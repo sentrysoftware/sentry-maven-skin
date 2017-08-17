@@ -1,0 +1,313 @@
+#*
+
+
+--------------------------------------------------*###
+#**
+ * Convenience directive to invoke a method and ignore the return value.
+ *
+ * Usage:
+ *	  #call ( $hashtable.put("foo", "bar") )
+ *###
+#macro ( call $foo )#*
+	*##if ($foo)#*
+		// do nothing - the 'if' is for ignoring the return value
+	*##end##
+#end#* /call
+
+
+
+--------------------------------------------------*###
+#**
+ * Checks if the given link is an external one.
+ *###
+#macro ( checkExtLink $href )#*
+
+	*##set ( $checkExtLink = false )#*
+	*##if ( $href && ($href.toLowerCase().startsWith("http:/") || $href.toLowerCase().startsWith("https:/")
+		|| $href.toLowerCase().startsWith("ftp:/") || $href.toLowerCase().startsWith("mailto:")
+		|| $href.toLowerCase().startsWith("file:/") || ($href.toLowerCase().indexOf("://") != -1) ))#*
+
+		*##set ( $checkExtLink = true )#*
+	*##end##
+#end#* /checkExtLink
+
+
+
+--------------------------------------------------*###
+#**
+ * Relativizes the link
+ *###
+#macro ( relativeLink $href )#*
+
+	*##if ( $href )#*
+
+		*##set ( $relativeLink = $PathTool.calculateLink( $href, $relativePath ) )#*
+		*##set ( $relativeLink = $relativeLink.replaceAll( "\\", "/" ) )#*
+		*##if ( ( $relativeLink == '' ) )#*
+			*##set ( $relativeLink = './' )#*
+		*##end#*
+
+		// Attempt to normalise the relative link - this is useful for active link
+		// calculations and better relative links for subdirectories.
+		//
+		// The issue is particularly visible with pages in subdirectories,
+		// so that if you are in <root>/dev/index.html, the relative menu link to
+		// the _same_ page would likely be ../dev/index.html instead of '' or 'index.html'.
+		*##set ( $absoluteLink = $uriTool.toURI( "$currentFileLoc" ).resolve( "$relativeLink" ).normalize().toString() )#*
+		*##if ( $currentFileLoc == $absoluteLink )#*
+			// for matching link, use empty relative link
+			*##set ( $relativeLink = '' )#*
+		*##else#*
+			// relativize the absolute link based on current directory
+			// (uses Maven project link relativization)
+			*##set ( $currentFileDir = $PathTool.getDirectoryComponent( $currentFileLoc ) )#*
+			*##set ( $relativeLink = $uriTool.relativizeLink( $currentFileDir, $absoluteLink ) )#*
+		*##end#*
+
+	*##else#*
+		// null $href
+		*##set ( $relativeLink = false )#*
+	*##end##
+#end#* /relativeLink
+
+
+
+--------------------------------------------------*###
+#**
+ * Checks if the given link is an external one. If not, calculates a relative link.
+ *###
+#macro ( relativeExtLink $href )#*
+
+	*##checkExtLink ( $href )#*
+	*##if ( $checkExtLink )#*
+		// if external, keep the original
+		*##set ( $relativeExtLink = $href )#*
+	*##else#*
+		// if not external link, calculate an return the relative link
+		*##relativeLink ( $href )#*
+		*##set ( $relativeExtLink = $relativeLink )#*
+	*##end##
+#end#* /relativeExtLink
+
+
+
+--------------------------------------------------*###
+#**
+ * Makes the link relative to the project URL, if one is set.
+ *###
+#macro ( currentFileRelativeLink $href )#*
+
+	*##if ( $project.url && $project.url != '' && $currentFileName )#*
+		// if project URL is available, relativize the link using it as a base dir
+		// note that the current file can be nested under project URL, so take that into account
+		*##set ( $currentFileDir = $uriTool.toURI( "$project.url/" ).resolve( "$currentFileName" ).resolve(".").toString() )#*
+		*##set ( $currentFileRelativeLink = $uriTool.relativizeLink( $currentFileDir, $href ) )#*
+	*##else#*
+		// otherwise just keep the original link
+		*##set ( $currentFileRelativeLink = $href )#*
+	*##end##
+#end#* /currentFileRelativeLink
+
+
+
+--------------------------------------------------*###
+#**
+ * Checks if the given link is the currently active one
+ *###
+#macro ( activeLink $href )#*
+
+	*##relativeLink ( $href )#*
+
+	*##if ( $href )#*
+		// either empty link (pointing to a page), or if the current file is index.html,
+		// the link may point to the whole directory
+		*##if ( '' == $relativeLink || ( $alignedFileName.endsWith("index.html") && './' == $relativeLink ) )#*
+			*##set ( $activeLink = true )#*
+			*##set ( $activeClass = 'active' )#*
+		*##else#*
+			*##set ( $activeLink = false )#*
+			*##set ( $activeClass = '' )#*
+		*##end#*
+	*##else#*
+		// null href - disable the link
+		*##set ( $activeLink = false )#*
+		*##set ( $activeClass = 'disabled' )#*
+	*##end##
+#end#* /activeLink
+
+
+
+--------------------------------------------------*###
+#**
+ * Creates a class="name" attribute if the given name exists
+ *###
+#macro ( classAttr $name )#*
+
+	*##if ( $name && '' != $name )#*
+		*#class="$name"#*
+	*##end##
+#end#* /classAttr
+
+
+
+--------------------------------------------------*###
+#**
+ * Outputs a list of links
+ *###
+#macro ( links $links )#*
+
+	*##foreach ( $item in $links )#*
+		*##activeLink ( $item.href )##
+							<li #classAttr( $activeClass )>#link ( $relativeLink $item.name $item.target )</li>
+#*	*##end##
+#end#* /links
+
+
+
+--------------------------------------------------*###
+#**
+ * Shortcut to display a basic hyperlink
+ *###
+#macro ( link $href $name $target )#*
+	*##fullLink ( $href $name $target false false false false false false false )##
+#end#* /link
+
+
+--------------------------------------------------*###
+#**
+ * Outputs a hyperlink with image and other attributes
+ *###
+#macro ( fullLink $href $name $target $img $position $alt $border $width $height $icon)#*
+
+// The opening <a> tag	*###
+<a#*
+	// if $href=false, do not create link
+	*##if ( $href ) href="$href"#end#*
+	*##if ( $name ) title="$name"#end#*
+	*##if ( $target ) target="$target"#end#*
+	*##checkExtLink ( $href )#*
+	*##if ( $checkExtLink ) class="externalLink"#end##
+>#*
+
+	*##if ( $img && $position == "left" )#*
+		// Image on the left side of the name
+		*##image ($img $alt $border $width $height)$name#*
+	*##elseif ( $img )#*
+		// Image on the right side of the name
+		*#${name}#if ($img) #image ($img $alt $border $width $height)#end#*
+	*##else#*
+		// No image - optional icon though on the right of the name
+		*#${name}#if ($icon) <i class="$icon"></i>#end#*
+	*##end#*
+
+// Close </a>	*###
+</a>##
+#end#* /fullLink
+
+
+
+--------------------------------------------------*###
+#**
+ * Outputs an image with attributes
+ *###
+#macro ( image $img $alt $border $width $height )#*
+
+	*##if ( $img )#*
+		*#<img class="imageLink"#*
+			*##relativeExtLink ( $img )#*
+			*# src="$relativeExtLink" alt='"'#if ( $alt )$alt#end'"'#*
+			*##if ( $border ) border="$border"#end#*
+			*##if ( $width ) width="$width"#end#*
+			*##if ( $height ) height="$height"#end#*
+		*# />#*
+
+	*##end##
+#end#* /image
+
+
+--------------------------------------------------*###
+#**
+ * Outputs Table of Contents into a list menu
+ *###
+#macro ( listToc $tocItems )##
+##
+					<ul>
+#*	*##foreach ( $item in $tocItems )#*
+		*##listTocItem ( $item )
+#*	*##end## /foreach $item
+					</ul>
+#end#* /listToc
+
+
+
+--------------------------------------------------*###
+#**
+ * Recursively outputs ToC item and its children
+ *###
+#macro ( listTocItem $item )##
+		<li><a href="#$item.id" title="$item.text">$item.text</a>
+#*		*##if ( $item.items.size() > 0 )##
+			<ul>
+#*			*##foreach ( $subitem in $item.items )#*
+				*##listTocItem ( $subitem )
+#*			*##end
+			</ul>
+#*		*##end
+		</li>
+#end#* /listTocItem
+
+/////////////////////////////////////////////////////
+//
+//   Initialization
+//
+/////////////////////////////////////////////////////
+
+// Process all ${properties} in the rendered HTML
+*##set ( $bodyContent = $render.eval( $bodyContent ) )#*
+
+// Try resolving site URL from the POM.
+// This can help with resolution of relative links, needed for 'active' link calculations,
+// e.g. to normalise the relative links in menus.
+*##if ( $project.url && $project.url != '' )#*
+	*##set ( $projectSiteLoc = $project.url )#*
+	*##if ( !$projectSiteLoc.endsWith("/") )#*
+		// ensure that the directory is uniform
+		*##set ( $projectSiteLoc = "$projectSiteLoc/" )#*
+	*##end#*
+*##else#*
+  // dummy project URL is used to provide a good base to resolve relative links with ../
+  *##set ( $projectSiteLoc = "http://www.sentrysoftware.com/library/dummy/" )#*
+*##end#*
+
+// absolute location of the current file
+*##set ( $currentFileLoc = $uriTool.toURI( "$projectSiteLoc" ).resolve( "$currentFileName" ).toString() )#*
+
+// Create the short title
+*##set ( $hTexts = $htmlTool.text( $bodyContent, "h1" ) )#*
+*##if ( $hTexts.size() == 0 )#*
+	*##set ( $hTexts = $htmlTool.text( $bodyContent, "h2" ) )#*
+*##end#*
+*##if ( $hTexts.size() > 0 )#*
+	*##set ( $shortTitle = $hTexts.get(0) )#*
+*##end#*
+*##set ( $title = $project.name + " - " + $shortTitle )#*
+
+// Enable lightbox on all pictures (except the ones marked with alt="inline"
+*##set ( $bodyContent = $htmlTool.enableLightbox( $bodyContent , "img:not(img[alt=inline])" , 150 ) )#*
+
+// HTML5-style anchors
+*##set ( $bodyContent = $htmlTool.headingAnchorToId( $bodyContent ) )#*
+
+// Bootstrap CSS class conversion for tables
+*##set ( $bodyContent = $htmlTool.addClass( $bodyContent, "table.bodyTable", ["table", "table-striped", "table-hover"] ) )#*
+*##set ( $bodyContent = $htmlTool.fixTableHeads( $bodyContent ) )#*
+
+// If we have a <div id="autoToc" /> element, we build the TOC from the headings in the page
+*##set ( $headingsSelector = $htmlTool.findAutoTocSelector( $bodyContent ) )#*
+*##if ( $headingsSelector != "" )#*
+	// Ensure IDs on all headings to refer to them in TOC
+	*##set ( $bodyContent = $htmlTool.ensureHeadingIds( $bodyContent, "_" ) )#*
+	*##set ( $tocItems = $htmlTool.headingTree( $bodyContent, $headingsSelector ) )#*
+*##end#*
+
+*###

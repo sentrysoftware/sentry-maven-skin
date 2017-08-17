@@ -1,0 +1,102 @@
+#parse( "tools.vm" )
+<!DOCTYPE html><html lang="en">
+
+<head>
+	<title>$title</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="$relativePath/css/bootstrap.min.css">
+	<link rel="stylesheet" href="$relativePath/css/lightbox.min.css">
+	<meta http-equiv="content-language" content="en" />
+	<link href="$relativePath/css/site.css" rel="stylesheet" />
+	<link href="$relativePath/css/print.css" rel="stylesheet" media="print" />
+
+</head>
+
+<body class="$!solutionClass">
+
+<div class="container-fluid">
+	<div class="row">
+		<nav class="navbar navbar-inverse" style="margin-bottom: 0;">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="$project.properties.productUrl">$project.name</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">$shortTitle
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu"> #*
+							*##foreach ( $menu in $decoration.body.menus ) #*
+								*##links ( $menu.items )#*
+							*##end##
+						</ul>
+					</li>
+				</ul>
+				<form class="navbar-form navbar-right">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Search">
+						<div class="input-group-btn">
+							<button class="btn btn-default" type="submit">
+								<i class="glyphicon glyphicon-search"></i>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</nav>
+	</div>
+
+	<div class="row" style="background-color: #e8e8e8; margin-bottom: 20px;">
+		<div class="col-md-12">
+			Version: <b>$project.version</b> - Documentation as of <b>$date.get("yyyy-MM-dd")</b>
+		</div>
+	</div>
+
+	<div class="row">
+		<nav class="col-md-3 hidden-xs hidden-sm">
+			#foreach ( $menu in $decoration.body.menus ) #*
+			*#<h5 class="text-uppercase">$menu.name</h5>
+			<ul class="nav nav-pills nav-stacked">
+				#foreach ( $item in $menu.items )#*
+					*##activeLink ( $item.href )
+					<li class="$activeClass"><a href="$relativeLink" title="$item.name">$item.name</a></li>
+				#end
+			</ul>
+			#end##
+
+		</nav>
+		<div class="col-md-9 col-xs-12 col-sm-12">
+			<div class="row">
+#if ( $headingsSelector != "" )
+				<div class="col-md-3 col-md-push-9">
+					In this page: <br>
+#*					*##listToc ( $tocItems )
+				</div>
+				<div class="col-md-9 col-md-pull-3">
+#*					*#$bodyContent
+				</div>
+#else
+				<div class="col-md-12">
+					$bodyContent
+				</div>
+#end
+			</div>
+		</div>
+
+	</div>
+</div>
+
+	<script src="$relativePath/js/jquery.min.js"></script>
+	<script src="$relativePath/js/bootstrap.min.js"></script>
+	<script src="$relativePath/js/lightbox.min.js"></script>
+	<script>
+		lightbox.option({
+			fadeDuration: 200,
+			resizeDuration: 200
+		})
+	</script>
+
+</body>
+</html>
