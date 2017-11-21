@@ -7,7 +7,7 @@ Elements of the page
 /* between 992 and 1100 screen size */
 @media screen and (min-width: 992px) and (max-width: 1225px) {
 	.affix {
-		top: 10px !important;		
+		top: 10px !important;
 		position:fixed !important;
 		width: 220px !important;
 	  }
@@ -19,7 +19,7 @@ Elements of the page
 /* between 992 and 1100 screen size */
 @media screen and (min-width: 1226px) and (max-width: 1441px) {
 	.affix {
-		top: 10px !important;		
+		top: 10px !important;
 		position:fixed !important;
 		width: 280px !important;
 	  }
@@ -31,7 +31,7 @@ Elements of the page
 /*between 1001 and 2500 screen size*/
 @media screen and (min-width: 1442px) {
 	.affix {
-		top: 10px !important;		
+		top: 10px !important;
 		position:fixed !important;
 		width: 330px !important;
 	  }
@@ -55,10 +55,10 @@ Elements of the page
 		border: none !important;
 		border-radius: 0 !important;
 	}
-	#productNameBanner a.dropdown-toggle{	
+	#productNameBanner a.dropdown-toggle{
 		background-color: transparent !important;
 	}
-	ul.nav.navbar-nav a.dropdown-toggle {		
+	ul.nav.navbar-nav a.dropdown-toggle {
 		position: absolute;
 		top: 0px;
 		right: 10px;
@@ -80,12 +80,12 @@ Elements of the page
 		top: 16px;
 		left: 15px;
 		box-shadow: 0 13px 0 1px white, 0 20px 0 1px white, 0 27px 0 1px white;
-	}	
+	}
 	.dropdown-menu>li>a{
 		font-family: 'Lato', sans-serif;
 	}
-	.dropdown-menu>.active>a, 
-	.dropdown-menu>.active>a:focus, 
+	.dropdown-menu>.active>a,
+	.dropdown-menu>.active>a:focus,
 	.dropdown-menu>.active>a:hover {
 		background-color: #3399ff !important;
 	}
@@ -94,14 +94,14 @@ Elements of the page
 @media screen and (max-width: 767px){
 	#footer {
 		text-align: center !important;
-	}	
+	}
 	#productNameBanner {
 		padding: 30px 50px !important;
 	}
-	#productNameBanner a.dropdown-toggle{	
+	#productNameBanner a.dropdown-toggle{
 		background-color: transparent !important;
 	}
-	ul.nav.navbar-nav a.dropdown-toggle {		
+	ul.nav.navbar-nav a.dropdown-toggle {
 		position: absolute;
 		top: -95px;
 		right: -9px;
@@ -126,7 +126,7 @@ Elements of the page
 	}
 	ul.dropdown-menu li:first-child {
 		border-top: 1px solid rgba(255,255,255,0.30);
-	}		
+	}
 	ul.dropdown-menu li {
 		border-bottom: 1px solid rgba(255,255,255,0.30);
 	}
@@ -143,7 +143,7 @@ Elements of the page
 @media screen and (min-width: 992px) {
 	#productNameBanner ul.nav.navbar-nav {
 		display: none;
-	}	
+	}
 }
 
 /*Color of the solution*/
@@ -175,7 +175,7 @@ body.sentry-studio #productNameBanner {background-color:#b071dc;}
     font-weight: 400;
     text-transform: uppercase;
     font-size: 10px;
-    color: #fff;	
+    color: #fff;
 	opacity: .5;
     filter: alpha(opacity=50);
 	transition: .2s ease-in-out;
@@ -211,8 +211,8 @@ body.sentry-studio #productNameBanner {background-color:#b071dc;}
 }
 #productNameBanner .navbar-header p,
 #productNameBanner .navbar-header span {
-	font-family: 'Raleway', sans-serif; 
-	font-weight: 300; 
+	font-family: 'Raleway', sans-serif;
+	font-weight: 300;
 	color:#ffffff !important;
 	text-transform:uppercase;
 }
@@ -220,7 +220,8 @@ body.sentry-studio #productNameBanner {background-color:#b071dc;}
 	font-size: 30px;
 }
 #productNameBanner .navbar-header span {
-	font-size: 11px;
+	font-size: 14px;
+	letter-spacing: 1px;
 	opacity: .7;
     filter: alpha(opacity=70);
 }
@@ -243,13 +244,13 @@ input.form-control::-webkit-input-placeholder {
    color: #ffffff;
 }
 input.form-control:-moz-placeholder { /* Firefox 18- */
-   color: #ffffff;  
+   color: #ffffff;
 }
 input.form-control::-moz-placeholder {  /* Firefox 19+ */
-   color: #ffffff;  
+   color: #ffffff;
 }
-input.form-control:-ms-input-placeholder {  
-   color: #ffffff;  
+input.form-control:-ms-input-placeholder {
+   color: #ffffff;
 }
 input.form-control:focus {
 	border-bottom: 1px solid #fff;
@@ -281,7 +282,7 @@ h1:after {
     border-top: 2px solid #444;
 }
 h2, h3, h4, h5, h6 {
-	padding-top: 35px; 
+	padding-top: 35px;
 	margin:10px 0 10px !important;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -311,7 +312,7 @@ h3,h4,h5, h6 {
 }
 
 a {
-	color: #3399FF;	
+	color: #3399FF;
 	transition:.2s ease-in-out;
 	-moz-transition:.2s ease-in-out;
 	-o-transition:.2s ease-in-out;
@@ -349,14 +350,14 @@ a:hover {
     letter-spacing: 1px;
     font-weight:bolder !important;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 12px;
     color: #fff;
-	opacity: .5;
-    filter: alpha(opacity=50);
+	opacity: 0.9;
+    filter: alpha(opacity=90);
 	margin: 20px 0 0 15px !important;
 	padding: 0;
 }
-#navigationCol a {	
+#navigationCol a {
 	transition:.2s ease-in-out;
 	-moz-transition:.2s ease-in-out;
 	-o-transition:.2s ease-in-out;
@@ -368,7 +369,7 @@ a:hover {
 	margin-top: 0 !important;
 	font-size: 13px;
 	font-family: 'Lato', sans-serif;
-	border-bottom: 1px solid #464646;	
+	border-bottom: 1px solid #464646;
 }
 .nav-pills li a {
 	background-color: #343434 !important;
@@ -434,7 +435,7 @@ a:hover {
 	font-weight: normal;
 }
 .panelToc ul li {
-	margin: 5px 0; 
+	margin: 5px 0;
 }
 #listToc ul li {
 	margin: 15px 0;
@@ -465,10 +466,10 @@ a:hover {
 /*Footer*/
 #footer {
 	background-color: #343434;
-    color: #fff;	
+    color: #fff;
 	padding: 15px;
 }
-#footer p {	
+#footer p {
 	font-family: 'Raleway', sans-serif;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -477,7 +478,7 @@ a:hover {
 	opacity: .6;
     filter: alpha(opacity=60);
 }
-#footer span {	
+#footer span {
 	font-family: 'Lato', sans-serif;
     font-size: 13px;
 	opacity: .3;
@@ -508,7 +509,7 @@ a:hover {
     -o-transition: .2s ease-in-out;
     -webkit-transition: .2s ease-in-out;
 }
-#gotoTop:hover { 
+#gotoTop:hover {
 	background-color: #3399FF;
 }
 
