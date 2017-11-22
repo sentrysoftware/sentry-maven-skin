@@ -10,7 +10,7 @@
 	<meta http-equiv="content-language" content="en" />
 	<link href="$relativePath/css/sentry.css" rel="stylesheet" />
 	<link href="$relativePath/css/print.css" rel="stylesheet" media="print" />
-	<link href="$relativePath/css/font-awesome.min.css" rel="stylesheet"> 
+	<link href="$relativePath/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body class="$!solutionClass">
@@ -36,17 +36,18 @@
 				<li><a href="http://www.sentrysoftware.com">Sentry Software</a></li>
 			</ul>
 		</div>
-	</div>	
+	</div>
 
 	<div class="row" id="productNameBanner">
 		<nav class="navbar navbar-inverse" style="margin-bottom: 0;">
-			<div class="container-fluid">			
-				<!--Banner with product name and version-->		
+			<div class="container-fluid">
+				<!--Banner with product name and version-->
 				<div class="navbar-header">
 					<p>$project.name</p>
 					<span>Version <strong>$project.version</strong></span>
 				</div>
 				<!--Dropdown mobile menu-->
+				<!--ZOOMSTOP-->
 				<ul class="nav navbar-nav">
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">$shortTitle
@@ -58,10 +59,11 @@
 						</ul>
 					</li>
 				</ul>
+				<!--ZOOMRESTART-->
 				<!--Search form https://www.sentrysoftware.com/_search/index.asp-->
 				<form class="navbar-form navbar-right hidden-xs hidden-sm" method="get" action="https://www.sentrysoftware.com/library/_search/index.asp">
 					<div class="input-group">
-						<input size="40" type="text" name="zoom_query" class="form-control" placeholder="Search...">						
+						<input size="40" type="text" name="zoom_query" class="form-control" placeholder="Search...">
 						<!--
 						In the URL (get method, via hidden fields), we send the following variables: zoom_cat, projectName, projectVersion, solutionClass.
 						So the search page in /Library/_search/index.asp (which includes /Library/_search/search.asp) can get and display these elements
@@ -86,6 +88,7 @@
 	<div class="row" id="mainContainer">
 		<!--Left desktop menu-->
 		<div class="col-md-3 hidden-xs hidden-sm" id="navigationCol">
+		<!--ZOOMSTOP-->
 		<nav>
 			#foreach ( $menu in $decoration.body.menus ) #*
 			*#<h5 class="text-uppercase">$menu.name</h5>
@@ -98,16 +101,18 @@
 			#end##
 
 		</nav>
+		<!--ZOOMRESTART-->
 		</div>
 		<div class="col-md-9 col-xs-12 col-sm-12" id="mainContent">
 			<div class="row">
-			
 
-		
-			
+
+
+
 #if ( $headingsSelector != "" )
-			
+
 				<!--Mobile collapsible table of content (toc)-->
+				<!--ZOOMSTOP-->
 				<div class="panel-group panelToc hidden-md hidden-lg" id="accordion" role="tablist" aria-multiselectable="true">
 				  <div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingOne">
@@ -123,10 +128,12 @@
 					  </div>
 					</div>
 				  </div>
-				</div>				
-			
+				</div>
+				<!--ZOOMRESTART-->
+
 				<!--Desktop table of content (toc)-->
-				<div class="col-md-4 col-md-push-8 hidden-xs hidden-sm"> 
+				<!--ZOOMSTOP-->
+				<div class="col-md-4 col-md-push-8 hidden-xs hidden-sm">
 					<div data-spy="affix" data-offset-top="160">
 						<div class="toc" id="listToc">
 						<span>Table of Content</span>
@@ -134,7 +141,8 @@
 						</div>
 					</div>
 				</div>
-				
+				<!--ZOOMRESTART-->
+
 				<!--Main content with a toc-->
 				<div class="col-md-8 col-md-pull-4">
 #*					*#$bodyContent
@@ -152,10 +160,10 @@
 	<!--Footer in mobile and desktop-->
 	<div class="row" id="footer">
 		<div class="col-md-12">
-			<p><strong>$project.name $project.version</strong> <span class="hidden-xs">|</span> <br class="hidden-sm hidden-md hidden-lg"/>Documentation as of <strong>$date.get("yyyy-MM-dd")</strong></p>
+			<p><strong>$project.name $project.version</strong> <span class="hidden-xs">|</span> <br class="hidden-sm hidden-md hidden-lg"/>Documentation as of <strong>$timestamp</strong></p>
 			<span>Copyrights &copy;2017 All Rights Reserved by Sentry Software</span>
-		</div>		
-	</div>	
+		</div>
+	</div>
 </div>
 <div id="gotoTop" onclick="topFunction()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
 
@@ -179,7 +187,7 @@
 		}
 		// When the user clicks on the button, scroll to the top of the document
 		function topFunction() {
-			document.body.scrollTop = 0; // For Chrome, Safari and Opera 
+			document.body.scrollTop = 0; // For Chrome, Safari and Opera
 			document.documentElement.scrollTop = 0; // For IE and Firefox
 		}
 	</script>
