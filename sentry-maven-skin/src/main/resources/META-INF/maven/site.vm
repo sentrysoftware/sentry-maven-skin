@@ -11,6 +11,16 @@
 	<link href="$relativePath/css/sentry.css" rel="stylesheet" />
 	<link href="$relativePath/css/print.css" rel="stylesheet" media="print" />
 	<link href="$relativePath/css/font-awesome.min.css" rel="stylesheet">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-5850468-1"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag()
+
+	{dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'UA-5850468-1');
+	</script>	
 </head>
 
 <body class="$!solutionClass">
