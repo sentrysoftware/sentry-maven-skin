@@ -171,7 +171,7 @@
 	<div class="row" id="footer">
 		<div class="col-md-12">
 			<p><strong>$project.name $project.version</strong> <span class="hidden-xs">|</span> <br class="hidden-sm hidden-md hidden-lg"/>Documentation as of <strong>$timestamp</strong></p>
-			<span>Copyrights &copy;2017 All Rights Reserved by Sentry Software</span>
+			<span>Copyrights &copy;#set( $year = ($currentDate.getYear() + 1900))$year All Rights Reserved by Sentry Software</span>
 		</div>
 	</div>
 </div>
