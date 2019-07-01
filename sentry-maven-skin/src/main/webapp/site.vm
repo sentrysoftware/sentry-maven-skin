@@ -1,0 +1,279 @@
+<!DOCTYPE html><html lang="en">
+<!-- #parse( "tools.vm" ) -->
+
+<head>
+	<title>$title</title>
+
+	<meta charset="utf-8">
+	<meta http-equiv="content-language" content="en" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+#if ( $keywords )
+	<meta name="keywords" content="$keywords" />
+#end
+	<meta name="generator" content="$generator" />
+
+	<!-- build:css css/main-combined.css -->
+	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
+	<link rel="stylesheet" href="css/sentry.css">
+	<link rel="stylesheet" href="css/print.css">
+	<!-- endbuild -->
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-5850468-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'UA-5850468-1');
+	</script>
+</head>
+
+<body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-app="sentry.site" ng-strict-di ng-controller="siteController">
+
+	<!-- Dark desktop banner with Sentry's links -->
+	<nav class="hidden-xs navbar navbar-inverse site-logo">
+		<ul class="nav navbar-nav">
+			<li class="logo"><a href="//www.sentrysoftware.com"></a></li>
+			<li><a href="//www.sentrysoftware.com/support/user-documentation.asp">User Documentation</a></li>
+			<li><a href="//www.sentrysoftware.com/kb/">Knowledge Base</a></li>
+			<li><a href="//www.sentrysoftware.com/support/patches/">Patches</a></li>
+			<li><a href="//www.sentrysoftware.com/support/product-lifecycle.asp">Product Lifecycle</a></li>
+			<li><a href="//docs.bmc.com" target="_blank">docs.bmc.com</a></li>
+		</ul>
+	</nav>
+
+	<!--Dark mobile banner with only one Sentry's link-->
+	<nav class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+		<ul class="nav navbar-nav">
+			<li><a href="//www.sentrysoftware.com">Sentry Software</a></li>
+		</ul>
+	</nav>
+
+	<!-- Navigation bar for Desktop -->
+	<nav ng-hide="media == 'xs'" class="hidden-xs navbar site-banner" role="navigation">
+
+		<div class="container-fluid">
+
+			<div class="navbar-header">
+				<p class="navbar-brand header-title">
+					$decoration.name
+					<br />
+					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion")</strong></span>
+				</p>
+			</div>
+
+			<!-- Search... -->
+			<form class="navbar-form navbar-right hidden-xs site-search">
+				<div class="form-group has-feedback">
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Search..."
+						ng-model="siteSearch"
+						ng-change="search(siteSearch)"
+						ng-model-options="{ debounce: 500 }"
+						ng-keydown="siteSearchKeyDown($event)"
+					/>
+					<i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+				</div>
+			</form>
+
+		</div>
+	</nav>
+
+
+	<!-- Navigation bar for mobile -->
+	<nav ng-show="media == 'xs'" class="visible-xs navbar site-banner" role="navigation">
+
+		<div class="container-fluid">
+
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" ng-click="clickNavToggle()">
+					<i class="icon-bar"></i>
+					<i class="icon-bar"></i>
+					<i class="icon-bar"></i>
+				</button>
+				<p class="navbar-brand header-title">
+					$decoration.name
+					<br />
+					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion")</strong></span>
+				</p>
+			</div>
+
+			<div class="navbar-collapse" uib-collapse="isNavCollapsed">
+
+				<!-- Search... -->
+				<form class="navbar-form">
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Search..."
+						ng-model="siteSearch"
+						ng-change="search(siteSearch)"
+						ng-model-options="{ debounce: 500 }"
+						ng-keydown="siteSearchKeyDown($event)"
+					/>
+				</form>
+
+				<ul class="nav navbar-nav" ng-hide="siteSearch">#*
+					*##foreach ( $menu in $decoration.body.menus ) #*
+						*##links ( $menu.items )#*
+					*##end##
+				</ul>
+
+				<!-- Search results -->
+				<ul class="nav navbar-nav search-results" ng-show="siteSearch">
+
+					<!-- List of results -->
+					<li ng-repeat="result in resultArray track by result.href">
+						<a ng-href="{{result.href}}">
+							{{result.title}}
+							<div class="row"><div class="col-md-12">
+								<uib-progressbar type="info" value="result.score" max="1"></uib-progressbar>
+							</div></div>
+							<small>{{result.body | truncate:'100'}}</small>
+						</a>
+					</li>
+
+					<p ng-show="!resultArray.length" class="navbar-text">No results.</p>
+
+				</ul>
+
+			</div>
+
+		</div>
+	</nav>
+
+	<div class="container-fluid main-container">
+		<div class="row display-flex">
+
+			<!-- Left menu -->
+			<div class="left-menu hidden-xs hidden-sm col-md-3">
+				<!--ZOOMSTOP-->
+				<nav>
+					#foreach ( $menu in $decoration.body.menus ) #*
+					*#<h5 class="text-uppercase">$menu.name</h5>
+					<ul class="nav nav-pills nav-stacked">#*
+						*##links ( $menu.items )
+					</ul>#*
+					*##end
+				</nav>
+				<!--ZOOMRESTART-->
+			</div>
+
+			<!-- Main content -->
+			<div class="main-content col-xs-12 col-sm-12 col-md-9">
+
+				<!-- Hide content if we're displaying search results -->
+				<div ng-hide="siteSearch">
+
+#if ( $tocContent != "" )
+#* We have a TOC *#
+
+					<div class="row">
+
+						<!-- We'll show the TOC on the right, on large display -->
+						<div class="col-md-12 col-lg-8">
+#*						*#$bodyContent
+#*						*##if ( $keywordsArray.size() > 0 )#*
+								*#<div class="keywords">Keywords:<br>#*
+								*##foreach ( $keyword in $keywordsArray )#*
+									*#<span class="label label-default">$keyword</span> #*
+								*##end#*
+								*#</div>#*
+							*##end##
+						</div>
+
+						<!--ZOOMSTOP-->
+						<div class="col-lg-4 visible-lg toc-side-container">
+							<div class="toc">
+								<div class="toc-title">Table of Contents</div>
+#*							*#$tocContent
+							</div>
+						</div>
+						<!--ZOOMRESTART-->
+
+					</div>
+#else
+#* We don't have a TOC *#
+#*				*#$bodyContent
+#*					*##if ( $keywordsArray.size() > 0 )#*
+							*#<div class="keywords">Keywords:<br>#*
+							*##foreach ( $keyword in $keywordsArray )#*
+								*#<span class="label label-default">$keyword</span> #*
+							*##end#*
+							*#</div>#*
+						*##end##
+#end
+				</div>
+
+				<!-- Search results -->
+				<div class="search-results hidden-xs" ng-show="siteSearch && media != 'xs'">
+
+					<h2>
+						Search Results for <em>{{siteSearch | truncate:'50'}}</em>
+					</h2>
+
+					<div ng-show="resultArray.length">
+
+						<!-- Result count -->
+						{{resultArray.length}}
+						<span ng-pluralize count="resultArray.length" when="{'1': 'result', 'other': 'results'}"></span>
+
+						<!-- List of results -->
+						<div ng-repeat="result in resultArray track by result.href">
+							<h4><a ng-href="{{result.href}}">{{result.title}}</a></h4>
+							<div class="row"><div class="col-md-6">
+								<uib-progressbar type="info" value="result.score" max="1"></uib-progressbar>
+							</div></div>
+							<small>{{result.body | truncate:'400'}}</small>
+						</div>
+
+					</div>
+
+					<div ng-hide="resultArray.length">
+						<em>No results.</em>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<!--Footer in mobile and desktop-->
+	<div class="footer">
+		<p class="footer-title">
+			<strong>$decoration.name $decoration.getCustomValue("projectVersion")</strong>
+			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
+			Documentation as of <strong>$publishDate</strong>
+		</p>
+		<span class="footer-copyright">
+			Copyright &copy; $date.get("yyyy") All Rights Reserved by Sentry Software
+		</span>
+	</div>
+
+
+	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+	<!-- build:js js/main-combined.js -->
+	<script src="../../../node_modules/angular/angular.min.js"></script>
+	<script src="../../../node_modules/angular-animate/angular-animate.min.js"></script>
+	<script src="../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+	<script src="../../../node_modules/angular-scroll/angular-scroll.min.js"></script>
+	<script src="../../../node_modules/angular-media-queries/match-media.js"></script>
+	<script src="../../../node_modules/elasticlunr/release/elasticlunr.min.js"></script>
+	<script src="js/site.js"></script>
+	<script src="js/site-index.js"></script>
+	<script src="js/zoomable-img.js"></script>
+	<script src="js/truncate.js"></script>
+	<!-- endbuild -->
+
+	<script>
+angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.javascript($relativePath)");
+	</script>
+
+</body>
+</html>

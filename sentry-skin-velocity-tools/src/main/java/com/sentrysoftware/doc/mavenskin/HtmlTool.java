@@ -21,16 +21,11 @@ import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 import org.apache.velocity.tools.ToolContext;
@@ -51,7 +46,7 @@ import org.jsoup.parser.Tag;
  * selectors</a> to refer to specific elements for manipulation.
  * </p>
  *
- * @author Andrius Velykis
+ * @author Bertrand Martin (originally inspired by Andrius Velykis)
  * @since 1.0
  * @see <a href="http://jsoup.org/">jsoup HTML parser</a>
  * @see <a href="http://jsoup.org/cookbook/extracting-data/selector-syntax">jsoup CSS selectors</a>
@@ -63,22 +58,6 @@ public class HtmlTool extends SafeConfig {
 	private static List<String> HEADINGS = Collections.unmodifiableList(
 			Arrays.asList("h1", "h2", "h3", "h4", "h5", "h6"));
 
-
-
-	/** Enum indicating separator handling strategy for document partitioning. */
-	public enum JoinSeparator {
-		/**
-		 * Keep separators at the start of partitions. The first partition will not have a
-		 * separator.
-		 */
-		AFTER,
-		/**
-		 * Keep separators at the end of partitions. The last partition will not have a separator.
-		 */
-		BEFORE,
-		/** Drop separators altogether. */
-		NO
-	}
 
 	private String outputEncoding = "UTF-8";
 
@@ -106,326 +85,6 @@ public class HtmlTool extends SafeConfig {
 		}
 	}
 
-	/**
-	 * Splits the given HTML content into partitions based on the given separator selector. The
-	 * separators themselves are dropped from the results.
-	 *
-	 * @param content
-	 *            HTML content to split
-	 * @param separatorCssSelector
-	 *            CSS selector for separators.
-	 * @return a list of HTML partitions split on separator locations, but without the separators.
-	 * @since 1.0
-	 * @see #split(String, String, JoinSeparator)
-	 */
-	public List<String> split(String content, String separatorCssSelector) {
-		return split(content, separatorCssSelector, JoinSeparator.NO);
-	}
-
-	/**
-	 * Splits the given HTML content into partitions based on the given separator selector. The
-	 * separators are kept as first elements of the partitions.
-	 * <p>
-	 * Note that the first part is removed if the split was successful. This is because the first
-	 * part does not include the separator.
-	 * </p>
-	 *
-	 * @param content
-	 *            HTML content to split
-	 * @param separatorCssSelector
-	 *            CSS selector for separators
-	 * @return a list of HTML partitions split on separator locations (except the first one), with
-	 *         separators at the beginning of each partition
-	 * @since 1.0
-	 * @see #split(String, String, JoinSeparator)
-	 */
-	public List<String> splitOnStarts(String content, String separatorCssSelector) {
-
-		List<String> result = split(content, separatorCssSelector, JoinSeparator.AFTER);
-
-		if (result == null || result.size() <= 1) {
-			// no result or just one part - return what we have
-			return result;
-		}
-
-		// otherwise, drop the first part - the first split will be the first 'start'
-		// e.g. if we split on headings, the first part will contain everything
-		// before the first heading.
-		return result.subList(1, result.size());
-	}
-
-	/**
-	 * Splits the given HTML content into partitions based on the given separator selector. The
-	 * separators are either dropped or joined with before/after depending on the indicated
-	 * separator strategy.
-	 *
-	 * @param content
-	 *            HTML content to split
-	 * @param separatorCssSelector
-	 *            CSS selector for separators
-	 * @param separatorStrategy
-	 *            strategy to drop or keep separators, one of "after", "before" or "no"
-	 * @return a list of HTML partitions split on separator locations.
-	 * @since 1.0
-	 * @see #split(String, String, JoinSeparator)
-	 */
-	public List<String> split(String content, String separatorCssSelector,
-			String separatorStrategy) {
-
-		JoinSeparator sepStrategy;
-		if ("before".equals(separatorStrategy)) {
-			sepStrategy = JoinSeparator.BEFORE;
-		} else if ("after".equals(separatorStrategy)) {
-			sepStrategy = JoinSeparator.AFTER;
-		} else {
-			sepStrategy = JoinSeparator.NO;
-		}
-
-		return split(content, separatorCssSelector, sepStrategy);
-	}
-
-	/**
-	 * Splits the given HTML content into partitions based on the given separator selector.The
-	 * separators are either dropped or joined with before/after depending on the indicated
-	 * separator strategy.
-	 * <p>
-	 * Note that splitting algorithm tries to resolve nested elements so that returned partitions
-	 * are self-contained HTML elements. The nesting is normally contained within the first
-	 * applicable partition.
-	 * </p>
-	 *
-	 * @param content
-	 *            HTML content to split
-	 * @param separatorCssSelector
-	 *            CSS selector for separators
-	 * @param separatorStrategy
-	 *            strategy to drop or keep separators
-	 * @return a list of HTML partitions split on separator locations. If no splitting occurs,
-	 *         returns the original content as the single element of the list
-	 * @since 1.0
-	 */
-	public List<String> split(String content, String separatorCssSelector,
-			JoinSeparator separatorStrategy) {
-
-		Element body = parseContent(content);
-
-		List<Element> separators = body.select(separatorCssSelector);
-		if (separators.size() > 0) {
-			List<List<Element>> partitions = split(separators, separatorStrategy, body);
-
-			List<String> sectionHtml = new ArrayList<String>();
-
-			for (List<Element> partition : partitions) {
-				sectionHtml.add(outerHtml(partition));
-			}
-
-			return sectionHtml;
-		} else {
-			// nothing to split
-			return Collections.singletonList(content);
-		}
-	}
-
-	/**
-	 * Recursively splits the {@code parent} element based on the given {@code separators}. If a
-	 * separator is encountered in the parent, it is split on that position. The outstanding nested
-	 * elements go with the first of the partitions in each case.
-	 *
-	 * @param separators
-	 * @param separatorStrategy
-	 * @param parent
-	 * @return list of partitions (as lists of root elements for each partition). Partition can be
-	 *         an empty list, e.g. if the separator is at the start of the content.
-	 */
-	private static List<List<Element>> split(Collection<Element> separators,
-			JoinSeparator separatorStrategy, Element parent) {
-
-		List<List<Element>> partitions = new LinkedList<List<Element>>();
-
-		for (Element child : parent.children()) {
-
-			if (separators.contains(child)) {
-				// split here and do not go deeper
-
-				// first ensure there was a partition before
-				// otherwise the split is not recognised on an outer level
-				getLastPartition(partitions);
-
-				if (separatorStrategy == JoinSeparator.BEFORE) {
-					// add to the last partition
-					getLastPartition(partitions).add(child);
-				}
-
-				// add an empty new partition
-				List<Element> newPartition = new LinkedList<Element>();
-				partitions.add(newPartition);
-
-				if (separatorStrategy == JoinSeparator.AFTER) {
-					// add to the new partition
-					newPartition.add(child);
-				}
-
-			} else {
-				// go deeper
-				List<List<Element>> childPartitions = split(separators, separatorStrategy, child);
-
-				// add the child to the last partition
-				getLastPartition(partitions).add(child);
-
-				if (childPartitions.size() > 1) {
-					// more than one partition:
-					// only keep the first partition elements in the child
-					// so for all other partitions, remove them from their parents
-
-					List<Element> allChildren = child.children();
-					List<Element> firstPartition = childPartitions.get(0);
-
-					allChildren.removeAll(firstPartition);
-					for (Element removeChild : allChildren) {
-						removeChild.remove();
-					}
-
-					// add the remaining partitions
-					for (List<Element> nextPartition : childPartitions.subList(1, childPartitions.size())) {
-						partitions.add(nextPartition);
-					}
-				}
-			}
-		}
-
-		return partitions;
-	}
-
-	/**
-	 * Retrieves the last partition (as list of elements) or creates a new one if there was none
-	 * before.
-	 *
-	 * @param partitions
-	 * @return
-	 */
-	private static List<Element> getLastPartition(List<List<Element>> partitions) {
-		if (partitions.isEmpty()) {
-			List<Element> newPartition = new LinkedList<Element>();
-			partitions.add(newPartition);
-			return newPartition;
-		} else {
-			return partitions.get(partitions.size() - 1);
-		}
-	}
-
-	/**
-	 * Outputs the list of partition root elements to HTML.
-	 *
-	 * @param elements
-	 * @return
-	 */
-	private static String outerHtml(List<Element> elements) {
-
-		switch (elements.size()) {
-		case 0:
-			return "";
-		case 1:
-			return elements.get(0).outerHtml();
-		default: {
-			// more than one element
-			// wrap into <div> which we will remove afterwards
-			Element root = new Element(Tag.valueOf("div"), "");
-			for (Element elem : elements) {
-				root.appendChild(elem);
-			}
-
-			return root.html();
-		}
-		}
-	}
-
-
-
-	/**
-	 * Reorders elements in HTML content so that selected elements are found at the top of the
-	 * content. Can be limited to a certain amount, e.g. to bring just the first of selected
-	 * elements to the top.
-	 *
-	 * @param content
-	 *            HTML content to reorder
-	 * @param selector
-	 *            CSS selector for elements to bring to top of the content
-	 * @param amount
-	 *            Maximum number of elements to reorder
-	 * @return HTML content with reordered elements, or the original content if no such elements
-	 *         found.
-	 * @since 1.0
-	 */
-	public String reorderToTop(String content, String selector, int amount) {
-		return reorderToTop(content, selector, amount, null);
-	}
-
-	/**
-	 * Reorders elements in HTML content so that selected elements are found at the top of the
-	 * content. Can be limited to a certain amount, e.g. to bring just the first of selected
-	 * elements to the top.
-	 *
-	 * @param content
-	 *            HTML content to reorder
-	 * @param selector
-	 *            CSS selector for elements to bring to top of the content
-	 * @param amount
-	 *            Maximum number of elements to reorder
-	 * @param wrapRemaining
-	 *            HTML to wrap the remaining (non-reordered) part
-	 * @return HTML content with reordered elements, or the original content if no such elements
-	 *         found.
-	 * @since 1.0
-	 */
-	public String reorderToTop(String content, String selector, int amount,
-			String wrapRemaining) {
-
-		// extract the elements and then prepend them to the remaining body
-		List<Element> extracted = extractElements(content, selector, amount);
-
-		if (extracted.size() > 1) {
-
-			Element body = extracted.get(0);
-
-			if (wrapRemaining != null) {
-				wrapInner(body, wrapRemaining);
-			}
-
-			List<Element> elements = extracted.subList(1, extracted.size());
-
-			// now prepend extracted elements to the body (in backwards to preserve original order)
-			for (int index = elements.size() - 1; index >= 0; index--) {
-				body.prependChild(elements.get(index));
-			}
-
-			return body.html();
-		} else {
-			// nothing to reorder
-			return content;
-		}
-	}
-
-	private static Element wrapInner(Element element, String html) {
-
-		// wrap everything into an additional <div> for wrapping
-		// otherwise there may be problems, e.g. with <body> element
-		Element topDiv = new Element(Tag.valueOf("div"), "");
-		for (Element topElem : element.children()) {
-			// add all elements in the body to the `topDiv`
-			topElem.remove();
-			topDiv.appendChild(topElem);
-		}
-
-		// add topDiv to the body
-		element.appendChild(topDiv);
-
-		// wrap topDiv
-		topDiv.wrap(html);
-		// now unwrap topDiv - will remove it from the hierarchy
-		topDiv.unwrap();
-
-		return element;
-	}
 
 	/**
 	 * Extracts elements from the HTML content.
@@ -460,30 +119,6 @@ public class HtmlTool extends SafeConfig {
 		// first element is the body
 		results.add(body);
 		results.addAll(elements);
-		return results;
-	}
-
-	/**
-	 * Select elements from the HTML content.
-	 *
-	 * @param content
-	 * @param selector
-	 * @param amount
-	 * @return A list of HTML elements
-	 */
-	private List<Element> select(String content, String selector, int amount) {
-
-		// Parse the content (from String to actual DOM)
-		Element body = parseContent(content);
-
-		// Get the matching elements
-		List<Element> results = body.select(selector);
-
-		// If we only need a sublist
-		if (amount > 0) {
-			results = results.subList(0, amount);
-		}
-
 		return results;
 	}
 
@@ -540,10 +175,10 @@ public class HtmlTool extends SafeConfig {
 				elementStr.add(el.outerHtml());
 			}
 
-			return new DefaultExtractResult(elementStr, body.html());
+			return new ExtractResult(elementStr, body.html());
 		} else {
 			// nothing to extract
-			return new DefaultExtractResult(Collections.<String> emptyList(), content);
+			return new ExtractResult(Collections.<String> emptyList(), content);
 		}
 	}
 
@@ -554,38 +189,30 @@ public class HtmlTool extends SafeConfig {
 	 * @author Andrius Velykis
 	 * @since 1.0
 	 */
-	public static interface ExtractResult {
+	public static class ExtractResult {
+
+		private final List<String> extracted;
+		private final String remainder;
+
+		public ExtractResult(List<String> extracted, String remainder) {
+			this.extracted = extracted;
+			this.remainder = remainder;
+		}
 
 		/**
 		 * Retrieves the extracted HTML elements.
 		 *
 		 * @return List of HTML of extracted elements. Can be empty if no elements found.
 		 */
-		public List<String> getExtracted();
+		public List<String> getExtracted() {
+			return Collections.unmodifiableList(extracted);
+		}
 
 		/**
 		 * Retrieves the content from which elements were extracted.
 		 *
 		 * @return The HTML content with extracted elements removed.
 		 */
-		public String getRemainder();
-	}
-
-	private static class DefaultExtractResult implements ExtractResult {
-		private final List<String> extracted;
-		private final String remainder;
-
-		public DefaultExtractResult(List<String> extracted, String remainder) {
-			this.extracted = extracted;
-			this.remainder = remainder;
-		}
-
-		@Override
-		public List<String> getExtracted() {
-			return Collections.unmodifiableList(extracted);
-		}
-
-		@Override
 		public String getRemainder() {
 			return remainder;
 		}
@@ -777,6 +404,82 @@ public class HtmlTool extends SafeConfig {
 			return content;
 		}
 	}
+
+	/**
+	 * Append HTML elements to specified elements in the given HTML.
+	 *
+	 * @param content
+	 *            HTML content to modify
+	 * @param selector
+	 *            CSS selector for elements that will get the appendice
+	 * @param appendHtml
+	 *            HTML to append to the selected elements
+	 * @param amount
+	 *            Maximum number of elements to modify
+	 * @return HTML content with modified elements. If no elements are found, the original content
+	 *         is returned.
+	 */
+	public String append(String content, String selector, String appendHtml, int amount) {
+
+		Element body = parseContent(content);
+
+		List<Element> elements = body.select(selector);
+		if (amount >= 0) {
+			// limit to the indicated amount
+			elements = elements.subList(0, Math.min(amount, elements.size()));
+		}
+
+		if (elements.size() > 0) {
+
+			for (Element element : elements) {
+				element.append(appendHtml);
+			}
+
+			return body.html();
+		} else {
+			// nothing to update
+			return content;
+		}
+	}
+
+
+	/**
+	 * Prepend HTML elements to specified elements in the given HTML.
+	 *
+	 * @param content
+	 *            HTML content to modify
+	 * @param selector
+	 *            CSS selector for elements that will get the "pre-pendice"
+	 * @param prependHtml
+	 *            HTML to prepend to the selected elements
+	 * @param amount
+	 *            Maximum number of elements to modify
+	 * @return HTML content with modified elements. If no elements are found, the original content
+	 *         is returned.
+	 */
+	public String prepend(String content, String selector, String prependHtml, int amount) {
+
+		Element body = parseContent(content);
+
+		List<Element> elements = body.select(selector);
+		if (amount >= 0) {
+			// limit to the indicated amount
+			elements = elements.subList(0, Math.min(amount, elements.size()));
+		}
+
+		if (elements.size() > 0) {
+
+			for (Element element : elements) {
+				element.prepend(prependHtml);
+			}
+
+			return body.html();
+		} else {
+			// nothing to update
+			return content;
+		}
+	}
+
 
 	/**
 	 * Removes elements from HTML.
@@ -1026,78 +729,98 @@ public class HtmlTool extends SafeConfig {
 	 * the heading contents and used as the ID.
 	 * </p>
 	 * <p>
-	 * Note that the algorithm also modifies existing IDs that have symbols not allowed in CSS
-	 * selectors, e.g. ":", ".", etc. The symbols are removed.
-	 * </p>
-	 *
 	 * @param content
 	 *            HTML content to modify
 	 * @return HTML content with all heading elements having {@code id} attributes. If all headings
 	 *         were with IDs already, the original content is returned.
 	 * @since 1.0
 	 */
-	public String ensureHeadingIds(String content, String idSeparator) {
+	public String ensureHeadingIds(String content) {
 
 		Element body = parseContent(content);
 
-		// first find all existing IDs (to avoid generating duplicates)
+		// Find all existing IDs (to avoid generating duplicates)
+		Map<String, Integer> ids = new HashMap<String, Integer>();
 		List<Element> idElems = body.select("*[id]");
-		Set<String> ids = new HashSet<String>();
-		boolean modified = false;
 		for (Element idElem : idElems) {
-
-			// fix all existing IDs - remove colon and other symbols which mess up jQuery
-			String id = idElem.id();
-			idElem.attr("id", adaptSlug(id, idSeparator));
-			modified = true;
-
-			ids.add(idElem.id());
+			ids.put(idElem.id(), 0);
 		}
 
-		List<String> headNoIds = concat(HEADINGS, ":not([id])", true);
-
 		// select all headings that do not have an ID
-		List<Element> headingsNoId = body.select(StringUtil.join(headNoIds, ", "));
+		List<Element> headingsNoId = body.select("h1:not([id]), h2:not([id]), h3:not([id]), h4:not([id]), h5:not([id]), h6:not([id])");
 
-		if (!headingsNoId.isEmpty() || modified) {
+		if (!headingsNoId.isEmpty()) {
+
 			for (Element heading : headingsNoId) {
 
+				// Take the text content of the title
 				String headingText = heading.text();
-				String headingSlug = slug(headingText, idSeparator);
-				// also limit slug to 50 symbols
+
+				// Create an ID out of it (trim all unwanted chars)
+				String headingSlug = slugLowerCase(headingText);
 				if (headingSlug.length() > 50) {
 					headingSlug = headingSlug.substring(0, 50);
 				}
-				String headingId = generateUniqueId(ids, headingSlug);
 
-				heading.attr("id", headingId);
+				// If the ID already exists, add an increasing number to it
+				ids.merge(headingSlug, 0, (id, n) -> n + 1);
+
+				// Set the ID attribute with slug_number
+				heading.attr("id", headingSlug + "_" + ids.getOrDefault(headingSlug, 0));
 			}
 
 			return body.html();
+
 		} else {
+
 			// nothing to update
 			return content;
 		}
 	}
 
 	/**
-	 * Generated a unique ID within the given set of IDs. Appends an incrementing number for
-	 * duplicates.
+	 * Transforms the given HTML content to replace IDs that have symbols not allowed in CSS
+	 * selectors, e.g. ":", ".", etc. The symbols are removed.
+	 * <p>
+	 * Naturally, the references to these IDs (in {@code <a href="#my_id">}) are also modified.
+	 * <p>
 	 *
-	 * @param ids
-	 * @param idBase
-	 * @return
+	 * @param content
+	 *            HTML content to modify
+	 * @return HTML content fixed IDs.
+	 * @since 1.0
 	 */
-	private static String generateUniqueId(Set<String> ids, String idBase) {
-		String id = idBase;
-		int counter = 1;
-		while (ids.contains(id)) {
-			id = idBase + String.valueOf(counter++);
+	public String fixIds(String content) {
+
+		Element body = parseContent(content);
+
+		// Find all IDs and remove unsupported characters
+		List<Element> idElems = body.select("*[id]");
+		boolean modified = false;
+		for (Element idElem : idElems) {
+
+			String id = idElem.id();
+			String newId = slug(id);
+			if (!id.equals(newId)) {
+				idElem.attr("id", newId);
+				modified = true;
+			}
 		}
 
-		// put the newly generated one into the set
-		ids.add(id);
-		return id;
+		// Then find all <a href="#..."> instances and update their values accordingly
+		List<Element> aElems = body.select("a[href^=#]");
+		for (Element aElem : aElems) {
+			// fix all existing IDs - remove colon and other symbols which mess up jQuery
+			String href = aElem.attr("href");
+			String newHref = "#" + slug(href.substring(1));
+			if (!href.equals(newHref)) {
+				aElem.attr("href", newHref);
+				modified = true;
+			}
+		}
+
+		// Return result
+		return modified ? body.html() : content;
 	}
 
 	/**
@@ -1144,20 +867,15 @@ public class HtmlTool extends SafeConfig {
 	private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
 
 	/**
-	 * Creates a slug (latin text with no whitespace or other symbols) for a longer text (i.e. to
-	 * use in URLs).
+	 * Same as {@link #slug(String)} but in lower case
 	 *
 	 * @param input
 	 *            text to generate the slug from
-	 * @param separator
-	 *            separator for whitespace replacement
-	 * @return the slug of the given text that contains alphanumeric symbols and separator only
+	 * @return the slug of the given text that contains alphanumeric symbols and "-" only
 	 * @since 1.0
-	 * @see <a href="http://www.codecodex.com/wiki/Generate_a_url_slug">http://www.codecodex.com/wiki/Generate_a_url_slug</a>
 	 */
-	public static String slug(String input, String separator) {
-		String slug = adaptSlug(input, separator);
-		return slug.toLowerCase(Locale.ENGLISH);
+	public static String slugLowerCase(String input) {
+		return slug(input).toLowerCase();
 	}
 
 	/**
@@ -1165,198 +883,14 @@ public class HtmlTool extends SafeConfig {
 	 * use in URLs). Uses "-" as a whitespace separator.
 	 *
 	 * @param input
-	 *            text to generate the slug from
-	 * @return the slug of the given text that contains alphanumeric symbols and "-" only
-	 * @since 1.0
-	 */
-	public static String slug(String input) {
-		return slug(input, "-");
-	}
-
-	/**
-	 * Creates a slug but does not change capitalization.
-	 *
-	 * @param input
 	 * @param separator
 	 * @return
 	 */
-	private static String adaptSlug(String input, String separator) {
-		String nowhitespace = WHITESPACE.matcher(input).replaceAll(separator);
+	private static String slug(String input) {
+		String nowhitespace = WHITESPACE.matcher(input).replaceAll("-");
 		String normalized = Normalizer.normalize(nowhitespace, Form.NFD);
 		return NONLATIN.matcher(normalized).replaceAll("");
 	}
-
-	/**
-	 * Extracts the autoToc div from the content and return the specified selector
-	 */
-	public String findAutoTocSelector(String content) {
-
-		// Parse the content
-		Element body = parseContent(content);
-
-		// Find the autoToc <div>
-		List<Element> autoTocDivList = body.select("div[id=autoToc]");
-
-		// If no <div id="autoToc"> tag, then return empty, meaning no autoToc
-		if (autoTocDivList.size() == 0) {
-			return "";
-		}
-
-		// Keep only the first one and return the data-headings attribute
-		String headingsSelector = autoTocDivList.get(0).attr("data-headings");
-
-		// In case of empty data-headings: default to h2
-		if (headingsSelector == null) {
-			return "h2";
-		}
-		if (headingsSelector.isEmpty()) {
-			return "h2";
-		}
-
-		// Return what we got
-		return headingsSelector;
-
-	}
-
-
-	/**
-	 * Reads all headings in the given HTML content as a hierarchy. Subsequent smaller headings are
-	 * nested within bigger ones, e.g. {@code <h2>} is nested under preceding {@code <h1>}.
-	 * <p>
-	 * Only headings with IDs are included in the hierarchy. The result elements contain ID and
-	 * heading text for each heading. The hierarchy is useful to generate a Table of Contents for a
-	 * page.
-	 * </p>
-	 *
-	 * @param content
-	 *            HTML content to extract heading hierarchy from
-	 * @return a list of top-level heading items (with id and text). The remaining headings are
-	 *         nested within these top-level items. Empty list if no headings are in the content.
-	 * @since 1.0
-	 */
-	public List<? extends IdElement> headingTree(String content, String selector) {
-
-		Element body = parseContent(content);
-
-		// select all headings
-		List<Element> headings = body.select(selector);
-
-		List<HeadingItem> headingItems = new ArrayList<HeadingItem>();
-		for (Element heading : headings) {
-			String headingId = heading.id();
-
-			// Keep only headings that have an ID
-			if (headingId != null) {
-				if (!headingId.isEmpty()) {
-					headingItems.add(new HeadingItem(headingId, heading.text(), headingIndex(heading)));
-				}
-			}
-		}
-
-		List<HeadingItem> topHeadings = new ArrayList<HeadingItem>();
-		Stack<HeadingItem> parentHeadings = new Stack<HeadingItem>();
-
-		for (HeadingItem heading : headingItems) {
-
-			while (!parentHeadings.isEmpty()
-					&& parentHeadings.peek().headingIndex >= heading.headingIndex) {
-				parentHeadings.pop();
-			}
-
-			if (parentHeadings.isEmpty()) {
-				// top level heading - no parents
-				topHeadings.add(heading);
-			} else {
-				// add to the children of topmost stack parent
-				parentHeadings.peek().children.add(heading);
-			}
-
-			// push the heading onto stack
-			parentHeadings.push(heading);
-		}
-
-		return topHeadings;
-	}
-
-	/**
-	 * Retrieves numeric index of a heading.
-	 *
-	 * @param element
-	 * @return
-	 */
-	private static int headingIndex(Element element) {
-		String tagName = element.tagName();
-		if (tagName.startsWith("h")) {
-			try {
-				return Integer.parseInt(tagName.substring(1));
-			} catch (Exception ex) {
-				throw new IllegalArgumentException("Must be a header tag: " + tagName, ex);
-			}
-		} else {
-			throw new IllegalArgumentException("Must be a header tag: " + tagName);
-		}
-	}
-
-	private static class HeadingItem implements IdElement {
-		private final String id;
-		private final String text;
-		private final int headingIndex;
-
-		private final List<HeadingItem> children = new ArrayList<HeadingItem>();
-
-		public HeadingItem(String id, String text, int headingIndex) {
-			this.id = id;
-			this.text = text;
-			this.headingIndex = headingIndex;
-		}
-
-		@Override
-		public String getId() {
-			return id;
-		}
-
-		@Override
-		public String getText() {
-			return text;
-		}
-
-		@Override
-		public List<HeadingItem> getItems() {
-			return Collections.unmodifiableList(children);
-		}
-	}
-
-	/**
-	 * Representation of a HTML element with ID and a text content. Other such elements can be
-	 * nested within.
-	 *
-	 * @author Andrius Velykis
-	 * @since 1.0
-	 */
-	public interface IdElement {
-
-		/**
-		 * Retrieves the ID of the HTML element (attribute {@code id})
-		 *
-		 * @return element {@code id} value
-		 */
-		public String getId();
-
-		/**
-		 * Retrieves the text contents of the HTML element (rendered for display)
-		 *
-		 * @return text contents of the element
-		 */
-		public String getText();
-
-		/**
-		 * Retrieves the children of the HTML element (nested within the element)
-		 *
-		 * @return nested items within the element
-		 */
-		public List<? extends IdElement> getItems();
-	}
-
 
 	/**
 	 * A generic method to use jsoup parser on an arbitrary HTML body fragment. Allows writing
@@ -1373,46 +907,5 @@ public class HtmlTool extends SafeConfig {
 		Document doc = Jsoup.parseBodyFragment(content);
 		return doc.body();
 	}
-
-	/**
-	 * Enable lightbox on all <img> elements
-	 *
-	 * @param content
-	 *            HTML content to modify
-	 * @return HTML content with modified elements. If no elements are found, the original content
-	 *         is returned.
-	 * @since 1.0
-	 */
-	public String enableLightbox(String content, String selector, int thumbnailSize ) {
-
-		if (selector == null) {
-			selector = "img";
-		}
-		if (selector.isEmpty()) {
-			selector = "img";
-		}
-
-		if (thumbnailSize <= 0) {
-			thumbnailSize = 100;
-		}
-
-		Element body = parseContent(content);
-
-		List<Element> elements = body.select(selector);
-
-		if (elements.size() > 0) {
-
-			for (Element element : elements) {
-				element.attr("height", new Integer(thumbnailSize).toString());
-				element.wrap("<a href=\"" + element.attr("src") + "\" data-lightbox=\"" + element.attr("src") + "\" data-title=\"" + element.attr("alt") + "\"></a>");
-			}
-
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
-		}
-	}
-
 
 }

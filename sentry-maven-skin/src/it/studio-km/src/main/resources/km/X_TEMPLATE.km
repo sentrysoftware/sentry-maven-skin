@@ -1,0 +1,159 @@
+!PATROLV3.6.00i BC58AF70B4845FE944F92DD307B2100A
+!#MSG_DOMAIN	X_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	10.0.00
+!REVISION	0
+!PACKAGE	X
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	X
+
+
+VERSION 10.3
+
+APPLICATIONS = {
+  { NAME = "X_TEMPLATE",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460066 "# This object represents the Template in which you define the hosts to be monitored and how to monitor them.",
+	DISCOVERY_TEXT =  1505460066 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 204,
+	OK_PICTURE = "X_TEMPLATE_ok",
+	WRONG_PICTURE = "X_TEMPLATE_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1416484706 "# Refreshes all instance parameters of the X_TEMPLATE application class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415895895 "# PATROL internal identifier of the Template instance.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"ID\");"}
+				}
+		},
+		{ NAME = "Contact", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896027 "# Name or contact information of the person in charge of the Template.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"contact\");"}
+				}
+		},
+		{ NAME = "Description", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896036 "# Description of the Template.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"description\");"}
+				}
+		},
+		{ NAME = "Constant 1", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896149 "# Name of the first Template Constant.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"constant1\");"}
+				}
+		},
+		{ NAME = "Constant 2", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896173 "# Name of the second Template Constant.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"constant2\");"}
+				}
+		},
+		{ NAME = "Constant 3", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896180 "# Name of the third Template Constant.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"constant3\");"}
+				}
+		},
+		{ NAME = "Constant 4", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896188 "# Name of the fourth Template Constant.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"constant4\");"}
+				}
+		},
+		{ NAME = "Constant 5", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415896194 "# Name of the fifth Template Constant.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"constant5\");"}
+				}
+		}
+
+	},
+	EV_CATALOG_NAME = "X_TEMPLATE.ctg",
+	EV_CATALOG_SERIAL =0,
+	PARAMETERS = {
+		{	NAME = "collectionErrorColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417705991 "requires X_template;\
+\
+swCollectionErrorCollector(get(\"sid\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "10", EXTERNAL_POLLING = False
+		},
+		{	NAME = "CollectionErrorCount", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 204,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1541494719 "# Number of collection problems that occurred on the Host and the related Monitors attached to its template. This parameter is cumulative, new errors increase the value of the parameter.\
+# The Collection Error Count value will be reset after a given time if no new errors are found. The default timeout is 15 minutes but can be configured with the:\
+# /SENTRY/STUDIO/&lt;templateID&gt;/collectionErrorCountAutoAcknowledgeTime variable.\
+# Value set by collectionErrorColl."}
+				},
+			TITLE = "Collection Error Count", UNITS = "errors",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 2147483646,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 1, MAXIMUM = 2147483646, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 2147483646, MAXIMUM = 2147483646, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!25743

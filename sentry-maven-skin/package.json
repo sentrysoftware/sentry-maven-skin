@@ -1,0 +1,49 @@
+{
+	"name": "sentry-maven-skin",
+	"version": "3.0.00",
+	"author": {
+		"name": "Bertrand Martin",
+		"email": "bertrand@sentrysoftware.com"
+	},
+	"main": "dist/sentry-maven-skin.jar",
+	"dependencies": {
+		"@fortawesome/fontawesome-free": "^5.7.1",
+		"angular": "^1.7.7",
+		"angular-animate": "^1.7.7",
+		"angular-aria": "^1.7.7",
+		"angular-media-queries": "github:jacopotarantino/angular-match-media#1d5d58c",
+		"angular-route": "^1.7.7",
+		"angular-scroll": "^1.0.2",
+		"angular-smart-table": "^2.1.11",
+		"angular-ui-bootstrap": "^2.5.6",
+		"bootstrap": "^3.4.0",
+		"bootstrap-jstree-theme": "github:aaronup/bootstrap-jstree-theme#e372bfc",
+		"elasticlunr": "^0.9.5",
+		"jquery": "^3.3.1",
+		"jquery.scrollbar": "^0.2.11",
+		"jquery.scrollintoview": "^1.9.4",
+		"jstree": "^3.3.7",
+		"moment": "^2.24.0",
+		"ng-js-tree": "^0.0.10",
+		"npm": "^6.7.0"
+	},
+	"devDependencies": {
+		"del": "^3.0.0",
+		"gulp": "^4.0.0",
+		"gulp-angular-embed-templates": "^2.3.0",
+		"gulp-clean-css": "^4.0.0",
+		"gulp-cli": "^2.0.1",
+		"gulp-eslint": "^5.0.0",
+		"gulp-filter": "^5.1.0",
+		"gulp-if": "^2.0.2",
+		"gulp-rename": "^1.4.0",
+		"gulp-replace": "^1.0.0",
+		"gulp-sourcemaps": "^2.6.4",
+		"gulp-uglify": "^3.0.1",
+		"gulp-useref": "^3.1.6",
+		"lazypipe": "^1.0.2"
+	},
+	"engines": {
+		"node": ">=0.8.0"
+	}
+}

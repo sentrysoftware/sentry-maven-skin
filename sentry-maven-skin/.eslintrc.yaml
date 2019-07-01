@@ -1,0 +1,17 @@
+---
+  env:
+    browser: true
+    node: false
+  # extends: 'eslint:recommended'
+  globals:
+    angular: readable
+    $: readable
+    jQuery: readable
+    moment: readable
+    ngStudioApp: writeable
+  rules:
+    eqeqeq: off
+    curly: warn
+    quotes:
+      - warn
+      - double

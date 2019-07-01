@@ -1,0 +1,151 @@
+#**********************************************************************
+*
+*    A few velocimacros to help site.vm
+*
+*    Perform also some "prep" work on the source HTML
+*    - indexing
+*    - add CSS classes where necessary
+*    - add AngularJS directives where necessary
+*
+***********************************************************************
+
+
+
+**
+* Convenience directive to invoke a method and ignore the return value.
+*
+* Usage:
+*	  #call ( $hashtable.put("foo", "bar") )
+**
+*##macro ( call $foo )#*
+	*##if ($foo)#*
+		// do nothing - the 'if' is for ignoring the return value
+	*##end#*
+
+*##end#*
+
+
+**
+* links
+*
+* Outputs a list of links
+*
+* $links must be a list of link objects with the below properties:
+* - href: the URL to link to
+* - name: the text to be displayed
+* - target: the "frame" target of the URL (typically "_blank" for a new tab)
+* - icon: to specify an icon to be displayed on the left of the text
+*
+* The "active" class is automatically put on the <li> element that contains
+* the URL linking to the current page.
+*
+* Output example:
+*
+* <li><a href="other.html">Other Path</a></li>
+* <li class="active"><a href="current.html">Current Path</a></li>
+* <li><a href="pretty.html"><i class="fa fa-plus-sign"></i> Pretty</a></li>
+**
+*##macro ( links $links )#*
+
+	*##foreach ( $item in $links )#*
+
+		*##set ( $alignedHref = $PathTool.calculateLink( $item.href, $relativePath ) )#*
+		*#<li#*
+			*##if ( $alignedHref == $alignedFileName ) class="active"#end>#*
+			*#<a #*
+				*##if ( $item.href ) href="$alignedHref"#end#*
+				*##if ( $item.target ) target="$target"#end#*
+				*#>#*
+				*##if ( $item.icon )<i class="$item.icon"></i> #end#*
+				*#$item.name#*
+			*#</a>#*
+		*#</li>#*
+	*##end#*
+
+*##end#*
+
+
+
+/////////////////////////////////////////////////////
+//
+//   Initialization
+//
+/////////////////////////////////////////////////////
+
+// Process all ${properties} in the rendered HTML
+*##set ( $bodyContent = $render.eval( $bodyContent ) )#*
+
+// Create the short title
+*##set ( $hTexts = $htmlTool.text( $bodyContent, "h1" ) )#*
+*##if ( $hTexts.size() == 0 )#*
+	*##set ( $hTexts = $htmlTool.text( $bodyContent, "h2" ) )#*
+*##end#*
+*##if ( $hTexts.size() > 0 )#*
+	*##set ( $shortTitle = $hTexts.get(0) )#*
+*##end#*
+*##set ( $title = $decoration.name + " - " + $shortTitle )#*
+
+// Add the "zoomable-img" attribute to all <img> where alt != "inline"
+*##set ( $bodyContent = $htmlTool.setAttr( $bodyContent, "img:not(img[alt=inline])", "zoomable-img", "" ) )#*
+
+// Also, add the "zoomable-img-loading" class, so it's immediately sized appropriately,
+// even before the zoomable-img directive kicks in
+*##set ( $bodyContent = $htmlTool.addClass( $bodyContent, "img:not(img[alt=inline])", "zoomable-img-loading" ) )#*
+
+// Bootstrap CSS class for tables
+*##set ( $bodyContent = $htmlTool.addClass( $bodyContent, "table.bodyTable", ["table", "table-striped", "table-hover"] ) )#*
+*##set ( $bodyContent = $htmlTool.fixTableHeads( $bodyContent ) )#*
+
+// Convert old-style <a name=""> anchors to HTML5 <a id="">
+*##set ( $bodyContent = $htmlTool.headingAnchorToId( $bodyContent ) )#*
+
+// Clean up IDs and corresponding <a href="#..."> references for unsupported characters
+*##set ( $bodyContent = $htmlTool.fixIds( $bodyContent ) )#*
+
+// Make sure all headings have IDs
+*##set ( $bodyContent = $htmlTool.ensureHeadingIds( $bodyContent ) )#*
+
+// Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
+*##set ( $bodyContent = $htmlTool.setAttr( $bodyContent, "a[href^=#]", "du-smooth-scroll", "" ) )#*
+
+// Extract the TOC and put it in a variable
+*##set ( $tocContentArray = $htmlTool.extract( $bodyContent, "ul#toc", 1 ).getExtracted() )#*
+*##if ( $tocContentArray.size() > 0 )#*
+	*##set ( $tocContent = $tocContentArray.get(0) )#*
+	// Wrap the TOC with the necessary HTML
+	*##set ( $bodyContent = $htmlTool.wrap( $bodyContent, "ul#toc", "<div class='toc-inline-container hidden-lg'>", 1 ) )#*
+	*##set ( $bodyContent = $htmlTool.prepend( $bodyContent, "div.toc-inline-container", "<h3>Table of Contents</h3>", 1 ) )#*
+*##else#*
+	*##set ( $tocContent = "" )#*
+*##end#*
+
+// Extract the keywords
+*##set ( $keywordsArray = $htmlTool.getAttr( $headContent, "meta[name=keywords]", "content" ) )#*
+*##call ( $keywordsArray.add( $decoration.getCustomValue("keywords") ) )#*
+*##if ( $keywordsArray.size() > 0 )#*
+	*##set ( $keywords = $display.list($display.list($keywordsArray, ",").trim().split("\s*,\s*"), ",") )#*
+	*##set ( $keywordsArray = $keywords.split("\s*,\s*") )#*
+*##end#*
+
+// Build ElasticLunr index
+*##set ( $indexFile = "${project.build.directory}/site/index.json" )#*
+*##set ( $bodyText = $htmlTool.text( $bodyContent, "body" ) )#*
+*##call ( $indexTool.buildElasticLunrIndex( $indexFile, $currentFileName, $shortTitle, $keywords, $bodyText.get(0) ) )#*
+
+// publishDate: either the one in site.xml, or current date
+*##if ( ! $publishDate || $publishDate == "" )#*
+	*##set ( $publishDate = $decoration.getCustomValue("publishDate") )#*
+	*##if ( ! $publishDate || $publishDate == "" )#*
+		*##set ( $publishDate = $date.get("yyyy-M-d HH:mm:ss") )#*
+	*##end#*
+*##end#*
+
+// generator: who we are and where we come from
+*##set ( $generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $decoration.skin.artifactId $decoration.skin.version" )#*
+*##if ( $docRenderingContext.doxiaSource )#*
+	*##set ( $generator = "$generator, from $docRenderingContext.parserId" )#*
+*##end#*
+*##if ( $docRenderingContext.generator && $docRenderingContext.generator != "" )#*
+	*##set ( $generator = "$generator, with $docRenderingContext.generator" )#*
+*##end#*
+*###
