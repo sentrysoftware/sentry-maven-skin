@@ -23,6 +23,7 @@
 		"jquery.scrollbar": "^0.2.11",
 		"jquery.scrollintoview": "^1.9.4",
 		"jstree": "^3.3.7",
+		"mark.js": "^8.11.1",
 		"moment": "^2.24.0",
 		"ng-js-tree": "^0.0.10",
 		"npm": "^6.7.0"

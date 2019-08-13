@@ -45,7 +45,7 @@ Other actions may be available as KM developers expose them in **${project.name}
 
 This view shows the values of the selected parameter, as stored over time in the history of the PATROL Agent, as a graph and as a table.
 
-By default, the 500 last points are displayed. Each time you click on the **GET MORE DATA** button, you double the number of points, until you reach the limit of the PATROL Agent history (1 day by default, customizable in the [Agent Settings](agent.html)). Be careful: your browser may struggle to render thousands of points at once.
+By default, the 500 last points are displayed. Each time you click on the **GET MORE DATA** button, you double the number of points, until you reach the limit of the PATROL Agent history (1 day by default, customizable in the [Agent Settings](subdir/agent.html)). Be careful: your browser may struggle to render thousands of points at once.
 
 Note that best effort is made by **${project.name}** to interpret the units of the parameter and render *enumerations* values as such, rather than as simple graphs.
 

@@ -429,7 +429,7 @@ public class HtmlTool extends SafeConfig {
 			elements = elements.subList(0, Math.min(amount, elements.size()));
 		}
 
-		if (elements.size() > 0) {
+		if (!elements.isEmpty()) {
 
 			for (Element element : elements) {
 				element.append(appendHtml);
@@ -467,7 +467,7 @@ public class HtmlTool extends SafeConfig {
 			elements = elements.subList(0, Math.min(amount, elements.size()));
 		}
 
-		if (elements.size() > 0) {
+		if (!elements.isEmpty()) {
 
 			for (Element element : elements) {
 				element.prepend(prependHtml);

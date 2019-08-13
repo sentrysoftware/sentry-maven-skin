@@ -123,7 +123,7 @@
 				</ul>
 
 				<!-- Search results -->
-				<ul class="nav navbar-nav search-results" ng-show="siteSearch">
+				<ul class="nav navbar-nav search-results search-results-content" ng-show="siteSearch">
 
 					<!-- List of results -->
 					<li ng-repeat="result in resultArray track by result.href">
@@ -222,12 +222,14 @@
 						<span ng-pluralize count="resultArray.length" when="{'1': 'result', 'other': 'results'}"></span>
 
 						<!-- List of results -->
-						<div ng-repeat="result in resultArray track by result.href">
-							<h4><a ng-href="{{result.href}}">{{result.title}}</a></h4>
-							<div class="row"><div class="col-md-6">
-								<uib-progressbar type="info" value="result.score" max="1"></uib-progressbar>
-							</div></div>
-							<small>{{result.body | truncate:'400'}}</small>
+						<div class="search-results-content">
+							<div ng-repeat="result in resultArray track by result.href">
+								<h4><a ng-href="{{result.href}}">{{result.title}}</a></h4>
+								<div class="row"><div class="col-md-6">
+									<uib-progressbar type="info" value="result.score" max="1"></uib-progressbar>
+								</div></div>
+								<small>{{result.body | truncate:'400'}}</small>
+							</div>
 						</div>
 
 					</div>
@@ -259,6 +261,7 @@
 	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
 
 	<!-- build:js js/main-combined.js -->
+	<script src="../../../node_modules/mark.js/dist/mark.min.js" charset="UTF-8"></script>
 	<script src="../../../node_modules/angular/angular.min.js"></script>
 	<script src="../../../node_modules/angular-animate/angular-animate.min.js"></script>
 	<script src="../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>

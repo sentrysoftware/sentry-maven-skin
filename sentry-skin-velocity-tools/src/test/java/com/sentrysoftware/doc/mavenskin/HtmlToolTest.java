@@ -157,7 +157,7 @@ class HtmlToolTest {
 	 */
 	protected static String getResourceAsString(String path) {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(HtmlToolTest.class.getClass().getResourceAsStream(path)));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(HtmlToolTest.class.getResourceAsStream(path)));
 		StringBuilder builder = new StringBuilder();
 		String l;
 		try {

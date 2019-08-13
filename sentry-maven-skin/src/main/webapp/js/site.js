@@ -15,13 +15,16 @@ angular.module("sentry.site").config(["$animateProvider", function($animateProvi
  **/
 angular.module("sentry.site").controller(
 	"siteController",
-	["$scope", "$http", "$location", "screenSize", "siteIndex", "$document", "$anchorScroll", "RELATIVE_ROOT",
-	function($scope, $http, $location, screenSize, siteIndex, $document, $anchorScroll, RELATIVE_ROOT) {
+	["$scope", "$http", "$location", "screenSize", "siteIndex", "$document", "$anchorScroll", "RELATIVE_ROOT", "$timeout",
+	function($scope, $http, $location, screenSize, siteIndex, $document, $anchorScroll, RELATIVE_ROOT, $timeout) {
 
 	/**
 	 * initialize
 	 **/
 	$scope.initialize = function() {
+
+		// What to highlight?
+		$scope.mark = new Mark(".search-results-content");
 
 		// Watch changes in search value in the URL
 		$scope.$on("$locationChangeSuccess", function() {
@@ -65,7 +68,20 @@ angular.module("sentry.site").controller(
 	 **/
 	$scope.search = function(what) {
 
-		if (!!what) {
+		// Normalize the keywords being searched (this is for the highlighting)
+		var keywords = elasticlunr
+			.tokenizer(what)
+			.map(elasticlunr.trimmer)
+			.filter(elasticlunr.stopWordFilter);
+		keywords = keywords.concat(keywords.map(elasticlunr.stemmer));
+
+		if (keywords.length > 0) {
+
+			// Build a regex that will search for any of these words
+			var keywordsRegex = new RegExp(keywords.join("|"), "i");
+
+			// Clear the highlighting
+			$scope.mark.unmark();
 
 			siteIndex.get().then(function(index) {
 
@@ -88,6 +104,17 @@ angular.module("sentry.site").controller(
 						body = body.substring(doc.title.length);
 					}
 
+					// Search for the first occurrence of the searched words
+					var pos = body.search(keywordsRegex) - 20;
+
+					// Stay in reasonable boundaries, from beginning to 400 chars before the end
+					if (pos > body.length - 400) { pos = body.length - 400; }
+					if (pos < 0) { pos = 0; }
+					if (pos > 0) {
+						body = "..." + body.substring(pos);
+					}
+
+
 					return {
 						href: RELATIVE_ROOT + "/" + doc.id,
 						title: doc.title,
@@ -96,6 +123,12 @@ angular.module("sentry.site").controller(
 					};
 				});
 
+				// Highlight these keywords... after the digest cycle is run,
+				// so the DOM is ready with the result of the search
+				$timeout(function() {
+					$scope.mark.mark(keywords, { accuracy: "complementary", diacritics: true });
+				}, 0, false);
+
 			});
 
 			// Update URL
@@ -103,8 +136,11 @@ angular.module("sentry.site").controller(
 
 		} else {
 			// Nothing to search, reset the results
+			$scope.mark.unmark();
 			$scope.resultArray = [];
-			$location.search("search", null);
+			if (!what) {
+				$location.search("search", null);
+			}
 		}
 
 	};

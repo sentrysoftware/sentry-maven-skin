@@ -3,6 +3,7 @@ package com.sentrysoftware.doc.mavenskin;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,12 +21,12 @@ public class IndexTool {
 	/**
 	 * UTF-8 Charset
 	 */
-	final static Charset UTF8_CHARSET = Charset.forName("UTF-8");
+	static final Charset UTF8_CHARSET = StandardCharsets.UTF_8;
 
 	/**
 	 * Nashorn engine to execute Javascript
 	 */
-	final static ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+	static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
 
 	static {
 
@@ -70,7 +71,7 @@ public class IndexTool {
 		// Read the index file, if any
 		String indexJson;
 		Path indexPath = Paths.get(indexPathString);
-		if (Files.exists(indexPath)) {
+		if (indexPath.toFile().exists()) {
 			indexJson = new String(Files.readAllBytes(indexPath), UTF8_CHARSET);
 		} else {
 			indexJson = "";

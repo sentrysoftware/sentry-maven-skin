@@ -138,6 +138,23 @@ nav.site-banner .navbar-toggle > i {
 }
 
 /**
+ * Naviguation bar for mobile devices
+ **/
+
+nav.visible-xs.site-banner.navbar p.navbar-brand.header-title {
+	max-width: calc(100vw - 60px);
+	margin-bottom: 0;
+	line-height: 28px;
+	padding-top: 0;
+	padding-bottom: 0;
+	height: unset;
+}
+
+nav.visible-xs.site-banner.navbar p.navbar-brand.header-title span.header-subtitle {
+	line-height: normal;
+}
+
+/**
  * Links in the navbar for small devices
  **/
 
@@ -229,6 +246,13 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	background-color: #000000;
 }
 
+.search-results-content mark {
+	color: inherit;
+	background-color: inherit;
+	font-weight: bold;
+	padding: 0;
+}
+
 
 /**
  * Main content
@@ -236,8 +260,10 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 
 .main-content {
 	min-height: 100vh;
+	padding-left: 30px;
+	padding-right: 30px;
 	padding-top: 15px;
-	padding-bottom: 50vh;
+	padding-bottom: 15px;
 	font-family: 'Lato-Regular', sans-serif;
 }
 

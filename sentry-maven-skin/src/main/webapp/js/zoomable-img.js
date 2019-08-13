@@ -14,7 +14,7 @@ angular.module("sentry.site").directive("zoomableImg", function() {
 		},
 		replace: true,
 		link: {
-			post: function postLink(scope, element, attrs) {
+			post: function postLink(scope, element) {
 				// For the smoothest animation, we will need the real picture size
 				// We'll get its size only once it's loaded
 				element.find("img").one("load", function(event) {
