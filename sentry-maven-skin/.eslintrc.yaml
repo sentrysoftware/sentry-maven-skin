@@ -1,0 +1,13 @@
+---
+  env:
+    browser: true
+    node: false
+  extends: 'eslint:recommended'
+  globals:
+    angular: readable
+    elasticlunr: readable
+    Mark: readable
+  rules:
+    quotes:
+      - warn
+      - double

@@ -1,0 +1,87 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	senms_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	9.3.00
+!REVISION	0
+!PACKAGE	senms
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	senms
+
+
+VERSION 9.305
+
+APPLICATIONS = { 
+  { NAME = "X_TRANSFORM",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 3600,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1171746184 "# This object transforms complex (multi-line, HTML, XML) text to enable String Searches, Numeric Value Extractions, Value Maps, Text Pre-Processing or Dynamic Object Builders.",
+	DISCOVERY_TEXT =  1171746184 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 210,
+	OK_PICTURE = "X_TRANSFORM_ok",
+	WRONG_PICTURE = "X_TRANSFORM_warn",
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1172155361 "# PATROL internal identifier of the Text Pre-Processing instance.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1172155382 "# PATROL internal identifier of the parent object.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Parent Type", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1172155458 "# Type of the parent of the Text Pre-Processing instance (File, Command Line,  etc.).\
+requires X_string;\
+\
+print (swInfoboxString(get(\"sid\"), \"parentType\"));"}
+				}
+		}
+
+	},
+	PARAMETERS = {
+		{	NAME = "Result", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 210,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1180539459 "# Lines matching the Text Pre-Processing."}
+				},
+			TITLE = "Result",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%s", OUTPUT = OUTPUT_TEXT,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!26300

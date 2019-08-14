@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="8" minorVersion="627" package="swsy" productcode="swsy" release="8.6.01" revision="00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="0" displayName="Studio Windows Service" helpContextId="205" helpFile="X_help.hlp" name="X_WINSERVICE" okPicture="X_WINSERVICE_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_WINSERVICE_warn">
+      <PreDiscoveryText serial="1505460227"># This Monitor searches and monitors the status of the specified Windows Service.
+# Available for Windows hosts only.</PreDiscoveryText>
+      <DiscoveryText serial="1505460227">#</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422885545"># Refreshes all instance parameters of the X_WINSERVICE application class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033400095"># PATROL internal identifier of the Windows Service instance.
+requires X_shared;
+
+print(swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033400103"># PATROL internal identifier of the parent object.
+requires X_shared;
+
+print(swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Service Name" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033398643"># Name of the monitored Windows Service.
+requires X_winservice;
+
+print (swInfoboxNTService(get("sid"), "serviceName"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Startup Mode" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1406652436"># Indicates the startup mode of the Windows Service.
+requires X_winservice;
+
+print (swInfoboxNTService(get("sid"), "startupMode"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Path" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1406652450"># Fully qualified path to the service binary file that implements the Windows Service.
+requires X_winservice;
+
+print (swInfoboxNTService(get("sid"), "servicePath"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" autoRescale="true" check="false" format="%s" helpContextId="205" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="ServiceDetails" output="OUTPUT_TEXT" title="Service Details" type="CONSUMER" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422885203"># Details about the Windows Service.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="205" helpFile="X_help.hlp" monitor="false" name="winServiceColl" pollTime="120" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422885773">requires X_winservice;
+
+swWinServiceCollector(get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+        <Parameter active="true" autoRescale="false" check="false" format="%f" helpContextId="205" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Status" output="OUTPUT_GRAPH" title="Status" type="CONSUMER" units="{0 = OK ; 1 = Suspicious ; 2 = Failed}" yAxisMax="2" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="true" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428648169"># Status of the Windows Service.
+# Value set by winServiceColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="1" name="ALARM1" state="WARN"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="2" name="ALARM2" state="ALARM"/>
+          </Ranges>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>

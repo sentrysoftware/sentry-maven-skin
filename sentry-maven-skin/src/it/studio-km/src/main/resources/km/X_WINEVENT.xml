@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="8" minorVersion="621" package="swsy" productcode="swsy" release="8.6.01" revision="00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="0" displayName="Studio Windows Event" helpContextId="207" helpFile="X_help.hlp" name="X_WINEVENT" okPicture="X_WINEVENT_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_WINEVENT_warn">
+      <PreDiscoveryText serial="1505460197"># This Monitor reports on the events in the Windows Event Log that match the specified criteria.
+# Available for Windows hosts only.</PreDiscoveryText>
+      <DiscoveryText serial="1505460197">#</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1416580288"># Refreshes all instance parameters of the X_WINEVENT application class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033399933"># PATROL internal identifier of the Windows Events instance.
+requires X_shared;
+
+print(swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033399946"># PATROL internal identifier of the parent object.
+requires X_shared;
+
+print(swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Event Log" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033389680"># Indicates which event log is searched.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "eventLog"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Provider" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033389663"># Indicates the provider selected.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "provider"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Event ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033389630"># ID of the event to be searched.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "eventID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledging Event ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033393227"># Event IDs that will acknowledge the detected events.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "acknowledgeEventID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledge" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033393403"># Indicates what is to be acknowledged: one event or all events.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "acknowledgeAlerts"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Timeout" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033393261"># Time after which a matching Windows Event is acknowledged.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "timeout"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Run Alert Actions" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033389687"># Indicates when Alert Actions should be executed.
+requires X_winevent;
+
+print (swInfoboxWinEvent(get("sid"), "runAlertActions"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="207" helpFile="X_help.hlp" monitor="false" name="winEventColl" pollTime="120" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1174828671">requires X_genericcollector;
+
+swGenericCollector(get("appType"), get("sid"), get("name"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="207" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MatchingEventRate" output="OUTPUT_GRAPH" title="Matching Event Rate" type="CONSUMER" units="events/min" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422842440"># Rate at which Windows Events are found.
+# Value set by winEventColl.
+</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="207" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MatchingEventCount" output="OUTPUT_GRAPH" title="Matching Event Count" type="CONSUMER" units="events" yAxisMax="2147483646" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428647997"># Number of matching Windows Events.
+# Value set by winEventColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="1" name="ALARM1" state="ALARM"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="2147483646" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%s" helpContextId="207" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MatchingEvents" output="OUTPUT_TEXT" title="Matching Events" type="CONSUMER" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1423195834"># Lists all matching events, which are counted in MatchingEventCount.
+# Value set by winEventColl.
+</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>

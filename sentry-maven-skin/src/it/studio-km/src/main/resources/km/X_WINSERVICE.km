@@ -1,0 +1,151 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	swsy_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	8.6.01
+!REVISION	00
+!PACKAGE	swsy
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	swsy
+
+
+VERSION 8.627
+
+APPLICATIONS = { 
+  { NAME = "X_WINSERVICE",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460227 "# This Monitor searches and monitors the status of the specified Windows Service.\
+# Available for Windows hosts only.",
+	DISCOVERY_TEXT =  1505460227 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 205,
+	OK_PICTURE = "X_WINSERVICE_ok",
+	WRONG_PICTURE = "X_WINSERVICE_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1422885545 "# Refreshes all instance parameters of the X_WINSERVICE application class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033400095 "# PATROL internal identifier of the Windows Service instance.\
+requires X_shared;\
+\
+print(swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033400103 "# PATROL internal identifier of the parent object.\
+requires X_shared;\
+\
+print(swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Service Name", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033398643 "# Name of the monitored Windows Service.\
+requires X_winservice;\
+\
+print (swInfoboxNTService(get(\"sid\"), \"serviceName\"));"}
+				}
+		},
+		{ NAME = "Startup Mode", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1406652436 "# Indicates the startup mode of the Windows Service.\
+requires X_winservice;\
+\
+print (swInfoboxNTService(get(\"sid\"), \"startupMode\"));"}
+				}
+		},
+		{ NAME = "Path", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1406652450 "# Fully qualified path to the service binary file that implements the Windows Service.\
+requires X_winservice;\
+\
+print (swInfoboxNTService(get(\"sid\"), \"servicePath\"));"}
+				}
+		}
+
+	},
+	PARAMETERS = {
+		{	NAME = "ServiceDetails", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 205,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1422885203 "# Details about the Windows Service."}
+				},
+			TITLE = "Service Details",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%s", OUTPUT = OUTPUT_TEXT,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "winServiceColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 205,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1422885773 "requires X_winservice;\
+\
+swWinServiceCollector(get(\"sid\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "120", EXTERNAL_POLLING = False
+		},
+		{	NAME = "Status", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 205,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428648169 "# Status of the Windows Service.\
+# Value set by winServiceColl."}
+				},
+			TITLE = "Status", UNITS = "{0 = OK ; 1 = Suspicious ; 2 = Failed}",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 2,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 2, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 1, MAXIMUM = 1, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = True, MINIMUM = 2, MAXIMUM = 2, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!27545

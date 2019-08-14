@@ -1,0 +1,135 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	senms_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	9.3.00
+!REVISION	0
+!PACKAGE	senms
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	senms
+
+
+VERSION 9.307
+
+APPLICATIONS = {
+  { NAME = "X_FORMULA",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460051 "# This Monitor combines the value of several parameters with a specified formula.\
+# The formula can be a simple mathematical expression or PSL code to perform string manipulation. Several useful PSL functions are provided for classic operations like table joins.\
+# The result can be parsed with String Searches, Numeric Value Extractions, Value Maps, Text Pre-Processing or Dynamic Object Builders.",
+	DISCOVERY_TEXT =  1505460051 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 195,
+	OK_PICTURE = "X_FORMULA_ok",
+	WRONG_PICTURE = "X_FORMULA_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1426845943 "# Refreshes all instance parameters of the X_FORMULA application class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380807 "# PATROL internal identifier of the Multi-Parameter Formula instance.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380820 "# PATROL internal identifier of the parent object.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Formula", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1216626460 "# Formula applied to the parameters.\
+requires X_formula;\
+\
+print(swInfoboxKmWatch(get(\"sid\"), \"formula\"));"}
+				}
+		}
+
+	},
+	PARAMETERS = {
+		{	NAME = "formulaColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 195,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1174917919 "requires X_genericcollector;\
+\
+swGenericCollector(get(\"appType\"), get(\"sid\"), get(\"name\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "120", EXTERNAL_POLLING = False
+		},
+		{	NAME = "Result", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 195,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1169051134 "# Return output of the formula (alphanumeric).\
+# Value set by formulaColl."}
+				},
+			TITLE = "Result",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%s", OUTPUT = OUTPUT_TEXT,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "Value", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 195,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391088899 "# Derived (numeric) value from the formula based on the input parameters.\
+# Value set by formulaColl."}
+				},
+			TITLE = "Value",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 1, MAXIMUM = 1, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 95, MAXIMUM = 100, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!62203

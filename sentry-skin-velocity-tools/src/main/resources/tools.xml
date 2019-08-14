@@ -2,11 +2,9 @@
 <!-- Add custom tools to Velocity tools. The tools.xml file is included in the classpath and Velocity finds it. -->
 <tools>
   <toolbox scope="application">
-    <tool key="config"
-          class="com.sentrysoftware.doc.mavenskin.SkinConfigTool"/>
     <tool key="htmlTool"
           class="com.sentrysoftware.doc.mavenskin.HtmlTool"/>
-    <tool key="uriTool"
-          class="com.sentrysoftware.doc.mavenskin.URITool"/>
+    <tool key="indexTool"
+    	  class="com.sentrysoftware.doc.mavenskin.IndexTool"/>
   </toolbox>
 </tools>

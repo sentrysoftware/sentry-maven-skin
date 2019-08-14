@@ -6,5 +6,9 @@ Thumbs.db
 **/*.bak
 **/*.versionsBackup
 
+# Node.js stuff
+node_modules/
+node/
+
 # Maven output dirs
 target/

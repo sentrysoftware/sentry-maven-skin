@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="10" minorVersion="10" package="X" productcode="X" release="10.0.00" revision="0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application EVCatalogName="X_MAIN.ctg" EVCatalogSerial="1535098463" active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="3600" displayName="Monitoring Studio X" helpContextId="201" helpFile="X_help.hlp" name="X_MAIN" okPicture="X_MAIN_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_MAIN_warn">
+      <PreDiscoveryText serial="1505460096"># This is the main application class which creates the main Monitoring Studio instance. By default, all monitoring instances (Hosts, Templates and Monitors) are grouped under this object.
+set("active", 2);</PreDiscoveryText>
+      <DiscoveryText serial="1505460096">requires X_discovery;
+
+swMainIconDiscovery();</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Trigger a KM Discovery" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422611049"># Forces a full KM discovery.
+set("/X_MAIN/STUDIO/forceDiscovery", 1);
+refresh_parameters("/X_MAIN/STUDIO/discoveryColl");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1421916984"># Refreshes all instance parameters of the X_MAIN application class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Java Settings..." security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1219830340"># Changes the path of the JRE used by Monitoring Studio. By default, it is automatically discovered.
+requires X_kmcommands;
+
+swJavaSettingsDialog();</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Debug..." security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422612237"># Enables or disables the KM debug options.
+requires X_kmcommands;
+
+swSentryDebugDialog();</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="About..." security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1419000692"># Diaplays the version, build number, and other general information about Monitoring Studio.
+requires X_kmcommands;
+
+swSentryAboutDialog();</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Product" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033635832"># Name of the product.
+requires X_main;
+
+swGenericInfobox(get("appType"), get("sid"), "productName");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Version" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033635868"># Current version of the product.
+requires X_main;
+
+swGenericInfobox(get("appType"), get("sid"), "version");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Release Date" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033635901"># Release date of the current version of the product.
+requires X_main;
+
+swGenericInfobox(get("appType"), get("sid"), "releaseDate");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Copyright" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033635926"># Copyright information.
+requires X_main;
+
+swGenericInfobox(get("appType"), get("sid"), "copyright");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Website" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033635945"># Website address.
+requires X_main;
+
+swGenericInfobox(get("appType"), get("sid"), "webSite");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Support" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033636082"># Support contact information.
+requires X_main;
+
+swGenericInfobox(get("appType"), get("sid"), "supportEmail");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="201" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="DiscoveryTime" output="OUTPUT_GRAPH" title="Discovery Time" type="CONSUMER" units="seconds" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1472559646"># Time taken to execute the global discovery.
+# Value set by discoveryColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="false" check="false" format="%f" helpContextId="201" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="DiscoveryStatus" output="OUTPUT_GRAPH" title="Discovery Status" type="CONSUMER" units="{0 = Not Running ; 1 = Running}" yAxisMax="1" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1472559673"># Indicates if the global discovery is currently running.
+# Value set by discoveryColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="1" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="201" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="CollectionErrorCount" output="OUTPUT_GRAPH" title="Collection Error Count" type="CONSUMER" units="errors" yAxisMax="2147483646" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="true" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1541494701"># Number of errors that prevent Monitoring Studio from operating properly. This parameter is cumulative, new errors increase the value of the parameter.
+# The Collection Error Count value will be reset after a given time if no new errors are found. The default timeout is 135 minutes but can be configured with the following variable:
+# /SENTRY/STUDIO/collectionErrorCountAutoAcknowledgeTime.
+# Value set by discoveryColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="1" name="ALARM1" state="ALARM"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="2147483646" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="201" helpFile="X_help.hlp" monitor="false" name="studioColl" pollTime="10" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1421915535">requires X_main;
+
+monitoringStudioCollector();</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="201" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MonitorCount" output="OUTPUT_GRAPH" title="Monitor Count" type="CONSUMER" units="Monitors" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1422612292"># Total number of Monitors managed by Monitoring Studio.
+# Value set by studioColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="201" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="HostCount" output="OUTPUT_GRAPH" title="Host Count" type="CONSUMER" units="Hosts" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1421915075"># Total number of Hosts managed by Monitoring Studio.
+# Note: Identical hosts are counted as if they were unique.
+# Value set by studioColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="201" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="DebugStatus" output="OUTPUT_GRAPH" title="Debug Status" type="CONSUMER" units="{0 = Off ; 1 = On}" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="true" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1472549391"># Indicates whether the debug mode is enabled or not.
+# Value set by studioColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="201" helpFile="X_help.hlp" monitor="false" name="discoveryColl" pollTime="60" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1246354814">requires X_discovery;
+
+swDiscoveryCollector();</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+        <Parameter active="false" autoRescale="true" check="false" externalPolling="false" format="%f" historyLevel="false" historySpan="0" historyTime="600" monitor="false" name="ExtraFilesList" output="OUTPUT_NONE" pollTime="600" start="ASAP" title="ExtraFilesList" type="STANDARD" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1024574201">#</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+      </Parameters>
+      <Commandtypes>
+        <Commandtype killGroup="false" killSignal="0" name="MIGRATE_PASSWORD">
+          <Template serial="1220261147">%{command} %{password}</Template>
+          <TermText/>
+          <PreText/>
+          <PostText/>
+        </Commandtype>
+      </Commandtypes>
+      <KMConfigurationMetadata>
+        <KMLevelConfiguration dataModelMajorVersion="1" dataModelMinorVersion="0"/>
+        <ConfigurationParameters>
+          <ConfigurationParameter>
+            <AttributeSet label="Monitoring Studio Configuration">
+
+              <Attribute>
+                <List id="hostList" indexedBy="hostID" isMandatory="true" label="Monitored Hosts">
+                  <AttributeSet label="Host Configuration">
+
+
+
+
+
+
+
+
+<!-- General -->
+                    <Attribute>
+                      <AttributeSet label="General">
+
+
+
+
+
+
+
+
+<!-- Display Name -->
+                        <Attribute>
+                          <String description="Enter a name to identify the monitored object in the Console." id="label" isMandatory="true" label="Display Name"/>
+                        </Attribute>
+
+
+
+
+
+
+
+
+<!-- Internal ID -->
+                        <Attribute>
+                          <String description="Enter an ID to identify the monitored object." id="hostID" isMandatory="true" label="Internal ID">
+                            <InputValidationRules>
+                              <InputValidationRule id="validatePattern">
+                                <Params>
+                                  <Param>^[a-zA-Z0-9-_#]+$</Param>
+                                </Params>
+                              </InputValidationRule>
+                            </InputValidationRules>
+                          </String>
+                        </Attribute>
+
+
+
+
+
+
+
+
+<!-- System Type -->
+                        <Attribute>
+                          <Enum default="Microsoft Windows" description="Select the host system type." id="systemType" label="System Type">
+                            <Enumerators>
+                              <Enumerator label="Microsoft Windows" value="2"/>
+                              <Enumerator label="Linux/UNIX" value="1"/>
+                              <Enumerator label="Other" value="3"/>
+
+                            </Enumerators>
+                          </Enum>
+                        </Attribute>
+
+
+
+
+
+
+            <!-- Host Group -->
+       					            <Attribute>
+                      	   <Boolean default="true" description="Enable to place the host(s) under a host group." id="groupHosts" label="Place Host(s) Under a Host Group"/>
+                      	</Attribute>
+
+                      </AttributeSet>
+                    </Attribute>
+
+
+
+
+
+
+
+
+<!-- Hosts/Hostnames -->
+                    <Attribute>
+                      <AttributeSet label="Hosts">
+                        <Attribute>
+                          <List id="hostnameList" indexedBy="hostname" label="Associated Hosts">
+                            <AttributeSet label="Hostname">
+                              <Attribute>
+                                <String default="localhost" description="Enter the name of the host with which you need to establish a connection." id="hostname" isMandatory="true" label="Hostname or IP Address"/>
+                              </Attribute>
+                              <Attribute>
+                                <String description="Fully Qualified Domain Name (FQDN)." id="fqdn" label="Associate to a Specific FQDN"/>
+                              </Attribute>
+                            </AttributeSet>
+                          </List>
+                        </Attribute>
+                      </AttributeSet>
+                    </Attribute>
+
+
+
+
+
+
+
+
+<!-- System Credentials -->
+                    <Attribute>
+                      <AttributeSet label="System Credentials">
+                        <Attribute>
+                          <String description="Enter the System username that will be used for all system-related monitoring (including WMI queries/SSH connections)." id="systemUsername" label="Username">
+                            <InputValidationRules>
+                              <InputValidationRule id="validateForbidden">
+                                <Params>
+                                  <Param> ,;</Param>
+                                </Params>
+                              </InputValidationRule>
+                            </InputValidationRules>
+                          </String>
+                        </Attribute>
+                        <Attribute>
+                          <String description="Enter the password to use to establish the connection with the host or the passphrase (optional) to use with the Private Key File Path." id="systemPassword" isStorageSecure="true" label="Password"/>
+                        </Attribute>
+                        <Attribute>
+                          <String description="Enter the full path to the private key file on the PATROL Agent node. The file should be readable to the default PATROL Agent user." id="systemPrivateKey" label="Associated Private Key File"/>
+                        </Attribute>
+
+
+
+
+
+
+
+
+<!-- SNMP -->
+                        <Attribute>
+                          <AttributeSet label="SNMP">
+                            <Attribute>
+                              <Enum default="No SNMP" description="Select the SNMP option and provode the required SNMP settings below." id="snmpVersion" label="SNMP">
+                                <Enumerators>
+                                  <Enumerator label="No SNMP" value="0"/>
+                                  <Enumerator label="SNMP v1" value="1"/>
+                                  <Enumerator label="SNMP v2c" value="2"/>
+                                  <Enumerator label="SNMP v3 - No Authentication" value="3"/>
+                                  <Enumerator label="SNMP v3 - MD5 Authentication" value="4"/>
+                                  <Enumerator label="SNMP v3 - SHA Authentication" value="5"/>
+                                </Enumerators>
+                              </Enum>
+                            </Attribute>
+
+
+
+
+
+
+
+
+<!-- SNMP v1 -->
+                            <Attribute>
+                              <AttributeSet label="SNMP v1" newPopupDialog="true">
+                                <Attribute>
+                                  <String default="public" description="Enter the SNMP community string to use to perform SNMP v1 queries." id="snmp1Community" label="Community String"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="161" description="Enter the SNMP port number." id="snmp1Port" label="Port" maxValue="20000" minValue="1"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="30" description="Enter the SNMP query timeout." id="snmp1Timeout" label="Timeout (seconds)" maxValue="32767" minValue="1"/>
+                                </Attribute>
+                              </AttributeSet>
+                            </Attribute>
+
+
+
+
+
+
+
+
+<!-- SNMP v2c -->
+                            <Attribute>
+                              <AttributeSet label="SNMP v2c" newPopupDialog="true">
+                                <Attribute>
+                                  <String default="public" description="Enter the SNMP community string to use to perform SNMP v2c queries." id="snmp2Community" label="Community String"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="161" description="Enter the SNMP port number." id="snmp2Port" label="Port" maxValue="20000" minValue="1"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="30" description="Enter the SNMP query timeout." id="snmp2Timeout" label="Timeout (seconds)" maxValue="32767" minValue="1"/>
+                                </Attribute>
+                              </AttributeSet>
+                            </Attribute>
+
+
+
+
+
+
+
+
+<!-- SNMP v3 - No Authentication -->
+                            <Attribute>
+                              <AttributeSet label="SNMP v3 - No Authentication" newPopupDialog="true">
+                                <Attribute>
+                                  <Enum default="No Encryption" description="Select the type of privacy protocol to execute the SNMP query." id="snmp3PrivacyProtocol" label="Privacy (Encryption)">
+                                    <Enumerators>
+                                      <Enumerator label="No Encryption" value="2"/>
+                                      <Enumerator label="DES Encryption" value="1"/>
+                                      <Enumerator label="AES Encryption" value="0"/>
+                                    </Enumerators>
+                                  </Enum>
+                                </Attribute>
+                                <Attribute>
+                                  <String description="Specify the password for the selected privacy protocol." id="snmp3PrivacyPassword" isStorageSecure="true" label="Privacy Password"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="161" description="Enter the SNMP port number." id="snmp3Port" label="Port" maxValue="20000" minValue="1"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="30" description="Enter the SNMP query timeout." id="snmp3Timeout" label="Timeout (seconds)" maxValue="32767" minValue="1"/>
+                                </Attribute>
+                              </AttributeSet>
+                            </Attribute>
+
+
+
+
+
+
+
+
+<!-- SNMP v3 - MD5 Authentication -->
+                            <Attribute>
+                              <AttributeSet label="SNMP v3 - MD5 Authentication" newPopupDialog="true">
+                                <Attribute>
+                                  <String description="Enter the username for the selected authentication type." id="snmp4Username" label="Username">
+                                    <InputValidationRules>
+                                      <InputValidationRule id="validateForbidden">
+                                        <Params>
+                                          <Param> ,;</Param>
+                                        </Params>
+                                      </InputValidationRule>
+                                    </InputValidationRules>
+                                  </String>
+                                </Attribute>
+                                <Attribute>
+                                  <String description="Enter the password for the selected authentication type." id="snmp4Password" isStorageSecure="true" label="Password"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Enum default="No Encryption" description="Select the type of privacy protocol to execute the SNMP query." id="snmp4PrivacyProtocol" label="Privacy (Encryption)">
+                                    <Enumerators>
+                                      <Enumerator label="No Encryption" value="2"/>
+                                      <Enumerator label="DES Encryption" value="1"/>
+                                      <Enumerator label="AES Encryption" value="0"/>
+                                    </Enumerators>
+                                  </Enum>
+                                </Attribute>
+                                <Attribute>
+                                  <String description="Specify the password for the selected privacy protocol." id="snmp4PrivacyPassword" isStorageSecure="true" label="Privacy Password"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="161" description="Enter the SNMP port number." id="snmp4Port" label="Port" maxValue="20000" minValue="1"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="30" description="Enter the SNMP query timeout." id="snmp4Timeout" label="Timeout (seconds)" maxValue="32767" minValue="1"/>
+                                </Attribute>
+                              </AttributeSet>
+                            </Attribute>
+
+
+
+
+
+
+
+
+<!-- SNMP v3 - SHA Authentication -->
+                            <Attribute>
+                              <AttributeSet label="SNMP v3 - SHA Authentication" newPopupDialog="true">
+                                <Attribute>
+                                  <String description="Enter the username for the selected authentication type." id="snmp5Username" label="Username">
+                                    <InputValidationRules>
+                                      <InputValidationRule id="validateForbidden">
+                                        <Params>
+                                          <Param> ,;</Param>
+                                        </Params>
+                                      </InputValidationRule>
+                                    </InputValidationRules>
+                                  </String>
+                                </Attribute>
+                                <Attribute>
+                                  <String description="Enter the password for the selected authentication type." id="snmp5Password" isStorageSecure="true" label="Password"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Enum default="No Encryption" description="Select the type of privacy protocol to execute the SNMP query." id="snmp5PrivacyProtocol" label="Privacy (Encryption)">
+                                    <Enumerators>
+                                      <Enumerator label="No Encryption" value="2"/>
+                                      <Enumerator label="DES Encryption" value="1"/>
+                                      <Enumerator label="AES Encryption" value="0"/>
+                                    </Enumerators>
+                                  </Enum>
+                                </Attribute>
+                                <Attribute>
+                                  <String description="Specify the password for the selected privacy protocol." id="snmp5PrivacyPassword" isStorageSecure="true" label="Privacy Password"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="161" description="Enter the SNMP port number." id="snmp5Port" label="Port" maxValue="20000" minValue="1"/>
+                                </Attribute>
+                                <Attribute>
+                                  <Counter default="30" description="Enter the SNMP query timeout." id="snmp5Timeout" label="Timeout (seconds)" maxValue="32767" minValue="1"/>
+                                </Attribute>
+                              </AttributeSet>
+                            </Attribute>
+
+                          </AttributeSet>
+                        </Attribute>
+
+                      </AttributeSet>
+                    </Attribute>
+
+
+
+
+
+
+
+
+<!-- Availability Check -->
+                    <Attribute>
+                      <AttributeSet label="Availability Check">
+                        <Attribute>
+                          <Boolean default="true" description="Select to have Monitoring Studio check that the targeted system's hostname or IP address can be resolved." id="availabilityCheckHostnameResolution" label="Hostname Resolution"/>
+                        </Attribute>
+                        <Attribute>
+                          <Boolean default="true" description="Select to have Monitoring Studio check that the targeted system responds to ping commands, trigger an alert if the availability check fails and turn off the monitoring of the host if selected." id="availabilityCheckPing" label="Ping"/>
+                        </Attribute>
+                        <Attribute>
+                          <Boolean description="Select to have Monitoring Studio check that the targeted system responds to SNMP requests, trigger an alert if the availability check fails and turn off the monitoring of the host if selected." id="availabilityCheckSNMP" label="SNMP"/>
+                        </Attribute>
+                        <Attribute>
+                          <Boolean description="Select to have Monitoring Studio check that the targeted system is available through SSH, trigger an alert if the availability check fails and turn off the monitoring of the host if selected." id="availabilityCheckSSH" label="SSH"/>
+                        </Attribute>
+                        <Attribute>
+                          <String description="Select to have Monitoring Studio check that the targeted system is available through the provided TCP port number, trigger an alert if the availability check fails and turn off the monitoring of the host if selected." id="availabilityCheckTCPPort" label="TCP - Port Number"/>
+                        </Attribute>
+                        <Attribute>
+                          <Boolean description="Select to have Monitoring Studio check that the targeted system responds to WMI queries, trigger an alert if the availability check fails and turn off the monitoring of the host if selected." id="availabilityCheckWMI" label="WMI"/>
+                        </Attribute>
+                      </AttributeSet>
+                    </Attribute>
+
+
+
+
+
+
+
+
+<!-- Templates -->
+                    <Attribute>
+                      <AttributeSet label="Templates">
+                        <Attribute>
+                          <List id="templateList" indexedBy="templateID" label="Associated Templates">
+                            <AttributeSet label="Template">
+                              <Attribute>
+                                <String description="Enter the internal ID of the Template you wish to monitor." id="templateID" isMandatory="true" label="Template Internal ID"/>
+                              </Attribute>
+
+
+
+
+
+
+
+
+<!-- Credentials -->
+                              <Attribute>
+                                <List id="credentialsList" indexedBy="credentialsName" label="Required Credentials">
+                                  <AttributeSet label="Credentials">
+                                    <Attribute>
+                                      <String description="Enter the name of the credentials as defined in the Template." id="credentialsName" isMandatory="true" label="Name"/>
+                                    </Attribute>
+                                    <Attribute>
+                                      <String description="Enter the username for this credentials." id="credentialsUsername" label="Username">
+                                        <InputValidationRules>
+                                          <InputValidationRule id="validateForbidden">
+                                            <Params>
+                                              <Param> ,;</Param>
+                                            </Params>
+                                          </InputValidationRule>
+                                        </InputValidationRules>
+                                      </String>
+                                    </Attribute>
+                                    <Attribute>
+                                      <String description="Enter the password to use to establish the connection with the host or the passphrase (optional) to use with the Private Key File Path." id="credentialsPassword" isStorageSecure="true" label="Password"/>
+                                    </Attribute>
+                                    <Attribute>
+                                      <String description="Enter the full path to the private key file on the PATROL Agent node. The file should be readable to the default PATROL Agent user." id="credentialsPrivateKey" label="Private Key File"/>
+                                    </Attribute>
+                                  </AttributeSet>
+                                </List>
+                              </Attribute>
+
+
+
+
+
+
+
+
+<!-- Macros -->
+                              <Attribute>
+                                <List id="macroList" indexedBy="macroName" label="Required Macros">
+                                  <AttributeSet label="Macros">
+                                    <Attribute>
+                                      <String description="Enter the name of the macro as defined in the Template." id="macroName" isMandatory="true" label="Name"/>
+                                    </Attribute>
+                                    <Attribute>
+                                      <String description="Enter a value for this macro." id="macroValue" label="Value"/>
+                                    </Attribute>
+                                  </AttributeSet>
+                                </List>
+                              </Attribute>
+
+
+
+
+
+
+
+
+<!-- DB Query Monitors -->
+                              <Attribute>
+                                <AttributeSet label="Database Query Monitors">
+
+                                  <Attribute>
+                                    <String description="Enter the name of the database. This will be used by all Database Query Monitors defined in the Template. It is not applicable to &quot;Other&quot; database types." id="dbConnectionDatabaseName" label="Database Name"/>
+                                  </Attribute>
+                                  <Attribute>
+                                    <String description="Enter the port number on the server you wish to use to access the database. You can enter Instance name instead of port number for Ms SQL Server database. Leave this field blank to use the default port for this database." id="dbConnectionPort" label="Port"/>
+                                  </Attribute>
+                                  <Attribute>
+                                    <Boolean default="false" description="Check this option to perform an encrypted connection to only Ms SQL Server database." id="dbConnectionSSLEncryption" label="SSL Encryption"/>
+                                  </Attribute>
+                                  <Attribute>
+                                    <Enum default="Not Applicable" description="Select the authentication mode to use to query the Ms SQL Server database." id="dbConnectionAuthenticationMode" label="Authentication Mode">
+                                      <Enumerators>
+                                        <Enumerator label="Not Applicable" value="0"/>
+                                        <Enumerator label="SQL Server Authentication" value="1"/>
+                                        <Enumerator label="Windows Authentication" value="2"/>
+                                      </Enumerators>
+                                    </Enum>
+                                  </Attribute>
+                                  <Attribute>
+                                    <String description="Enter the URL for connecting to the &quot;Other&quot; database types. Example: jdbc:postgresql://hostname:5432/dbname" id="dbConnectionUrl" label="URL"/>
+                                  </Attribute>
+                                  <Attribute>
+                                    <String description="Enter the driver class for the &quot;Other&quot; database types. Example: org.postgresql.Driver" id="dbConnectionDriverClass" label="Driver Class"/>
+                                  </Attribute>
+
+                                </AttributeSet>
+                              </Attribute>
+
+
+
+
+
+
+
+
+<!-- WBEM Query Monitors -->
+                              <Attribute>
+                                  <AttributeSet label="WBEM Query Monitors">
+                                    <Attribute>
+                                      <Counter default="5989" description="Enter the WBEM port number. This will be used by all WBEM Query Monitors defined in the Template" id="wbemPort" label="Port" maxValue="20000" minValue="1"/>
+                                    </Attribute>
+                                  </AttributeSet>
+                              </Attribute>
+
+
+
+
+
+
+
+
+<!-- Web Request Monitors -->
+                              <Attribute>
+                                  <AttributeSet label="Web Request Monitors">
+                                    <Attribute>
+                                      <Boolean default="false" description="Select to bypass the proxy configured in Monitoring Studio. This will be used by all Web Request Monitors defined in the Template." id="bypassProxy" label="Bypass Proxy"/>
+                                    </Attribute>
+                                  </AttributeSet>
+                              </Attribute>
+
+                            </AttributeSet>
+                          </List>
+                        </Attribute>
+                      </AttributeSet>
+                    </Attribute>
+
+                  </AttributeSet>
+                </List>
+              </Attribute>
+
+            </AttributeSet>
+          </ConfigurationParameter>
+        </ConfigurationParameters>
+      </KMConfigurationMetadata>
+    </Application>
+  </Applications>
+
+</KMFile>

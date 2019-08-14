@@ -1,0 +1,180 @@
+!PATROLV3.6.00i BC58AF70B4845FE944F92DD307B2100A
+!#MSG_DOMAIN	swsy_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	8.6.01
+!REVISION	00
+!PACKAGE	swsy
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	swsy
+
+
+VERSION 8.620
+
+APPLICATIONS = {
+  { NAME = "X_NAGIOSPERF",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505459886 "# This monitors the Nagios Plugin performance metrics.",
+	DISCOVERY_TEXT =  1505459886 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 300,
+	OK_PICTURE = "X_NAGIOSPERF_ok",
+	WRONG_PICTURE = "X_NAGIOSPERF_warn",
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380882 "# PATROL internal identifier of the Nagios Performance Data instance.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380894 "# PATROL internal identifier of the parent object.\
+requires X_nagiosperf;\
+\
+print (swNagiosPerfInfoBox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Raw Value", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380894 "# Value reported as collected.\
+requires X_nagiosperf;\
+\
+print (swNagiosPerfInfoBox(get(\"sid\"), \"rawValue\"));"}
+				}
+		},
+		{ NAME = "Converted Value", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380894 "# Value processed according to the selected rescaling option.\
+requires X_nagiosperf;\
+\
+print (swNagiosPerfInfoBox(get(\"sid\"), \"convertedValue\"));"}
+				}
+		}
+
+	},
+	PARAMETERS = {
+		{	NAME = "Delta", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 300,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1459294753 "# Difference between values collected during two consecutive pollings.\
+# Value set by nagiosPluginColl."}
+				},
+			TITLE = "Delta",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "DeltaPerSecond", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 300,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1458161677 "# Value corresponding to Delta divided by the elapsed time in seconds between the collection times.\
+# Value set by nagiosPluginColl."}
+				},
+			TITLE = "Delta Per Second", UNITS = "delta/s",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "Percentage", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 300,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1458161638 "# Percentage of the Value against the maximum, if a maximum value is found in the performance data.\
+# Value set by nagiosPluginColl."}
+				},
+			TITLE = "Percentage", UNITS = "%",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 1, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 1, MAXIMUM = 10, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "Present", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 300,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1542137288 "exit;"}
+				},
+			TITLE = "Present", UNITS = "{0 = Missing ; 1 = Present}",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 1,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 1, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 0, MAXIMUM = 0, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 1, MAXIMUM = 1, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "Value", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 300,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1458006346 "# Value interpreted from the performance data.\
+# Value set by nagiosPluginColl."}
+				},
+			TITLE = "Value",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!27455

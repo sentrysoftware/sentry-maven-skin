@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="9" minorVersion="306" package="senms" productcode="senms" release="9.3.00" revision="0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="0" displayName="Studio Database Query" helpContextId="185" helpFile="X_help.hlp" name="X_DBQUERY" okPicture="X_DBQUERY_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_DBQUERY_warn">
+      <PreDiscoveryText serial="1505459902"># This Monitor queries a database with an SQL statement through supported JDBC drivers.
+# The result of the SQL query can be parsed with String Searches, Numeric Value Extractions, Value Maps, Text Pre-Processing or Dynamic Object Builders.</PreDiscoveryText>
+      <DiscoveryText serial="1505459902">#</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1423573026"># Refreshes all instance parameters of the X_DBQUERY application class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227263338"># PATROL internal identifier of the Database Query instance.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227263348"># PATROL internal identifier of the parent Database Query instance.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Database Type" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227269854"># Displays the database type.
+requires X_dbquery;
+
+print(swDbQueryInfobox(get("sid"), "databaseType"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Database Name" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227269884"># Displays the database name.
+requires X_dbquery;
+
+print(swDbQueryInfobox(get("sid"), "databaseName"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Connect as" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227269891"># Login used to connect to the database server.
+requires X_dbquery;
+
+print(swDbQueryInfobox(get("sid"), "username"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="SQL Query" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227269899"># Displays the SQL query that will be executed.
+requires X_dbquery;
+
+print(swDbQueryInfobox(get("sid"), "sqlQuery"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" autoRescale="false" check="false" format="%f" helpContextId="185" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Status" output="OUTPUT_GRAPH" title="Status" type="CONSUMER" units="{0 = OK ; 1 = Suspicious ; 2 = Failed}" yAxisMax="2" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="true" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428648779"># Indicates whether or not the query was successfully executed.
+# Value set by dbQueryColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="1" name="ALARM1" state="WARN"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="2" name="ALARM2" state="ALARM"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%s" helpContextId="185" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Result" output="OUTPUT_TEXT" type="CONSUMER" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1423573094"># Output of the database query execution.
+# Value set by dbQueryColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="185" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="ExecutionTime" output="OUTPUT_GRAPH" title="Execution Time" type="CONSUMER" units="seconds" yAxisMax="2147483646" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="true" monitorForAbnormalities="true" normalDistribution="false" responseTime="true" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428648860"># Time taken by the database query to run.
+# Value set by dbQueryColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="60" minimum="15" name="ALARM1" state="WARN"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="60" name="ALARM2" state="ALARM"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="185" helpFile="X_help.hlp" monitor="false" name="dbQueryColl" pollTime="600" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1174917865">requires X_genericcollector;
+
+swGenericCollector(get("appType"), get("sid"), get("name"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>
