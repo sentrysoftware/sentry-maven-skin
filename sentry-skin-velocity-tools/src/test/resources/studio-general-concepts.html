@@ -1,0 +1,83 @@
+<h1>General Concepts</h1>
+<blockquote>
+
+<p>This section provides general information about the important concepts of skin-test.</p>
+</blockquote>
+<ul id="toc">
+<li><a href="#Product_Hierarchy">Product Hierarchy</a>
+<ul>
+<li><a href="#Hosts">Hosts</a></li>
+<li><a href="#Templates">Templates</a></li>
+<li><a href="#Monitors">Monitors</a></li></ul></li>
+<li><a href="#Credentials_Management">Credentials Management</a></li>
+<li><a href="#Alert_Messages_and_Alert_Actions">Alert Messages and Alert Actions</a>
+<ul>
+<li><a href="#Alert_Messages">Alert Messages</a></li>
+<li><a href="#Alert_Actions">Alert Actions</a></li></ul></li></ul>
+<section>
+<h2><a name="Product_Hierarchy"></a>Product Hierarchy</h2>
+<p>The <b>skin-test</b> hierarchy can be represented as follows:</p>
+<p><img src="./images/product-hierarchy.png" alt="skin-test hierarchy" /></p><section>
+<h3><a name="Hosts"></a>Hosts</h3>
+<p>Hosts provide information about the target server where the technology to be monitored is running (hostname, system type, credentials, SNMP information, host availability check information, etc.). Hosts are at the highest level of the hierarchy and contain none, one or several Templates.</p>
+<p>Refer to the section <a href="./hosts-templates.html">Hosts and Templates</a> to know how to define hosts.</p></section><section>
+<h3><a name="Templates"></a>Templates</h3>
+<p><b>Templates</b> correspond to the technology you need to monitor (application, server, device, etc.). Arranged under the Host instance, they contain the list of Monitors and credentials required to assess the health and performance of the targeted technology or application. Templates can be attached to none, one or several hosts.</p>
+<p>Refer to the section <a href="./hosts-templates.html">Hosts and Templates</a> to know how to create templates and apply them to hosts.</p></section><section>
+<h3><a name="Monitors"></a>Monitors</h3>
+<p>Monitor instances are arranged under the Template instance and correspond to the monitoring action(s) to be performed by <b>skin-test</b> such as:</p>
+<ul>
+
+<li>process monitoring</li>
+<li>file parsing</li>
+<li>HTTP request</li>
+<li>database query</li>
+<li>SNMP polling</li>
+<li>folder listing</li>
+<li>WBEM query</li>
+<li>WMI query</li>
+<li>Command line execution</li>
+<li>etc.</li>
+</ul>
+<p><b>Monitors</b> are configured when creating Templates. They can refer to credentials, and user-defined, host-level, or template-level macros. They can be referred to as &#x201c;monitored objects&#x201d;.</p>
+<p>Refer to <a href="./basic-monitors.html">Basic Monitors</a>, <a href="./content-monitors.html">Monitors with Content</a>, <a href="./content-parsing-monitors.html">Content Parsing Monitors</a> and <a href="./dynamic-instances.html">Dynamic Instances</a> to learn more about the Monitors available and how to configure them.</p></section></section><section>
+<h2><a name="Credentials_Management"></a>Credentials Management</h2>
+<p>Credentials are <b><i>declared</i></b> at the <b>Template</b> level:</p>
+<p><img src="./images/required-credentials-template.png" alt="Declaring credentials at the Template level" /></p>
+<p>and <b><i>set</i></b> at the <b>Host</b> level.</p>
+<p><img src="./images/required-credentials-host.png" alt="Setting credentials at the Host level" /></p>
+<p>A default <b>Username</b> and <b>Password</b> can however be specified at the <b>Template</b> level. They will be used if no <b>Username</b> and <b>Password</b> are set at the <b>Host</b> level.</p>
+<p>All credentials are stored in the PATROL configuration under the relevant <b>Template</b> and <b>Host</b> object in a comma-separated list.</p>
+<ul>
+
+<li>
+
+<p>The <b>credentialsList</b> for <b>Templates</b> will contain comma-delimited list of credentials in the following format:<br /> &lt;credentials-label&gt;;&lt;default-username&gt;;&lt;default-password-or-passphrase&gt;;&lt;default-private-key-file&gt;</br></p>
+</li>
+<li>
+
+<p>When set, the <b>credentialsList</b> for <b>Hosts</b> will be prefixed by &lt;template-configuration-id&gt;: as follows: &lt;template-configuration-id&gt;:&lt;credentials-label&gt;;&lt;username&gt;;&lt;password-or-passphrase&gt;;&lt;private-key-file&gt;</p>
+</li>
+</ul>
+<p>Credentials can be removed only at the <b>Template</b> level.</p></section><section>
+<h2><a name="Alert_Messages_and_Alert_Actions"></a>Alert Messages and Alert Actions</h2><section>
+<h3><a name="Alert_Messages"></a>Alert Messages</h3>
+<p>When a problem is detected by <b>skin-test</b>, the following alert messaging options are available:</p>
+<ul>
+
+<li>Annotation</li>
+<li>PATROL Event</li>
+<li>Command Line</li>
+<li>PSL Script</li>
+<li>Email</li>
+<li>Write to a Log File</li>
+<li>Send an SNMP Trap</li>
+</ul>
+<p>Enabled in the <b>Studio &gt; Studio Settings</b> page, their content can be customized at the Monitor level by using Macros.</p>
+<p>Default messages are also configured for Monitors and parameters that do not have specific Alert Messages. They can be configured in the <b>Default Message Content</b> section of the <b>Studio &gt; Studio Settings</b> page.</p>
+<p>The list of alert messages to send is stored under the main configuration path in /SENTRY/X/messageTypeList</p>
+<p>Refer to <a href="./alerts.html">Alert Messages and Actions</a> to know how to enable alert messages and customize their content.</p></section><section>
+<h3><a name="Alert_Actions"></a>Alert Actions</h3>
+<p>Alert Actions allow you to automatically refresh a Monitor of a same Template when a problem is detected. The Monitors to be refreshed are special diagnosis or troubleshooting Monitors configured to run manually (i.e. their polling interval is set to <i>manual</i>).  This feature allows you to decide what to do when something goes wrong and get feedback about the actions taken. You can for example decide that a <i>regular</i> Monitor triggers a <i>troubleshooting</i> Monitor which triggers a <i>repairing</i> Monitor and so on.</p>
+<p>The Monitors to be refreshed are configured at the Monitor level, for each range of each parameter.</p>
+<p>Refer to <a href="./alerts.html">Alert Messages and Actions</a> to learn more about alert actions.</p></section></section>

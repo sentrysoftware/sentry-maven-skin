@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="8" minorVersion="624" package="swsy" productcode="swsy" release="8.6.01" revision="00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="0" displayName="Studio Process" helpContextId="199" helpFile="X_help.hlp" name="X_PROCESS" okPicture="X_PROCESS_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_PROCESS_warn">
+      <PreDiscoveryText serial="1505460137"># This Monitor reports on the performance of one or several processes matching the selection criteria.</PreDiscoveryText>
+      <DiscoveryText serial="1505460137">#</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1416580288"># Refreshes all instance parameters of the X_PROCESS class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227271658"># PATROL internal identifier of the Process instance.
+requires X_shared;
+
+print(swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227271626"># PATROL internal identifier of the parent object.
+requires X_shared;
+
+print(swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Process IDs" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227271592"># Monitored process IDs (PIDs).
+requires X_process;
+
+print(swInfoboxProcess(get("sid"), "pidList"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Child Process IDs" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1227271592"># Detected child process IDs (PIDs).
+requires X_process;
+
+print(swInfoboxProcess(get("sid"), "childList"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="199" helpFile="X_help.hlp" monitor="false" name="processColl" pollTime="120" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1413189032">requires X_genericcollector;
+
+swGenericCollector(get("appType"), get("sid"), get("name"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="ThreadCount" output="OUTPUT_GRAPH" title="Thread Count" type="CONSUMER" units="threads" yAxisMax="9999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089212"># (Windows only) Number of threads of the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="ChildCount" output="OUTPUT_GRAPH" title="Child Count" type="CONSUMER" units="processes" yAxisMax="9999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089203"># Number of child processes that match the user-defined criteria.
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="HandleCount" output="OUTPUT_GRAPH" title="Handle Count" type="CONSUMER" units="handles" yAxisMax="9999999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089221"># (Windows only) Number of handles opened by the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="PageFaultsPerSec" output="OUTPUT_GRAPH" title="Page Faults Per Second" type="CONSUMER" units="faults/s" yAxisMax="99999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089230"># (Windows only) Number of page faults per second caused by the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="VirtualBytes" output="OUTPUT_GRAPH" title="Virtual Bytes" type="CONSUMER" units="MB" yAxisMax="99999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="true" monitorForAbnormalities="true" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089255"># Amount of virtual memory used by the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="PrivateBytes" output="OUTPUT_GRAPH" title="Private Bytes" type="CONSUMER" units="MB" yAxisMax="99999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089267"># (Windows only) Amount of memory that has been allocated to the process and that cannot be shared with others.
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="PageFileBytes" output="OUTPUT_GRAPH" title="Page File Bytes" type="CONSUMER" units="MB" yAxisMax="99999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1419211279"># (Windows only) Page file size used by the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="WorkingSet" output="OUTPUT_GRAPH" title="Working Set" type="CONSUMER" units="MB" yAxisMax="99999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089288"># (Windows only) Working set size of the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="false" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="ProcessorTime" output="OUTPUT_GRAPH" title="Processor Time" type="CONSUMER" units="%" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="true" monitorForAbnormalities="true" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428646544"># Percentage of processor time used by the matching process(es).
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="90" name="ALARM1" state="WARN"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Count" output="OUTPUT_GRAPH" title="Count" type="CONSUMER" units="processes" yAxisMax="9999" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428646324"># Number of processes that match the user-defined criteria.
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="0" minimum="0" name="ALARM1" state="ALARM"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="0" minimum="0" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%s" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MatchingProcesses" output="OUTPUT_TEXT" title="Matching Processes" type="CONSUMER" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1169051134"># List of all processes counted in the Count parameter according to the user-defined criteria.
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="false" check="false" format="%f" helpContextId="199" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Status" output="OUTPUT_GRAPH" title="Status" type="CONSUMER" units="{0 = OK ; 1 = Suspicious ; 2 = Failed}" yAxisMax="2" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="true" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428646562"># (UNIX/Linux only) Status of the process monitoring execution
+# Value set by processColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="1" name="ALARM1" state="WARN"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="2" name="ALARM2" state="ALARM"/>
+          </Ranges>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>

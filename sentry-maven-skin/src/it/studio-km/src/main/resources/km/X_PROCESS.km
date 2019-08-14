@@ -1,0 +1,352 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	swsy_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	8.6.01
+!REVISION	00
+!PACKAGE	swsy
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	swsy
+
+
+VERSION 8.624
+
+APPLICATIONS = {
+  { NAME = "X_PROCESS",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460137 "# This monitors the performance of one or several processes matching the selection criteria.",
+	DISCOVERY_TEXT =  1505460137 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 199,
+	OK_PICTURE = "X_PROCESS_ok",
+	WRONG_PICTURE = "X_PROCESS_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1416580288 "# Refreshes all instance parameters of the X_PROCESS class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1227271658 "# PATROL internal identifier of the Process instance.\
+requires X_shared;\
+\
+print(swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1227271626 "# PATROL internal identifier of the parent object.\
+requires X_shared;\
+\
+print(swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Process IDs", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1227271592 "# Monitored process IDs (PIDs).\
+requires X_process;\
+\
+print(swInfoboxProcess(get(\"sid\"), \"pidList\"));"}
+				}
+		},
+		{ NAME = "Child Process IDs", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1227271592 "# Detected child process IDs (PIDs).\
+requires X_process;\
+\
+print(swInfoboxProcess(get(\"sid\"), \"childList\"));"}
+				}
+		}
+
+	},
+	PARAMETERS = {
+		{	NAME = "processColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1413189032 "requires X_genericcollector;\
+\
+swGenericCollector(get(\"appType\"), get(\"sid\"), get(\"name\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "120", EXTERNAL_POLLING = False
+		},
+		{	NAME = "ThreadCount", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089212 "# (Windows only) Number of threads of the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Thread Count", UNITS = "threads",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 9999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "ChildCount", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089203 "# Number of child processes that match the user-defined criteria.\
+# Value set by processColl."}
+				},
+			TITLE = "Child Count", UNITS = "processes",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 9999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "HandleCount", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089221 "# (Windows only) Number of handles opened by the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Handle Count", UNITS = "handles",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 9999999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "PageFaultsPerSec", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089230 "# (Windows only) Number of page faults per second caused by the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Page Faults Per Second", UNITS = "faults/s",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 99999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "VirtualBytes", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089255 "# Amount of virtual memory used by the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Virtual Bytes", UNITS = "MB",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 99999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "PrivateBytes", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089267 "# (Windows only) Amount of memory that has been allocated to the process and that cannot be shared with others.\
+# Value set by processColl."}
+				},
+			TITLE = "Private Bytes", UNITS = "MB",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 99999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "PageFileBytes", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1419211279 "# (Windows only) Page file size used by the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Page File Bytes", UNITS = "MB",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 99999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "WorkingSet", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089288 "# (Windows only) Working set size of the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Working Set", UNITS = "MB",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 99999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "ProcessorTime", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428646544 "# Percentage of processor time used by the matching process(es).\
+# Value set by processColl."}
+				},
+			TITLE = "Processor Time", UNITS = "%",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 90, MAXIMUM = 100, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "Count", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428646324 "# Number of processes that match the user-defined criteria.\
+# Value set by processColl."}
+				},
+			TITLE = "Count", UNITS = "processes",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 9999,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 0, MAXIMUM = 0, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 0, MAXIMUM = 0, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "MatchingProcesses", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1169051134 "# List of all processes counted in the Count parameter according to the user-defined criteria.\
+# Value set by processColl."}
+				},
+			TITLE = "Matching Processes",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%s", OUTPUT = OUTPUT_TEXT,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "Status", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 199,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428646562 "# (UNIX/Linux only) Status of the process monitoring execution\
+# Value set by processColl."}
+				},
+			TITLE = "Status", UNITS = "{0 = OK ; 1 = Suspicious ; 2 = Failed}",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 2,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 2, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 1, MAXIMUM = 1, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = True, MINIMUM = 2, MAXIMUM = 2, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+! 4200

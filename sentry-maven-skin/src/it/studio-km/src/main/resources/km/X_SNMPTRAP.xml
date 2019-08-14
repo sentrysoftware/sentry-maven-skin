@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="8" minorVersion="619" package="swsy" productcode="swsy" release="8.6.01" revision="00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application EVCatalogName="X_SNMPTRAP.ctg" EVCatalogSerial="0" active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="3600" displayName="Studio SNMP Trap" helpContextId="197" helpFile="X_help.hlp" name="X_SNMPTRAP" okPicture="X_SNMPTRAP_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_SNMPTRAP_warn">
+      <PreDiscoveryText serial="1505460162"># This Monitor reports on the SNMP traps that are sent by the monitored Host to the PATROL Agent and that match the specified criteria.</PreDiscoveryText>
+      <DiscoveryText serial="1505460162">#</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1423063208"># Refreshes all parameters of the X_SNMPTRAP application class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033381571"># PATROL internal identifier of the SNMP traps instance.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033381583"># PATROL internal identifier of the parent object.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Community" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387812"># Community used to listen to traps.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "community"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Enterprise ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387846"># Enterprise ID of the SNMP agent that raises the traps.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "enterpriseid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Trap Number" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387867"># Number of the searched trap.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "trapnumber"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="OID 1" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387884"># OID of the first varBind of the searched traps.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "oid1"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="String 1" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387908"># Searched string in the first varBind.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "string1"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="OID 2" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387924"># OID of the second varBind of the searched traps.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "oid2"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="String 2" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387943"># Searched string in the second varBind.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "string2"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledging Trap Number" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387962"># Trap number that will acknowledge this trap search.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "acknowledgetrapnumber"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledging OID 1" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033387962"># OID of the first varBind of the trap that will acknowledge this trap search.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "acknowledgeoid1"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledging String 1" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033388485"># Searched string in the first varBind of the acknowledging trap.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "acknowledgestring1"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledging OID 2" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033388228"># OID of the second varBind of the trap that will acknowledge this trap search.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "acknowledgeoid2"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Acknowledging String 2" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033388250"># Searched string in the second varBind of the acknowledging trap.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "acknowledgestring2"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Timeout" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033388301"># Timeout for auto-acknowledgment.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "timeout"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Run Alert Actions" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033388329"># Indicates when Alert Actions should be executed.
+requires X_snmptrap;
+
+print (swInfoboxSNMPTrap(get("sid"), "runAlertActions"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" check="false" externalPolling="false" helpContextId="197" helpFile="X_help.hlp" monitor="false" name="snmpTrapColl" pollTime="120" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1174917964">requires X_genericcollector;
+
+swGenericCollector(get("appType"), get("sid"), get("name"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="197" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MatchingTrapRate" output="OUTPUT_GRAPH" title="Matching Trap Rate" type="CONSUMER" units="traps/min" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1391089447"># Number of SNMP traps per minute matching the search.
+# Value set by snmpTrapColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" autoRescale="true" check="false" format="%f" helpContextId="197" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="MatchingTrapCount" output="OUTPUT_GRAPH" title="Matching Trap Count" type="CONSUMER" units="traps" yAxisMax="2147483646" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="true" responseTime="false" statistical="true"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1428649638"># Number of SNMP traps matching the search.
+# Value set by snmpTrapColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="1" name="ALARM1" state="ALARM"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2147483646" minimum="2147483646" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>

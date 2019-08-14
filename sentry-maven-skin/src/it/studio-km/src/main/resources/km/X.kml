@@ -1,0 +1,39 @@
+!++
+!
+! Monitoring Studio X KM for PATROL
+! MetaKMLDisplayName = "Monitoring Studio X"
+! MetaKMLDescription = "Monitoring Studio X"
+! MetaKMLMandatoryConfig = "True"
+!
+!--
+KM_LIST = {
+	"X_MAIN.km"
+	"X_TEMPLATE.km"
+	"X_HOSTGROUP.km"
+	"X_HOST.km"
+	"X_DBQUERY.km"
+	"X_DYNAMIC.km"
+	"X_DYNAMICDISCOVERY.km"
+	"X_FILE.km"
+	"X_FILESYSTEM.km"
+	"X_FOLDER.km"
+	"X_HTTP.km"
+	"X_FORMULA.km"
+	"X_WINEVENT.km"
+	"X_WINPERF.km"
+	"X_WINSERVICE.km"
+	"X_WMIQUERY.km"
+	"X_MONITORGROUP.km"
+	"X_NUMBER.km"
+	"X_COMMANDLINE.km"
+	"X_PROCESS.km"
+	"X_SNMPPOLLING.km"
+	"X_SNMPTRAP.km"
+	"X_STRING.km"
+	"X_TRANSFORM.km"
+	"X_WBEMQUERY.km"
+	"X_NAGIOSPLUGIN.km"
+	"X_NAGIOSPERF.km"
+	"X_PSLCOMMAND.km"
+	"X_VALUEMAP.km"
+}

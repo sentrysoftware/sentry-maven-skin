@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="10" minorVersion="3" package="X" productcode="X" release="10.0.00" revision="0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application CDMClass="BMC_ComputerSystem" EVCatalogName="X_HOST.ctg" EVCatalogSerial="0" active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="0" displayName="Studio Host" helpContextId="203" helpFile="X_help.hlp" name="X_HOST" okPicture="X_HOST_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_HOST_warn">
+      <PreDiscoveryText serial="1505460079"># This Monitor allows users to define a host to be monitored. Credentials and Monitors are managed from the Host objects.</PreDiscoveryText>
+      <DiscoveryText serial="1505460079">#</DiscoveryText>
+      <MenuCommands>
+        <MenuCommand annotate="false" autoID="false" available="AVAILABLE_ONLINE" id="" name="Refresh Parameters" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417097995"># Refreshes all instance parameters of the X_HOST application class.
+requires X_generic;
+
+swGenericRefreshParameters(get("appType"), get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </MenuCommand>
+      </MenuCommands>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033380033"># PATROL internal identifier of the Host: &amp;lt;templateID&amp;gt;@&amp;lt;hostname&amp;gt;.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1033380040"># PATROL internal identifier of the parent instance.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Hostname" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100825"># Hostname or IP address of the Host.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "hostname");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Description" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100902"># Description of the Host.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "description");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="BMC TrueSight Device" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100902"># FQDN and Token ID of the Host (separated by '/').
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "MetaFQDN");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Credentials" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417101275"># Lists the type of credentials provided.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "credentialsLabelList");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Signature File 1" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100620"># First signature file.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "signatureFile1");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Signature File 2" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100668"># Second signature file.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "signatureFile2");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Signature File 3" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100691"># Third signature file.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "signatureFile3");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Signature File 4" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1417100725"># Fourth signature file.
+requires X_common;
+
+swCommonInfobox(get("appType"), get("sid"), "signatureFile4");</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" autoRescale="false" check="false" format="%f" helpContextId="203" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Status" output="OUTPUT_GRAPH" title="Status" type="CONSUMER" units="{ 0 = OK ; 2 = Unreachable }" yAxisMax="2" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="true" config="false" delta="false" graphByDefault="true" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1536841228"># Status of the Host availability.
+# Value set by the availabilityCheckColl.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="1" minimum="1" name="ALARM1" state="WARN"/>
+            <Range active="true" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="2" minimum="2" name="ALARM2" state="ALARM"/>
+          </Ranges>
+        </Parameter>
+        <Parameter active="true" check="false" externalPolling="false" monitor="false" name="availabilityCheckColl" pollTime="120" start="ASAP" type="COLLECTOR">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1424268605">requires X_host;
+
+swAvailabilityCheckCollector(get("sid"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>

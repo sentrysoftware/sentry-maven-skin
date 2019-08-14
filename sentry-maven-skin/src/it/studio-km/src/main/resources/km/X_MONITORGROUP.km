@@ -1,0 +1,48 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	senms_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	9.0.00
+!REVISION	00
+!PACKAGE	senms
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	senms
+
+
+VERSION 9.11
+
+APPLICATIONS = {
+  { NAME = "X_MONITORGROUP",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460066 "# This object allows to group monitors within a host.",
+	DISCOVERY_TEXT =  1505460066 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 286,
+	OK_PICTURE = "X_MONITORGROUP_ok",
+	WRONG_PICTURE = "X_MONITORGROUP_warn",
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1415895895 "# PATROL internal identifier of the Monitor Group instance.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"ID\");"}
+				}
+		}
+
+	},
+	EV_CATALOG_NAME = "X_MONITORGROUP.ctg",
+	EV_CATALOG_SERIAL =0
+  }
+}
+!61219

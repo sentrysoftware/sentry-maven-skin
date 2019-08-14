@@ -1,0 +1,196 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	swsy_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	8.6.01
+!REVISION	00
+!PACKAGE	swsy
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	swsy
+
+
+VERSION 8.624
+
+APPLICATIONS = {
+  { NAME = "X_FILESYSTEM",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460021 "# This Monitor reports on the main characteristics of a specified file system.",
+	DISCOVERY_TEXT =  1505460021 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 193,
+	OK_PICTURE = "X_FILESYSTEM_ok",
+	WRONG_PICTURE = "X_FILESYSTEM_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1416580288 "# Refreshes all instance parameters of the X_FILESYSTEM application class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033399905 "# PATROL internal identifier of the File System instance.\
+requires X_shared;\
+\
+print(swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033399913 "# PATROL internal identifier of the parent object.\
+requires X_shared;\
+\
+print(swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "File System", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033394607 "# Drive or path of the monitored file system.\
+requires X_filesystem;\
+\
+print (swInfoboxFileSystem(get(\"sid\"), \"fileSystem\"));"}
+				}
+		}
+
+	},
+	PARAMETERS = {
+		{	NAME = "fileSystemColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 193,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1174828671 "requires X_genericcollector;\
+\
+swGenericCollector(get(\"appType\"), get(\"sid\"), get(\"name\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "120", EXTERNAL_POLLING = False
+		},
+		{	NAME = "ConsumedCapacityGrowthPercentage", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 193,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1420459014 "# Speed at which the capacity is actually consumed in the file system.\
+# Value set by fileSystemColl."}
+				},
+			TITLE = "Consumed Capacity Growth Percentage", UNITS = "%/h",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "ConsumedCapacityGrowthSpeed", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 193,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391088476 "# Percentage of the capacity that is actually consumed per hour in the file system.\
+# Value set by fileSystemColl."}
+				},
+			TITLE = "Consumed Capacity Growth Speed", UNITS = "MB/h",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "AvailableCapacityPercentage", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 193,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428647568 "# Percentage of capacity not consumed in the file system.\
+# Value set by fileSystemColl."}
+				},
+			TITLE = "Available Capacity Percentage", UNITS = "%",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 0, MAXIMUM = 1, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = True, MINIMUM = 1, MAXIMUM = 10, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "AvailableCapacity", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 193,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428647620 "# Total capacity not consumed in the file system.\
+# Value set by fileSystemColl."}
+				},
+			TITLE = "Available Capacity", UNITS = "MB",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 0, MAXIMUM = 10, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "AvailableInodesPercentage", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 193,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1432861093 "# Percentage of available inodes on UNIX and Linux platforms.\
+# Value set by fileSystemColl."}
+				},
+			TITLE = "Available Inodes Percentage", UNITS = "%",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 0, MAXIMUM = 1, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = True, MINIMUM = 1, MAXIMUM = 10, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!53534

@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.sentrysoftware.doc</groupId>
 		<artifactId>sentry-maven-skin-parent</artifactId>
-		<version>2.0</version>
+		<version>3.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>sentry-maven-skin</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>Sentry Maven Skin</name>
 	<description>
@@ -19,83 +19,87 @@
 		However, because Reflow is no longer maintained, we had to fork the projet and go with our own!
 	</description>
 
-	<dependencies>
-	    <dependency>
-		    <groupId>external</groupId>
-		    <artifactId>bootstrap</artifactId>
-		    <version>3.3.7</version>
-		    <scope>runtime</scope>
-		</dependency>
-		<dependency>
-		    <groupId>external</groupId>
-		    <artifactId>font-awesome</artifactId>
-		    <version>4.7.0</version>
-		    <scope>runtime</scope>
-		</dependency>
-	    <dependency>
-		    <groupId>external</groupId>
-		    <artifactId>jquery</artifactId>
-		    <version>3.1.1</version>
-		    <scope>runtime</scope>
-		</dependency>
-	    <dependency>
-		    <groupId>external</groupId>
-		    <artifactId>lightbox</artifactId>
-		    <version>2.9.0</version>
-		    <scope>runtime</scope>
-		</dependency>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
+	<dependencies>
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources/</directory>
-			</resource>
-			<resource>
-				<!-- Filter skin template to add generator version -->
-				<directory>src/main/resources/</directory>
-				<includes>
-					<include>META-INF/maven/*</include>
-				</includes>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 
 		<plugins>
 
-			<!-- resources -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+
+					<!-- initialize -->
+					<!-- Install Node.js -->
+					<execution>
+						<id>install-nodejs</id>
+						<phase>initialize</phase>
+						<goals>
+								<goal>install-node-and-npm</goal>
+						</goals>
+						<!-- optional: default phase is "generate-resources" -->
+						<configuration>
+							<nodeVersion>v9.9.0</nodeVersion>
+						</configuration>
+					</execution>
+
+					<!-- generate-resources -->
+					<!-- Run "npm install" -->
+					<execution>
+						<id>npm-install</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>gulp</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>gulp</goal>
+						</goals>
+						<configuration>
+							<!-- <arguments></arguments> -->
+						</configuration>
+					</execution>
+
+				</executions>
 				<configuration>
-					<!-- Override resource filtering delimiters to avoid filtering Velocity variables,
-					which have the same pattern ${replace.me}. Instead, using @replace.me@. -->
-					<useDefaultDelimiters>false</useDefaultDelimiters>
-					<delimiters>
-						<delimiter>@</delimiter>
-					</delimiters>
+					<workingDirectory>${project.basedir}</workingDirectory>
+					<!-- <installDirectory>${project.build.directory}</installDirectory> -->
 				</configuration>
 			</plugin>
 
 			<!-- assembly -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.0.0</version>
 				<executions>
 
 					<!-- package -->
-					<!-- Create the jar with everything in it -->
+					<!-- Build a .jar from the content of target/dist -->
 					<execution>
-						<id>make-my-jar-with-dependencies</id>
+						<id>assemblyBeforeMinification</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
+							<skipAssembly>false</skipAssembly>
+							<descriptors>
+								<descriptor>dist-to-jar.xml</descriptor>
+							</descriptors>
 							<attach>true</attach>
 							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
@@ -104,6 +108,63 @@
 				</executions>
 			</plugin>
 
+			<!-- install -->
+			<plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<executions>
+
+					<!-- integration-test -->
+					<!-- Copy the sentry-skin-velocity-tools JAR from our working directory to the repo -->
+					<!-- We do that manually because the invoker:install goal (below) doesn't do it, as -->
+					<!-- it's not the artifact we're working on, but one that is produced by our sibling -->
+					<execution>
+						<id>copy-workspace-tools</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+							<file>${project.basedir}/../sentry-skin-velocity-tools/target/sentry-skin-velocity-tools-${project.version}.jar</file>
+							<sources>${project.basedir}/../sentry-skin-velocity-tools/target/sentry-skin-velocity-tools-${project.version}-sources.jar</sources>
+							<javadoc>${project.basedir}/../sentry-skin-velocity-tools/target/sentry-skin-velocity-tools-${project.version}-javadoc.jar</javadoc>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--  maven-invoker-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-invoker-plugin</artifactId>
+				<version>2.0.0</version>
+				<configuration>
+					<debug>true</debug>
+					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+					<pomIncludes>
+						<pomInclude>**/pom.xml</pomInclude>
+					</pomIncludes>
+					<postBuildHookScript>verify</postBuildHookScript>
+					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+					<extraArtifacts>
+						<extraArtifact>com.sentrysoftware.maven:patrolreport-maven-plugin:2.0</extraArtifact>
+					</extraArtifacts>
+					<settingsFile>src/it/settings.xml</settingsFile>
+					<goals>
+						<goal>clean</goal>
+						<goal>site</goal>
+					</goals>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>install</goal>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 
 		</plugins>

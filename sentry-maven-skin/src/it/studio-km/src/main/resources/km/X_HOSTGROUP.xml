@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile majorVersion="1" minorVersion="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="0" displayName="Studio Host Group" helpContextId="203" helpFile="X_help.hlp" name="X_HOSTGROUP" okPicture="X_HOST_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_HOST_warn">
+      <PreDiscoveryText serial="1547052460"># This Monitor is a container designed to facilitate the organization of hosts objects in the Web interface.</PreDiscoveryText>
+      <DiscoveryText serial="1547052460">#</DiscoveryText>
+    </Application>
+  </Applications>
+
+</KMFile>

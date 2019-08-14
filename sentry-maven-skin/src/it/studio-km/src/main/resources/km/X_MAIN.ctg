@@ -1,0 +1,13 @@
+1551290387
+EVENT_RECORD "Ack" ANY NO_TRAP STORED "NONE" "Patrol"
+""
+"%s"
+ESCL_ACTION  1549876577 "# Escalation Command"
+NOTIFY_ACTION  1549876577 "# Notify Command"
+MGT_ACTION  1549876577 "# Acknowledge Command"
+EVENT_RECORD "Studio" ANY NO_TRAP STORED "NONE" "Patrol"
+""
+"%s"
+ESCL_ACTION  1535098423 "# Escalation Command"
+NOTIFY_ACTION  1535098423 "# Notify Command"
+MGT_ACTION  1535098423 "# Acknowledge Command"

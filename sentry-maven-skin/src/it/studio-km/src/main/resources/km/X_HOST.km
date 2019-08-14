@@ -1,0 +1,175 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	X_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	10.0.00
+!REVISION	0
+!PACKAGE	X
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	X
+
+
+VERSION 10.3
+
+APPLICATIONS = {
+  { NAME = "X_HOST",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 0,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460079 "# Defines a host to be monitored. Credentials and Monitors are managed from the Host objects.",
+	DISCOVERY_TEXT =  1505460079 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 203,
+	OK_PICTURE = "X_HOST_ok",
+	WRONG_PICTURE = "X_HOST_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417097995 "# Refreshes all instance parameters of the X_HOST application class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380033 "# PATROL internal identifier of the Host: &lt;templateID&gt;@&lt;hostname&gt;.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033380040 "# PATROL internal identifier of the parent instance.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Hostname", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100825 "# Hostname or IP address of the Host.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"hostname\");"}
+				}
+		},
+		{ NAME = "Description", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100902 "# Description of the Host.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"description\");"}
+				}
+		},
+		{ NAME = "BMC TrueSight Device", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100902 "# FQDN and Token ID of the Host (separated by '/').\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"MetaFQDN\");"}
+				}
+		},
+		{ NAME = "Credentials", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417101275 "# Lists the type of credentials provided.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"credentialsLabelList\");"}
+				}
+		},
+		{ NAME = "Signature File 1", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100620 "# First signature file.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"signatureFile1\");"}
+				}
+		},
+		{ NAME = "Signature File 2", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100668 "# Second signature file.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"signatureFile2\");"}
+				}
+		},
+		{ NAME = "Signature File 3", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100691 "# Third signature file.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"signatureFile3\");"}
+				}
+		},
+		{ NAME = "Signature File 4", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1417100725 "# Fourth signature file.\
+requires X_common; \
+\
+swCommonInfobox(get(\"appType\"), get(\"sid\"), \"signatureFile4\");"}
+				}
+		}
+
+	},
+	EV_CATALOG_NAME = "X_HOST.ctg",
+	EV_CATALOG_SERIAL =0,
+	PARAMETERS = {
+		{	NAME = "Status", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 203,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1536841228 "# Status of the Host availability.\
+# Value set by the availabilityCheckColl."}
+				},
+			TITLE = "Status", UNITS = "{ 0 = OK ; 2 = Unreachable }",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = False, Y_AXIS_MIN = 0, Y_AXIS_MAX = 2,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 2, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 1, MAXIMUM = 1, STATE = WARN, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = True, MINIMUM = 2, MAXIMUM = 2, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "availabilityCheckColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+				BASE_COMMAND = {
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1424268605 "requires X_host;\
+\
+swAvailabilityCheckCollector(get(\"sid\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "120", EXTERNAL_POLLING = False
+		}
+
+	}
+  }
+}
+!55374

@@ -1,0 +1,252 @@
+!PATROLV3.6.00i 9C995318ECBFC63588548C5CC48BE6DD
+!#MSG_DOMAIN	swsy_sec
+!++
+!
+! PATROL Session Knowledge Module
+!
+!--
+!RELEASE	8.6.01
+!REVISION	00
+!PACKAGE	swsy
+!DESCRIPTION	Monitoring Studio KM for PATROL
+!PRODUCTCODE	swsy
+
+
+VERSION 8.619
+
+APPLICATIONS = { 
+  { NAME = "X_SNMPTRAP",
+	ACTIVE = True,
+	SECURITY = False,
+	PROPAGATE_STATE = True,
+	CREATE_ICON = False,
+	SUSPEND_GLOBAL_PARAMS = False,
+	DISCOVERY_TIME = 3600,
+	DISCOVERY = PSL,
+	PRE_DISCOVERY_TEXT =  1505460162 "# This monitors the SNMP traps that are sent by the monitored Host to the PATROL Agent and that match the specified criteria.",
+	DISCOVERY_TEXT =  1505460162 "#",
+	HELP_FILE = "X_help.hlp",
+	HELP_CONTEXT_ID = 197,
+	OK_PICTURE = "X_SNMPTRAP_ok",
+	WRONG_PICTURE = "X_SNMPTRAP_warn",
+	COMMANDS = {
+		{ NAME = "Refresh Parameters", AVAILABILITY = AVAILABLE_ONLINE, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1423063208 "# Refreshes all parameters of the X_SNMPTRAP application class.\
+requires X_generic;\
+\
+swGenericRefreshParameters(get(\"appType\"), get(\"sid\"));"}
+				}
+		}
+
+	},
+	INFO_BOX = {
+		{ NAME = "ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033381571 "# PATROL internal identifier of the SNMP traps instance.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"ID\"));"}
+				}
+		},
+		{ NAME = "Parent ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033381583 "# PATROL internal identifier of the parent object.\
+requires X_shared;\
+\
+print (swSentryInfobox(get(\"sid\"), \"parentID\"));"}
+				}
+		},
+		{ NAME = "Community", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387812 "# Community used to listen to traps.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"community\"));"}
+				}
+		},
+		{ NAME = "Enterprise ID", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387846 "# Enterprise ID of the SNMP agent that raises the traps.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"enterpriseid\"));"}
+				}
+		},
+		{ NAME = "Trap Number", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387867 "# Number of the searched trap.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"trapnumber\"));"}
+				}
+		},
+		{ NAME = "OID 1", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387884 "# OID of the first varBind of the searched traps.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"oid1\"));"}
+				}
+		},
+		{ NAME = "String 1", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387908 "# Searched string in the first varBind.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"string1\"));"}
+				}
+		},
+		{ NAME = "OID 2", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387924 "# OID of the second varBind of the searched traps.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"oid2\"));"}
+				}
+		},
+		{ NAME = "String 2", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387943 "# Searched string in the second varBind.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"string2\"));"}
+				}
+		},
+		{ NAME = "Acknowledging Trap Number", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387962 "# Trap number that will acknowledge this trap search.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"acknowledgetrapnumber\"));"}
+				}
+		},
+		{ NAME = "Acknowledging OID 1", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033387962 "# OID of the first varBind of the trap that will acknowledge this trap search.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"acknowledgeoid1\"));"}
+				}
+		},
+		{ NAME = "Acknowledging String 1", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033388485 "# Searched string in the first varBind of the acknowledging trap.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"acknowledgestring1\"));"}
+				}
+		},
+		{ NAME = "Acknowledging OID 2", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033388228 "# OID of the second varBind of the trap that will acknowledge this trap search.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"acknowledgeoid2\"));"}
+				}
+		},
+		{ NAME = "Acknowledging String 2", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033388250 "# Searched string in the second varBind of the acknowledging trap.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"acknowledgestring2\"));"}
+				}
+		},
+		{ NAME = "Timeout", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033388301 "# Timeout for auto-acknowledgment.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"timeout\"));"}
+				}
+		},
+		{ NAME = "Run Alert Actions", AVAILABILITY = AVAILABLE_ALWAYS, SECURITY = SECURITY_INHERIT,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1033388329 "# Indicates when Alert Actions should be executed.\
+requires X_snmptrap;\
+\
+print (swInfoboxSNMPTrap(get(\"sid\"), \"runAlertActions\"));"}
+				}
+		}
+
+	},
+	EV_CATALOG_NAME = "X_SNMPTRAP.ctg",
+	EV_CATALOG_SERIAL =0,
+	PARAMETERS = {
+		{	NAME = "snmpTrapColl", PARAM_TYPE = COLLECTOR, ACTIVE = True, MONITOR = False, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 197,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "PSL",
+				  COMMAND_TEXT =  1174917964 "requires X_genericcollector;\
+\
+swGenericCollector(get(\"appType\"), get(\"sid\"), get(\"name\"));"}
+				},
+			START = "ASAP",
+			POLL_TIME = "120", EXTERNAL_POLLING = False
+		},
+		{	NAME = "MatchingTrapRate", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 197,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1391089447 "# Number of SNMP traps per minute matching the search.\
+# Value set by snmpTrapColl."}
+				},
+			TITLE = "Matching Trap Rate", UNITS = "traps/min",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 100,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 100, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		},
+		{	NAME = "MatchingTrapCount", PARAM_TYPE = CONSUMER, ACTIVE = True, MONITOR = True, CHECK = False,
+ HELP_FILE = "X_help.hlp",
+ HELP_CONTEXT_ID = 197,
+				BASE_COMMAND = { 
+				{ COMPUTER_TYPE = "ALL_COMPUTERS", COMMAND_TYPE = "OS",
+				  COMMAND_TEXT =  1428649638 "# Number of SNMP traps matching the search.\
+# Value set by snmpTrapColl."}
+				},
+			TITLE = "Matching Trap Count", UNITS = "traps",
+			HISTORY_TIME = "600", HISTORY_SPAN = 0, HISTORY_LEVEL = False,
+			FORMAT = "%f", OUTPUT = OUTPUT_GRAPH,
+			AUTO_RESCALE = True, Y_AXIS_MIN = 0, Y_AXIS_MAX = 2147483646,
+			RANGES = {
+			  { NAME = "BORDER", ACTIVE = False, MINIMUM = 0, MAXIMUM = 100, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM1", ACTIVE = True, MINIMUM = 1, MAXIMUM = 2147483646, STATE = ALARM, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  },
+			  { NAME = "ALARM2", ACTIVE = False, MINIMUM = 2147483646, MAXIMUM = 2147483646, STATE = OK, ALARM_WHEN = ALARM_INSTANT, ALARM_WHEN_N = 0
+			  }
+			}
+		}
+
+	}
+  }
+}
+!29776

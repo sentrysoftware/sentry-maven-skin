@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<KMFile description="Monitoring Studio KM for PATROL" majorVersion="9" minorVersion="305" package="senms" productcode="senms" release="9.3.00" revision="0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="KMFile.xsd">
+
+  <Applications>
+    <Application active="true" category="Application" createIcon="false" discovery="PSL" discoveryTime="3600" displayName="Studio Text Transform" helpContextId="210" helpFile="X_help.hlp" name="X_TRANSFORM" okPicture="X_TRANSFORM_ok" propagateState="true" security="false" suspendGlobalParams="false" type="MONITOR" wrongPicture="X_TRANSFORM_warn">
+      <PreDiscoveryText serial="1171746184"># This object transforms complex (multi-line, HTML, XML) text to enable String Searches, Numeric Value Extractions, Value Maps, Text Pre-Processing or Dynamic Object Builders.</PreDiscoveryText>
+      <DiscoveryText serial="1171746184">#</DiscoveryText>
+      <InfoBoxes>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1172155361"># PATROL internal identifier of the Text Pre-Processing instance.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "ID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent ID" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1172155382"># PATROL internal identifier of the parent object.
+requires X_shared;
+
+print (swSentryInfobox(get("sid"), "parentID"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+        <InfoBox annotate="false" autoID="false" available="AVAILABLE_ALWAYS" id="" name="Parent Type" security="SECURITY_INHERIT">
+          <BaseCommand>
+            <Command commandType="PSL" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1172155458"># Type of the parent of the Text Pre-Processing instance (File, Command Line,  etc.).
+requires X_string;
+
+print (swInfoboxString(get("sid"), "parentType"));</Commandtext>
+            </Command>
+          </BaseCommand>
+        </InfoBox>
+      </InfoBoxes>
+      <Parameters>
+        <Parameter active="true" autoRescale="true" check="false" format="%s" helpContextId="210" helpFile="X_help.hlp" historyLevel="false" historySpan="0" historyTime="600" monitor="true" name="Result" output="OUTPUT_TEXT" title="Result" type="CONSUMER" yAxisMax="100" yAxisMin="0">
+          <ParamMetadata applicationCollectionStatus="false" availability="false" config="false" delta="false" graphByDefault="false" kpi="false" monitorForAbnormalities="false" normalDistribution="false" responseTime="false" statistical="false"/>
+          <BaseCommand>
+            <Command commandType="OS" computerType="ALL_COMPUTERS">
+              <Commandtext serial="1180539459"># Lines matching the Text Pre-Processing.</Commandtext>
+            </Command>
+          </BaseCommand>
+          <Ranges>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="BORDER" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="0" name="ALARM1" state="OK"/>
+            <Range active="false" alarmWhen="ALARM_INSTANT" alarmWhenN="0" maximum="100" minimum="100" name="ALARM2" state="OK"/>
+          </Ranges>
+        </Parameter>
+      </Parameters>
+    </Application>
+  </Applications>
+
+</KMFile>
