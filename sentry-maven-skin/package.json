@@ -8,9 +8,6 @@
 		"name": "Bertrand Martin",
 		"email": "bertrand@sentrysoftware.com"
 	},
-	"os": [
-		"win32"
-	],
 	"main": "dist/sentry-maven-skin.jar",
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^5.15.1",
