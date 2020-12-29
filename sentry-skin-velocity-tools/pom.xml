@@ -66,10 +66,20 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.junit.platform</groupId>
-		    <artifactId>junit-platform-launcher</artifactId>
-		    <version>1.1.1</version>
-		    <scope>test</scope>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>1.1.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.graalvm.js</groupId>
+			<artifactId>js</artifactId>
+			<version>20.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.graalvm.js</groupId>
+			<artifactId>js-scriptengine</artifactId>
+			<version>20.2.0</version>
 		</dependency>
 	</dependencies>
 
@@ -103,9 +113,9 @@
 				<executions>
 					<execution>
 						<id>attach-sources</id>
-					<goals>
-						<goal>jar</goal>
-					</goals>
+						<goals>
+							<goal>jar</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -117,7 +127,7 @@
 				<version>3.0.1</version>
 				<executions>
 					<execution>
-							<id>attach-javadocs</id>
+						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -155,11 +165,11 @@
 						<artifactId>junit-platform-surefire-provider</artifactId>
 						<version>1.0.3</version>
 					</dependency>
-	                <dependency>
-	                    <groupId>org.junit.jupiter</groupId>
-	                    <artifactId>junit-jupiter-engine</artifactId>
-	                    <version>5.0.3</version>
-	                </dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>5.0.3</version>
+					</dependency>
 				</dependencies>
 			</plugin>
 
