@@ -26,7 +26,7 @@ public class IndexTool {
 	/**
 	 * Nashorn engine to execute Javascript
 	 */
-	static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+	static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
 
 	static {
 

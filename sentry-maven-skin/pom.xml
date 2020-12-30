@@ -46,7 +46,7 @@
 						</goals>
 						<!-- optional: default phase is "generate-resources" -->
 						<configuration>
-							<nodeVersion>v9.9.0</nodeVersion>
+							<nodeVersion>v14.15.3</nodeVersion>
 						</configuration>
 					</execution>
 
