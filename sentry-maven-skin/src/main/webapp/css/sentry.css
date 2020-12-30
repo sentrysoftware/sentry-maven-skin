@@ -550,7 +550,7 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 
 .footer > .footer-copyright {
 	font-family: 'Lato-Regular', sans-serif;
-	font-size: 13px;
+	font-size: 10px;
 	opacity: .3;
 	filter: alpha(opacity=30);
 }

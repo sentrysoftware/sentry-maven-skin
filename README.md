@@ -1,13 +1,10 @@
 # Sentry Maven Skin
 
-The *Sentry Maven Skin* is an Apache Maven site skin to be used to generate Sentry's technical
-user documentation, using modern-era development tools (git, maven, markdown), and producing
-modern-era Web-based documentation (HTML5, Bootstrap, etc.)
+The *Sentry Maven Skin* is an Apache Maven site skin to be used to generate Sentry's technical user documentation, using modern-era development tools (git, maven, markdown), and producing modern-era Web-based documentation (HTML5, Bootstrap, etc.)
 
 ## Setup of your `site` project
 
-First, the *Sentry Maven Skin* requires a specific Java library for its more advanced features (like the automatic
-generation of the search index). You therefore need to update your `./pom.xml` file as below:
+First, the *Sentry Maven Skin* requires a specific Java library for its more advanced features (like the automatic generation of the search index). You therefore need to update your `./pom.xml` file as below:
 
 ```xml
 <build>
@@ -16,13 +13,13 @@ generation of the search index). You therefore need to update your `./pom.xml` f
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-site-plugin</artifactId>
-			<version>3.8.2</version>
+			<version>3.9.1</version>
 			...
 			<dependencies>
 				<dependency>
 					<groupId>com.sentrysoftware.doc</groupId>
 					<artifactId>sentry-skin-velocity-tools</artifactId>
-					<version>3.0</version>
+					<version>4.0</version>
 				</dependency>
 			</dependencies>
 		</plugin>
@@ -39,7 +36,7 @@ Then, specify the Sentry Maven Skin artifact in your `./src/site/site.xml` file:
 	<skin>
 		<groupId>com.sentrysoftware.doc</groupId>
 		<artifactId>sentry-maven-skin</artifactId>
-		<version>3.0</version>
+		<version>4.0</version>
 	</skin>
 
 	<custom>
@@ -66,8 +63,7 @@ Then, specify the Sentry Maven Skin artifact in your `./src/site/site.xml` file:
 </project>
 ```
 
-> Note: Use the latest officially available version of the skin as published on Sentry's repository
-(it's **3.0** in the examples above).
+> Note: Use the latest officially available version of the skin as published on Sentry's repository (it's **4.0** in the examples above).
 
 
 ## Features
@@ -103,7 +99,7 @@ As values in `./site/site.xml` can refer to `./pom.xml`, your `./site/site.xml` 
 
 The *Sentry Maven Skin* now leverages Maven Doxia standard **TOC** macro, which needs to be inserted in Markdown documents as below:
 
-```md
+```html
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 ```
 
@@ -113,11 +109,9 @@ More information about [Maven Doxia macros](https://maven.apache.org/doxia/macro
 
 ### Parsing of the `${property}` properties
 
-All properties defined in `./pom.xml` can be referenced in the Markdown (and other) source documents and will be
-replaced with their corresponding values in the resulting HTML, using the `${propertyName}` syntax.
+All properties defined in `./pom.xml` can be referenced in the Markdown (and other) source documents and will be replaced with their corresponding values in the resulting HTML, using the `${propertyName}` syntax.
 
-Similarly, all properties defined in `./site/site.xml` under the `<custom>` tag can also be referenced with the
-`$decoration.getCustomValue("propertyName")` syntax.
+Similarly, all properties defined in `./site/site.xml` under the `<custom>` tag can also be referenced with the `$decoration.getCustomValue("propertyName")` syntax.
 
 Example of a `pom.xml`:
 
@@ -131,8 +125,7 @@ Example of a `pom.xml`:
 	</properties>
 ```
 
-In the source documents (Markdown or other), you can use `$productShortname` and `$model` that will be replaced
-with *Xtrem IO KM* and *EMC XtremIO* respectively.
+In the source documents (Markdown or other), you can use `$productShortname` and `$model` that will be replaced with *Xtrem IO KM* and *EMC XtremIO* respectively.
 
 Same example with `./site/site.xml`:
 
@@ -149,16 +142,44 @@ Same example with `./site/site.xml`:
 
 ```
 
-In the source documents (Markdown or other), you can use `$decoration.getCustomValue("productShortName")` and
-`$decoration.getCustomValue("model")`, which will be replaced with with *Xtrem IO KM* and *EMC XtremIO* respectively.
+In the source documents (Markdown or other), you can use `$decoration.getCustomValue("productShortName")` and `$decoration.getCustomValue("model")`, which will be replaced with with *Xtrem IO KM* and *EMC XtremIO* respectively.
 
-The syntax to reference values in `./pom.xml` looks nicer and easier than the one to reference values in `./site/site.xml`.
-However, it's the latter method that is recommended so that documentation information remains in `./site/site.xml` rather
-than spread across several configuration files.
+The syntax to reference values in `./pom.xml` looks nicer and easier than the one to reference values in `./site/site.xml`. However, it's the latter method that is recommended so that documentation information remains in `./site/site.xml` rather than spread across several configuration files.
 
 ### Automatic Title
 
-The page title is automatically built from the project name and the first `<h1>` heading found in the document.
+The page title is automatically built from the project name and the first heading found in the document.
+
+### Links in the top navigation bar
+
+At the very top of each page, above the title banner, several "general purpose" links are listed. You can specify additional links in **site.xml** as in the example below:
+
+```xml
+<project name="My Documentation">
+
+	...
+
+	<links>
+		<item name="Product Page" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+		<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
+	</links>
+```
+
+You can also prevent the skin from adding the usual default links to Sentry's Web site with the `noDefaultLinks` option in the `<custom>` section as in the example below:
+
+```xml
+	...
+
+	<links>
+		...
+	</links>
+
+	<custom>
+		...
+		<noDefaultLinks>true</noDefaultLinks>
+	</custom>
+
+```
 
 ### Auto-zoom images
 
@@ -172,9 +193,9 @@ you will need to set its `alt` attribute to `inline`.
 Examples:
 
 ```md
-![My Description](./images/my-picture.png) This will show in *lightbox*
+![My Description](./images/my-picture.png) This will show as a zoomable image
 
-![inline](./images/icon.png) This will show "inline", with no *lightbox*
+![inline](./images/icon.png) This will show "inline", with no zoom
 ```
 
 ### Keywords
@@ -239,14 +260,14 @@ Project in Jira: http://alpha.internal.sentrysoftware.net/tracker/projects/SMS/
 
 ### Source code
 
-Fork the git repository from http://alpha/source, branch from `master`, commit and push your changes, and submit pull requests.
+Fork the git repository from http://alpha/source, branch from **develop**, commit and push your changes, and submit pull requests.
 
 ### Structure and technologies
 
 Beware that this project is a baroc mix of languages, frameworks and libraries:
 
 * Java for some *backend* HTML processing
-* Javascript-in-Java ([Nashorn](//docs.oracle.com/javase/10/nashorn/introduction.htm)) for building the index
+* Javascript-in-Java with [GraalVM](//www.graalvm.org/reference-manual/js/) for building the index
 * [Velocity](//velocity.apache.org/engine/1.7/user-guide.html) for templating
 * [AngularJS](//angularjs.org/) for front-end logic
 * Various HTML, CSS and JS frameworks and libraries (Bootstrap, etc.)
@@ -268,13 +289,13 @@ The *Sentry Maven Skin* project is made of 2 modules:
 The build is done with Maven with the below command:
 
 ```sh
-$ mvn integration-test
+$ mvn verify
 ```
 
 Build steps:
 
 * First, the *sentry-skin-velocity-tools* module is built as a regular Java project
-  * JUnit 5 (Jupiter) is used to unit tests
+  * JUnit 5 (Jupiter) is used for unit tests
 * Then, the *sentry-maven-skin* module is built
   * NodeJS is installed in `./node` (and is ignored by Git)
   * `npm install` is run to get all dependencies listed in `package.json`, which are installed in the `./node_modules` (also ignored by Git)
@@ -292,7 +313,7 @@ Conveniently, the project comes with integration tests, i.e. a documentation pro
 built with the skin as it is in the workspace. The integration test is run with the below command:
 
 ```sh
-$ mvn integration-test
+$ mvn verify
 ```
 
 This command builds the skin and run it against a documentation project. The result can be seen in

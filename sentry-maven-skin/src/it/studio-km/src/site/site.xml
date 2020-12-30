@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${project.name} Extended">
+<project name="${project.name} Extended" xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd">
 
 	<skin>
 		<groupId>com.sentrysoftware.doc</groupId>
@@ -12,9 +12,16 @@
 		<bodyClass>sentry-studio</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
 		<publishDate>${timestamp}</publishDate>
+		<noDefaultLinks>true</noDefaultLinks>
 	</custom>
 
+
 	<body>
+
+		<links>
+			<item name="${project.name}" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+			<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
+		</links>
 
 		<menu name="Getting Started">
 			<item name="Overview" href="index.html"/>
