@@ -59,8 +59,8 @@
 				*##if ( $item.icon )<i class="$item.icon"></i> #end#*
 				*#$item.name#*
 			*#</a>#*
-		*#</li>#*
-	*##end#*
+		*#</li>
+#**##end#*
 
 *##end#*
 
@@ -83,7 +83,7 @@
 *##if ( $hTexts.size() > 0 )#*
 	*##set ( $shortTitle = $hTexts.get(0) )#*
 *##end#*
-*##set ( $title = $decoration.name + " - " + $shortTitle )#*
+*##set ( $title = $shortTitle + " &ndash; " + $decoration.name )#*
 
 // Add the "zoomable-img" attribute to all <img> where alt != "inline"
 *##set ( $bodyContent = $htmlTool.setAttr( $bodyContent, "img:not(img[alt=inline])", "zoomable-img", "" ) )#*
@@ -133,11 +133,9 @@
 *##call ( $indexTool.buildElasticLunrIndex( $indexFile, $currentFileName, $shortTitle, $keywords, $bodyText.get(0) ) )#*
 
 // publishDate: either the one in site.xml, or current date
-*##if ( ! $publishDate || $publishDate == "" )#*
-	*##set ( $publishDate = $decoration.getCustomValue("publishDate") )#*
-	*##if ( ! $publishDate || $publishDate == "" )#*
-		*##set ( $publishDate = $date.get("yyyy-M-d HH:mm:ss") )#*
-	*##end#*
+*##set ( $publishDateString = $decoration.getCustomValue("publishDate") )#*
+*##if ( ! $publishDateString || $publishDateString == "" )#*
+	*##set ( $publishDateString = $date.get("yyyy-M-d HH:mm:ss") )#*
 *##end#*
 
 // generator: who we are and where we come from
