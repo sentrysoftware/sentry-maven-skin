@@ -1,0 +1,10 @@
+<div class="zoomable" ng-click="$ctrl.fullScreenClick($event)">
+	<div class="zoomable-shadow" title="{{!$ctrl.zoomed && !$ctrl.fullScreen ? $ctrl.alt : undefined}}">
+		<div class="zoomable-control">
+			<i ng-if="$ctrl.zoomed && !$ctrl.fullScreen" class="fas fa-expand" title="Expand Full Screen" ng-click="$ctrl.enterFullScreen($event)"></i>
+			<i ng-if="$ctrl.fullScreen" class="fas fa-times" title="Exit Full Screen" ng-click="$ctrl.exitFullScreen($event)"></i>
+		</div>
+		<ng-transclude ng-click="false"></ng-transclude>
+	</div>
+	<div class="zoomable-title" ng-if="$ctrl.alt">{{$ctrl.alt}}</div>
+</div>

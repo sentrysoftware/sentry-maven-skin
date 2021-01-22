@@ -6,5 +6,7 @@
           class="com.sentrysoftware.doc.mavenskin.HtmlTool"/>
     <tool key="indexTool"
     	  class="com.sentrysoftware.doc.mavenskin.IndexTool"/>
+    <tool key="imageTool"
+    	  class="com.sentrysoftware.doc.mavenskin.ImageTool"/>
   </toolbox>
 </tools>

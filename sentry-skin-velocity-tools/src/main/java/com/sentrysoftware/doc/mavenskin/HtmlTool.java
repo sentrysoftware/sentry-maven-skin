@@ -258,7 +258,7 @@ public class HtmlTool extends SafeConfig {
 	 * @param content
 	 * @return the {@code body} element of the parsed content
 	 */
-	private Element parseContent(String content) {
+	protected Element parseContent(String content) {
 		Document doc = Jsoup.parseBodyFragment(content);
 		doc.outputSettings().charset(outputEncoding);
 		return doc.body();

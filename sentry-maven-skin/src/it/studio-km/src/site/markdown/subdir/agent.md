@@ -6,6 +6,8 @@ keywords: agent,java,http,preload
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
+![Monitoring Studio X - Architecture Diagram](../images/MS_X_Architecture_Diagram-subdir.png)
+
 **${project.name}** allows you to manage the main configuration properties of the PATROL Agent directly from its Web interface, that is:
 
 - Defining a default user account

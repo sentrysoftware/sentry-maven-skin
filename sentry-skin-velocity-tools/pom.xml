@@ -13,6 +13,7 @@
 
 	<name>Sentry Skin Velocity Tools</name>
 	<description>Velocity tools supporting Sentry's Maven skin (based on Reflow)</description>
+	<packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,6 +81,11 @@
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js-scriptengine</artifactId>
 			<version>20.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sejda.imageio</groupId>
+			<artifactId>webp-imageio</artifactId>
+			<version>0.1.6</version>
 		</dependency>
 	</dependencies>
 

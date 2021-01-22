@@ -586,36 +586,149 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	background-color: #3399FF;
 }
 
+
 /**
- * zoomable-img
+ * zoomable
+ *
+ * zoomable thumbnail size is initialized with min-width and min-height.
+ * Then animation from thumbnail to zoomed is done with a transition on
+ * width from 0% to 100% (so, relative to the parent).
+ * The zoomed size won't exceed max-width and max-height.
+ *
+ * The IMG element inside zoomable is constrained with max-width = 100%
+ * and height: auto so that it grows and shrinks with the size of the
+ * zoomable element.
+ *
+ * The full-screen state re-shuffles everything as a lightbox, using a
+ * different z-index and position fixed.
+ *
+ * Do not mess with these CSS classes and attributes unless you really
+ * know what you're doing.
  **/
 
-img.zommable-img-loading,
-.zoomable-img img {
-	max-height: 150px;
-	max-width: 100%;
+zoomable {
 	cursor: zoom-in;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	transition: max-height .5s ease-in-out, box-shadow 0.3s ease-in-out;
+	transition: width .3s ease-in-out;
+	display: block;
+	width: 0%;
+	background-repeat: no-repeat;
+	background-size: auto;
+	position: relative;
+	margin-bottom: 2em;
 }
 
-.zoomable-img.zoomed img {
+zoomable.zoomed {
 	cursor: zoom-out;
+	width: 100%;
 }
 
-.zoomable-img img:hover {
+.zoomable:focus {
+	outline: none;
+}
+
+zoomable .zoomable-shadow {
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	transition: box-shadow .3s ease-in-out;
+}
+
+zoomable .zoomable-shadow:hover {
 	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
-.zoomable-img > .zoomable-img-title {
-	margin-top: 5px;
-	color: #888;
-	text-align: center;
-	transform: scale(0, 0);
-	transition: transform 0.5s ease-in-out;
-	max-width: 100%;
+.full-screen.zoomable .zoomable-shadow {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	z-index: 999999;
 }
 
-.zoomable-img.zoomed > .zoomable-img-title {
-	transform: scale(1, 1);
+zoomable img {
+	opacity: 0;
+	max-width: 100%;
+	height: auto !important;
+	transition: opacity .3s ease-in-out;
 }
+
+zoomable.zoomed img {
+	opacity: 1;
+}
+
+.zoomable.full-screen img {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto auto;
+	width: auto !important;
+	height: auto !important;
+	max-width: 90vw;
+	max-height: 90vh;
+}
+
+.zoomable .zoomable-title {
+	position: absolute;
+	margin-top: 5px;
+	width: 100%;
+	text-align: center;
+	color: #888;
+	opacity: 0;
+	font-size: 0%;
+	transition: opacity .3s ease-in-out, font-size .3s ease-in-out;
+}
+
+.zoomed .zoomable .zoomable-title,
+.zoomable.full-screen .zoomable-title {
+	opacity: 1;
+	font-size: 100%;
+}
+
+.zoomable.full-screen .zoomable-title {
+	position: fixed;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 1000000;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.5);
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.zoomable .zoomable-control {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000000;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 10px;
+	text-align: right;
+	background-color: rgba(0, 0, 0, 0.2);
+	transition: opacity .3s ease-in-out;
+}
+
+.zoomed:hover .zoomable .zoomable-control,
+.zoomable.full-screen .zoomable-control {
+	opacity: 1;
+}
+
+.zoomable .zoomable-control i {
+	cursor: pointer;
+	padding: 5px;
+	font-size: 30px;
+	color: rgba(255, 255, 255, 0.5);
+	text-shadow: black;
+}
+
+.zoomable .zoomable-control i:hover {
+	color: white;
+}
+
