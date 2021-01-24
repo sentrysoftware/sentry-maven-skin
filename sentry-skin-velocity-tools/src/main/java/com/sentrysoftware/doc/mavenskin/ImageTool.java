@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -41,6 +43,90 @@ public class ImageTool {
 		iioRegistry.registerServiceProvider(new WebPImageReaderSpi());
 
 	}
+
+	/**
+	 * Check the image links in the document and make sure they refer to a file that
+	 * actually exists.
+	 *
+	 * @param content         the HTML content
+	 * @param basedir         Actual root directory of the site on the file system
+	 * @param currentDocument Logical path of the document being parsed (e.g.
+	 *                        "index.html", or "subdir/subpage.html")
+	 * @return the updated HTML content
+	 * @throws IOException when an image cannot be read or converted
+	 */
+	public String checkImageLinks(
+			String content,
+			String basedir,
+			String currentDocument
+	) throws IOException {
+
+		// Initialization
+		List<String> errorList = new ArrayList<String>();
+
+		// basedir path
+		Path basedirPath = Paths.get(basedir).toAbsolutePath();
+
+		// First, calculate the real path of the current document
+		Path documentPath = Paths.get(basedir, currentDocument);
+
+		// Read the content body
+		Document doc = Jsoup.parseBodyFragment(content);
+		doc.outputSettings().charset(StandardCharsets.UTF_8);
+		Element body = doc.body();
+
+		// Select all images
+		List<Element> elements = body.select("img");
+		if (elements.isEmpty()) {
+
+			// nothing to update
+			return content;
+
+		}
+
+		// For each image
+		for (Element element : elements) {
+
+			// Get the SRC attribute (the path)
+			String imageSrc = element.attr("src");
+			if (imageSrc.isEmpty()) {
+				continue;
+			}
+
+			// Calculate the path to the actual picture file
+			Path sourcePath = documentPath.resolveSibling(imageSrc);
+			File sourceFile = sourcePath.toFile();
+
+			// Skip external URLs
+			if (!sourcePath.toAbsolutePath().startsWith(basedirPath)) {
+				continue;
+			}
+
+			// Recalculate the relative link and see whether the original matches
+			// the recalculated one. If not, it means there is a problem in the case.
+			Path recalculatedPath = documentPath.getParent().toRealPath().relativize(sourcePath.toRealPath());
+			String sourcePathSlashString = sourcePath.toString().replace('\\', '/');
+			String recalculatedPathSlashString = recalculatedPath.toString().replace('\\', '/');
+			if (!recalculatedPathSlashString.endsWith(sourcePathSlashString) && !sourcePathSlashString.endsWith(recalculatedPathSlashString)) {
+				errorList.add("Referenced image " + imageSrc + " in " + currentDocument + " doesn't match case of actual file " + recalculatedPath);
+			}
+
+			// Sanity check
+			if (!sourceFile.isFile()) {
+				errorList.add("Referenced image " + imageSrc + " in " + currentDocument + " doesn't exist");
+			}
+
+		}
+
+		// Some errors, show them all
+		if (!errorList.isEmpty()) {
+			throw new IOException(errorList.stream().collect(Collectors.joining("\n")));
+		}
+
+		return body.html();
+
+	}
+
 
 	/**
 	 * Returns the extension of the file
@@ -89,6 +175,11 @@ public class ImageTool {
 			int maxHeight
 	) throws IOException {
 
+		// Sanity check
+		if (!sourceFile.isFile()) {
+			throw new IOException(sourceFile.getAbsolutePath()  + " does not exist");
+		}
+
 		// Read the specified image
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
 		String imageType = getExtension(sourceFile).toLowerCase();
@@ -127,6 +218,11 @@ public class ImageTool {
 	 * @throws IOException when cannot read the image file
 	 */
 	protected static File saveImageFileAsWebp(File sourceFile) throws IOException {
+
+		// Sanity check
+		if (!sourceFile.isFile()) {
+			throw new IOException(sourceFile.getAbsolutePath()  + " does not exist");
+		}
 
 		// Read the specified image
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
@@ -186,6 +282,9 @@ public class ImageTool {
 			String currentDocument
 	) throws IOException {
 
+		// basedir path
+		Path basedirPath = Paths.get(basedir).toAbsolutePath();
+
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
 
@@ -196,7 +295,7 @@ public class ImageTool {
 
 		// Select all images
 		List<Element> elements = body.select(selector);
-		if (elements.size() == 0) {
+		if (elements.isEmpty()) {
 
 			// nothing to update
 			return content;
@@ -215,6 +314,16 @@ public class ImageTool {
 			// Calculate the path to the actual picture file
 			Path sourcePath = documentPath.resolveSibling(imageSrc);
 			File sourceFile = sourcePath.toFile();
+
+			// Skip external URLs
+			if (!sourcePath.toAbsolutePath().startsWith(basedirPath)) {
+				continue;
+			}
+
+			// Sanity check
+			if (!sourceFile.isFile()) {
+				throw new IOException(sourceFile.getAbsolutePath()  + " (referenced as " + imageSrc + ") does not exist");
+			}
 
 			// Save as webp
 			File webpFile = saveImageFileAsWebp(sourceFile);
@@ -254,12 +363,15 @@ public class ImageTool {
 	 * @return the updated HTML content
 	 * @throws IOException when an image cannot be read or converted
 	 */
-public String explicitImageSize(
+	public String explicitImageSize(
 			String content,
 			String selector,
 			String basedir,
 			String currentDocument
 	) throws IOException {
+
+		// basedir path
+		Path basedirPath = Paths.get(basedir).toAbsolutePath();
 
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
@@ -271,7 +383,7 @@ public String explicitImageSize(
 
 		// Select all images
 		List<Element> elements = body.select(selector);
-		if (elements.size() == 0) {
+		if (elements.isEmpty()) {
 
 			// nothing to update
 			return content;
@@ -297,6 +409,16 @@ public String explicitImageSize(
 			// Calculate the path to the actual picture file
 			Path sourcePath = documentPath.resolveSibling(imageSrc);
 			File sourceFile = sourcePath.toFile();
+
+			// Skip external URLs
+			if (!sourcePath.toAbsolutePath().startsWith(basedirPath)) {
+				continue;
+			}
+
+			// Sanity check
+			if (!sourceFile.isFile()) {
+				throw new IOException(sourceFile.getAbsolutePath()  + " (referenced as " + imageSrc + ") does not exist");
+			}
 
 			// Read the image
 			BufferedImage sourceImage = ImageIO.read(sourceFile);
@@ -360,6 +482,9 @@ public String explicitImageSize(
 			String wrapTemplate
 	) throws IOException {
 
+		// basedir path
+		Path basedirPath = Paths.get(basedir).toAbsolutePath();
+
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
 
@@ -370,7 +495,7 @@ public String explicitImageSize(
 
 		// Select all images
 		List<Element> elements = body.select(selector);
-		if (elements.size() == 0) {
+		if (elements.isEmpty()) {
 
 			// nothing to update
 			return content;
@@ -393,6 +518,16 @@ public String explicitImageSize(
 			Path sourcePath = documentPath.resolveSibling(imageSrc);
 			File sourceFile = sourcePath.toFile();
 
+			// Skip external URLs
+			if (!sourcePath.toAbsolutePath().startsWith(basedirPath)) {
+				continue;
+			}
+
+			// Sanity check
+			if (!sourceFile.isFile()) {
+				throw new IOException(sourceFile.getAbsolutePath()  + " (referenced as " + imageSrc + ") does not exist");
+			}
+
 			// Image size
 			BufferedImage sourceImage = ImageIO.read(sourceFile);
 			int sourceWidth = sourceImage.getWidth();
@@ -400,9 +535,6 @@ public String explicitImageSize(
 
 			// Create the thumbnail
 			File thumbnailFile = createThumbnail(sourceFile, "-thumbnail", maxWidth, maxHeight);
-			if (thumbnailFile == null) {
-				continue;
-			}
 
 			// Read the thumbnail and get its size
 			BufferedImage thumbnailImage = ImageIO.read(thumbnailFile);

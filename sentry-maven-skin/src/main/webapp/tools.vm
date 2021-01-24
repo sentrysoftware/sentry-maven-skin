@@ -85,6 +85,9 @@
 *##end#*
 *##set ( $title = $shortTitle + " &ndash; " + $decoration.name )#*
 
+// Check all images
+*##set ( $bodyContent = $imageTool.checkImageLinks( $bodyContent, ${project.reporting.outputDirectory}, $currentFileName ) )#*
+
 // Convert all <IMG> to WEBP format (more efficient)
 *##set ( $bodyContent = $imageTool.convertImagesToWebp( $bodyContent, "img", ${project.reporting.outputDirectory}, $currentFileName ) )#*
 
