@@ -24,7 +24,7 @@ public class IndexTool {
 	static final Charset UTF8_CHARSET = StandardCharsets.UTF_8;
 
 	/**
-	 * Nashorn engine to execute Javascript
+	 * GraalVM's graal.js engine to execute Javascript
 	 */
 	static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
 

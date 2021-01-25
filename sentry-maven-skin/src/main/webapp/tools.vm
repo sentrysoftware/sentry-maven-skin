@@ -60,7 +60,7 @@
 				*#$item.name#*
 			*#</a>#*
 		*#</li>
-#**##end#*
+	#end#*
 
 *##end#*
 
@@ -85,12 +85,17 @@
 *##end#*
 *##set ( $title = $shortTitle + " &ndash; " + $decoration.name )#*
 
-// Add the "zoomable-img" attribute to all <img> where alt != "inline"
-*##set ( $bodyContent = $htmlTool.setAttr( $bodyContent, "img:not(img[alt=inline])", "zoomable-img", "" ) )#*
+// Check all images
+*##set ( $bodyContent = $imageTool.checkImageLinks( $bodyContent, ${project.reporting.outputDirectory}, $currentFileName ) )#*
 
-// Also, add the "zoomable-img-loading" class, so it's immediately sized appropriately,
-// even before the zoomable-img directive kicks in
-*##set ( $bodyContent = $htmlTool.addClass( $bodyContent, "img:not(img[alt=inline])", "zoomable-img-loading" ) )#*
+// Convert all <IMG> to WEBP format (more efficient)
+*##set ( $bodyContent = $imageTool.convertImagesToWebp( $bodyContent, "img", ${project.reporting.outputDirectory}, $currentFileName ) )#*
+
+// Specify the size of the images (makes the rendering more efficient)
+*##set ( $bodyContent = $imageTool.explicitImageSize( $bodyContent, "img", ${project.reporting.outputDirectory}, $currentFileName ) )#*
+
+// Surround all <IMG> not marked as "inline" with a thumbnail
+*##set ( $bodyContent = $imageTool.convertImagesToThumbnails( $bodyContent, "img:not(img[alt=inline])", ${project.reporting.outputDirectory}, $currentFileName, 200, 0, "<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></div>" ) )#*
 
 // Bootstrap CSS class for tables
 *##set ( $bodyContent = $htmlTool.addClass( $bodyContent, "table.bodyTable", ["table", "table-striped", "table-hover"] ) )#*
@@ -128,7 +133,7 @@
 *##end#*
 
 // Build ElasticLunr index
-*##set ( $indexFile = "${project.build.directory}/site/index.json" )#*
+*##set ( $indexFile = "${project.reporting.outputDirectory}/index.json" )#*
 *##set ( $bodyText = $htmlTool.text( $bodyContent, "body" ) )#*
 *##call ( $indexTool.buildElasticLunrIndex( $indexFile, $currentFileName, $shortTitle, $keywords, $bodyText.get(0) ) )#*
 

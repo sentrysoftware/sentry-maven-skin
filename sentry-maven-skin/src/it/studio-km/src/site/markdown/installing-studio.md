@@ -111,7 +111,7 @@ You can create the installation package that will be deployed to the managed sys
 4. Select the **${project.name}** package and click **Deploy and Install**
 
 	![Installing the Package - Selecting the Monitoring Studio Package](./images/TS_Select_Package.png)
-5. Wait for the installation to complete. You can click the ![inline](./images/TS_Refresh_Btn.png) button to refresh the page and check the installation progress in the **Deploy Status** column.
+5. Wait for the installation to complete. You can click the ![inline](./images/TS_Refresh_btn.png) button to refresh the page and check the installation progress in the **Deploy Status** column.
 
 
 ## Accessing ${project.name} Web Interface
