@@ -152,7 +152,7 @@
 		<div class="row display-flex">
 
 			<!-- Left menu -->
-			<div class="left-menu hidden-xs hidden-sm col-md-3">
+			<div class="left-menu hidden-xs col-sm-4 col-md-3">
 				<!--ZOOMSTOP-->
 				<nav>
 					#foreach ( $menu in $decoration.body.menus ) #*
@@ -166,7 +166,7 @@
 			</div>
 
 			<!-- Main content -->
-			<div class="main-content col-xs-12 col-sm-12 col-md-9">
+			<div class="main-content col-xs-12 col-sm-8 col-md-9">
 
 				<!-- Hide content if we're displaying search results -->
 				<div ng-hide="siteSearch">
