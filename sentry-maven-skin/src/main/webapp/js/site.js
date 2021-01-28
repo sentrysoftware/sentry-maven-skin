@@ -1,7 +1,19 @@
 /**
  * The site AngularJS application
  **/
-angular.module("sentry.site", ["ngAnimate", "ui.bootstrap", "matchMedia", "duScroll"]);
+angular.module(
+	"sentry.site",
+	[
+		"ngAnimate",
+		"uib/template/progressbar/progressbar.html",
+		"uib/template/progressbar/progress.html",
+		"uib/template/progressbar/bar.html",
+		"ui.bootstrap.progressbar",
+		"ui.bootstrap.collapse",
+		"matchMedia",
+		"duScroll"
+	]
+);
 
 /**
  * Prevent animations for anything not marked with the class "animate"
@@ -15,8 +27,8 @@ angular.module("sentry.site").config(["$animateProvider", function($animateProvi
  **/
 angular.module("sentry.site").controller(
 	"siteController",
-	["$scope", "$http", "$location", "screenSize", "siteIndex", "$document", "$anchorScroll", "RELATIVE_ROOT", "$timeout",
-	function($scope, $http, $location, screenSize, siteIndex, $document, $anchorScroll, RELATIVE_ROOT, $timeout) {
+	["$scope", "$location", "screenSize", "siteIndex", "$document", "$anchorScroll", "RELATIVE_ROOT", "$timeout",
+		function($scope, $location, screenSize, siteIndex, $document, $anchorScroll, RELATIVE_ROOT, $timeout) {
 
 	/**
 	 * initialize
