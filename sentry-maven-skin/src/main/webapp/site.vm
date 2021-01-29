@@ -35,14 +35,14 @@
 	<!-- Dark desktop banner with Sentry's links -->
 	<nav class="hidden-xs navbar navbar-inverse site-logo">
 		<ul class="nav navbar-nav">
-			<li class="logo"><a href="//www.sentrysoftware.com"></a></li>
+			<li class="logo"><a href="https://www.sentrysoftware.com"></a></li>
 #links ( $decoration.body.links )
 #if ( ! ($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true") )#*
-*#		<li><a href="//www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
-			<li><a href="//www.sentrysoftware.com/kb/">Knowledge Base</a></li>
-			<li><a href="//www.sentrysoftware.com/support/patches/">Patches</a></li>
-			<li><a href="//www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
-			<li><a href="//docs.bmc.com" target="_blank">docs.bmc.com</a></li>
+*#		<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
+			<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
+			<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
+			<li><a href="https://www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
+			<li><a href="https://docs.bmc.com" target="_blank">docs.bmc.com</a></li>
 #end#*
 *#	</ul>
 	</nav>
@@ -50,7 +50,7 @@
 	<!--Dark mobile banner with only one Sentry's link-->
 	<nav class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 		<ul class="nav navbar-nav">
-			<li><a href="//www.sentrysoftware.com">Sentry Software</a></li>
+			<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
 		</ul>
 	</nav>
 
@@ -261,14 +261,14 @@
 		<!-- Mobile only: links -->
 		<nav class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
-				<li><a href="//www.sentrysoftware.com">Sentry Software</a></li>
+				<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
 	#links ( $decoration.body.links )
 #if ( ! ($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true") )#*
-*#			<li><a href="//www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
-				<li><a href="//www.sentrysoftware.com/kb/">Knowledge Base</a></li>
-				<li><a href="//www.sentrysoftware.com/support/patches/">Patches</a></li>
-				<li><a href="//www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
-				<li><a href="//docs.bmc.com" target="_blank">docs.bmc.com</a></li>
+*#			<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
+				<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
+				<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
+				<li><a href="https://www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
+				<li><a href="https://docs.bmc.com" target="_blank">docs.bmc.com</a></li>
 #end#*
 *#		</ul>
 		</nav>

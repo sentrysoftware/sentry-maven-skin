@@ -140,10 +140,10 @@ The **Information** page, as its name suggests, provides any relevant informatio
 
 ## Related Topics
 
-- [Defining Access Control Lists](https://docs.bmc.com/docs/PATROLAgent/113/defining-access-control-lists-766670424.html)
-- [Preloading KMs on the PATROL Agent](https://docs.bmc.com/docs/PATROLAgent/113/preloading-kms-on-the-patrol-agent-766670451.html)
-- [Setting the number of days that history is retained in the history database ](https://docs.bmc.com/docs/PATROLAgent/113/setting-the-number-of-days-that-history-is-retained-in-the-history-database-766670474.html)
-- [Setting up the event log file and size](https://docs.bmc.com/docs/PATROLAgent/113/setting-up-the-event-log-file-and-size-766670479.html)
-- [Specifying the Integration Service path](https://docs.bmc.com/docs/PATROLAgent/113/specifying-the-integration-service-path-766670245.html)
-- [Configuring TrueSight Infrastructure Management Event Manager Integration ](https://docs.bmc.com/docs/PATROLAgent/113/configuring-truesight-event-manager-integration-766670201.html)
-- [Integration Variables](https://docs.bmc.com/docs/PATROLAgent/113/integration-variables-766670137.html)
+- [Defining Access Control Lists](//docs.bmc.com/docs/PATROLAgent/113/defining-access-control-lists-766670424.html)
+- [Preloading KMs on the PATROL Agent](//docs.bmc.com/docs/PATROLAgent/113/preloading-kms-on-the-patrol-agent-766670451.html)
+- [Setting the number of days that history is retained in the history database ](//docs.bmc.com/docs/PATROLAgent/113/setting-the-number-of-days-that-history-is-retained-in-the-history-database-766670474.html)
+- [Setting up the event log file and size](//docs.bmc.com/docs/PATROLAgent/113/setting-up-the-event-log-file-and-size-766670479.html)
+- [Specifying the Integration Service path](//docs.bmc.com/docs/PATROLAgent/113/specifying-the-integration-service-path-766670245.html)
+- [Configuring TrueSight Infrastructure Management Event Manager Integration ](//docs.bmc.com/docs/PATROLAgent/113/configuring-truesight-event-manager-integration-766670201.html)
+- [Integration Variables](//docs.bmc.com/docs/PATROLAgent/113/integration-variables-766670137.html)

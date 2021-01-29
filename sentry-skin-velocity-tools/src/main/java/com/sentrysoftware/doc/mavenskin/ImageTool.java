@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.imageio.IIOImage;
@@ -42,6 +43,30 @@ public class ImageTool {
 		iioRegistry.registerServiceProvider(new WebPImageWriterSpi());
 		iioRegistry.registerServiceProvider(new WebPImageReaderSpi());
 
+	}
+
+	/**
+	 * Patterns that matches with absolute URLs, like:
+	 * <ul>
+	 * <li>http://google.com
+	 * <li>ftp://cia.gov
+	 * <li>//sentrysoftware.com
+	 */
+	private static final Pattern ABSOLUTE_URL_PATTERN = Pattern.compile("^(?:[a-z]+:)?//", Pattern.CASE_INSENSITIVE);
+
+	/**
+	 * Returns whether specified path is absolute or not.
+	 * <ul>
+	 * <li>http://google.com => absolute
+	 * <li>ftp://cia.gov => absolute
+	 * <li>//sentrysoftware.com => absolute
+	 * <li>path/file => relative
+	 *
+	 * @param path Path to test
+	 * @return whether specified path is absolute or not
+	 */
+	protected static boolean isAbsoluteUrl(String path) {
+		return ABSOLUTE_URL_PATTERN.matcher(path).find();
 	}
 
 	/**
@@ -90,6 +115,11 @@ public class ImageTool {
 			// Get the SRC attribute (the path)
 			String imageSrc = element.attr("src");
 			if (imageSrc.isEmpty()) {
+				continue;
+			}
+
+			// Skip absolute URLs
+			if (isAbsoluteUrl(imageSrc)) {
 				continue;
 			}
 
@@ -311,6 +341,11 @@ public class ImageTool {
 				continue;
 			}
 
+			// Skip absolute URLs
+			if (isAbsoluteUrl(imageSrc)) {
+				continue;
+			}
+
 			// Calculate the path to the actual picture file
 			Path sourcePath = documentPath.resolveSibling(imageSrc);
 			File sourceFile = sourcePath.toFile();
@@ -396,6 +431,11 @@ public class ImageTool {
 			// Get the SRC attribute (the path)
 			String imageSrc = element.attr("src");
 			if (imageSrc.isEmpty()) {
+				continue;
+			}
+
+			// Skip absolute URLs
+			if (isAbsoluteUrl(imageSrc)) {
 				continue;
 			}
 
@@ -508,6 +548,11 @@ public class ImageTool {
 			// Get the SRC attribute (the path)
 			String imageSrc = element.attr("src");
 			if (imageSrc.isEmpty()) {
+				continue;
+			}
+
+			// Skip absolute URLs
+			if (isAbsoluteUrl(imageSrc)) {
 				continue;
 			}
 

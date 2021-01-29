@@ -51,7 +51,7 @@ function templates() {
 		.pipe(dest(TMP + "/js"));
 }
 function htmlTmp() {
-	return src([SRC_MAIN + "/*.vm", SRC_MAIN + "/*.html"])
+	return src([SRC_MAIN + "/*.vm"])
 		.pipe(dest(TMP));
 }
 function cssTmp() {
@@ -59,7 +59,7 @@ function cssTmp() {
 		.pipe(dest(TMP + "/css"));
 }
 function mini() {
-	return src([TMP + "/*.vm", TMP + "/*.html"])
+	return src([TMP + "/*.vm"])
 		.pipe(useref({}, lazypipe().pipe(sourcemaps.init, { loadMaps: true })))
 		.pipe(gulpif("*.js", uglify()))
 		.pipe(gulpif("*.css", minifyCss()))

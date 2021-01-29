@@ -120,4 +120,15 @@ class ImageToolTest {
 
 	}
 
+	@Test
+	void testIsAbsoluteUrl() {
+		assertTrue(ImageTool.isAbsoluteUrl("http://test"));
+		assertTrue(ImageTool.isAbsoluteUrl("HTTP://test"));
+		assertTrue(ImageTool.isAbsoluteUrl("https://test"));
+		assertTrue(ImageTool.isAbsoluteUrl("HTTPS://test"));
+		assertTrue(ImageTool.isAbsoluteUrl("//test"));
+		assertTrue(ImageTool.isAbsoluteUrl("ftp://test"));
+		assertFalse(ImageTool.isAbsoluteUrl("./test"));
+		assertFalse(ImageTool.isAbsoluteUrl("test"));
+	}
 }

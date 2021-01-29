@@ -85,6 +85,9 @@
 *##end#*
 *##set ( $title = $shortTitle + " &ndash; " + $decoration.name )#*
 
+// Fix all protocol-relative links
+*##set ( $bodyContent = $htmlTool.fixProtocolRelativeUrls( $bodyContent ) )#*
+
 // Check all images
 *##set ( $bodyContent = $imageTool.checkImageLinks( $bodyContent, ${project.reporting.outputDirectory}, $currentFileName ) )#*
 

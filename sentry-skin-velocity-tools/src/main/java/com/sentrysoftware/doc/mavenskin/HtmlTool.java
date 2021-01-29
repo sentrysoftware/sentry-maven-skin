@@ -908,4 +908,38 @@ public class HtmlTool extends SafeConfig {
 		return doc.body();
 	}
 
+	/**
+	 * Replace all <a href="//..."> links with protocol-relative URLs with
+	 * proper HTTPS URLs
+	 *
+	 * @param content
+	 *            HTML content to modify
+	 * @return HTML content fixed linkss
+	 */
+	public String fixProtocolRelativeUrls(String content) {
+
+		Element body = parseContent(content);
+
+		// Find all links with HREF that starts with //
+		// (i.e. protocol-relative)
+		List<Element> aElems = body.select("*[href^=//]");
+
+		// Nothing? Exit immediately
+		if (aElems.isEmpty()) {
+			return content;
+		}
+
+		for (Element aElem : aElems) {
+
+			// Prepend "https:" in front of each protocol-relative link
+			String href = aElem.attr("href");
+			aElem.attr("href", "https:" + href);
+
+		}
+
+		// Return result
+		return body.html();
+	}
+
+
 }

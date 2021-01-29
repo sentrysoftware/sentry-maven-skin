@@ -58,6 +58,10 @@ assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir-thumbnail
 assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.webp' : "WEBP reference work in subdir"
 assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.png.*width="1723"' : "Image size work in subdir"
 
+// Verify that there is no protocol-relative links left
+assert !(agentContent =~ '"//') : "URLs must not be protocol-relative"
+assert !(agentContent =~ "'//") : "URLs must not be protocol-relative"
+
 // Verify that index.json contains the proper information
 indexJsonFile = new File(basedir, "target/site/index.json")
 assert indexJsonFile.isFile()

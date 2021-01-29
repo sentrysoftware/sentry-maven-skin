@@ -160,7 +160,7 @@ At the very top of each page, above the title banner, several "general purpose" 
 	...
 
 	<links>
-		<item name="Product Page" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+		<item name="Product Page" href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
 		<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
 	</links>
 ```

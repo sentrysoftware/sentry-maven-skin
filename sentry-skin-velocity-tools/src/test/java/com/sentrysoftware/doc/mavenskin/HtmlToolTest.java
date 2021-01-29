@@ -132,7 +132,7 @@ class HtmlToolTest {
 		List<String> result = HTML_TOOL.getAttr(AGENT_HTML_SOURCE, "a", "href");
 		assertNotEquals(0, result.size());
 		assertEquals("#Related_Topics", result.get(0));
-		assertEquals("https://docs.bmc.com/docs/PATROLAgent/113/integration-variables-766670137.html", result.get(result.size() - 1));
+		assertEquals("//docs.bmc.com/docs/PATROLAgent/113/integration-variables-766670137.html", result.get(result.size() - 1));
 	}
 
 	@Test
@@ -147,6 +147,12 @@ class HtmlToolTest {
 		assertEquals(2, result.getExtracted().size());
 		assertEquals("<h2><a name=\"Defining_a_Default_User_Account\"></a>Defining a Default User Account</h2>", result.getExtracted().get(0));
 		assertTrue(trimWhites(result.getRemainder()).contains("</ul><section><p>Youcanconfigure"));
+	}
+
+	@Test
+	void testfixProtocolRelativeUrls() {
+		String result = trimWhites(HTML_TOOL.fixProtocolRelativeUrls(AGENT_HTML_SOURCE));
+		assertFalse(result.contains("\"//"), "Protocol-relative URLs must have been fixed");
 	}
 
 	/**

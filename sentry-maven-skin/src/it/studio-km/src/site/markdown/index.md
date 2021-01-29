@@ -2,8 +2,6 @@
 
 <!-- MACRO{toc|fromDepth=1|toDepth=1|id=toc} -->
 
-[This is a nice test image from the Web which must not trigger any error](https://cds.cern.ch/images/CERN-HOMEWEB-PHO-2019-004-1/file?size=large)
-
 ## What is ${project.name}?
 
 **${project.name}** is a monitoring solution that enables you to monitor almost any technology (application, server, device, etc.) for which there is no out-of-the-box monitoring solution. **${project.name}** is designed as a regular Knowledge Module (KM) with a Web interface that brings the benefits of a standard solution: maintenance, updates, patches, etc. to further respond to growing technological needs for specific business-critical technologies.
