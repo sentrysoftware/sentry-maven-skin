@@ -6,27 +6,33 @@
 	font-family: 'Raleway-Bold';
 	src: url('../fonts/Raleway-Bold.woff2') format('woff2'),
 			 url('../fonts/Raleway-Bold.woff') format('woff'),
-			 url('../fonts/Raleway-Bold.ttf') format('truetype');
+			 url('../fonts/Raleway-Bold.ttf') format('truetype'),
+			 local('Helvetica');
 	font-weight: normal;
 	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: 'Raleway-Regular';
 	src: url('../fonts/Raleway-Regular.woff2') format('woff2'),
 			 url('../fonts/Raleway-Regular.woff') format('woff'),
-			 url('../fonts/Raleway-Regular.ttf') format('truetype');
+			 url('../fonts/Raleway-Regular.ttf') format('truetype'),
+			 local('Helvetica');
 	font-weight: normal;
 	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: 'Lato-Regular';
 	src: url('../fonts/Lato-Regular.woff2') format('woff2'),
 			 url('../fonts/Lato-Regular.woff') format('woff'),
-			 url('../fonts/Lato-Regular.ttf') format('truetype');
+			 url('../fonts/Lato-Regular.ttf') format('truetype'),
+			 local('Arial');
 	font-weight: normal;
 	font-style: normal;
+	font-display: swap;
 }
 
 
