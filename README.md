@@ -8,23 +8,23 @@ First, the *Sentry Maven Skin* requires a specific Java library for its more adv
 
 ```xml
 <build>
-	<plugins>
-		...
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-site-plugin</artifactId>
-			<version>3.9.1</version>
-			...
-			<dependencies>
-				<dependency>
-					<groupId>com.sentrysoftware.doc</groupId>
-					<artifactId>sentry-skin-velocity-tools</artifactId>
-					<version>4.0</version>
-				</dependency>
-			</dependencies>
-		</plugin>
-		...
-	</plugins>
+  <plugins>
+    ...
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-site-plugin</artifactId>
+      <version>3.9.1</version>
+      ...
+      <dependencies>
+        <dependency>
+          <groupId>com.sentrysoftware.doc</groupId>
+          <artifactId>sentry-skin-velocity-tools</artifactId>
+          <version>4.0</version>
+        </dependency>
+      </dependencies>
+    </plugin>
+    ...
+  </plugins>
 </build>
 ```
 
@@ -33,67 +33,68 @@ Then, specify the Sentry Maven Skin artifact in your `./src/site/site.xml` file:
 ```xml
 <project name="${project.name}">
 
-	<skin>
-		<groupId>com.sentrysoftware.doc</groupId>
-		<artifactId>sentry-maven-skin</artifactId>
-		<version>4.0</version>
-	</skin>
+  <skin>
+    <groupId>com.sentrysoftware.doc</groupId>
+    <artifactId>sentry-maven-skin</artifactId>
+    <version>4.0</version>
+  </skin>
 
-	<custom>
-		<projectVersion>${project.version}</projectVersion>
-		<bodyClass>sentry-studio</bodyClass>
-		<keywords>keyword1,keyword2</keywords>
-		<publishDate><!--Unspecified--></publishDate>
-	</custom>
+  <custom>
+    <bodyClass>sentry-studio</bodyClass>
+    <keywords>keyword1,keyword2</keywords>
+    <publishDate>$timestamp</publishDate>
+  </custom>
 
-	<body>
+  <body>
 
-		<menu name="First Menu Group">
-			<item name="Overview" href="index.html"/>
-			<item name="Other Page" href="other-page.html"/>
-		</menu>
+    <menu name="First Menu Group">
+      <item name="Overview" href="index.html"/>
+      <item name="Other Page" href="other-page.html"/>
+    </menu>
 
-		<menu name="Second Menu Group">
-			<item name="Write a Good Documentation" href="writing.html"/>
-			<item name="Using Subdirectories" href="subdir/using.html"/>
-		</menu>
+    <menu name="Second Menu Group">
+      <item name="Write a Good Documentation" href="writing.html"/>
+      <item name="Using Subdirectories" href="subdir/using.html"/>
+    </menu>
 
-	</body>
+  </body>
 
 </project>
 ```
 
 > Note: Use the latest officially available version of the skin as published on Sentry's repository (it's **4.0** in the examples above).
 
-
 ## Features
 
-### Requirements in **site.xml**
+### General Settings in **site.xml**
 
-For the skin to work properly, you will need to set a few values in `./site/site.xml`:
-
-* `<project name="Documentation Title">`: The title of the documentation
-* Properties under the `<custom>` tag:
-  * `<projectVersion>1.2.34-SNAPSHOT</projectVersion>`: The version of the documentation (or of the product being documented)
-  * `<publishDate>July 4th, 1776</publishDate>`: The publish date of the documentation (will use current date and time if not set)
-  * `<keywords>some, keywords, describing, document</keywords>`: Common keywords that will be added to all pages in this documentation (and merged with the keywords set in each individual page)
-  * `<bodyClass>sentry-studio</bodyClass>`: The CSS class to be added to the `<body>` element of each page (will control the color of the title). It can be `sentry-studio` (purple), `sentry-hardware` (green) or `sentry-storage` (orange), or no value (blue).
-
-As values in `./site/site.xml` can refer to `./pom.xml`, your `./site/site.xml` will probably look like below:
+The general settings of the documentation are configured in `./site/site.xml`:
 
 ```xml
 <project name="${project.name}">
 
 ...
 
-	<custom>
-		<projectVersion>${project.version}</projectVersion>
-		<publishDate><$timestamp></publishDate>
-		<keywords><!-- keyword1, keyword2 --></keywords>
-		<bodyClass><!-- sentry-studio, sentry-hardware or sentry-storage --></bodyClass>
-	</custom>
+  <custom>
+    <publishDate><$timestamp></publishDate>
+    <keywords>keyword1, keyword2, ...</keywords>
+    <bodyClass>sentry-storage</bodyClass>
+  </custom>
 ...
 ```
+
+Configurable properties:
+
+| Property | Description | Default |
+|---|---|---|
+| `<project name="...">` | Title of the documentation <br>Recommended value: `<project name="$project.name">` | |
+| `<bodyClass>` | CSS class to be added to the `<body>` element of each page (which will control the color of the title).<br>Predefined values are: `sentry-studio` (purple), `sentry-hardware` (green) or `sentry-storage` (orange) | None (blue) |
+| `<publishDate>` | Publish date of the documentation<br>Recommended value: `$timestamp` (i.e. build time)<br>Note: The date and time format is free | Current date |
+| `<keywords>` | Comma-separated list of keywords that will be added to all pages in this documentation (and merged with the keywords set in each individual page) | |
+| `<projectVersion>` | Version of the documentation (or of the product being documented). Useful to override the version defined in the Maven project. | `$project.version` |
+| `<noDefaultLinks>` | When set to `true`, prevents the display of the default links to Sentry's Web site | *Not set* (false) |
+
+Values in `./site/site.xml` can refer to properties defined in `./pom.xml`.
 
 ### Generate a ToC automatically
 
@@ -117,38 +118,54 @@ Example of a `pom.xml`:
 
 ```xml
 <project>
-	...
-	<properties>
-		<productShortname>Xtrem IO KM</productShortname>
-		<model>EMC XtremIO</model>
-		...
-	</properties>
+  ...
+  <properties>
+    <productShortname>Xtrem IO KM</productShortname>
+    <model>EMC XtremIO</model>
+    ...
+  </properties>
 ```
 
-In the source documents (Markdown or other), you can use `$productShortname` and `$model` that will be replaced with *Xtrem IO KM* and *EMC XtremIO* respectively.
+In the source documents (Markdown or other), you can use `$productShortname` and `$model` that will be replaced with *Xtrem IO KM* and *EMC XtremIO* respectively:
+
+```md
+**$productShortname** allows administrators to setup the monitoring of $model storage systems...
+```
 
 Same example with `./site/site.xml`:
 
 ```xml
 <project name="My Documentation">
 
-	...
+  ...
 
-	<custom>
-		<productShortname>Xtrem IO KM</productShortname>
-		<model>EMC XtremIO</model>
-		...
-	</custom>
+  <custom>
+    <productShortname>Xtrem IO KM</productShortname>
+    <model>EMC XtremIO</model>
+    ...
+  </custom>
 
 ```
 
-In the source documents (Markdown or other), you can use `$decoration.getCustomValue("productShortName")` and `$decoration.getCustomValue("model")`, which will be replaced with with *Xtrem IO KM* and *EMC XtremIO* respectively.
+In the source documents (Markdown or other), you can use `$decoration.getCustomValue("productShortName")` and `$decoration.getCustomValue("model")`, which will be replaced with with *Xtrem IO KM* and *EMC XtremIO* respectively:
 
-The syntax to reference values in `./pom.xml` looks nicer and easier than the one to reference values in `./site/site.xml`. However, it's the latter method that is recommended so that documentation information remains in `./site/site.xml` rather than spread across several configuration files.
+```md
+**$decoration.getCustomValue("productShortName")** allows administrators to setup the monitoring of $decoration.getCustomValue("model") storage systems...
+```
+
+Note: The syntax to reference values in `./pom.xml` looks nicer and easier than the one to reference values in `./site/site.xml`. However, it's the latter method that is recommended so that documentation information remains in `./site/site.xml` rather than spread across several configuration files.
 
 ### Automatic Title
 
-The page title is automatically built from the project name and the first heading found in the document.
+The page title is automatically built from the project name and the first heading found in the document. However, you can also specify the page title in the Markdown source with the `title` header:
+
+```md
+title: The Real Title
+
+# First Heading
+
+Lorem ipsum...
+```
 
 ### Links in the top navigation bar
 
@@ -157,35 +174,34 @@ At the very top of each page, above the title banner, several "general purpose" 
 ```xml
 <project name="My Documentation">
 
-	...
+  ...
 
-	<links>
-		<item name="Product Page" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
-		<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
-	</links>
+  <links>
+    <item name="Product Page" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+    <item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
+  </links>
 ```
 
 You can also prevent the skin from adding the usual default links to Sentry's Web site with the `noDefaultLinks` option in the `<custom>` section as in the example below:
 
 ```xml
-	...
+  ...
 
-	<links>
-		...
-	</links>
+  <links>
+    ...
+  </links>
 
-	<custom>
-		...
-		<noDefaultLinks>true</noDefaultLinks>
-	</custom>
+  <custom>
+    ...
+    <noDefaultLinks>true</noDefaultLinks>
+  </custom>
 
 ```
 
 ### Auto-zoom images
 
 By default, all images in the source documents are displayed as a thumbnail, which the reader needs to click on
-to see in real size. The image is zoomed in place, there is no "lightbox", for a better experience on small
-devices.
+to see in real size.
 
 If you want an image to be displayed *as is* (like ones that you would use for a bullet list, etc.),
 you will need to set its `alt` attribute to `inline`.
@@ -200,8 +216,7 @@ Examples:
 
 ### Automatic conversion of all images to WEBP
 
-All images are automatically converted to the WEBP format. The original format is kept and the HTML page is updated
-so that the browser falls back to the original format if WEBP is not supported.
+All images are automatically converted to the WEBP format. The original format is kept and the HTML page is updated so that the browser falls back to the original format if WEBP is not supported.
 
 * PNG and GIF are converted to *lossless* WEBP
 * other formats are converted to *lossy* WEBP
@@ -215,13 +230,13 @@ applicable to all pages in the documentation, as in the example below.
 
 ```xml
 <project name="My Documentation">
-	...
-	<custom>
-		...
-		<keywords>generalkeyword1, generalkeyword2, ...</keywords>
-		...
-	</custom>
-	...
+  ...
+  <custom>
+    ...
+    <keywords>generalkeyword1, generalkeyword2, ...</keywords>
+    ...
+  </custom>
+  ...
 </project>
 ```
 
@@ -235,40 +250,62 @@ keywords: specifickeyword1, specifickeyword2, ...
 ...
 ```
 
-They keywords specified in a specific page are merged with the keywords specified in `./site/site.xml`.
-They are listed in the `<meta name="keywords">` header value. They are also used for the indexing of
+They keywords specified in a specific page are merged with the keywords specified in `./site/site.xml`. They are listed in the `<meta name="keywords">` header value. They are also used for the indexing of
 the pages and the local *elasticlunr* engine. They may be useful to implement a "Related Topics" feature.
 
 ### Index and Search
 
-The content of each page is automatically indexed with [elasticlunr.js](//elasticlunr.com/). *Elasticlunr.js*
-is a Javascript front-end only indexing and searching solution.
+The content of each page is automatically indexed with [elasticlunr.js](//elasticlunr.com/). *Elasticlunr.js* is a Javascript front-end only indexing and searching solution.
 
-The *Sentry Maven Skin* will build an *Elasticlunr.js* index and each page will be able to search the
-entire project documentation that has been generated.
+The *Sentry Maven Skin* will build an *Elasticlunr.js* index and each page will be able to search the entire project documentation that has been generated.
 
-THe index file is `./target/site/index.json` and can be leveraged and merged with other documentation indexes,
-but this will require extra work (in Javascript only).
+The index file is `./target/site/index.json` and can be leveraged and merged with other documentation indexes, but this will require extra work (in Javascript only).
 
-When the user start typing in the *Search* box, the **index.josn** file will be loaded. Its size grows with
-the size of the documentation.
+The **index.json** file is lazily loaded when the user starts typing in the *Search* box. Its size grows with the size of the documentation.
+
+### Additional Document Headers
+
+Headers can be added to each Markdown document, notably to specify the document's title, author and description. Actually, any custom header can be added using the below syntax in the Markdown source:
+
+```md
+title: Casino Royale
+author: Ian Fleming
+description: The story concerns the British secret agent James Bond, gambling at the casino in Royale-les-Eaux to bankrupt Le Chiffre, the treasurer of a French communist union and a secret member of Soviet state intelligence. Bond is supported in his endeavours by Vesper Lynd, a member of his own service, as well as Felix Leiter of the CIA and René Mathis of the French Deuxième Bureau.
+date: 13 April 1953
+
+# Casino Royale (James Bond)
+
+'A dry martini,' Bond said 'in a deep Champagne goblet. Three measures of Gordon's, one of Vodka, half a measure of Kina Lillet. Shake it very well until it's ice cold, then add a thin slice of lemon peel. Got it?'
+
+'Certainly, monsieur.'
+```
+
+Typical headers:
+
+| Header | Description |
+|---|---|
+| `title` | To specify a document title different than its first heading. |
+| `author` | Specifies the author of the document. Multiple `author` entries are possible in the same document. |
+| `date` | Date of writing of the document (creation or update).<br>No date format is enforced; it is recommended to be consistent across the documentation. |
+| `description` | Typically used by Search Engines as short description of the page. This is critical to SEO. |
+| `keywords` | List of keywords applicable to the page. Not used by public Search Engines, but will be used for internal *Related Topics* listing. |
 
 ### Miscellaneous
 
-* Automatic creation of <a> anchor tags for all headings (HTML5-style, with `id` instead of `name`)
+* Automatic creation of &lt;a&gt; anchor tags for all headings (HTML5-style, with `id` instead of `name`)
 * Bootstrap-styled tables
-
 
 ## Bug tracker
 
-Project in Jira: http://alpha.internal.sentrysoftware.net/tracker/projects/SMS/
-
+[Project in JIRA](http://alpha.internal.sentrysoftware.net/tracker/projects/SMS/)
 
 ## Contributing
 
 ### Source code
 
-Fork the git repository from http://alpha/source, branch from **develop**, commit and push your changes, and submit pull requests.
+Fork the [git repository](http://alpha.internal.sentrysoftware.net/source/projects/DU/repos/sentry-maven-skin/browse), branch from **develop**, commit and push your changes, and submit pull requests.
+
+**DO NOT SQUASH OR REBASE COMMITS THAT HAVE BEEN PUSHED**
 
 ### Structure and technologies
 
@@ -297,7 +334,7 @@ The *Sentry Maven Skin* project is made of 2 modules:
 The build is done with Maven with the below command:
 
 ```sh
-$ mvn verify
+mvn verify
 ```
 
 Build steps:
@@ -321,7 +358,7 @@ Conveniently, the project comes with integration tests, i.e. a documentation pro
 built with the skin as it is in the workspace. The integration test is run with the below command:
 
 ```sh
-$ mvn verify
+mvn verify
 ```
 
 This command builds the skin and run it against a documentation project. The result can be seen in
@@ -337,13 +374,13 @@ Note: To update the version number to a non-`SNAPSHOT` version, run the below co
 root directory of the *Sentry Maven Skin* project:
 
 ```sh
-$ mvn versions:set -DremoveSnapshot=true
+mvn versions:set -DremoveSnapshot=true
 ```
 
 Once validated by the QA team, deploy to the alpha Maven repository from the same root directory with the command below:
 
 ```sh
-$ mvn clean deploy
+mvn clean deploy
 ```
 
 This will deploy the official (non-`SNAPSHOT`) version of the *Sentry Maven Plugin* to the *Maven* repository
@@ -352,5 +389,5 @@ so that other projects (documentation projects) can consume it.
 Then set the version to a new SNAPSHOT version:
 
 ```sh
-$ mvn versions:set -DnewVersion=3.1-SNAPSHOT
+mvn versions:set -DnewVersion=3.1-SNAPSHOT
 ```

@@ -75,16 +75,6 @@
 // Process all ${properties} in the rendered HTML
 *##set ( $bodyContent = $render.eval( $bodyContent ) )#*
 
-// Create the short title
-*##set ( $hTexts = $htmlTool.text( $bodyContent, "h1" ) )#*
-*##if ( $hTexts.size() == 0 )#*
-	*##set ( $hTexts = $htmlTool.text( $bodyContent, "h2" ) )#*
-*##end#*
-*##if ( $hTexts.size() > 0 )#*
-	*##set ( $shortTitle = $hTexts.get(0) )#*
-*##end#*
-*##set ( $title = $shortTitle + " &ndash; " + $decoration.name )#*
-
 // Check all images
 *##set ( $bodyContent = $imageTool.checkImageLinks( $bodyContent, ${project.reporting.outputDirectory}, $currentFileName ) )#*
 
@@ -105,43 +95,41 @@
 *##set ( $bodyContent = $htmlTool.headingAnchorToId( $bodyContent ) )#*
 
 // Clean up IDs and corresponding <a href="#..."> references for unsupported characters
-*##set ( $bodyContent = $htmlTool.fixIds( $bodyContent ) )#*
+*##set ( $bodyContent = $htmlTool.fixIds($bodyContent) )#*
 
 // Make sure all headings have IDs
-*##set ( $bodyContent = $htmlTool.ensureHeadingIds( $bodyContent ) )#*
+*##set ( $bodyContent = $htmlTool.ensureHeadingIds($bodyContent) )#*
 
 // Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
-*##set ( $bodyContent = $htmlTool.setAttr( $bodyContent, "a[href^=#]", "du-smooth-scroll", "" ) )#*
+*##set ( $bodyContent = $htmlTool.setAttr($bodyContent, "a[href^=#]", "du-smooth-scroll", "") )#*
 
 // Extract the TOC and put it in a variable
-*##set ( $tocContentArray = $htmlTool.extract( $bodyContent, "ul#toc", 1 ).getExtracted() )#*
-*##if ( $tocContentArray.size() > 0 )#*
+*##set ( $tocContentArray = $htmlTool.extract($bodyContent, "ul#toc", 1 ).getExtracted() )#*
+*##if ( ! $tocContentArray.isEmpty() )#*
 	*##set ( $tocContent = $tocContentArray.get(0) )#*
 	// Wrap the TOC with the necessary HTML
-	*##set ( $bodyContent = $htmlTool.wrap( $bodyContent, "ul#toc", "<div class='toc-inline-container hidden-lg'>", 1 ) )#*
-	*##set ( $bodyContent = $htmlTool.prepend( $bodyContent, "div.toc-inline-container", "<h3>Table of Contents</h3>", 1 ) )#*
+	*##set ( $bodyContent = $htmlTool.wrap($bodyContent, "ul#toc", "<div class='toc-inline-container hidden-lg'>", 1) )#*
+	*##set ( $bodyContent = $htmlTool.prepend($bodyContent, "div.toc-inline-container", "<h3>Table of Contents</h3>", 1) )#*
 *##else#*
 	*##set ( $tocContent = "" )#*
 *##end#*
 
 // Extract the keywords
-*##set ( $keywordsArray = $htmlTool.getAttr( $headContent, "meta[name=keywords]", "content" ) )#*
+*##set ( $keywordsArray = $htmlTool.getAttr($headContent, "meta[name=keywords]", "content") )#*
 *##call ( $keywordsArray.add( $decoration.getCustomValue("keywords") ) )#*
-*##if ( $keywordsArray.size() > 0 )#*
+*##if ( ! $keywordsArray.isEmpty() )#*
 	*##set ( $keywords = $display.list($display.list($keywordsArray, ",").trim().split("\s*,\s*"), ",") )#*
 	*##set ( $keywordsArray = $keywords.split("\s*,\s*") )#*
 *##end#*
+*##set ( $headContent = $htmlTool.remove($headContent, "meta[name=keywords]") )#*
 
 // Build ElasticLunr index
 *##set ( $indexFile = "${project.reporting.outputDirectory}/index.json" )#*
-*##set ( $bodyText = $htmlTool.text( $bodyContent, "body" ) )#*
-*##call ( $indexTool.buildElasticLunrIndex( $indexFile, $currentFileName, $shortTitle, $keywords, $bodyText.get(0) ) )#*
+*##set ( $bodyText = $htmlTool.text($bodyContent, "body") )#*
+*##call ( $indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText.get(0)) )#*
 
 // publishDate: either the one in site.xml, or current date
-*##set ( $publishDateString = $decoration.getCustomValue("publishDate") )#*
-*##if ( ! $publishDateString || $publishDateString == "" )#*
-	*##set ( $publishDateString = $date.get("yyyy-M-d HH:mm:ss") )#*
-*##end#*
+*##set ( $publishDateString = $decoration.getCustomValue("publishDate", $date.get($decoration.publishDate.format)) )#*
 
 // generator: who we are and where we come from
 *##set ( $generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $decoration.skin.artifactId $decoration.skin.version" )#*
@@ -151,4 +139,5 @@
 *##if ( $docRenderingContext.generator && $docRenderingContext.generator != "" )#*
 	*##set ( $generator = "$generator, with $docRenderingContext.generator" )#*
 *##end#*
+*##set ( $headContent = $htmlTool.remove( $headContent, "meta[name=generator]" ) )#*
 *###

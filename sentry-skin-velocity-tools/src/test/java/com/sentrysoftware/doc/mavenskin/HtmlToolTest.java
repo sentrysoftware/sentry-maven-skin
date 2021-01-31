@@ -104,6 +104,13 @@ class HtmlToolTest {
 	}
 
 	@Test
+	void testTitleText() {
+		List<String> result = HTML_TOOL.text("<title>Title</title>", "title");
+		assertEquals(1, result.size());
+		assertEquals("Title", result.get(0));
+	}
+
+	@Test
 	void testFixTableHeads() {
 		String result = trimWhites(HTML_TOOL.fixTableHeads("<table><tbody><tr><th>head</th></tr><tr><td>body</td></tr></tbody></table>"));
 		assertEquals("<table><thead><tr><th>head</th></tr></thead><tbody><tr><td>body</td></tr></tbody></table>", result);
