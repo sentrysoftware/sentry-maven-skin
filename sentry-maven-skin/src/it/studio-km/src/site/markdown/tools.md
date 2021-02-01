@@ -2,6 +2,8 @@
 
 > This section describes the tools you can use to quickly manage a PATROL Agent configuration or troubleshoot your monitored environment.
 
+![This is a nice test image from the Web which must not trigger any error](https://cds.cern.ch/images/CERN-HOMEWEB-PHO-2019-004-1/file?size=large)
+
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
 ## Configuration Tools

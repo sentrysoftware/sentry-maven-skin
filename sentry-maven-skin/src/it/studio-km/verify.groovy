@@ -72,6 +72,9 @@ assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.png.*wi
 
 assert agentContent.contains("<title>Configuring the Agent &ndash; skin-test Extended</title>") : "Document title is set according to source's first heading"
 
+// Verify that there is no protocol-relative links left
+assert !(agentContent =~ '"//') : "URLs must not be protocol-relative"
+
 // Verify that index.json contains the proper information
 indexJsonFile = new File(basedir, "target/site/index.json")
 assert indexJsonFile.isFile()

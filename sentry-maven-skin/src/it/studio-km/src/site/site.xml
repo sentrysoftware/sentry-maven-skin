@@ -19,7 +19,7 @@
 	<body>
 
 		<links>
-			<item name="${project.name}" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+			<item name="${project.name}" href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
 			<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
 		</links>
 

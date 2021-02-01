@@ -176,10 +176,17 @@ At the very top of each page, above the title banner, several "general purpose" 
 
   ...
 
+<<<<<<< HEAD
+	<links>
+		<item name="Product Page" href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+		<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
+	</links>
+=======
   <links>
     <item name="Product Page" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
     <item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
   </links>
+>>>>>>> develop
 ```
 
 You can also prevent the skin from adding the usual default links to Sentry's Web site with the `noDefaultLinks` option in the `<custom>` section as in the example below:

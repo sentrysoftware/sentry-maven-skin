@@ -75,6 +75,9 @@
 // Process all ${properties} in the rendered HTML
 *##set ( $bodyContent = $render.eval( $bodyContent ) )#*
 
+// Fix all protocol-relative links
+*##set ( $bodyContent = $htmlTool.fixProtocolRelativeUrls( $bodyContent ) )#*
+
 // Check all images
 *##set ( $bodyContent = $imageTool.checkImageLinks( $bodyContent, ${project.reporting.outputDirectory}, $currentFileName ) )#*
 
@@ -139,5 +142,5 @@
 *##if ( $docRenderingContext.generator && $docRenderingContext.generator != "" )#*
 	*##set ( $generator = "$generator, with $docRenderingContext.generator" )#*
 *##end#*
-*##set ( $headContent = $htmlTool.remove( $headContent, "meta[name=generator]" ) )#*
+*##set ( $headContent = $htmlTool.remove($headContent, "meta[name=generator]") )#*
 *###
