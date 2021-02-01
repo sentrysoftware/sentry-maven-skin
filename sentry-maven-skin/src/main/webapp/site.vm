@@ -1,17 +1,21 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="$locale.language">
 <!-- #parse( "tools.vm" ) -->
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="content-language" content="en" />
+	<meta charset="$outputEncoding">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<title>$title</title>
+	<title>$shortTitle &ndash; $decoration.name</title>
 
-#if ( $keywords )
-	<meta name="keywords" content="$keywords" />
-#end
-	<meta name="generator" content="$generator" />
-
+#if ( $keywords )#*
+*#	<meta name="keywords" content="$keywords" />
+#end#*
+*#	<meta name="generator" content="$esc.html( $generator )" />
+#foreach ( $author in $authors )#*
+*#	<meta name="author" content="$author" />
+#end#*
+Header from the document
+*#$headContent#*
+*#
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
@@ -63,7 +67,7 @@
 				<p class="navbar-brand header-title">
 					$decoration.name
 					<br />
-					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion")</strong></span>
+					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong></span>
 				</p>
 			</div>
 
@@ -101,7 +105,7 @@
 				<p class="navbar-brand header-title">
 					$decoration.name
 					<br />
-					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion")</strong></span>
+					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong></span>
 				</p>
 			</div>
 
@@ -172,23 +176,35 @@
 				<!-- Hide content if we're displaying search results -->
 				<div ng-hide="siteSearch">
 
-#if ( $tocContent != "" )
-#* We have a TOC *#
-
 					<div class="row">
 
 						<!-- We'll show the TOC on the right, on large display -->
-						<div class="col-md-12 col-lg-8">
+						#if ( $StringUtils.isNotBlank($tocContent) )<div class="col-md-12 col-lg-8">#else<div class="col-md-12">#end
 #*						*#$bodyContent
-#*						*##if ( $keywordsArray.size() > 0 )#*
-								*#<div class="keywords">Keywords:<br>#*
-								*##foreach ( $keyword in $keywordsArray )#*
-									*#<span class="label label-default">$keyword</span> #*
-								*##end#*
-								*#</div>#*
-							*##end##
+							<div class="document-footer">
+#*						// Keywords
+							*##if ( ! $keywordsArray.isEmpty() )#*
+								*#<div class="keywords">Keywords:<br>
+#*							*##foreach ( $keyword in $keywordsArray )#*
+									*#<span class="label label-default">$keyword</span>
+#*							*##end#*
+								*#</div>
+#*						*##end#*
+
+							// Author
+							*##if ( ! $authors.isEmpty() )#*
+								*#<div class="authors">Author: <strong>$StringUtils.join( $authors.toArray() , ", ")</strong></div>
+#*						*##end#*
+
+							// Date
+							*##if ( $StringUtils.isNotBlank($documentDate) )#*
+								*#<div class="date">Date: <strong>$documentDate</strong></div>
+#*						*##end##
+							</div>
 						</div>
 
+#if ( $StringUtils.isNotBlank($tocContent) )
+#* We have a TOC *#
 						<!--ZOOMSTOP-->
 						<div class="col-lg-4 visible-lg toc-side-container">
 							<div class="toc">
@@ -197,20 +213,8 @@
 							</div>
 						</div>
 						<!--ZOOMRESTART-->
-
-					</div>
-#else
-#* We don't have a TOC *#
-#*				*#$bodyContent
-#*					*##if ( $keywordsArray.size() > 0 )#*
-							*#<div class="keywords">Keywords:<br>#*
-							*##foreach ( $keyword in $keywordsArray )#*
-								*#<span class="label label-default">$keyword</span> #*
-							*##end#*
-							*#</div>#*
-						*##end##
 #end
-				</div>
+					</div>
 
 				<!-- Search results -->
 				<div class="search-results hidden-xs" ng-show="siteSearch && media != 'xs'">
@@ -253,7 +257,7 @@
 	<div class="footer">
 
 		<p class="footer-title" ng-class="{'text-center': media == 'xs'}">
-			<strong>$decoration.name $decoration.getCustomValue("projectVersion")</strong>
+			<strong>$decoration.name $decoration.getCustomValue("projectVersion", $project.version)</strong>
 			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
 			Documentation as of <strong>$publishDateString</strong>
 		</p>
