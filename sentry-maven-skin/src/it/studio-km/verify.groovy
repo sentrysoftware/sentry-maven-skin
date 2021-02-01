@@ -4,10 +4,15 @@ assert new File(basedir, "target/site/index.html").isFile()
 // Verify that the created HTML files contain the proper information
 String result = new File(basedir, "target/site/events.html").text
 
-assert result.contains("<b>skin-test</b> allows you")
-assert result.contains("<title>Managing Events &ndash; skin-test Extended</title>")
+assert result.contains("<title>Dealing with Events &ndash; skin-test Extended</title>") : "Document title is set according to source's metadata"
+assert result.contains('<meta name="description" content="Monitoring Studio X allows the operators') : "Document's description is set according to source's metadata"
+assert result.contains('<meta name="keywords" content="event,testevent,blank space,studio,km,patrol,develop,web" />') : "Document's keywords is a merge of source's keywords and site.xml's keywords"
+assert result =~ /<meta name="generator" content="Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin .*, from markdown"/ : "Document's generator is set correctly"
+assert result.contains('<meta name="author" content="The &quot;Proud&quot; People" />') : "Document's author is set according to source's metadata"
 
-assert result =~ '<li><a +href="https://youtu.be/Th6NweyurWs">YouTube</a></li>'
+assert result.contains("<b>skin-test</b> allows you") : "pom.xml properties must be replaced with their values"
+
+assert result =~ '<li><a +href="https://youtu.be/Th6NweyurWs">YouTube</a></li>' : "Links specified in site.xml are added to the HTML"
 
 assert new File(basedir, "target/site/images/Events-thumbnail.jpg").isFile() : "JPG thumbnails have been generated"
 assert new File(basedir, "target/site/images/Events_Details-thumbnail.jpg").isFile() : "JPG thumbnails have been generated"
@@ -34,9 +39,6 @@ assert result.contains('<h2 id="Keyboard_Shortcuts_28special29">Keyboard Shortcu
 assert result.contains('<li><a href="#Keyboard_Shortcuts_28special29" du-smooth-scroll="">Keyboard Shortcuts (special)</a></li>')
 assert result =~ /(?s)toc-inline-container.*Table of Contents.*ul id="toc"/
 assert result.indexOf('<ul id="toc">') != result.lastIndexOf('<ul id="toc">')
-assert result.contains('<meta name="keywords" content="event,testevent,blank space,studio,km,patrol,develop,web" />')
-assert result.contains("Documentation as of <strong>1975-03-24 19:30:00</strong>")
-assert result =~ /<meta name="generator" content="Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin .*, from markdown"/
 assert result.contains('<body class="sentry-site sentry-studio"')
 assert result =~ /(?s)header-title.*skin-test Extended.*header-subtitle.*Version <strong>1.0-SNAPSHOT-test/
 assert result.contains('<h5 class="text-uppercase">Getting Started</h5>')
@@ -44,9 +46,19 @@ assert result.contains('<li><a  href="console.html">Operating the Console</a></l
 assert result.contains('<li class="active"><a  href="events.html">Managing Events</a></li>')
 assert result.contains('<li><a  href="subdir/agent.html">Configuring the Agent</a></li>')
 assert result =~ /(?s)<div class="toc">.*<li><a href="#Filtering_Events" du-smooth-scroll="">Filtering Events/
-assert result =~ /Keywords:.*<span class="label.*">testevent<.*<span class="label.*">blank space<.*<span class="label.*">web</
+
+// Document's footer
+assert result =~ /Keywords:/ : "Keywords section is present"
+assert result =~ '<span class="label label-default">event</span>' : "Document keywords are listed"
+assert result =~ '<span class="label label-default">testevent</span>' : "Document keywords are listed (#2)"
+assert result =~ '<span class="label label-default">patrol</span>' : "site.xml keywords are listed"
+assert result =~ '<span class="label label-default">develop</span>' : "site.xml keywords are listed (#2)"
+assert result =~ /Date:.*2021-01-01/ : "Document's date metadata is present in the body"
+assert result =~ /Author:.*The &quot;Proud&quot; People/ : "Document's author metadata is present in the body"
+
+// Page's footer
 assert result =~ /(?s)<div class="footer">.*skin-test Extended 1.0-SNAPSHOT-test/
-assert result =~ /Documentation as of.*1975-03-24 19:30:00*/
+assert result =~ /Documentation as of.*1975-03-24 19:30:00/ : "Publish date is derived from site.xml, which uses a pom.xml property"
 assert result =~ /Copyright.*20[1-9][0-9]/
 
 // Verify documents in a subdir
@@ -58,6 +70,8 @@ assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir-thumbnail
 assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.webp' : "WEBP reference work in subdir"
 assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.png.*width="1723"' : "Image size work in subdir"
 
+assert agentContent.contains("<title>Configuring the Agent &ndash; skin-test Extended</title>") : "Document title is set according to source's first heading"
+
 // Verify that there is no protocol-relative links left
 assert !(agentContent =~ '"//') : "URLs must not be protocol-relative"
 assert !(agentContent =~ "'//") : "URLs must not be protocol-relative"
@@ -66,4 +80,5 @@ assert !(agentContent =~ "'//") : "URLs must not be protocol-relative"
 indexJsonFile = new File(basedir, "target/site/index.json")
 assert indexJsonFile.isFile()
 String indexJson = indexJsonFile.text
-assert indexJson.contains('"events.html":{"id":"events.html","title":"Managing Events","keywords":"event,testevent,blank space,studio,km,patrol,develop,web"')
+def eventsGood = indexJson.contains('"events.html":{"id":"events.html","title":"Dealing with Events","keywords":"event,testevent,blank space,studio,km,patrol,develop,web"')
+assert eventsGood : "The index contains title and keywords from the source metadata"

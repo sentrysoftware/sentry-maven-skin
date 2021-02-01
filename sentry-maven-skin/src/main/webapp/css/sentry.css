@@ -338,7 +338,7 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	font-size: inherit;
 }
 
-.main-content .keywords::before {
+.main-content .document-footer::before {
 	content: '';
 	display: block;
 	margin-top: 45px;
@@ -347,15 +347,21 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	border-top: 1px solid #888;
 }
 
-.main-content .keywords {
+.main-content .document-footer {
 	color: #888;
 }
 
-.main-content .keywords .label.label-default {
+.main-content .document-footer .keywords .label.label-default {
 	background-color: #888;
 	font-weight: normal;
 	letter-spacing: 1px;
 	text-transform: lowercase;
+}
+
+.main-content .document-footer .keywords,
+.main-content .document-footer .authors,
+.main-content .document-footer .date {
+	margin-bottom: 15px;
 }
 
 /**
