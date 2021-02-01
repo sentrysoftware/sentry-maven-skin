@@ -25,7 +25,7 @@ var addDocumentToElasticLunr = function(indexJson, id, title, keywords, body) {
 	}
 
 	// Add the specified document
-	idx.addDoc({
+	idx.updateDoc({
 		id: id,
 		title: title,
 		keywords: keywords,

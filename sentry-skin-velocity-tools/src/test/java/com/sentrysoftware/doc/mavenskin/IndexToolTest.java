@@ -26,7 +26,7 @@ class IndexToolTest {
 		String studioAgentText = htmlTool.text(studioAgentBody, "body").get(0);
 
 		// Add it to the index, twice! (it's supposed to be updated properly and the page present only once)
-		IndexTool.buildElasticLunrIndex(indexPath.toString(), "agent.html", "Agent", "testagent,dragon", studioAgentText);
+		IndexTool.buildElasticLunrIndex(indexPath.toString(), "agent.html", "Agent", "testagent", studioAgentText + " dragon");
 		IndexTool.buildElasticLunrIndex(indexPath.toString(), "agent.html", "Agent", "testagent", studioAgentText);
 
 		// And now add another fake entry
@@ -34,9 +34,10 @@ class IndexToolTest {
 
 		String indexContent = new String(Files.readAllBytes(indexPath), "UTF-8");
 
-		assertFalse(indexContent.contains("{\"id\":\"agent.html\",\"title\":\"Agent\",\"keywords\":\"testagent,dragon\""));
 		assertTrue(indexContent.contains("{\"id\":\"agent.html\",\"title\":\"Agent\",\"keywords\":\"testagent\""));
 		assertTrue(indexContent.contains("{\"id\":\"fake.html\",\"title\":\"Fake\",\"keywords\":\"fake\""));
+
+		assertFalse(indexContent.contains("dragon"), "Existing entries must be overwritten with new ones");
 
 		// Delete the temporary file
 		Files.delete(indexPath);
