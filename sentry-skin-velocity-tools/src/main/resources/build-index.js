@@ -2,9 +2,9 @@
  * addDocumentToElasticLunr
  **/
 var addDocumentToElasticLunr = function(indexJson, id, title, keywords, body) {
-	
+
 	var idx;
-	
+
 	// New or existing index?
 	if (indexJson == null || indexJson == "") {
 
@@ -16,14 +16,14 @@ var addDocumentToElasticLunr = function(indexJson, id, title, keywords, body) {
 		    this.setRef("id");
 		    this.saveDocument(true);
 		});
-		
+
 	} else {
-		
+
 		// Load the specified index
 		indexJsonObj = JSON.parse(indexJson);
 		idx = elasticlunr.Index.load(indexJsonObj);
 	}
-	
+
 	// Add the specified document
 	idx.addDoc({
 		id: id,
@@ -31,7 +31,7 @@ var addDocumentToElasticLunr = function(indexJson, id, title, keywords, body) {
 		keywords: keywords,
 		body: body
 	});
-	
+
 	// Return the JSON-serialized index
 	return JSON.stringify(idx);
 
