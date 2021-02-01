@@ -215,6 +215,7 @@ Header from the document
 						<!--ZOOMRESTART-->
 #end
 					</div>
+				</div>
 
 				<!-- Search results -->
 				<div class="search-results hidden-xs" ng-show="siteSearch && media != 'xs'">
