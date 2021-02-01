@@ -74,7 +74,6 @@ assert agentContent.contains("<title>Configuring the Agent &ndash; skin-test Ext
 
 // Verify that there is no protocol-relative links left
 assert !(agentContent =~ '"//') : "URLs must not be protocol-relative"
-assert !(agentContent =~ "'//") : "URLs must not be protocol-relative"
 
 // Verify that index.json contains the proper information
 indexJsonFile = new File(basedir, "target/site/index.json")
