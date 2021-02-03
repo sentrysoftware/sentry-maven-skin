@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.apache.velocity.tools.ToolContext;
@@ -85,144 +84,10 @@ public class HtmlTool extends SafeConfig {
 		}
 	}
 
-
-	/**
-	 * Extracts elements from the HTML content.
-	 *
-	 * @param content
-	 * @param selector
-	 * @param amount
-	 * @return the remainder and a list of extracted elements. The main body (remainder after
-	 *         extraction) is always returned as the first element of the list.
-	 */
-	private List<Element> extractElements(String content, String selector, int amount) {
-
-		Element body = parseContent(content);
-
-		List<Element> elements = body.select(selector);
-		if (elements.size() > 0) {
-
-			elements = filterParents(elements);
-
-			if (amount >= 0) {
-				// limit to the indicated amount
-				elements = elements.subList(0, Math.min(amount, elements.size()));
-			}
-
-			// remove all from their parents
-			for (Element element : elements) {
-				element.remove();
-			}
-		}
-
-		List<Element> results = new ArrayList<Element>();
-		// first element is the body
-		results.add(body);
-		results.addAll(elements);
-		return results;
-	}
-
-	/**
-	 * Filters the list of elements to only contain parent elements. This is to avoid both parent
-	 * and child being in the list of elements.
-	 *
-	 * @param elements
-	 * @return
-	 */
-	private static List<Element> filterParents(List<Element> elements) {
-		List<Element> filtered = new ArrayList<Element>();
-		for (Element element : elements) {
-			// get the intersection of parents and selected elements
-			List<Element> parentsInter = element.parents();
-			parentsInter.retainAll(elements);
-			if (parentsInter.isEmpty()) {
-				// no intersection - element's parents are not in the selected list
-				filtered.add(element);
-			}
-		}
-
-		return filtered;
-	}
-
-	/**
-	 * Extracts HTML elements from the main HTML content. The result consists of the extracted HTML
-	 * elements and the remainder of HTML content, with these elements removed. Can be limited to a
-	 * certain amount, e.g. to extract just the first of selected elements.
-	 *
-	 * @param content
-	 *            HTML content to extract elements from
-	 * @param selector
-	 *            CSS selector for elements to extract
-	 * @param amount
-	 *            Maximum number of elements to extract
-	 * @return HTML content of the extracted elements together with the remainder of the original
-	 *         content. If no elements are found, the remainder contains the original content.
-	 * @since 1.0
-	 */
-	public ExtractResult extract(String content, String selector, int amount) {
-
-		List<Element> extracted = extractElements(content, selector, amount);
-
-		if (extracted.size() > 1) {
-
-			// first element is the remaining body, the rest are extracted
-			Element body = extracted.get(0);
-			List<Element> elements = extracted.subList(1, extracted.size());
-
-			// convert to HTML
-			List<String> elementStr = new ArrayList<String>();
-			for (Element el : elements) {
-				elementStr.add(el.outerHtml());
-			}
-
-			return new ExtractResult(elementStr, body.html());
-		} else {
-			// nothing to extract
-			return new ExtractResult(Collections.<String> emptyList(), content);
-		}
-	}
-
-	/**
-	 * A container to carry element extraction results. Contains the extracted element HTML
-	 * code and the remainder of the body content with elements removed.
-	 *
-	 * @author Andrius Velykis
-	 * @since 1.0
-	 */
-	public static class ExtractResult {
-
-		private final List<String> extracted;
-		private final String remainder;
-
-		public ExtractResult(List<String> extracted, String remainder) {
-			this.extracted = extracted;
-			this.remainder = remainder;
-		}
-
-		/**
-		 * Retrieves the extracted HTML elements.
-		 *
-		 * @return List of HTML of extracted elements. Can be empty if no elements found.
-		 */
-		public List<String> getExtracted() {
-			return Collections.unmodifiableList(extracted);
-		}
-
-		/**
-		 * Retrieves the content from which elements were extracted.
-		 *
-		 * @return The HTML content with extracted elements removed.
-		 */
-		public String getRemainder() {
-			return remainder;
-		}
-	}
-
-
 	/**
 	 * Sets attribute to the given value on elements in HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to set attributes on
 	 * @param selector
 	 *            CSS selector for elements to modify
@@ -234,31 +99,25 @@ public class HtmlTool extends SafeConfig {
 	 *         is returned.
 	 * @since 1.0
 	 */
-	public String setAttr(String content, String selector, String attributeKey, String value) {
-
-		Element body = parseContent(content);
+	public Element setAttr(Element body, String selector, String attributeKey, String value) {
 
 		List<Element> elements = body.select(selector);
-		if (elements.size() > 0) {
 
-			for (Element element : elements) {
-				element.attr(attributeKey, value);
-			}
-
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
+		for (Element element : elements) {
+			element.attr(attributeKey, value);
 		}
+
+		return body;
+
 	}
 
 	/**
-	 * Parses body fragment to the {@code <body>} element.
+	 * Parses HTML fragment
 	 *
 	 * @param content
-	 * @return the {@code body} element of the parsed content
+	 * @return Element of the specified HTML fragment
 	 */
-	protected Element parseContent(String content) {
+	public Element parseContent(String content) {
 		Document doc = Jsoup.parseBodyFragment(content);
 		doc.outputSettings().charset(outputEncoding);
 		return doc.body();
@@ -268,7 +127,7 @@ public class HtmlTool extends SafeConfig {
 	 * Retrieves attribute value on elements in HTML. Will return all attribute values for the
 	 * selector, since there can be more than one element.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to read attributes from
 	 * @param selector
 	 *            CSS selector for elements to find
@@ -278,9 +137,7 @@ public class HtmlTool extends SafeConfig {
 	 *         returned.
 	 * @since 1.0
 	 */
-	public List<String> getAttr(String content, String selector, String attributeKey) {
-
-		Element body = parseContent(content);
+	public List<String> getAttr(Element body, String selector, String attributeKey) {
 
 		List<Element> elements = body.select(selector);
 		List<String> attrs = new ArrayList<String>();
@@ -296,7 +153,7 @@ public class HtmlTool extends SafeConfig {
 	/**
 	 * Adds given class names to the elements in HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements to add classes to
@@ -308,9 +165,7 @@ public class HtmlTool extends SafeConfig {
 	 *         is returned.
 	 * @since 1.0
 	 */
-	public String addClass(String content, String selector, List<String> classNames, int amount) {
-
-		Element body = parseContent(content);
+	public Element addClass(Element body, String selector, List<String> classNames, int amount) {
 
 		List<Element> elements = body.select(selector);
 		if (amount >= 0) {
@@ -318,25 +173,20 @@ public class HtmlTool extends SafeConfig {
 			elements = elements.subList(0, Math.min(amount, elements.size()));
 		}
 
-		if (elements.size() > 0) {
-
-			for (Element element : elements) {
-				for (String className : classNames) {
-					element.addClass(className);
-				}
+		for (Element element : elements) {
+			for (String className : classNames) {
+				element.addClass(className);
 			}
-
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
 		}
+
+		return body;
+
 	}
 
 	/**
 	 * Adds given class names to the elements in HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements to add classes to
@@ -346,14 +196,14 @@ public class HtmlTool extends SafeConfig {
 	 *         is returned.
 	 * @since 1.0
 	 */
-	public String addClass(String content, String selector, List<String> classNames) {
-		return addClass(content, selector, classNames, -1);
+	public Element addClass(Element body, String selector, List<String> classNames) {
+		return addClass(body, selector, classNames, -1);
 	}
 
 	/**
 	 * Adds given class to the elements in HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements to add the class to
@@ -363,14 +213,14 @@ public class HtmlTool extends SafeConfig {
 	 *         is returned.
 	 * @since 1.0
 	 */
-	public String addClass(String content, String selector, String className) {
-		return addClass(content, selector, Collections.singletonList(className));
+	public Element addClass(Element body, String selector, String className) {
+		return addClass(body, selector, Collections.singletonList(className));
 	}
 
 	/**
 	 * Wraps elements in HTML with the given HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements to wrap
@@ -382,9 +232,7 @@ public class HtmlTool extends SafeConfig {
 	 *         is returned.
 	 * @since 1.0
 	 */
-	public String wrap(String content, String selector, String wrapHtml, int amount) {
-
-		Element body = parseContent(content);
+	public Element wrap(Element body, String selector, String wrapHtml, int amount) {
 
 		List<Element> elements = body.select(selector);
 		if (amount >= 0) {
@@ -392,23 +240,18 @@ public class HtmlTool extends SafeConfig {
 			elements = elements.subList(0, Math.min(amount, elements.size()));
 		}
 
-		if (elements.size() > 0) {
-
-			for (Element element : elements) {
-				element.wrap(wrapHtml);
-			}
-
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
+		for (Element element : elements) {
+			element.wrap(wrapHtml);
 		}
+
+		return body;
+
 	}
 
 	/**
 	 * Append HTML elements to specified elements in the given HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements that will get the appendice
@@ -419,9 +262,7 @@ public class HtmlTool extends SafeConfig {
 	 * @return HTML content with modified elements. If no elements are found, the original content
 	 *         is returned.
 	 */
-	public String append(String content, String selector, String appendHtml, int amount) {
-
-		Element body = parseContent(content);
+	public Element append(Element body, String selector, String appendHtml, int amount) {
 
 		List<Element> elements = body.select(selector);
 		if (amount >= 0) {
@@ -429,24 +270,19 @@ public class HtmlTool extends SafeConfig {
 			elements = elements.subList(0, Math.min(amount, elements.size()));
 		}
 
-		if (!elements.isEmpty()) {
-
-			for (Element element : elements) {
-				element.append(appendHtml);
-			}
-
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
+		for (Element element : elements) {
+			element.append(appendHtml);
 		}
+
+		return body;
+
 	}
 
 
 	/**
 	 * Prepend HTML elements to specified elements in the given HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements that will get the "pre-pendice"
@@ -457,9 +293,7 @@ public class HtmlTool extends SafeConfig {
 	 * @return HTML content with modified elements. If no elements are found, the original content
 	 *         is returned.
 	 */
-	public String prepend(String content, String selector, String prependHtml, int amount) {
-
-		Element body = parseContent(content);
+	public Element prepend(Element body, String selector, String prependHtml, int amount) {
 
 		List<Element> elements = body.select(selector);
 		if (amount >= 0) {
@@ -467,24 +301,19 @@ public class HtmlTool extends SafeConfig {
 			elements = elements.subList(0, Math.min(amount, elements.size()));
 		}
 
-		if (!elements.isEmpty()) {
-
-			for (Element element : elements) {
-				element.prepend(prependHtml);
-			}
-
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
+		for (Element element : elements) {
+			element.prepend(prependHtml);
 		}
+
+		return body;
+
 	}
 
 
 	/**
 	 * Removes elements from HTML.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @param selector
 	 *            CSS selector for elements to remove
@@ -492,100 +321,30 @@ public class HtmlTool extends SafeConfig {
 	 *         returned.
 	 * @since 1.0
 	 */
-	public String remove(String content, String selector) {
-
-		Element body = parseContent(content);
+	public Element remove(Element body, String selector) {
 
 		List<Element> elements = body.select(selector);
-		if (elements.size() > 0) {
-			for (Element element : elements) {
-				element.remove();
-			}
 
-			return body.html();
-		} else {
-			// nothing changed
-			return content;
-		}
-	}
-
-	/**
-	 * Replaces elements in HTML.
-	 *
-	 * @param content
-	 *            HTML content to modify
-	 * @param selector
-	 *            CSS selector for elements to replace
-	 * @param replacement
-	 *            HTML replacement (must parse to a single element)
-	 * @return HTML content with replaced elements. If no elements are found, the original content is
-	 *         returned.
-	 * @since 1.0
-	 */
-	public String replace(String content, String selector, String replacement) {
-		return replaceAll(content, Collections.singletonMap(selector, replacement));
-	}
-
-	/**
-	 * Replaces elements in HTML.
-	 *
-	 * @param content
-	 *            HTML content to modify
-	 * @param replacements
-	 *            Map of CSS selectors to their replacement HTML texts. CSS selectors find elements
-	 *            to be replaced with the HTML in the mapping. The HTML must parse to a single
-	 *            element.
-	 * @return HTML content with replaced elements. If no elements are found, the original content
-	 *         is returned.
-	 * @since 1.0
-	 */
-	public String replaceAll(String content, Map<String, String> replacements) {
-
-		Element body = parseContent(content);
-
-		boolean modified = false;
-		for (Entry<String, String> replacementEntry : replacements.entrySet()) {
-			String selector = replacementEntry.getKey();
-			String replacement = replacementEntry.getValue();
-
-			List<Element> elements = body.select(selector);
-			if (elements.size() > 0) {
-
-				// take the first child
-				Element replacementElem = parseContent(replacement).child(0);
-
-				if (replacementElem != null) {
-					for (Element element : elements) {
-						element.replaceWith(replacementElem.clone());
-					}
-
-					modified = true;
-				}
-			}
+		for (Element element : elements) {
+			element.remove();
 		}
 
-		if (modified) {
-			return body.html();
-		} else {
-			// nothing changed
-			return content;
-		}
+		return body;
+
 	}
 
 	/**
 	 * Retrieves text content of the selected elements in HTML. Renders the element's text as it
 	 * would be displayed on the web page (including its children).
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content with the elements
 	 * @param selector
 	 *            CSS selector for elements to extract contents
 	 * @return A list of element texts as rendered to display. Empty list if no elements are found.
 	 * @since 1.0
 	 */
-	public List<String> text(String content, String selector) {
-
-		Element body = parseContent(content);
+	public List<String> text(Element body, String selector) {
 
 		List<Element> elements = body.select(selector);
 		List<String> texts = new ArrayList<String>();
@@ -610,15 +369,13 @@ public class HtmlTool extends SafeConfig {
 	 * name as heading {@code id} instead. The anchors themselves are removed.
 	 * </p>
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @return HTML content with modified elements. Anchor names are used for adjacent headings, and
 	 *         anchor tags are removed. If no elements are found, the original content is returned.
 	 * @since 1.0
 	 */
-	public String headingAnchorToId(String content) {
-
-		Element body = parseContent(content);
+	public Element headingAnchorToId(Element body) {
 
 		// selectors for headings without IDs
 		List<String> headNoIds = concat(HEADINGS, ":not([id])", true);
@@ -630,13 +387,11 @@ public class HtmlTool extends SafeConfig {
 		List<Element> headingsInnerA = body.select(StringUtil.join(
 				concat(headNoIds, ":has(" + nameA + ")", true), ", "));
 
-		boolean modified = false;
 		for (Element heading : headingsInnerA) {
 			List<Element> anchors = heading.select(nameA);
 			// take first
 			if (!anchors.isEmpty()) {
 				anchorToId(heading, anchors.get(0));
-				modified = true;
 			}
 		}
 
@@ -648,7 +403,6 @@ public class HtmlTool extends SafeConfig {
 			Element anchor = heading.previousElementSibling();
 			if (anchor != null) {
 				anchorToId(heading, anchor);
-				modified = true;
 			}
 		}
 
@@ -662,16 +416,10 @@ public class HtmlTool extends SafeConfig {
 			Element heading = anchor.previousElementSibling();
 			if (heading != null) {
 				anchorToId(heading, anchor);
-				modified = true;
 			}
 		}
 
-		if (modified) {
-			return body.html();
-		} else {
-			// nothing to update
-			return content;
-		}
+		return body;
 	}
 
 	/**
@@ -729,15 +477,13 @@ public class HtmlTool extends SafeConfig {
 	 * the heading contents and used as the ID.
 	 * </p>
 	 * <p>
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @return HTML content with all heading elements having {@code id} attributes. If all headings
 	 *         were with IDs already, the original content is returned.
 	 * @since 1.0
 	 */
-	public String ensureHeadingIds(String content) {
-
-		Element body = parseContent(content);
+	public Element ensureHeadingIds(Element body) {
 
 		// Find all existing IDs (to avoid generating duplicates)
 		Map<String, Integer> ids = new HashMap<String, Integer>();
@@ -749,33 +495,26 @@ public class HtmlTool extends SafeConfig {
 		// select all headings that do not have an ID
 		List<Element> headingsNoId = body.select("h1:not([id]), h2:not([id]), h3:not([id]), h4:not([id]), h5:not([id]), h6:not([id])");
 
-		if (!headingsNoId.isEmpty()) {
+		for (Element heading : headingsNoId) {
 
-			for (Element heading : headingsNoId) {
+			// Take the text content of the title
+			String headingText = heading.text();
 
-				// Take the text content of the title
-				String headingText = heading.text();
-
-				// Create an ID out of it (trim all unwanted chars)
-				String headingSlug = slugLowerCase(headingText);
-				if (headingSlug.length() > 50) {
-					headingSlug = headingSlug.substring(0, 50);
-				}
-
-				// If the ID already exists, add an increasing number to it
-				ids.merge(headingSlug, 0, (id, n) -> n + 1);
-
-				// Set the ID attribute with slug_number
-				heading.attr("id", headingSlug + "_" + ids.getOrDefault(headingSlug, 0));
+			// Create an ID out of it (trim all unwanted chars)
+			String headingSlug = slugLowerCase(headingText);
+			if (headingSlug.length() > 50) {
+				headingSlug = headingSlug.substring(0, 50);
 			}
 
-			return body.html();
+			// If the ID already exists, add an increasing number to it
+			ids.merge(headingSlug, 0, (id, n) -> n + 1);
 
-		} else {
-
-			// nothing to update
-			return content;
+			// Set the ID attribute with slug_number
+			heading.attr("id", headingSlug + "_" + ids.getOrDefault(headingSlug, 0));
 		}
+
+		return body;
+
 	}
 
 	/**
@@ -785,25 +524,21 @@ public class HtmlTool extends SafeConfig {
 	 * Naturally, the references to these IDs (in {@code <a href="#my_id">}) are also modified.
 	 * <p>
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @return HTML content fixed IDs.
 	 * @since 1.0
 	 */
-	public String fixIds(String content) {
-
-		Element body = parseContent(content);
+	public Element fixIds(Element body) {
 
 		// Find all IDs and remove unsupported characters
 		List<Element> idElems = body.select("*[id]");
-		boolean modified = false;
 		for (Element idElem : idElems) {
 
 			String id = idElem.id();
 			String newId = slug(id);
 			if (!id.equals(newId)) {
 				idElem.attr("id", newId);
-				modified = true;
 			}
 		}
 
@@ -815,55 +550,55 @@ public class HtmlTool extends SafeConfig {
 			String newHref = "#" + slug(href.substring(1));
 			if (!href.equals(newHref)) {
 				aElem.attr("href", newHref);
-				modified = true;
 			}
 		}
 
 		// Return result
-		return modified ? body.html() : content;
+		return body;
 	}
 
 	/**
 	 * Fixes table heads: wraps rows with {@code <th>} (table heading) elements into {@code <thead>}
 	 * element if they are currently in {@code <tbody>}.
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @return HTML content with all table heads fixed. If all heads were correct, the original
 	 *         content is returned.
 	 * @since 1.0
 	 */
-	public String fixTableHeads(String content) {
-
-		Element body = parseContent(content);
+	public Element fixTableHeads(Element body) {
 
 		// select rows with <th> tags within <tbody>
 		List<Element> tableHeadRows = body.select("table > tbody > tr:has(th)");
-		if (tableHeadRows.size() > 0) {
-			for (Element row : tableHeadRows) {
 
-				// get the row's table
-				Element table = row.parent().parent();
+		for (Element row : tableHeadRows) {
 
-				// remove row from its original position
-				row.remove();
+			// get the row's table
+			Element table = row.parent().parent();
 
-				// create table header element with the row
-				Element thead = new Element(Tag.valueOf("thead"), "");
-				thead.appendChild(row);
-				// add at the beginning of the table
-				table.prependChild(thead);
-			}
+			// remove row from its original position
+			row.remove();
 
-			return body.html();
-		} else {
-			// nothing changed
-			return content;
+			// create table header element with the row
+			Element thead = new Element(Tag.valueOf("thead"), "");
+			thead.appendChild(row);
+			// add at the beginning of the table
+			table.prependChild(thead);
 		}
+
+		return body;
 	}
 
 
+	/**
+	 * Regex that matches with all non-latin chars
+	 */
 	private static final Pattern NONLATIN = Pattern.compile("[^\\w-]");
+
+	/**
+	 * Regex that matches with all white spaces
+	 */
 	private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
 
 	/**
@@ -896,13 +631,11 @@ public class HtmlTool extends SafeConfig {
 	 * Replace all <a href="//..."> links with protocol-relative URLs with
 	 * proper HTTPS URLs
 	 *
-	 * @param content
+	 * @param body
 	 *            HTML content to modify
 	 * @return HTML content fixed linkss
 	 */
-	public String fixProtocolRelativeUrls(String content) {
-
-		Element body = parseContent(content);
+	public Element fixProtocolRelativeUrls(Element body) {
 
 		// Find all links with HREF that starts with //
 		// (i.e. protocol-relative)
@@ -910,7 +643,7 @@ public class HtmlTool extends SafeConfig {
 
 		// Nothing? Exit immediately
 		if (aElems.isEmpty()) {
-			return content;
+			return body;
 		}
 
 		for (Element aElem : aElems) {
@@ -922,7 +655,7 @@ public class HtmlTool extends SafeConfig {
 		}
 
 		// Return result
-		return body.html();
+		return body;
 	}
 
 

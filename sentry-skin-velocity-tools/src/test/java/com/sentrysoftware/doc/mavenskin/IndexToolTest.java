@@ -23,7 +23,7 @@ class IndexToolTest {
 		// Get a page content
 		String studioAgentBody = HtmlToolTest.getResourceAsString("/studio-agent.html");
 		HtmlTool htmlTool = new HtmlTool();
-		String studioAgentText = htmlTool.text(studioAgentBody, "body").get(0);
+		String studioAgentText = htmlTool.text(htmlTool.parseContent(studioAgentBody), "body").get(0);
 
 		// Add it to the index, twice! (it's supposed to be updated properly and the page present only once)
 		IndexTool.buildElasticLunrIndex(indexPath.toString(), "agent.html", "Agent", "testagent", studioAgentText + " dragon");

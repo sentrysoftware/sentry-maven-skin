@@ -37,8 +37,12 @@ assert result.contains('<table border="0" class="bodyTable table table-striped t
 assert result.contains('<h2 id="Filtering_Events">Filtering Events</h2>')
 assert result.contains('<h2 id="Keyboard_Shortcuts_28special29">Keyboard Shortcuts (special)</h2>')
 assert result.contains('<li><a href="#Keyboard_Shortcuts_28special29" du-smooth-scroll="">Keyboard Shortcuts (special)</a></li>')
+
+// TOC has been inserted
 assert result =~ /(?s)toc-inline-container.*Table of Contents.*ul id="toc"/
-assert result.indexOf('<ul id="toc">') != result.lastIndexOf('<ul id="toc">')
+assert result.indexOf('id="right-toc"') > -1 : "A copy of the TOC has been inserted"
+assert result.indexOf('id="toc"') == result.lastIndexOf('id="toc"') : "The ID of the 2nd TOC has been changed (no duplicate with same ID)"
+
 assert result.contains('<body class="sentry-site sentry-studio"')
 assert result =~ /(?s)header-title.*skin-test Extended.*header-subtitle.*Version <strong>1.0-SNAPSHOT-test/
 assert result.contains('<h5 class="text-uppercase">Getting Started</h5>')

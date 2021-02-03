@@ -72,75 +72,95 @@
 //
 /////////////////////////////////////////////////////
 
+// Measure the time to process all of this
+*##set($startTime = $date.systemTime)#*
+
 // Process all ${properties} in the rendered HTML
-*##set ( $bodyContent = $render.eval( $bodyContent ) )#*
+*##set($bodyContent = $render.eval($bodyContent))#*
+*##set($headContent = $render.eval($headContent))#*
+
+// Parse the body and header content
+*##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
+*##set($headElement = $htmlTool.parseContent($headContent))#*
 
 // Fix all protocol-relative links
-*##set ( $bodyContent = $htmlTool.fixProtocolRelativeUrls( $bodyContent ) )#*
+*##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
 
 // Check all images
-*##set ( $bodyContent = $imageTool.checkImageLinks( $bodyContent, ${project.reporting.outputDirectory}, $currentFileName ) )#*
+*##set($bodyElement = $imageTool.checkImageLinks($bodyElement, ${project.reporting.outputDirectory}, $currentFileName))#*
 
 // Convert all <IMG> to WEBP format (more efficient)
-*##set ( $bodyContent = $imageTool.convertImagesToWebp( $bodyContent, "img", ${project.reporting.outputDirectory}, $currentFileName ) )#*
+*##set($bodyElement = $imageTool.convertImagesToWebp($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
 
 // Specify the size of the images (makes the rendering more efficient)
-*##set ( $bodyContent = $imageTool.explicitImageSize( $bodyContent, "img", ${project.reporting.outputDirectory}, $currentFileName ) )#*
+*##set($bodyElement = $imageTool.explicitImageSize($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
 
 // Surround all <IMG> not marked as "inline" with a thumbnail
-*##set ( $bodyContent = $imageTool.convertImagesToThumbnails( $bodyContent, "img:not(img[alt=inline])", ${project.reporting.outputDirectory}, $currentFileName, 200, 0, "<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></div>" ) )#*
+*##set($bodyElement = $imageTool.convertImagesToThumbnails(
+		$bodyElement,
+		"img:not(img[alt=inline])",
+		${project.reporting.outputDirectory},
+		$currentFileName,
+		200, 0,
+		"<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></div>"
+	)
+)#*
 
 // Bootstrap CSS class for tables
-*##set ( $bodyContent = $htmlTool.addClass( $bodyContent, "table.bodyTable", ["table", "table-striped", "table-hover"] ) )#*
-*##set ( $bodyContent = $htmlTool.fixTableHeads( $bodyContent ) )#*
+*##set($bodyElement = $htmlTool.addClass($bodyElement, "table.bodyTable", ["table", "table-striped", "table-hover"]))#*
+*##set($bodyElement = $htmlTool.fixTableHeads($bodyElement))#*
 
 // Convert old-style <a name=""> anchors to HTML5 <a id="">
-*##set ( $bodyContent = $htmlTool.headingAnchorToId( $bodyContent ) )#*
+*##set($bodyElement = $htmlTool.headingAnchorToId($bodyElement))#*
 
 // Clean up IDs and corresponding <a href="#..."> references for unsupported characters
-*##set ( $bodyContent = $htmlTool.fixIds($bodyContent) )#*
+*##set($bodyElement = $htmlTool.fixIds($bodyElement))#*
 
 // Make sure all headings have IDs
-*##set ( $bodyContent = $htmlTool.ensureHeadingIds($bodyContent) )#*
+*##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*
 
 // Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
-*##set ( $bodyContent = $htmlTool.setAttr($bodyContent, "a[href^=#]", "du-smooth-scroll", "") )#*
+*##set($bodyElement = $htmlTool.setAttr($bodyElement, "a[href^=#]", "du-smooth-scroll", ""))#*
 
 // Extract the TOC and put it in a variable
-*##set ( $tocContentArray = $htmlTool.extract($bodyContent, "ul#toc", 1 ).getExtracted() )#*
-*##if ( ! $tocContentArray.isEmpty() )#*
-	*##set ( $tocContent = $tocContentArray.get(0) )#*
-	// Wrap the TOC with the necessary HTML
-	*##set ( $bodyContent = $htmlTool.wrap($bodyContent, "ul#toc", "<div class='toc-inline-container hidden-lg'>", 1) )#*
-	*##set ( $bodyContent = $htmlTool.prepend($bodyContent, "div.toc-inline-container", "<h3>Table of Contents</h3>", 1) )#*
+*##set($tocElementList = $bodyElement.select("ul#toc"))#*
+*##if (!$tocElementList.isEmpty())#*
+	// Extract the TOC content
+	// It will be reinserted in the document (so it will be in the final HTML twice:
+	// once inline, just below the <h1>, and once to the right, as a sticky <div>)
+	*##set($tocElement = $tocElementList.get(0))#*
+	*##set($tocContent = $tocElement.clone().attr("id", "right-toc").outerHtml())#*
+	// Wrap the inline TOC with the necessary HTML
+	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg'>"))#*
+	*##call($tocElement.parent().prepend("<h3>Table of Contents</h3>"))#*
 *##else#*
-	*##set ( $tocContent = "" )#*
+	*##set($tocContent = "")#*
 *##end#*
 
 // Extract the keywords
-*##set ( $keywordsArray = $htmlTool.getAttr($headContent, "meta[name=keywords]", "content") )#*
-*##call ( $keywordsArray.add( $decoration.getCustomValue("keywords") ) )#*
-*##if ( ! $keywordsArray.isEmpty() )#*
-	*##set ( $keywords = $display.list($display.list($keywordsArray, ",").trim().split("\s*,\s*"), ",") )#*
-	*##set ( $keywordsArray = $keywords.split("\s*,\s*") )#*
+*##set($keywordsArray = $htmlTool.getAttr($headElement, "meta[name=keywords]", "content"))#*
+*##call($keywordsArray.add($decoration.getCustomValue("keywords")))#*
+*##if (!$keywordsArray.isEmpty())#*
+	*##set($keywords = $display.list($display.list($keywordsArray, ",").trim().split("\s*,\s*"), ","))#*
+	*##set($keywordsArray = $keywords.split("\s*,\s*"))#*
 *##end#*
-*##set ( $headContent = $htmlTool.remove($headContent, "meta[name=keywords]") )#*
+*##set($headElement = $htmlTool.remove($headElement, "meta[name=keywords]") )#*
 
 // Build ElasticLunr index
-*##set ( $indexFile = "${project.reporting.outputDirectory}/index.json" )#*
-*##set ( $bodyText = $htmlTool.text($bodyContent, "body") )#*
-*##call ( $indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText.get(0)) )#*
+*##set($indexFile = "${project.reporting.outputDirectory}/index.json")#*
+*##set($bodyText = $htmlTool.text($bodyElement, "body").get(0) )#*
+*##call($indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText))#*
 
 // publishDate: either the one in site.xml, or current date
-*##set ( $publishDateString = $decoration.getCustomValue("publishDate", $date.get($decoration.publishDate.format)) )#*
+*##set($publishDateString = $decoration.getCustomValue("publishDate", $date.get($decoration.publishDate.format)))#*
 
 // generator: who we are and where we come from
-*##set ( $generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $decoration.skin.artifactId $decoration.skin.version" )#*
-*##if ( $docRenderingContext.doxiaSource )#*
-	*##set ( $generator = "$generator, from $docRenderingContext.parserId" )#*
+*##set($generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $decoration.skin.artifactId $decoration.skin.version")#*
+*##if ($docRenderingContext.doxiaSource)#*
+	*##set($generator = "$generator, from $docRenderingContext.parserId")#*
 *##end#*
-*##if ( $docRenderingContext.generator && $docRenderingContext.generator != "" )#*
-	*##set ( $generator = "$generator, with $docRenderingContext.generator" )#*
+*##if($docRenderingContext.generator && $docRenderingContext.generator != "")#*
+	*##set($generator = "$generator, with $docRenderingContext.generator")#*
 *##end#*
-*##set ( $headContent = $htmlTool.remove($headContent, "meta[name=generator]") )#*
+*##set($headElement = $htmlTool.remove($headElement, "meta[name=generator]"))#*
 *###
