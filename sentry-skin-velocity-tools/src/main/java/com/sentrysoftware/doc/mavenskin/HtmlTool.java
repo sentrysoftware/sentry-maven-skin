@@ -174,9 +174,8 @@ public class HtmlTool extends SafeConfig {
 		}
 
 		for (Element element : elements) {
-			for (String className : classNames) {
-				element.addClass(className);
-			}
+			element.classNames().addAll(classNames);
+			element.classNames(element.classNames());
 		}
 
 		return body;
