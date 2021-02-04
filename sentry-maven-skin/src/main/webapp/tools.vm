@@ -78,6 +78,7 @@
 // Process all ${properties} in the rendered HTML
 *##set($bodyContent = $render.eval($bodyContent))#*
 *##set($headContent = $render.eval($headContent))#*
+*##set($shortTitle = $render.eval($shortTitle))#*
 
 // Parse the body and header content
 *##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
@@ -132,7 +133,7 @@
 	*##set($tocContent = $tocElement.clone().attr("id", "right-toc").outerHtml())#*
 	// Wrap the inline TOC with the necessary HTML
 	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg'>"))#*
-	*##call($tocElement.parent().prepend("<h3>Table of Contents</h3>"))#*
+	*##call($tocElement.parent().prepend("<div class='toc-heading'>Table of Contents</div>"))#*
 *##else#*
 	*##set($tocContent = "")#*
 *##end#*
