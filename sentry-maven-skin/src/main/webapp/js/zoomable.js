@@ -19,8 +19,10 @@
 			// Add a click handler on the component element itself
 			$element.on("click", function() { $ctrl.zoomClick(); $scope.$applyAsync(); });
 
-			// Find the image "alt" text
-			$ctrl.alt = $element.find("img").attr("alt");
+			// Find the image "alt" text, display it in a specific div, and remove it from alt
+			var imgElement = $element.find("img");
+			$ctrl.alt = imgElement.attr("alt");
+			imgElement.attr("alt", "");
 
 			// Initial state
 			$ctrl.zoomed = false;

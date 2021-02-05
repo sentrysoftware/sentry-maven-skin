@@ -61,7 +61,7 @@ assert result =~ /Date:.*2021-01-01/ : "Document's date metadata is present in t
 assert result =~ /Author:.*The &quot;Proud&quot; People/ : "Document's author metadata is present in the body"
 
 // Page's footer
-assert result =~ /(?s)<div class="footer">.*skin-test Extended 1.0-SNAPSHOT-test/
+assert result =~ /(?s)<footer class="footer">.*skin-test Extended 1.0-SNAPSHOT-test/
 assert result =~ /Documentation as of.*1975-03-24 19:30:00/ : "Publish date is derived from site.xml, which uses a pom.xml property"
 assert result =~ /Copyright.*20[1-9][0-9]/
 
