@@ -1,20 +1,20 @@
 <!DOCTYPE html><html lang="$locale.language">
-<!-- #parse( "tools.vm" ) -->
+#parse("tools.vm")
 <head>
 	<meta charset="$outputEncoding">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<title>$shortTitle &ndash; $decoration.name</title>
 
-#if ( $keywords )#*
+#if ($keywords)#*
 *#	<meta name="keywords" content="$keywords" />
 #end#*
 *#	<meta name="generator" content="$esc.html( $generator )" />
-#foreach ( $author in $authors )#*
+#foreach ($author in $authors)#*
 *#	<meta name="author" content="$author" />
 #end#*
 Header from the document
-*#$headContent#*
+*#$headElement.html()#*
 *#
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
@@ -40,8 +40,8 @@ Header from the document
 	<nav class="hidden-xs navbar navbar-inverse site-logo">
 		<ul class="nav navbar-nav">
 			<li class="logo"><a href="https://www.sentrysoftware.com"></a></li>
-#links ( $decoration.body.links )
-#if ( ! ($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true") )#*
+#links($decoration.body.links)
+#if (!($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true"))#*
 *#		<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
 			<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
 			<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
@@ -160,10 +160,10 @@ Header from the document
 			<div class="left-menu hidden-xs col-sm-4 col-md-3">
 				<!--ZOOMSTOP-->
 				<nav>
-					#foreach ( $menu in $decoration.body.menus ) #*
+					#foreach ($menu in $decoration.body.menus) #*
 					*#<h5 class="text-uppercase">$menu.name</h5>
 					<ul class="nav nav-pills nav-stacked">#*
-						*##links ( $menu.items )
+						*##links($menu.items)
 					</ul>#*
 					*##end
 				</nav>
@@ -179,31 +179,31 @@ Header from the document
 					<div class="row">
 
 						<!-- We'll show the TOC on the right, on large display -->
-						#if ( $StringUtils.isNotBlank($tocContent) )<div class="col-md-12 col-lg-8">#else<div class="col-md-12">#end
-#*						*#$bodyContent
+						<div class="col-md-12#if ($StringUtils.isNotBlank($tocContent)) col-lg-8#end">
+#*						*#$bodyElement.html()
 							<div class="document-footer">
 #*						// Keywords
-							*##if ( ! $keywordsArray.isEmpty() )#*
+							*##if (!$keywordsArray.isEmpty())#*
 								*#<div class="keywords">Keywords:<br>
-#*							*##foreach ( $keyword in $keywordsArray )#*
+#*							*##foreach ($keyword in $keywordsArray)#*
 									*#<span class="label label-default">$keyword</span>
 #*							*##end#*
 								*#</div>
 #*						*##end#*
 
 							// Author
-							*##if ( ! $authors.isEmpty() )#*
-								*#<div class="authors">Author: <strong>$StringUtils.join( $authors.toArray() , ", ")</strong></div>
+							*##if (!$authors.isEmpty())#*
+								*#<div class="authors">Author: <strong>$StringUtils.join($authors.toArray(), ", ")</strong></div>
 #*						*##end#*
 
 							// Date
-							*##if ( $StringUtils.isNotBlank($documentDate) )#*
+							*##if ($StringUtils.isNotBlank($documentDate))#*
 								*#<div class="date">Date: <strong>$documentDate</strong></div>
 #*						*##end##
 							</div>
 						</div>
 
-#if ( $StringUtils.isNotBlank($tocContent) )
+#if ($StringUtils.isNotBlank($tocContent))
 #* We have a TOC *#
 						<!--ZOOMSTOP-->
 						<div class="col-lg-4 visible-lg toc-side-container">
@@ -267,8 +267,8 @@ Header from the document
 		<nav class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
 				<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
-	#links ( $decoration.body.links )
-#if ( ! ($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true") )#*
+#links($decoration.body.links)
+#if (!($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true"))#*
 *#			<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
 				<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
 				<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
@@ -307,6 +307,7 @@ Header from the document
 	<script>
 angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.javascript($relativePath)");
 	</script>
-
+#set($renderTime = $date.systemTime - $startTime)
+<!-- Generation time: $renderTime ms -->
 </body>
 </html>

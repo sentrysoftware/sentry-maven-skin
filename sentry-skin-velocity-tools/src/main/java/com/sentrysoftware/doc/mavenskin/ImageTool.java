@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -20,8 +19,6 @@ import javax.imageio.spi.IIORegistry;
 import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.velocity.tools.config.DefaultKey;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.luciad.imageio.webp.WebPImageReaderSpi;
@@ -73,15 +70,15 @@ public class ImageTool {
 	 * Check the image links in the document and make sure they refer to a file that
 	 * actually exists.
 	 *
-	 * @param content         the HTML content
+	 * @param body         the HTML content
 	 * @param basedir         Actual root directory of the site on the file system
 	 * @param currentDocument Logical path of the document being parsed (e.g.
 	 *                        "index.html", or "subdir/subpage.html")
 	 * @return the updated HTML content
 	 * @throws IOException when an image cannot be read or converted
 	 */
-	public String checkImageLinks(
-			String content,
+	public Element checkImageLinks(
+			Element body,
 			String basedir,
 			String currentDocument
 	) throws IOException {
@@ -95,19 +92,8 @@ public class ImageTool {
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
 
-		// Read the content body
-		Document doc = Jsoup.parseBodyFragment(content);
-		doc.outputSettings().charset(StandardCharsets.UTF_8);
-		Element body = doc.body();
-
 		// Select all images
 		List<Element> elements = body.select("img");
-		if (elements.isEmpty()) {
-
-			// nothing to update
-			return content;
-
-		}
 
 		// For each image
 		for (Element element : elements) {
@@ -153,7 +139,7 @@ public class ImageTool {
 			throw new IOException(errorList.stream().collect(Collectors.joining("\n")));
 		}
 
-		return body.html();
+		return body;
 
 	}
 
@@ -198,7 +184,7 @@ public class ImageTool {
 	 * @return File instance of the thumbail image
 	 * @throws IOException when cannot read the source image, or write the thumbnail file
 	 */
-	public static File createThumbnail(
+	protected static File createThumbnail(
 			File sourceFile,
 			String thumbnailMark,
 			int maxWidth,
@@ -208,6 +194,14 @@ public class ImageTool {
 		// Sanity check
 		if (!sourceFile.isFile()) {
 			throw new IOException(sourceFile.getAbsolutePath()  + " does not exist");
+		}
+
+		// Destination
+		File destination = new File(sourceFile.getParent(), getNameWithoutExtension(sourceFile) + thumbnailMark + ".jpg");
+
+		// Do we need to do anything? (if destination is newer than source, we skip)
+		if (Helper.getLastModifiedTime(sourceFile) < Helper.getLastModifiedTime(destination)) {
+			return destination;
 		}
 
 		// Read the specified image
@@ -233,7 +227,6 @@ public class ImageTool {
 		outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
 
 		// Write the thumbnail file
-		File destination = new File(sourceFile.getParent(), getNameWithoutExtension(sourceFile) + thumbnailMark + ".jpg");
 		ImageIO.write(outputImage, imageType, destination);
 
 		return destination;
@@ -252,6 +245,15 @@ public class ImageTool {
 		// Sanity check
 		if (!sourceFile.isFile()) {
 			throw new IOException(sourceFile.getAbsolutePath()  + " does not exist");
+		}
+
+		// Output file
+		String webpImagePath = getNameWithoutExtension(sourceFile) + ".webp";
+		File webpFile = new File(sourceFile.getParent(), webpImagePath);
+
+		// Do we need to do anything? (if destination is newer than source, we skip)
+		if (Helper.getLastModifiedTime(sourceFile) < Helper.getLastModifiedTime(webpFile)) {
+			return webpFile;
 		}
 
 		// Read the specified image
@@ -279,8 +281,6 @@ public class ImageTool {
 		}
 
 		// Configure the output on the ImageWriter
-		String webpImagePath = getNameWithoutExtension(sourceFile) + ".webp";
-		File webpFile = new File(sourceFile.getParent(), webpImagePath);
 		writer.setOutput(new FileImageOutputStream(webpFile));
 
 		// Write the WEBP image
@@ -295,7 +295,7 @@ public class ImageTool {
 	 * Upgrades all images in the specified HTML document to WEBP.
 	 * <p>
 	 *
-	 * @param content         the HTML content
+	 * @param body         the HTML content
 	 * @param selector        CSS selector to select all images to upgrade
 	 *                        ("img.screenshot" will process all &lt;IMG
 	 *                        class="screenshot"&gt; elements)
@@ -305,8 +305,8 @@ public class ImageTool {
 	 * @return the updated HTML content
 	 * @throws IOException when an image cannot be read or converted
 	 */
-	public String convertImagesToWebp(
-			String content,
+	public Element convertImagesToWebp(
+			Element body,
 			String selector,
 			String basedir,
 			String currentDocument
@@ -318,19 +318,8 @@ public class ImageTool {
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
 
-		// Read the content body
-		Document doc = Jsoup.parseBodyFragment(content);
-		doc.outputSettings().charset(StandardCharsets.UTF_8);
-		Element body = doc.body();
-
 		// Select all images
 		List<Element> elements = body.select(selector);
-		if (elements.isEmpty()) {
-
-			// nothing to update
-			return content;
-
-		}
 
 		// For each image
 		for (Element element : elements) {
@@ -379,7 +368,7 @@ public class ImageTool {
 
 		}
 
-		return body.html();
+		return body;
 
 	}
 
@@ -388,7 +377,7 @@ public class ImageTool {
 	 * Explicitly states the width and height of each image in the specified document.
 	 * <p>
 	 *
-	 * @param content         the HTML content
+	 * @param body         the HTML content
 	 * @param selector        CSS selector to select all images to upgrade
 	 *                        ("img.screenshot" will process all &lt;IMG
 	 *                        class="screenshot"&gt; elements)
@@ -398,8 +387,8 @@ public class ImageTool {
 	 * @return the updated HTML content
 	 * @throws IOException when an image cannot be read or converted
 	 */
-	public String explicitImageSize(
-			String content,
+	public Element explicitImageSize(
+			Element body,
 			String selector,
 			String basedir,
 			String currentDocument
@@ -411,19 +400,8 @@ public class ImageTool {
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
 
-		// Read the content body
-		Document doc = Jsoup.parseBodyFragment(content);
-		doc.outputSettings().charset(StandardCharsets.UTF_8);
-		Element body = doc.body();
-
 		// Select all images
 		List<Element> elements = body.select(selector);
-		if (elements.isEmpty()) {
-
-			// nothing to update
-			return content;
-
-		}
 
 		// For each image
 		for (Element element : elements) {
@@ -479,7 +457,7 @@ public class ImageTool {
 
 		}
 
-		return body.html();
+		return body;
 
 	}
 
@@ -497,7 +475,7 @@ public class ImageTool {
 	 * <li><code>%thumbSrc%</code>: the thumbnail image source path
 	 * </ul>
 	 *
-	 * @param content         the HTML content
+	 * @param body         the HTML content
 	 * @param selector        CSS selector to select all images to upgrade
 	 *                        ("img.screenshot" will process all &lt;IMG
 	 *                        class="screenshot"&gt; elements)
@@ -512,8 +490,8 @@ public class ImageTool {
 	 * @return the updated HTML content
 	 * @throws IOException when an image cannot be read or converted
 	 */
-	public String convertImagesToThumbnails(
-			String content,
+	public Element convertImagesToThumbnails(
+			Element body,
 			String selector,
 			String basedir,
 			String currentDocument,
@@ -528,19 +506,8 @@ public class ImageTool {
 		// First, calculate the real path of the current document
 		Path documentPath = Paths.get(basedir, currentDocument);
 
-		// Read the content body
-		Document doc = Jsoup.parseBodyFragment(content);
-		doc.outputSettings().charset(StandardCharsets.UTF_8);
-		Element body = doc.body();
-
 		// Select all images
 		List<Element> elements = body.select(selector);
-		if (elements.isEmpty()) {
-
-			// nothing to update
-			return content;
-
-		}
 
 		// For each image
 		for (Element element : elements) {
@@ -609,7 +576,7 @@ public class ImageTool {
 
 		}
 
-		return body.html();
+		return body;
 
 	}
 
