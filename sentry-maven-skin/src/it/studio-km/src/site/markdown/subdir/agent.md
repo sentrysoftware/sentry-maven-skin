@@ -2,7 +2,7 @@ keywords: agent,java,http,preload
 
 # Configuring the Agent
 
->  This section explains how to configure the main properties of the PATROL Agent from the **Agent** menu of the **${project.name}** user interface. Detailed information about the PATROL Agent properties itself is available from the BMC Documentation, see the [Related Topic](#Related_Topics) section.
+> This section explains how to configure the main properties of the PATROL Agent from the **Agent** menu of the **${project.name}** user interface. Detailed information about the PATROL Agent properties itself is available from the BMC Documentation, see the [Related Topic](#Related_Topics) section.
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
@@ -22,7 +22,6 @@ Once the PATROL Agent is properly configured, you need to review and customize t
 - Java
 - HTTP server
 
-
 ## Defining a Default User Account
 
 You can configure the **Default Account** that the agent uses for parameter collects, recovery actions, and discovery procedures. By default, this account is the one used to install the PATROL Agent.
@@ -34,7 +33,6 @@ On Windows systems, if the **Run As LOCALSYSTEM** option is activated, the PATRO
 You can restrict user access to a PATROL Agent by creating an **Access Control List** (ACL) in which you can specify the allowed or denied users, hosts that are authorized or denied access to the agent and the granted access modes.
 
 An Access Control List consists in a comma-separated list of entries of the following format: ```<username>/<hostname>/mode```.
-
 
 ## Preloading KMs
 
@@ -142,8 +140,8 @@ The **Information** page, as its name suggests, provides any relevant informatio
 
 - [Defining Access Control Lists](//docs.bmc.com/docs/PATROLAgent/113/defining-access-control-lists-766670424.html)
 - [Preloading KMs on the PATROL Agent](//docs.bmc.com/docs/PATROLAgent/113/preloading-kms-on-the-patrol-agent-766670451.html)
-- [Setting the number of days that history is retained in the history database ](//docs.bmc.com/docs/PATROLAgent/113/setting-the-number-of-days-that-history-is-retained-in-the-history-database-766670474.html)
+- [Setting the number of days that history is retained in the history database](//docs.bmc.com/docs/PATROLAgent/113/setting-the-number-of-days-that-history-is-retained-in-the-history-database-766670474.html)
 - [Setting up the event log file and size](//docs.bmc.com/docs/PATROLAgent/113/setting-up-the-event-log-file-and-size-766670479.html)
 - [Specifying the Integration Service path](//docs.bmc.com/docs/PATROLAgent/113/specifying-the-integration-service-path-766670245.html)
-- [Configuring TrueSight Infrastructure Management Event Manager Integration ](//docs.bmc.com/docs/PATROLAgent/113/configuring-truesight-event-manager-integration-766670201.html)
+- [Configuring TrueSight Infrastructure Management Event Manager Integration](//docs.bmc.com/docs/PATROLAgent/113/configuring-truesight-event-manager-integration-766670201.html)
 - [Integration Variables](//docs.bmc.com/docs/PATROLAgent/113/integration-variables-766670137.html)

@@ -33,7 +33,6 @@ The **REFRESH** button checks whether newer events have been triggered on the Ag
 
 With the **DOWNLOAD CSV** button, you can download a CSV file with the content of the list of events. Note that the time displayed in the CSV will be the time as reported by the PATROL Agent, with no time zone and clock adjustment.
 
-
 ## Filtering Events
 
 By default, all events are displayed except for *"State Change"* and *"Response"* events.
@@ -74,7 +73,6 @@ From the detailed view, you can perform the following operations:
 * view the entire content of the event
 * copy the event content to the clipboard
 * add a comment to the *Diary* of the event
-
 
 ## Keyboard Shortcuts (special)
 

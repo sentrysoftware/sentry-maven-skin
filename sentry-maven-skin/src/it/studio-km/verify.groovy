@@ -45,10 +45,10 @@ assert result.indexOf('id="toc"') == result.lastIndexOf('id="toc"') : "The ID of
 
 assert result.contains('<body class="sentry-site sentry-studio"')
 assert result =~ /(?s)header-title.*skin-test Extended.*header-subtitle.*Version <strong>1.0-SNAPSHOT-test/
-assert result.contains('<h5 class="text-uppercase">Getting Started</h5>')
-assert result.contains('<li><a  href="console.html">Operating the Console</a></li>')
-assert result.contains('<li class="active"><a  href="events.html">Managing Events</a></li>')
-assert result.contains('<li><a  href="subdir/agent.html">Configuring the Agent</a></li>')
+assert result =~ /<h5.*Getting Started/
+assert result =~ /href="console.html".*Operating the Console/
+assert result =~ /class="active".*href="events.html".*Managing Events/
+assert result =~ /href="subdir\/agent.html".*Configuring the Agent/
 assert result =~ /(?s)<div class="toc">.*<li><a href="#Filtering_Events" du-smooth-scroll="">Filtering Events/
 
 // Document's footer
@@ -84,4 +84,16 @@ indexJsonFile = new File(basedir, "target/site/index.json")
 assert indexJsonFile.isFile()
 String indexJson = indexJsonFile.text
 def eventsGood = indexJson.contains('"events.html":{"id":"events.html","title":"Dealing with Events","keywords":"event,testevent,blank space,studio,km,patrol,develop,web"')
-assert eventsGood : "The index contains title and keywords from the source metadata"
+assert eventsGood : "The index must contain title and keywords from the source metadata"
+
+// Basic Monitors topic contains 6 subtopics
+def basicHtml = new File(basedir, "target/site/basic-monitors/index.html").text
+assert basicHtml =~ /Basic Monitors.*6/ : "Basic Monitors entry must say it has 6 subitems in the left menu"
+assert basicHtml.contains("../basic-monitors/filesystem.html") : "Link to filesystem.html must be present"
+assert basicHtml.contains("../basic-monitors/process.html") : "Link to process.html must be present"
+
+// Process topic lists its parents (as defined in site.xml)
+def processHtml = new File(basedir, "target/site/basic-monitors/process.html").text
+assert processHtml =~ /\bHome\b/ : "Home must be in the breadcrumb"
+assert processHtml =~ /Using Monitoring Studio/ : "'Using Monitoring Studio' must be in the breadcrumb"
+assert processHtml =~ /Basic Monitors/ : "'Basic Monitors' must be in the breadcrumb"

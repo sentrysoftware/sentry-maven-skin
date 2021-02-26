@@ -1,21 +1,23 @@
 <!DOCTYPE html><html lang="$locale.language">
 #parse("tools.vm")
+
 <head>
 	<meta charset="$outputEncoding">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<title>$shortTitle &ndash; $decoration.name</title>
 
-#if ($keywords)#*
-*#	<meta name="keywords" content="$keywords" />
+#if ($keywords)
+	<meta name="keywords" content="$keywords" />
+#end
+	<meta name="generator" content="$esc.html($generator)" />
+#foreach ($author in $authors)
+	<meta name="author" content="$author" />
 #end#*
-*#	<meta name="generator" content="$esc.html( $generator )" />
-#foreach ($author in $authors)#*
-*#	<meta name="author" content="$author" />
-#end#*
-Header from the document
-*#$headElement.html()#*
-*#
+
+// Header from the document *#
+$headElement.html()
+
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
@@ -23,51 +25,98 @@ Header from the document
 	<link rel="stylesheet" href="css/print.css">
 	<!-- endbuild -->
 	<link rel="stylesheet" href="$relativePath/css/site.css">
-
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-5850468-1"></script>
+#*
+	// Global site tag (gtag.js) - Google Analytics *#
+#if ($googleAnalyticsAccountId)
+	<script async src="https://www.googletagmanager.com/gtag/js?id=$googleAnalyticsAccountId"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
-		gtag('config', 'UA-5850468-1');
+		gtag('config', '$googleAnalyticsAccountId');
 	</script>
+#end
 </head>
 
-<body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-app="sentry.site" ng-strict-di ng-controller="siteController">
-
-	<!-- Dark desktop header with Sentry's links -->
-	<header class="hidden-xs" role="banner">
-		<!-- Links -->
-		<div class="navbar navbar-inverse site-logo">
+<body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
+				<!--ZOOMSTOP-->
+#*
+	// Dark desktop header with Sentry's links *#
+	<header role="banner">
+#*
+		// Links *#
+		<div class="hidden-xs navbar navbar-inverse site-logo">
 			<ul class="nav navbar-nav">
 				<li class="logo"><a href="https://www.sentrysoftware.com" title="Visit Sentry Software's Web site"></a></li>
 #links($decoration.body.links)
-#if (!($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true"))#*
-*#			<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
+#if (!($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true"))
+				<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
 				<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
 				<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
 				<li><a href="https://www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
 				<li><a href="https://docs.bmc.com" target="_blank">docs.bmc.com</a></li>
-#end#*
-	*#	</ul>
+#end
+			</ul>
 		</div>
 
-		<!-- Banner for Desktop -->
+		<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+			<ul class="nav navbar-nav">
+				<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
+			</ul>
+		</div>
+#*
+		// Banner *#
 		<div class="navbar site-banner">
 
 			<div class="container-fluid">
 
-				<div class="navbar-header">
-					<p class="navbar-brand header-title">
-						$decoration.name
-						<br />
-						<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong></span>
-					</p>
-				</div>
+				<!--ZOOMRESTART-->
+				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && media == 'xs'}">#*
 
-				<!-- Search... -->
-				<form class="navbar-form navbar-right hidden-xs site-search">
+					// The Search button (only on xs displays) *#
+					<button
+						class="navbar-toggle hidden-lg hidden-md hidden-sm"
+						ng-click="showSearchInput = !showSearchInput; clearSearch()"
+						title="{{ showSearchInput ? 'Close the search' : 'Search' }}"
+					>
+						<i ng-class="showSearchInput ? 'fas fa-times' : 'fa fa-search'"></i>
+					</button>#*
+
+					// The documentation title *#
+					<div class="navbar-brand">
+						<div class="header-title">$decoration.name</div>
+						<div class="header-subtitle">
+							Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong>
+						</div>
+					</div>#*
+
+					// The documentation title minimized (when search is on, on mobile) *#
+					<div class="navbar-brand header-xxs">
+						<div class="header-title">$decoration.name</div>
+						<div class="header-subtitle">
+							Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong>
+						</div>
+					</div>#*
+
+					// The search field (only on xs displays) *#
+					<form class="navbar-form site-search site-search-xs visible-xs" ng-show="showSearchInput">
+						<input
+							type="search"
+							class="form-control"
+							placeholder="Search..."
+							aria-label="Search"
+							ng-model="siteSearch"
+							ng-change="search(siteSearch)"
+							ng-model-options="{ debounce: 500 }"
+							ng-keydown="handleKeyboard($event)"
+							focus-me="showSearchInput"
+						/>
+					</form>
+				</div>
+				<!--ZOOMSTOP-->
+#*
+				// Search field on desktop *#
+				<form class="navbar-form navbar-right site-search hidden-xs">
 					<div class="form-group has-feedback">
 						<input
 							type="text"
@@ -77,7 +126,7 @@ Header from the document
 							ng-model="siteSearch"
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"
-							ng-keydown="siteSearchKeyDown($event)"
+							ng-keydown="handleKeyboard($event)"
 						/>
 						<i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
 					</div>
@@ -87,117 +136,174 @@ Header from the document
 		</div>
 	</header>
 
-	<!--Dark mobile banner with only one Sentry's link-->
-	<header class="visible-xs navbar navbar-inverse site-logo site-logo-xs" role="banner">
-		<ul class="nav navbar-nav">
-			<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
-		</ul>
-	</header>
-
-	<!-- Banner and navigation for mobile -->
-	<nav class="visible-xs navbar site-banner" role="navigation">
-
-		<div class="container-fluid">
-
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" ng-click="clickNavToggle()" aria-label="Toggle the navigation menu">
-					<i class="icon-bar"></i>
-					<i class="icon-bar"></i>
-					<i class="icon-bar"></i>
-				</button>
-				<p class="navbar-brand header-title">
-					$decoration.name
-					<br />
-					<span class="header-subtitle">Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong></span>
-				</p>
-			</div>
-
-			<div class="navbar-collapse" uib-collapse="isNavCollapsed">
-
-				<!-- Search... -->
-				<form class="navbar-form">
-					<input
-						type="text"
-						class="form-control"
-						placeholder="Search..."
-						aria-label="Search"
-						ng-model="siteSearch"
-						ng-change="search(siteSearch)"
-						ng-model-options="{ debounce: 500 }"
-						ng-keydown="siteSearchKeyDown($event)"
-					/>
-				</form>
-
-				<ul class="nav navbar-nav" ng-hide="siteSearch">#*
-					*##foreach ( $menu in $decoration.body.menus ) #*
-						*##links ( $menu.items )#*
-					*##end##
-				</ul>
-
-				<!-- Search results -->
-				<ul class="nav navbar-nav search-results search-results-content" ng-show="siteSearch">
-
-					<!-- List of results -->
-					<li ng-repeat="result in resultArray track by result.href">
-						<a ng-href="{{result.href}}">
-							{{result.title}}
-							<div class="row"><div class="col-md-12">
-								<uib-progressbar type="info" value="result.score" max="1"></uib-progressbar>
-							</div></div>
-							<small>{{result.body | truncate:'100'}}</small>
-						</a>
-					</li>
-
-					<li ng-show="!resultArray.length" class="navbar-text">No results.</li>
-
-				</ul>
-
-			</div>
-
-		</div>
-	</nav>
-
 	<div class="container-fluid main-container">
 		<div class="row display-flex">
-
-			<!-- Left menu -->
+#*
+			// Left menu*#
 			<nav class="left-menu hidden-xs col-sm-4 col-md-3" role="navigation">
-				<!--ZOOMSTOP-->
-				#foreach ($menu in $decoration.body.menus) #*
-				*#<h5 class="text-uppercase">$menu.name</h5>
-				<ul class="nav nav-pills nav-stacked">#*
-					*##links($menu.items)
-				</ul>#*
+				#foreach ($menu in $decoration.body.menus)
+					<h5 class="text-uppercase">$menu.name</h5>
+#*				*##leftMenu($menu.items)#*
 				*##end
-				<!--ZOOMRESTART-->
 			</nav>
-
-			<!-- Main content -->
+#*
+			// Main content*#
 			<main class="main-content col-xs-12 col-sm-8 col-md-9">
-
-				<!-- Hide content if we're displaying search results -->
+#*
+				// Hide content if we're displaying search results *#
 				<div ng-hide="siteSearch">
 
 					<div class="row">
-
-						<!-- We'll show the TOC on the right, on large display -->
+#*
+						// We'll show the TOC on the right, on large display *#
 #if ($StringUtils.isNotBlank($tocContent))
 #* We have a TOC *#
-						<!--ZOOMSTOP-->
 						<div class="col-lg-4 col-lg-push-9 visible-lg toc-side-container">
 							<div class="toc">
 								<div class="toc-heading">Table of Contents</div>
 #*							*#$tocContent
 							</div>
 						</div>
-						<!--ZOOMRESTART-->
-#end
-						<!-- And the main content -->
-						<div class="col-md-12#if ($StringUtils.isNotBlank($tocContent)) col-lg-8 col-lg-pull-4#end">
-#*						*#$bodyElement.html()
+#end#*
+						// Main content
+*#					<div class="col-md-12#if ($StringUtils.isNotBlank($tocContent)) col-lg-8 col-lg-pull-4#end">
+#*
+*##if ($alignedFileName != "index.html")#*
+
+							// Breadcrumb to parents (full desktop)
+*#						<div class="parents hidden-xs">
+								<ol class="breadcrumb">
+									<!-- Home -->
+									<li>
+										<a href="$PathTool.calculateLink('index.html', $relativePath)">
+											<i class="fas fa-home"></i>Home
+										</a>
+									</li>
+								<!-- menus and items -->
+	#foreach($menu in $decoration.body.menus)#*
+	*##foreach($item in $menu.items)#*
+		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+		*##if ($alignedHref == $alignedFileName)
+									<li>$menu.name</li>
+				#break($foreach.parent)#*
+		*##else#*
+			*##foreach($subItem in $item.items)#*
+				*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
+				*##if ($alignedSubHref == $alignedFileName)
+									<li>$menu.name</li>
+									<li><a href="$alignedHref">$item.name</a></li>
+						#break($foreach.parent)#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end
+								</ol>
+							</div>
+#*
+							// Breadcrumb to parents (mobile)
+*#						<div class="parents-xs visible-xs">
+								<ul class="list-group">
+									<!-- Home -->
+									<a class="list-group-item" href="$PathTool.calculateLink('index.html', $relativePath)">
+										<i class="fas fa-home"></i>Home
+									</a>
+									<!-- menus and items -->
+	#foreach($menu in $decoration.body.menus)#*
+	*##foreach($item in $menu.items)#*
+		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+		*##if ($alignedHref == $alignedFileName)
+									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>$menu.name</li>
+				#break($foreach.parent)#*
+		*##else#*
+			*##foreach($subItem in $item.items)#*
+				*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
+				*##if ($alignedSubHref == $alignedFileName)
+									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>$menu.name</li>
+									<a class="list-group-item" href="$alignedHref">
+										<i class="fas fa-level-up-alt fa-flip-horizontal"></i>$item.name
+										<span class="badge">$item.items.size()</span>
+									</a>
+						#break($foreach.parent)#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end
+							</ul>
+						</div>
+#end#*
+
+							// For index.html, we will show all 1st-level content from site.xml
+							*##if ($alignedFileName == "index.html")
+								<div class="home-xs visible-xs">
+									<h1 title="Documentation Home"><i class="fas fa-home"></i></h1>
+									<ul class="list-group">
+#*								*##foreach ($menu in $decoration.body.menus)
+										<li class="list-group-item"><i class="fas fa-folder-open"></i>$menu.name</li>
+#*									*##foreach ($item in $menu.items)#*
+											*##if ($item.href == "index.html")
+												<a class="list-group-item" href="#$bodyElement.select('h1').get(0).attr('id')" du-smooth-scroll>
+													<i class="fas fa-home"></i>$item.name
+													<i class="fas fa-angle-double-down pull-right"></i>
+												</a>
+#*										*##else
+												<a class="list-group-item" href="$PathTool.calculateLink($item.href, $relativePath)">
+													<i class="fas fa-file-alt"></i>$item.name
+#*												*##if (!$item.items.empty)<span class="badge">$item.items.size()</span>#end
+												</a>
+#*										*##end#*
+										*##end#*
+									*##end
+									</ul>
+								</div>
+#*						*##end#*
+
+							//
+							// The actual document body (finally!)
+							// *#
+							<!--ZOOMRESTART-->#*
+							*#$bodyElement.html()
+#*
+							// Subtopics (if any)
+							*##foreach ($menu in $decoration.body.menus)#*
+								*##foreach ($item in $menu.items)#*
+									*##if ($alignedFileName == $PathTool.calculateLink($item.href, $relativePath))#*
+										*##if (!$item.items.empty)
+											<div class="subtopics hidden-xs">
+												<h2>More Information</h2>
+												<ul>
+#*											*##foreach ($subItem in $item.items)
+													<li>
+														<a href="$PathTool.calculateLink($subItem.href, $relativePath)">
+															<i class="fas fa-file-alt"></i>$subItem.name
+														</a>
+													</li>
+#*											*##end
+												</ul>
+											</div>
+											<div class="subtopics-xs visible-xs">
+												<ul class="list-group">
+													<li class="list-group-item"><i class="fas fa-folder-open"></i>$item.name</li>
+#*												*##foreach ($subItem in $item.items)
+													<a class="list-group-item" href="$PathTool.calculateLink($subItem.href, $relativePath)">
+														<i class="fas fa-file-alt"></i>$subItem.name
+													</a>
+#*												*##end
+												</ul>
+											</div>
+#*									*##end#*
+									*##end#*
+								*##end#*
+							*##end#*
+
+							//
+							// The footer
+							//*#
 							<div class="document-footer">
-#*						// Keywords
-							*##if (!$keywordsArray.isEmpty())#*
+#*
+							// Keywords
+							*##if (!$keywordsArray.empty)#*
 								*#<div class="keywords">Keywords:<br>
 #*							*##foreach ($keyword in $keywordsArray)#*
 									*#<span class="label label-default">$keyword</span>
@@ -213,35 +319,60 @@ Header from the document
 							// Date
 							*##if ($StringUtils.isNotBlank($documentDate))#*
 								*#<div class="date">Date: <strong>$documentDate</strong></div>
-#*						*##end##
-							</div>
+#*						*##end#*
+*#						</div>
 						</div>
 					</div>
 				</div>
+				<!--ZOOMSTOP-->
 
 				<!-- Search results -->
-				<div class="search-results hidden-xs" ng-show="siteSearch && media != 'xs'">
+				<div class="search-results" ng-show="siteSearch">
 
-					<h2>
+					<h2 class="hidden-xs">
 						Search Results for <em>{{siteSearch | truncate:'50'}}</em>
 					</h2>
 
 					<div ng-show="resultArray.length">
 
 						<!-- Result count -->
-						{{resultArray.length}}
-						<span ng-pluralize count="resultArray.length" when="{'1': 'result', 'other': 'results'}"></span>
+						<div class="hidden-xs">
+							{{resultArray.length}}
+							<span ng-pluralize count="resultArray.length" when="{'1': 'result', 'other': 'results'}"></span>
+						</div>
 
-						<!-- List of results -->
-						<div class="search-results-content">
-							<div ng-repeat="result in resultArray track by result.href">
-								<h4><a ng-href="{{result.href}}">{{result.title}}</a></h4>
-								<div class="row"><div class="col-md-6">
-									<uib-progressbar type="info" value="result.score" max="1"></uib-progressbar>
-								</div></div>
-								<small>{{result.body | truncate:'400'}}</small>
+						<!-- List of results (Desktop) -->
+						<div ng-if="media != 'xs'" class="search-results-content hidden-xs">
+							<div class="search-results-entry" ng-repeat="result in resultArray track by result.href">
+								<div class="search-results-parents small text-muted">
+									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title">
+										<a ng-if="parent.path" ng-href="{{parent.path}}">{{parent.title}}</a>
+										<span ng-if="!parent.path">{{parent.title}}</span>
+									</span>
+								</div>
+								<p class="search-results-title"><a ng-href="{{result.href}}"><i class="fas fa-file-alt"></i>{{result.title}}</a></p>
+								<div class="progressbar" aria-hidden="true"><div class="bar" ng-style="{width: result.score * 100 + '%'}"></div></div>
+								<div class="small extract">{{result.body | truncate:'400'}}</div>
 							</div>
 						</div>
+
+						<!-- List of results (mobile) -->
+						<ul ng-if="media == 'xs'" class="list-group search-results-content search-results-content-xs visible-xs">
+							<a
+								ng-repeat="result in resultArray track by result.href"
+								ng-href="{{result.href}}"
+								class="list-group-item"
+							>
+								<div class="search-results-parents small" aria-hidden="true">
+									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title">
+										{{parent.title}}
+									</span>
+								</div>
+								<div class="search-results-title"><i class="fas fa-file-alt"></i>{{result.title}}</div>
+								<div class="progressbar" aria-hidden="true"><div class="bar" ng-style="{width: result.score * 100 + '%'}"></div></div>
+								<div class="small extract">{{result.body | truncate:'100'}}</div>
+							</a>
+						</ul>
 
 					</div>
 
@@ -292,11 +423,6 @@ Header from the document
 	<script src="../../../node_modules/mark.js/dist/mark.min.js" charset="UTF-8"></script>
 	<script src="../../../node_modules/angular/angular.min.js"></script>
 	<script src="../../../node_modules/angular-animate/angular-animate.min.js"></script>
-	<script src="../../../node_modules/angular-ui-bootstrap/template/progressbar/progressbar.html.js"></script>
-	<script src="../../../node_modules/angular-ui-bootstrap/template/progressbar/bar.html.js"></script>
-	<script src="../../../node_modules/angular-ui-bootstrap/template/progressbar/progress.html.js"></script>
-	<script src="../../../node_modules/angular-ui-bootstrap/src/progressbar/progressbar.js"></script>
-	<script src="../../../node_modules/angular-ui-bootstrap/src/collapse/collapse.js"></script>
 	<script src="../../../node_modules/angular-scroll/angular-scroll.min.js"></script>
 	<script src="../../../node_modules/angular-media-queries/match-media.js"></script>
 	<script src="../../../node_modules/elasticlunr/release/elasticlunr.min.js"></script>
@@ -307,7 +433,36 @@ Header from the document
 	<!-- endbuild -->
 
 	<script>
-angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.javascript($relativePath)");
+angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.java($relativePath)");
+angular.module("sentry.site").constant("SITE_MENU", [
+#foreach ($menu in $decoration.menus)#*
+*##foreach ($item in $menu.items)
+{
+	path: "$esc.java($item.href)",
+	title: "$esc.java($item.name)",
+	parents: [{ title: "$esc.java($menu.name)" }]
+},
+#**##if (!$item.items.empty)#*
+		*##foreach ($subItem in $item.items)
+{
+	path: "$esc.java($subItem.href)",
+	title: "$esc.java($subItem.name)",
+	parents: [
+		{
+			title: "$esc.java($menu.name)"
+		},
+		{
+			path: "$esc.java($PathTool.calculateLink($item.href, $relativePath))",
+			title: "$esc.java($item.name)"
+		}
+	]
+},
+#*	*##end#*
+	*##end#*
+*##end
+#end
+]);
+
 	</script>
 #set($renderTime = $date.systemTime - $startTime)
 <!-- Generation time: $renderTime ms -->
