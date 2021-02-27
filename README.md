@@ -55,6 +55,10 @@ Then, specify the Sentry Maven Skin artifact in your `./src/site/site.xml` file:
     <menu name="Second Menu Group">
       <item name="Write a Good Documentation" href="writing.html"/>
       <item name="Using Subdirectories" href="subdir/using.html"/>
+      <item name="Big Chapter" href="big-chapter/index.html">
+        <item name="Sub Topic 1" href="big-chapter/subtopic1.html" />
+        <item name="Sub Topic 2" href="big-chapter/subtopic2.html" />
+      </item>
     </menu>
 
   </body>
@@ -95,6 +99,47 @@ Configurable properties:
 | `<noDefaultLinks>` | When set to `true`, prevents the display of the default links to Sentry's Web site | *Not set* (false) |
 
 Values in `./site/site.xml` can refer to properties defined in `./pom.xml`.
+
+### Sub-topics
+
+Starting with version 4.0 of the Sentry Maven Skin, it is possible to specify a 2nd level of hierarchy in the pages of the documentation:
+
+```raw
++ Menu
+|
++--- Item (topic)
+|
++--+ Item (topic)
+   |
+   +--- Item (sub-topic)
+   |
+   +--- Item (sub-topic)
+```
+
+Above *menus* define sections of the documentation (Installation Guide, User Guide, Reference Guide, for example). *Items* are actual pages and can "contain" other items (pages), as in the **site.xml** example below:
+
+```xml
+...
+    <menu name="Using Monitoring Studio">
+      <item name="General Concepts" href="general-concepts.html"/>
+      <item name="Hosts and Templates" href="hosts-templates.html"/>
+      <item name="Configuring Monitoring Studio" href="studio-settings.html"/>
+      <item name="Basic Monitors" href="basic-monitors/index.html">
+        <item name="Filesystem" href="basic-monitors/filesystem.html" />
+        <item name="Process" href="basic-monitors/process.html" />
+        <item name="SNMP Trap" href="basic-monitors/snmp-trap.html" />
+        <item name="Windows Event" href="basic-monitors/windows-event.html" />
+        <item name="Windows Performance Counter" href="basic-monitors/windows-perf.html" />
+        <item name="Windows Service" href="basic-monitors/windows-service.html" />
+      </item>
+      ...
+    </menu>
+...
+```
+
+In the above example, the *Basic Monitors* page is a chapter of the documentation that groups several other pages. The Sentry Maven Skin will automatically add links to all subtopics in the parent page.
+
+Note: The Sentry Maven Skin does not support a 3rd level of hierarchy.
 
 ### Generate a ToC automatically
 
@@ -176,17 +221,10 @@ At the very top of each page, above the title banner, several "general purpose" 
 
   ...
 
-<<<<<<< HEAD
-	<links>
-		<item name="Product Page" href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
-		<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
-	</links>
-=======
   <links>
     <item name="Product Page" href="//www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
     <item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
   </links>
->>>>>>> develop
 ```
 
 You can also prevent the skin from adding the usual default links to Sentry's Web site with the `noDefaultLinks` option in the `<custom>` section as in the example below:
