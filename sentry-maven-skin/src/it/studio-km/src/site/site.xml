@@ -59,7 +59,8 @@
 		<menu name="Product Reference">
 			<item name="Reference Guide" ref="km-reference" />
 			<item name="PATROL REST API Documentation" href="../swagger-ui/?url=../openapi.yaml"/>
-			<item name="Time/Date Formats for Macros" href="macros.html"/>
+			<item name="Extensions for KM Developers" href="extend-summary.html" />
+			<item name="Time/Date Formats for Macros" href="macros.html" />
 		</menu>
 
 		<menu name="Reports" ref="reports" />

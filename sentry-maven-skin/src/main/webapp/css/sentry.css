@@ -939,3 +939,29 @@ zoomable.zoomed img {
 	color: white;
 }
 
+/**
+ * PrismJS customized theme
+ **/
+.language-psl .token.builtin {
+	color: #e8e;
+}
+
+.language-psl .token.symbol {
+	color: #fca;
+}
+
+.language-psl .token.operator {
+	color: deepskyblue;
+}
+
+pre[class*=language-] {
+	background-color: #333;
+}
+
+pre[class*="language-"]::selection,
+code[class*="language-"]::selection,
+pre[class*="language-"] *::selection,
+code[class*="language-"] *::selection {
+	text-shadow: none;
+	background: #666;
+}

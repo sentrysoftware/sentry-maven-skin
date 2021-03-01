@@ -21,6 +21,7 @@ $headElement.html()
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
+	<link rel="stylesheet" href="../../../node_modules/prism-themes/themes/prism-vsc-dark-plus.css">
 	<link rel="stylesheet" href="css/sentry.css">
 	<link rel="stylesheet" href="css/print.css">
 	<!-- endbuild -->
@@ -432,6 +433,28 @@ $headElement.html()
 	<script src="js/truncate.js"></script>
 	<!-- endbuild -->
 
+#if (!$bodyElement.select("pre > code[class*=language-]").empty)
+	<!-- build:js js/prism.js -->
+	<script src="../../../node_modules/prismjs/prism.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-markup.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-clike.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-bash.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-batch.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-css.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-docker.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-ini.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-javascript.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-java.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-json.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-markdown.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-powershell.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-psl.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-shell-session.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-regex.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-sql.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-yaml.js"></script>
+	<!-- endbuild -->
+#end
 	<script>
 angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.java($relativePath)");
 angular.module("sentry.site").constant("SITE_MENU", [
