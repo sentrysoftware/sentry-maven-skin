@@ -295,7 +295,7 @@ keywords: specifickeyword1, specifickeyword2, ...
 ...
 ```
 
-They keywords specified in a specific page are merged with the keywords specified in `./site/site.xml`. They are listed in the `<meta name="keywords">` header value. They are also used for the indexing of
+The keywords specified in a specific page are merged with the keywords specified in `./site/site.xml`. They are listed in the `<meta name="keywords">` header value. They are also used for the indexing of
 the pages and the local *elasticlunr* engine. They may be useful to implement a "Related Topics" feature.
 
 ### Index and Search
