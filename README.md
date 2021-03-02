@@ -450,7 +450,7 @@ npm install --global http-server
 Launch a Web server with the generated test documentation with:
 
 ```bash
-http-server target/it/studio-km/target/site
+http-server sentry-maven-skin/target/it/studio-km/target/site
 ```
 
 In case of a build failure, the output of the build is stored in `./sentry-maven-skin/target/it/studio-km/build.log`.
