@@ -56,13 +56,41 @@
 			<item name="Use Cases" href="use-cases.html"/>
 		</menu>
 
-		<menu name="Product Reference">
-			<item name="Reference Guide" ref="km-reference" />
+		<menu name="Appendixes">
+			<item name="Monitors and Attributes" ref="km-reference">
+				<item name="Studio Command Line" href="X_COMMANDLINE.html" />
+				<item name="Studio Database Query" href="X_DBQUERY.html" />
+				<item name="Studio Dynamic Object" href="X_DYNAMIC.html" />
+				<item name="Studio Dynamic Discovery" href="X_DYNAMICDISCOVERY.html" />
+				<item name="Studio File" href="X_FILE.html" />
+				<item name="Studio File System" href="X_FILESYSTEM.html" />
+				<item name="Studio Folder" href="X_FOLDER.html" />
+				<item name="Studio Multi-parameter Formula" href="X_FORMULA.html" />
+				<item name="Studio Host" href="X_HOST.html" />
+				<item name="Studio Host Group" href="X_HOSTGROUP.html" />
+				<item name="Studio HTTP Request" href="X_HTTP.html" />
+				<item name="Monitoring Studio X" href="X_MAIN.html" />
+				<item name="Studio Group" href="X_MONITORGROUP.html" />
+				<item name="Studio Nagios Performance Data" href="X_NAGIOSPERF.html" />
+				<item name="Studio Nagios Plugin" href="X_NAGIOSPLUGIN.html" />
+				<item name="Studio Number Extract" href="X_NUMBER.html" />
+				<item name="Studio Process" href="X_PROCESS.html" />
+				<item name="Studio PSL Command" href="X_PSLCOMMAND.html" />
+				<item name="Studio SNMP Polling" href="X_SNMPPOLLING.html" />
+				<item name="Studio SNMP Trap" href="X_SNMPTRAP.html" />
+				<item name="Studio String Search" href="X_STRING.html" />
+				<item name="Studio Template" href="X_TEMPLATE.html" />
+				<item name="Studio Text Transform" href="X_TRANSFORM.html" />
+				<item name="Studio Value Map" href="X_VALUEMAP.html" />
+				<item name="Studio WBEM Query" href="X_WBEMQUERY.html" />
+				<item name="Studio Windows Event" href="X_WINEVENT.html" />
+				<item name="Studio Windows Performance Counter" href="X_WINPERF.html" />
+				<item name="Studio Windows Service" href="	X_WINSERVICE.html" />
+				<item name="Studio WMI Query" href="X_WMIQUERY.html" />
+			</item>
 			<item name="PATROL REST API Documentation" href="../swagger-ui/?url=../openapi.yaml"/>
 			<item name="Time/Date Formats for Macros" href="macros.html"/>
 		</menu>
-
-		<menu name="Reports" ref="reports" />
 
 	</body>
 </project>
