@@ -295,12 +295,12 @@ keywords: specifickeyword1, specifickeyword2, ...
 ...
 ```
 
-They keywords specified in a specific page are merged with the keywords specified in `./site/site.xml`. They are listed in the `<meta name="keywords">` header value. They are also used for the indexing of
+The keywords specified in a specific page are merged with the keywords specified in `./site/site.xml`. They are listed in the `<meta name="keywords">` header value. They are also used for the indexing of
 the pages and the local *elasticlunr* engine. They may be useful to implement a "Related Topics" feature.
 
 ### Index and Search
 
-The content of each page is automatically indexed with [elasticlunr.js](//elasticlunr.com/). *Elasticlunr.js* is a Javascript front-end only indexing and searching solution.
+The content of each page is automatically indexed with [elasticlunr.js](https://elasticlunr.com/). *Elasticlunr.js* is a Javascript front-end only indexing and searching solution.
 
 The *Sentry Maven Skin* will build an *Elasticlunr.js* index and each page will be able to search the entire project documentation that has been generated.
 
@@ -335,6 +335,39 @@ Typical headers:
 | `description` | Typically used by Search Engines as short description of the page. This is critical to SEO. |
 | `keywords` | List of keywords applicable to the page. Not used by public Search Engines, but will be used for internal *Related Topics* listing. |
 
+### Code Syntax Highlighting
+
+Fenced code blocks will be syntax-highlighted using [PrismJS](https://prismjs.com/). The language of the code block must be specified as in the below example:
+
+````md
+```java
+System.out.println("Hello, World!");
+```
+````
+
+Supported languages (or syntax highlighting types) are:
+
+| Language | Markdown markup |
+|---|---|
+| Command line | <pre><code class="language-md">```batch</code></pre> |
+| Commands with output | <pre><code class="language-md">```shell-session<br>$ ls -l test<br>test: Not found<br></code></pre> |
+| CSS | <pre><code class="language-md">```css</code></pre> |
+| Dockerfile | <pre><code class="language-md">```docker</code></pre> |
+| HTML | <pre><code class="language-md">```html</code></pre> |
+| JavaScript | <pre><code class="language-md">```js</code></pre> |
+| JSON | <pre><code class="language-md">```json</code></pre> |
+| Markdown | <pre><code class="language-md">```md</code></pre> |
+| PowerShell | <pre><code class="language-md">```ps</code></pre> |
+| PSL | <pre><code class="language-md">```psl</code></pre> |
+| Regular expressions | <pre><code class="language-md">```regex</code></pre> |
+| Shell script (Linux) | <pre><code class="language-md">```bash</code></pre> |
+| Shell script (Windows) | <pre><code class="language-md">```batch</code></pre> |
+| SQL | <pre><code class="language-md">```sql</code></pre> |
+| XML | <pre><code class="language-md">```xml</code></pre> |
+| YAML | <pre><code class="language-md">```yaml</code></pre> |
+
+> Note: Syntax highlighting for fenced code blocks is available only when using version 3.10 (and later) of *maven-site-plugin*. At the time of writing, the latest version is **3.9.1**.
+
 ### Miscellaneous
 
 * Automatic creation of &lt;a&gt; anchor tags for all headings (HTML5-style, with `id` instead of `name`)
@@ -342,7 +375,7 @@ Typical headers:
 
 ## Bug tracker
 
-[Project in JIRA](http://alpha.internal.sentrysoftware.net/tracker/projects/SMS/)
+[Project in JIRA](http://alpha.internal.sentrysoftware.net/tracker/issues/?jql=project%20%3D%20ALPHA%20AND%20component%20%3D%20%22Maven%20Skin%20Plugin%22)
 
 ## Contributing
 
@@ -350,19 +383,19 @@ Typical headers:
 
 Fork the [git repository](http://alpha.internal.sentrysoftware.net/source/projects/DU/repos/sentry-maven-skin/browse), branch from **develop**, commit and push your changes, and submit pull requests.
 
-**DO NOT SQUASH OR REBASE COMMITS THAT HAVE BEEN PUSHED**
+Repository policy: **DO NOT SQUASH OR REBASE COMMITS THAT HAVE BEEN PUSHED**
 
 ### Structure and technologies
 
 Beware that this project is a baroc mix of languages, frameworks and libraries:
 
 * Java for some *backend* HTML processing
-* Javascript-in-Java with [GraalVM](//www.graalvm.org/reference-manual/js/) for building the index
-* [Velocity](//velocity.apache.org/engine/1.7/user-guide.html) for templating
-* [AngularJS](//angularjs.org/) for front-end logic
+* Javascript-in-Java with [GraalVM](https://www.graalvm.org/reference-manual/js/) for building the index
+* [Velocity](https://velocity.apache.org/engine/1.7/user-guide.html) for templating
+* [AngularJS](https://angularjs.org/) for front-end logic
 * Various HTML, CSS and JS frameworks and libraries (Bootstrap, etc.)
-* [npm](www.npmjs.com/) and [Gulp.js](//gulpjs.com/) to build the front-end
-* [Groovy](//groovy-lang.org/) for validating the integration tests
+* [npm](https:www.npmjs.com/) and [Gulp.js](https://gulpjs.com/) to build the front-end
+* [Groovy](https://groovy-lang.org/) for validating the integration tests
 
 The *Sentry Maven Skin* project is made of 2 modules:
 
@@ -378,7 +411,7 @@ The *Sentry Maven Skin* project is made of 2 modules:
 
 The build is done with Maven with the below command:
 
-```sh
+```bash
 mvn verify
 ```
 
@@ -402,13 +435,25 @@ While modifying the *Sentry Maven Skin*, you will want to see how your changes a
 Conveniently, the project comes with integration tests, i.e. a documentation project that is automatically
 built with the skin as it is in the workspace. The integration test is run with the below command:
 
-```sh
+```bash
 mvn verify
 ```
 
-This command builds the skin and run it against a documentation project. The result can be seen in
-`./sentry-maven-skin/target/it/studio-km/site/*.html`. The output of the build (if it fails or if the integration tests
-fail) is stored in `./sentry-maven-skin/target/it/studio-km/build.log`.
+This command builds the skin and run it against a documentation project. The result can be seen in `./sentry-maven-skin/target/it/studio-km/site/*.html`.
+
+We recommend running [http-server](https://github.com/http-party/http-server#readme) to browse the result. Install with:
+
+```bash
+npm install --global http-server
+```
+
+Launch a Web server with the generated test documentation with:
+
+```bash
+http-server sentry-maven-skin/target/it/studio-km/target/site
+```
+
+In case of a build failure, the output of the build is stored in `./sentry-maven-skin/target/it/studio-km/build.log`.
 
 ### Finalizing a version
 
@@ -418,13 +463,13 @@ To do so, follow Gitflow procedure.
 Note: To update the version number to a non-`SNAPSHOT` version, run the below command from the
 root directory of the *Sentry Maven Skin* project:
 
-```sh
+```bash
 mvn versions:set -DremoveSnapshot=true
 ```
 
 Once validated by the QA team, deploy to the alpha Maven repository from the same root directory with the command below:
 
-```sh
+```bash
 mvn clean deploy
 ```
 
@@ -433,6 +478,6 @@ so that other projects (documentation projects) can consume it.
 
 Then set the version to a new SNAPSHOT version:
 
-```sh
+```bash
 mvn versions:set -DnewVersion=3.1-SNAPSHOT
 ```

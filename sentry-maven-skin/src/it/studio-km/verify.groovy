@@ -97,3 +97,10 @@ def processHtml = new File(basedir, "target/site/basic-monitors/process.html").t
 assert processHtml =~ /\bHome\b/ : "Home must be in the breadcrumb"
 assert processHtml =~ /Using Monitoring Studio/ : "'Using Monitoring Studio' must be in the breadcrumb"
 assert processHtml =~ /Basic Monitors/ : "'Basic Monitors' must be in the breadcrumb"
+
+// Code highlighting
+// Not enabled for basic-monitors/index.html (because there is no code)
+assert !basicHtml.contains("prism.js") : "Page without code must not load prism.js"
+// Enabled for extend-summary.html (because it has code)
+def extendHtml = new File(basedir, "target/site/extend-summary.html").text
+assert extendHtml.contains("prism.js") : "Page with code must load prism.js"

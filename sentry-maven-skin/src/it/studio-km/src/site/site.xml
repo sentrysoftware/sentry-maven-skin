@@ -89,7 +89,8 @@
 				<item name="Studio WMI Query" href="X_WMIQUERY.html" />
 			</item>
 			<item name="PATROL REST API Documentation" href="../swagger-ui/?url=../openapi.yaml"/>
-			<item name="Time/Date Formats for Macros" href="macros.html"/>
+			<item name="Extensions for KM Developers" href="extend-summary.html" />
+			<item name="Time/Date Formats for Macros" href="macros.html" />
 		</menu>
 
 	</body>
