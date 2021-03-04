@@ -518,6 +518,20 @@ nav.left-menu ul li a .badge {
 	font-size: 70%;
 }
 
+/* Left menu collapse animation */
+nav.left-menu .ng-hide-animate:not(.ng-hide) {
+	transform: scaleY(1);
+}
+
+nav.left-menu .ng-hide-animate.ng-hide {
+	transform: scaleY(0);
+}
+
+nav.left-menu .ng-hide-animate {
+	transition: all linear 0.25s;
+	transform-origin: top;
+}
+
 /**
  * Make Bootstrap 3 columns full height using flex
  **/
