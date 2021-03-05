@@ -10,7 +10,7 @@
 
 	<groupId>com.sentrysoftware.doc</groupId>
 	<artifactId>sentry-maven-skin-parent</artifactId>
-	<version>4.0-SNAPSHOT</version>
+	<version>5.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Sentry Maven Skin Parent</name>
