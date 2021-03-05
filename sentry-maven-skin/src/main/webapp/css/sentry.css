@@ -122,63 +122,72 @@ body.sentry-studio .site-banner { background-color: #b071dc; }
 
 .site-banner .navbar-header {
 	text-transform: uppercase;
+	position: relative;
 }
 
-.site-banner .navbar-header .header-title {
-	font-size: 30px;
-}
-
-.site-banner .navbar-header .header-subtitle {
-	font-size: 14px;
-	letter-spacing: 1px;
-	opacity: .8;
+.site-banner .navbar-brand {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	max-width: calc(100vw - 65px);
+	height: unset;
+	position: relative;
 }
 
 .site-banner .navbar-toggle {
 	border-style: none;
+	font-size: 30px;
 }
 
-.site-banner .navbar-toggle > i {
-	background-color: #ffffff;
+.site-banner .navbar-header .header-title {
+	font-size: 30px;
+	line-height: 30px;
+	margin-top: 0;
 }
 
-/**
- * Naviguation bar for mobile devices
- **/
-
-nav.visible-xs.site-banner.navbar p.navbar-brand.header-title {
-	max-width: calc(100vw - 60px);
-	margin-bottom: 0;
-	line-height: 28px;
-	padding-top: 0;
-	padding-bottom: 0;
-	height: unset;
+.site-banner .navbar-header .header-subtitle {
+	font-size: 14px;
+	line-height: 14px;
+	letter-spacing: 1px;
+	opacity: .8;
 }
 
-nav.visible-xs.site-banner.navbar p.navbar-brand.header-title span.header-subtitle {
-	line-height: normal;
+.site-banner .navbar-header .header-xxs {
+	position: absolute;
 }
 
-/**
- * Links in the navbar for small devices
- **/
-
-nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li > a {
-	color: #ffffff;
+.site-banner .navbar-header .header-xxs .header-title {
+	font-size: 14px;
+	line-height: 14px;
+	margin-top: -14px;
 }
 
-nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li.active {
-	background-color: #ffffff;
+.site-banner .navbar-header .header-xxs .header-subtitle {
+	font-size: 10px;
+	line-height: 10px;
 }
 
-nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li.active > a {
-	color: #000000;
+/* Show the "normal" banner when no .show-search-xs */
+.site-banner .navbar-header .navbar-brand {
+	opacity: 1;
+	transition: opacity 0.1s, transform 0.1s;
+	transform-origin: top left;
 }
 
-nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
-	color: #000000;
+/* Hide the "normal" banner when .show-search-xs is set */
+.site-banner .navbar-header.show-search-xs .navbar-brand:not(.header-xxs) {
+	opacity: 0;
+	transform: scale(0.2);
 }
 
+/* Hide the minimized banner when no .show-search-xs */
+.site-banner .navbar-header .navbar-brand.header-xxs {
+	opacity: 0;
+}
+
+/* Show the minimized banner when .show-search-xs is set */
+.site-banner .navbar-header.show-search-xs .navbar-brand.header-xxs {
+	opacity: 1;
+}
 
 /**
  * Search input
@@ -222,33 +231,95 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	font-size: 18px;
 }
 
+.site-search-xs {
+	box-shadow: none;
+	margin-top: 14px;
+	margin-left: 0;
+	margin-right: 0;
+	max-width: calc(100vw - 50px);
+	position: absolute;
+	opacity: 0;
+	transition: opacity 0.1s;
+}
+
+.show-search-xs .site-search-xs {
+	opacity: 1;
+}
+
+.site-search.site-search-xs input.form-control {
+	font-size: 20px;
+}
+
 /**
  * Search Results
  **/
 
-.search-results .progress {
+.search-results .search-results-content .search-results-entry {
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+
+.search-results .search-results-content .search-results-parents {
+	letter-spacing: 1px;
+}
+
+.search-results .search-results-content .search-results-parents .search-results-parents-entry:not(:last-child)::after {
+	content: "/";
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.search-results .search-results-content .search-results-title {
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+
+.search-results .search-results-content.search-results-content-xs .search-results-title {
+	font-size: 15px;
+}
+
+.search-results .search-results-content a {
+	text-decoration: none;
+}
+
+.search-results .search-results-content a:hover {
+	text-decoration: underline;
+}
+
+.search-results .search-results-content.search-results-content-xs a:hover,
+.search-results .search-results-content.search-results-content-xs a:active {
+	text-decoration: none;
+}
+
+.search-results .search-results-content.search-results-content-xs .search-results-parents {
+	color: #aaa;
+}
+
+.search-results .search-results-content i {
+	margin-right: 5px;
+}
+
+.search-results-content .progressbar {
+	width: 50%;
 	height: 3px;
-	margin-top: 5px;
+	background-color: #ccc;
+	margin-bottom: 5px;
 }
 
-.search-results .progress .progress-bar-info {
-	background-color: #0070E0;
+.search-results-content.search-results-content-xs .progressbar {
+	width: 100%;
 }
 
-.visible-xs .search-results .progress {
-	background-color: rgba(255, 255, 255, 0.5);
+.search-results-content .progressbar .bar {
+	background-color: #006ad6;
+	height: 3px;
+	width: 0;
+	max-width: 100%;
+	transition: width 0.5s ease-in-out;
 }
 
-.visible-xs .search-results .progress .progress-bar-info {
-	background-color: #FFFFFF;
-}
-
-.visible-xs .search-results li:hover .progress {
-	background-color: rgba(0, 0, 0, 0.1);
-}
-
-.visible-xs .search-results li:hover .progress .progress-bar-info {
-	background-color: #000000;
+.search-results-content.search-results-content-xs .extract {
+	color: #555555;
 }
 
 .search-results-content mark {
@@ -278,9 +349,6 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	text-decoration: underline;
 }
 
-.main-content a:hover {
-}
-
 .main-content ul ul,
 .main-content ul ol,
 .main-content ol ol,
@@ -297,7 +365,7 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 	font-size: 40px;
 }
 
-.main-content h1:after {
+.main-content h1::after {
 	content: '';
 	display: block;
 	margin-top: 30px;
@@ -379,8 +447,8 @@ nav.visible-xs.site-banner.navbar ul.nav.navbar-nav > li:hover > a {
 
 nav.left-menu {
 	background-color: #383838;
-	border: none !important;
-	padding: 0 !important;
+	border: none;
+	padding: 0;
 }
 
 nav.left-menu h5 {
@@ -390,8 +458,10 @@ nav.left-menu h5 {
 	font-size: 12px;
 	color: #fff;
 	opacity: 0.9;
-	filter: alpha(opacity=90);
-	margin: 20px 0 0 15px !important;
+	margin-top: 20px;
+	margin-left: 15px;
+	margin-bottom: 2px;
+	margin-right: 0;
 	padding: 0;
 }
 
@@ -403,33 +473,63 @@ nav.left-menu > ul > li:first-child {
 	border-top: 1px solid #464646;
 }
 
-nav.left-menu > ul > li {
+nav.left-menu ul > li {
 	margin-top: 0;
 }
 
-nav.left-menu > ul > li > a {
+nav.left-menu ul > li > a {
 	padding-top: 6px;
 	padding-bottom: 6px;
 	font-size: 13px;
 	font-family: 'Lato-Regular', sans-serif;
 	border-bottom: 1px solid #464646;
 	border-radius: 0px;
-	background-color: #343434 !important;
+	background-color: #343434;
 	color: #bbbbbb;
 }
 
-nav.left-menu > ul > li:not(.active) > a:hover {
-	background-color: #404040 !important;
+nav.left-menu ul > li:not(.active) > a:hover {
+	background-color: #404040;
 	color: #ffffff;
 	padding-left: 17px;
 }
 
-nav.left-menu > ul > li.active > a,
-nav.left-menu > ul > li.active > a:hover {
-	background-color: #0070E0 !important;
-	background-image:url(../images/arrow.png);
+nav.left-menu ul > li.active > a,
+nav.left-menu ul > li.active > a:hover {
+	background-color: #0070E0;
+	background-image: url(../images/arrow.png);
 	background-repeat: no-repeat;
 	background-position: right;
+}
+
+nav.left-menu ul ul > li > a {
+	padding-left: 30px;
+}
+
+nav.left-menu ul ul > li:not(.active) > a:hover {
+	padding-left: 32px;
+}
+
+nav.left-menu ul li a i {
+	margin-right: 5px;
+}
+
+nav.left-menu ul li a .badge {
+	font-size: 70%;
+}
+
+/* Left menu collapse animation */
+nav.left-menu .ng-hide-animate:not(.ng-hide) {
+	transform: scaleY(1);
+}
+
+nav.left-menu .ng-hide-animate.ng-hide {
+	transform: scaleY(0);
+}
+
+nav.left-menu .ng-hide-animate {
+	transition: all linear 0.25s;
+	transform-origin: top;
 }
 
 /**
@@ -444,6 +544,46 @@ nav.left-menu > ul > li.active > a:hover {
 .row.display-flex > [class*='col-'] {
 	display: flex;
 	flex-direction: column;
+}
+
+/**
+ * Breadcrumbs
+ **/
+
+.parents ol.breadcrumb > li > a {
+	color: #006ad6;
+	text-decoration: none;
+}
+
+.parents ol.breadcrumb > li > a:hover {
+	text-decoration: underline;
+}
+
+.parents ol.breadcrumb > li > a > i {
+	margin-right: 5px;
+}
+
+.parents-xs ul > a {
+	text-decoration: none;
+}
+
+.parents-xs ul > a > i,
+.parents-xs ul > li > i {
+	margin-right: 5px;
+}
+
+.parents-xs ul > a:hover {
+	color: #006ad6;
+}
+
+.parents-xs ul > a:nth-child(2),
+.parents-xs ul > li:nth-child(2) {
+	padding-left: 30px;
+}
+
+.parents-xs ul > a:nth-child(3),
+.parents-xs ul > li:nth-child(3) {
+	padding-left: 45px;
 }
 
 /**
@@ -480,7 +620,7 @@ nav.left-menu > ul > li.active > a:hover {
 	margin: 5px 0 5px 0;
 }
 
-.toc-side-container .toc > .toc-heading:after {
+.toc-side-container .toc > .toc-heading::after {
 	content: '';
 	display: block;
 	margin: 20px 0;
@@ -551,6 +691,67 @@ nav.left-menu > ul > li.active > a:hover {
 .toc-inline-container ul ul li {
 	margin: 2px 0;
 }
+
+
+/**
+ * Subtopics (and home on XS displays)
+ **/
+
+.subtopics::before,
+.subtopics-xs::before {
+	content: '';
+	display: block;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width: 40px;
+	border-top: 2px solid #444;
+}
+
+.subtopics ul {
+	list-style-type: none;
+	padding-inline-start: 0px;
+}
+
+.subtopics ul > li > a > i {
+	margin-right: 7px;
+}
+
+.subtopics-xs ul > a,
+.home-xs ul > a {
+	text-decoration: none;
+	padding-left: 30px;
+}
+
+.subtopics-xs ul > a:hover,
+.home-xs ul > a:hover {
+	color: #006ad6;
+}
+
+.subtopics-xs ul > a > i,
+.subtopics-xs ul > li > i,
+.home-xs ul > a > i,
+.home-xs ul > li > i {
+	margin-right: 5px;
+}
+
+.subtopics-xs ul > a > i.pull-right,
+.subtopics-xs ul > li > i.pull-right,
+.home-xs ul > a > i.pull-right,
+.home-xs ul > li  > i.pull-right {
+	margin-right: 0;
+	margin-top: 5px;
+	color: initial;
+}
+
+.home-xs::after {
+	content: '';
+	display: block;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width: 40px;
+	border-top: 2px solid #444;
+}
+
 
 
 /**
@@ -752,3 +953,29 @@ zoomable.zoomed img {
 	color: white;
 }
 
+/**
+ * PrismJS customized theme
+ **/
+.language-psl .token.builtin {
+	color: #e8e;
+}
+
+.language-psl .token.symbol {
+	color: #fca;
+}
+
+.language-psl .token.operator {
+	color: deepskyblue;
+}
+
+pre[class*=language-] {
+	background-color: #333;
+}
+
+pre[class*="language-"]::selection,
+code[class*="language-"]::selection,
+pre[class*="language-"] *::selection,
+code[class*="language-"] *::selection {
+	text-shadow: none;
+	background: #666;
+}

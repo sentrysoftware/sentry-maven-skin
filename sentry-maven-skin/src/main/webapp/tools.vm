@@ -34,7 +34,6 @@
 * - href: the URL to link to
 * - name: the text to be displayed
 * - target: the "frame" target of the URL (typically "_blank" for a new tab)
-* - icon: to specify an icon to be displayed on the left of the text
 *
 * The "active" class is automatically put on the <li> element that contains
 * the URL linking to the current page.
@@ -45,25 +44,105 @@
 * <li class="active"><a href="current.html">Current Path</a></li>
 * <li><a href="pretty.html"><i class="fa fa-plus-sign"></i> Pretty</a></li>
 **
-*##macro ( links $links )#*
+*##macro(links $links)#*
 
-	*##foreach ( $item in $links )#*
+	*##foreach($item in $links)#*
 
-		*##set ( $alignedHref = $PathTool.calculateLink( $item.href, $relativePath ) )#*
-		*#<li#*
-			*##if ( $alignedHref == $alignedFileName ) class="active"#end>#*
+		// Calculate how to reach the menu item's link from where we are
+		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+
+		// Check whether this menu item should be set as "active", i.e.
+		// the current page we're rendering matches with this menu item
+		*##set($activeLink = false)#*
+		*##if ($alignedHref == $alignedFileName)#*
+			*##set($activeLink = true)#*
+		*##end#*
+
+		// <li> or <li class="active">
+		*##if ($activeLink)<li class="active">#{else}<li>#end#*
+			// The <a href="..." target="..."> link
 			*#<a #*
-				*##if ( $item.href ) href="$alignedHref"#end#*
-				*##if ( $item.target ) target="$target"#end#*
+				*##if ($item.href)href="$alignedHref"#end#*
+				*##if ($item.target) target="$target"#end#*
 				*#>#*
-				*##if ( $item.icon )<i class="$item.icon"></i> #end#*
 				*#$item.name#*
 			*#</a>#*
 		*#</li>
-	#end#*
+#*
+	*##end#*
 
 *##end#*
 
+
+**
+* leftMenu
+*
+* Recursive macro that creates the left menu with all the links from the menus
+* in site.xml.
+*
+* Must be called for each menu instance in $decoration.body.menus
+*
+* The "active" class is automatically put on the <li> element that contains
+* the URL linking to the current page.
+*
+**
+*##macro(leftMenu $links $closeable)#*
+*#
+<ul class="nav nav-pills nav-stacked animate"#if ($closeable) ng-hide="hideSubItems"#end>
+#*
+*##foreach($item in $links)#*
+
+		// Calculate how to reach the menu item's link from where we are
+		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+
+		// Check whether this menu item should be set as "active", i.e.
+		// the current page we're rendering matches with this menu item...
+		// or matches with any sub menu item
+		*##set($activeLink = false)#*
+		*##set($openLink = false)#*
+		*##if ($alignedHref == $alignedFileName)#*
+			*##set($activeLink = true)#*
+		*##else#*
+			*##foreach($subItem in $item.items)#*
+				*##if ($alignedFileName == $PathTool.calculateLink($subItem.href, $relativePath)) #set($openLink = true)#end#*
+			*##end#*
+		*##end#*
+
+		// <li> or <li class="active">
+		*##if ($activeLink)<li class="active">#{else}<li>#end#*
+			// The <a href="..." target="..."> link
+			*#<a #*
+				*##if ($item.href)href="$alignedHref"#end#*
+				*##if ($item.target) target="$target"#end#*
+				*##if ($activeLink) ng-click="hideSubItems = !hideSubItems"#end#*
+				*#>#*
+				// Icon (different for topics with subtopics)
+				*##if ($item.items.empty)#*
+					*##if ($item.href == "/" || $item.href == "index.html")#*
+						*#<i class="fas fa-home"></i>#*
+					*##else#*
+						*#<i class="fas fa-file-alt"></i>#*
+					*##end#*
+				*##else#*
+					*##if ($openLink || $activeLink)#*
+						*#<i ng-class="hideSubItems ? 'fas fa-folder' : 'fas fa-folder-open'"></i>#*
+					*##else#*
+						*#<i class="fas fa-folder"></i>#*
+					*##end#*
+				*##end#*
+				*# $item.name#*
+				*##if (!$item.items.empty) <span class="badge">$item.items.size()</span>#end#*
+			*#</a>#*
+		*#</li>
+#*
+		// If link is active and has subitems, show them
+		*##if (($openLink || $activeLink) && !$item.items.empty)#leftMenu($item.items, $activeLink)#end
+#*
+	*##end#*
+
+*#</ul>
+#*
+*##end#*
 
 
 /////////////////////////////////////////////////////
@@ -132,7 +211,7 @@
 	*##set($tocElement = $tocElementList.get(0))#*
 	*##set($tocContent = $tocElement.clone().attr("id", "right-toc").outerHtml())#*
 	// Wrap the inline TOC with the necessary HTML
-	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg'>"))#*
+	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg hidden-xs'>"))#*
 	*##call($tocElement.parent().prepend("<div class='toc-heading'>Table of Contents</div>"))#*
 *##else#*
 	*##set($tocContent = "")#*
@@ -164,4 +243,10 @@
 	*##set($generator = "$generator, with $docRenderingContext.generator")#*
 *##end#*
 *##set($headElement = $htmlTool.remove($headElement, "meta[name=generator]"))#*
-*###
+
+// Google Analytics Account ID
+*##set($googleAnalyticsAccountId = $decoration.googleAnalyticsAccountId)#*
+*##if (!$googleAnalyticsAccountId)#*
+	*##set($googleAnalyticsAccountId = "UA-5850468-1")#*
+*##end#*
+*#
