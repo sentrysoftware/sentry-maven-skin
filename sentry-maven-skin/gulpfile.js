@@ -68,8 +68,8 @@ function mini() {
 }
 function siteVm() {
 	return src(DIST + "/*.vm")
-		.pipe(replace(/script src="js/, "script src=\"$relativePath/js"))
-		.pipe(replace(/link rel="stylesheet" href="css/, "link rel=\"stylesheet\" href=\"$relativePath/css"))
+		.pipe(replace(/script src="js/g, "script src=\"$relativePath/js"))
+		.pipe(replace(/link rel="stylesheet" href="css/g, "link rel=\"stylesheet\" href=\"$relativePath/css"))
 		.pipe(dest(DIST + "/META-INF/maven"))
 }
 function removeSiteVm() {

@@ -69,15 +69,21 @@ assert result =~ /Copyright.*20[1-9][0-9]/
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
 assert agentFile.isFile() : "Documents in subdir have been rendered"
 
-def agentContent = agentFile.text
-assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir-thumbnail\\.jpg' : "Thumbnail references work in subdir"
-assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.webp' : "WEBP reference work in subdir"
-assert agentContent =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.png.*width="1723"' : "Image size work in subdir"
+def agentHtml = agentFile.text
+assert agentHtml =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir-thumbnail\\.jpg' : "Thumbnail references work in subdir"
+assert agentHtml =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.webp' : "WEBP reference work in subdir"
+assert agentHtml =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.png.*width="1723"' : "Image size work in subdir"
 
-assert agentContent.contains("<title>Configuring the Agent &ndash; skin-test Extended</title>") : "Document title is set according to source's first heading"
+assert agentHtml.contains("\"../js/") : "Page in subdir must refer to ../js/"
+assert !agentHtml.contains("\"js/") && !agentHtml.contains("\"./js/") : "All references to JS must refer to parent dir"
+
+assert agentHtml.contains("\"../css/") : "Page in subdir must refer to ../css/"
+assert !agentHtml.contains("\"css/") && !agentHtml.contains("\"./css/") : "All references to CSS must refer to parent dir"
+
+assert agentHtml.contains("<title>Configuring the Agent &ndash; skin-test Extended</title>") : "Document title is set according to source's first heading"
 
 // Verify that there is no protocol-relative links left
-assert !(agentContent =~ '"//') : "URLs must not be protocol-relative"
+assert !(agentHtml =~ '"//') : "URLs must not be protocol-relative"
 
 // Verify that index.json contains the proper information
 indexJsonFile = new File(basedir, "target/site/index.json")
