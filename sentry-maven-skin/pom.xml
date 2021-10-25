@@ -148,9 +148,9 @@
 					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
 					<extraArtifacts>
 						<extraArtifact>com.sentrysoftware.maven:patrolreport-maven-plugin:2.0</extraArtifact>
-						<extraArtifact>org.apache.maven.doxia:doxia-core:1.10-SNAPSHOT</extraArtifact>
-						<extraArtifact>org.apache.maven.doxia:doxia-module-xhtml:1.10-SNAPSHOT</extraArtifact>
-						<extraArtifact>org.apache.maven.doxia:doxia-module-markdown:1.10-SNAPSHOT</extraArtifact>
+						<extraArtifact>org.apache.maven.doxia:doxia-core:1.10</extraArtifact>
+						<extraArtifact>org.apache.maven.doxia:doxia-module-xhtml:1.10</extraArtifact>
+						<extraArtifact>org.apache.maven.doxia:doxia-module-markdown:1.10</extraArtifact>
 						<extraArtifact>com.vladsch.flexmark:flexmark-all:0.42.14</extraArtifact>
 					</extraArtifacts>
 					<settingsFile>src/it/settings.xml</settingsFile>
