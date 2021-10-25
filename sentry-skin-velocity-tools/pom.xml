@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.sentrysoftware.doc</groupId>
 		<artifactId>sentry-maven-skin-parent</artifactId>
-		<version>5.0-SNAPSHOT</version>
+		<version>5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
