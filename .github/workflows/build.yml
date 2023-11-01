@@ -1,0 +1,9 @@
+name: Maven Build
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    uses: sentrysoftware/workflows/.github/workflows/maven-build.yml@main
