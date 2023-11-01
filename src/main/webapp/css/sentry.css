@@ -116,9 +116,9 @@
 
 /* Color of the solution */
 body .site-banner { background-color: #3399ff; }
-body.sentry-hardware .site-banner { background-color: #76A600; }
-body.sentry-storage .site-banner { background-color: #db5d18; }
-body.sentry-studio .site-banner { background-color: #b071dc; }
+body.sentry-green .site-banner { background-color: #76A600; }
+body.sentry-orange .site-banner { background-color: #db5d18; }
+body.sentry-purple .site-banner { background-color: #b071dc; }
 
 .site-banner .navbar-header {
 	text-transform: uppercase;

@@ -43,7 +43,7 @@ assert result =~ /(?s)toc-inline-container.*Table of Contents.*ul id="toc"/
 assert result.indexOf('id="right-toc"') > -1 : "A copy of the TOC has been inserted"
 assert result.indexOf('id="toc"') == result.lastIndexOf('id="toc"') : "The ID of the 2nd TOC has been changed (no duplicate with same ID)"
 
-assert result.contains('<body class="sentry-site sentry-studio"')
+assert result.contains('<body class="sentry-site sentry-purple"')
 assert result =~ /(?s)header-title.*skin-test Extended.*header-subtitle.*Version <strong>1.0-SNAPSHOT-test/
 assert result =~ /<h5.*Getting Started/
 assert result =~ /href="console.html".*Operating the Console/
