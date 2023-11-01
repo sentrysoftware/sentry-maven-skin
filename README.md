@@ -373,18 +373,6 @@ Supported languages (or syntax highlighting types) are:
 * Automatic creation of &lt;a&gt; anchor tags for all headings (HTML5-style, with `id` instead of `name`)
 * Bootstrap-styled tables
 
-## Bug tracker
-
-[Project in JIRA](http://alpha.internal.sentrysoftware.net/tracker/issues/?jql=project%20%3D%20ALPHA%20AND%20component%20%3D%20%22Maven%20Skin%20Plugin%22)
-
-## Contributing
-
-### Source code
-
-Fork the [git repository](http://alpha.internal.sentrysoftware.net/source/projects/DU/repos/sentry-maven-skin/browse), branch from **develop**, commit and push your changes, and submit pull requests.
-
-Repository policy: **DO NOT SQUASH OR REBASE COMMITS THAT HAVE BEEN PUSHED**
-
 ### Structure and technologies
 
 Beware that this project is a baroc mix of languages, frameworks and libraries:
