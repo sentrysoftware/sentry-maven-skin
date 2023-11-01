@@ -16,7 +16,7 @@
 		However, because Reflow is no longer maintained, we had to fork the projet and go with our own!
 	</description>
 	<inceptionYear>2017</inceptionYear>
-	<url>https://sentrysoftware.github.io/maven-skin</url>
+	<url>https://sentrysoftware.github.io/sentry-maven-skin</url>
 
 	<organization>
 		<name>Sentry Software</name>
@@ -44,12 +44,12 @@
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/sentrysoftware/maven-skin/issues/</url>
+		<url>https://github.com/sentrysoftware/sentry-maven-skin/issues/</url>
 	</issueManagement>
 
 	<scm>
-		<connection>scm:git:https://github.com/sentrysoftware/maven-skin.git</connection>
-		<url>https://github.com/sentrysoftware/maven-skin</url>
+		<connection>scm:git:https://github.com/sentrysoftware/sentry-maven-skin.git</connection>
+		<url>https://github.com/sentrysoftware/sentry-maven-skin</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -135,6 +135,7 @@
 				<version>4.0.0-M11</version>
 			</plugin>
 
+			<!-- frontend -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
@@ -263,61 +264,16 @@
 				<version>3.3.1</version>
 			</plugin>
 
-			<!-- checkstyle -->
-			<plugin>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.3.1</version>
-				<configuration>
-					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-					<linkXref>true</linkXref>
-					<configLocation>checkstyle.xml</configLocation>
-				</configuration>
-			</plugin>
-
-			<!-- pmd -->
-			<plugin>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.21.0</version>
-				<configuration>
-					<linkXref>true</linkXref>
-					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-					<minimumTokens>50</minimumTokens>
-					<targetJdk>${maven.compiler.target}</targetJdk>
-					<rulesets>
-						<ruleset>pmd.xml</ruleset>
-					</rulesets>
-				</configuration>
-			</plugin>
-
-			<!-- spotbugs -->
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.7.3.6</version>
-			</plugin>
-
 			<!-- changelog -->
 			<plugin>
 				<artifactId>maven-changelog-plugin</artifactId>
 				<version>2.3</version>
 			</plugin>
 
-			<!-- surefire -->
+			<!-- invoker -->
 			<plugin>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>3.2.1</version>
-			</plugin>
-
-			<!-- javadoc -->
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>javadoc</report>
-						</reports>
-					</reportSet>
-				</reportSets>
+				<artifactId>maven-invoker-plugin</artifactId>
+				<version>3.6.0</version>
 			</plugin>
 
 			<!-- Default project-info-reports -->

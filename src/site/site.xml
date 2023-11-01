@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<site name="${project.name}">
+
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>2.0.0-M8</version>
+	</skin>
+
+	<custom>
+		<fluidoSkin>
+			<gitHub>
+				<projectId>sentrysoftware/maven-skin-tools</projectId>
+				<ribbonOrientation>right</ribbonOrientation>
+				<ribbonColor>red</ribbonColor>
+			</gitHub>
+		</fluidoSkin>
+	</custom>
+
+	<bannerLeft name="${project.name}" href="/index.html" />
+
+	<bannerRight href="https://sentrysoftware.com">
+		<image src="images/sentry-logo-179x75px.png" width="179" height="75"/>
+	</bannerRight>
+
+	<publishDate position="right" />
+
+	<body>
+
+		<links>
+		</links>
+
+		<breadcrumbs>
+			<!-- <item name="Home" href="/" /> -->
+		</breadcrumbs>
+
+		<menu name="User Documentation">
+			<item name="Getting Started" href="index.html" />
+			<item name="General Settings" href="settings.html" />
+			<item name="Navigation Links" href="nav-links.html" />
+			<item name="Subtopics" href="subtopics.html" />
+			<item name="Maven Properties" href="maven-properties.html" />
+			<item name="Keywords" href="keywords.html" />
+			<item name="Index and Search" href="search.html" />
+			<item name="Headers (Front Matter)" href="headers.html" />
+			<item name="Automatic ToC" href="toc.html" />
+			<item name="Automatic Title" href="title.html" />
+			<item name="Autozoom Images" href="autozoom.html" />
+			<item name="Conversion to WEBP" href="webp.html" />
+			<item name="Code Syntax Highlighting" href="code.html" />
+			<item name="Miscellaneous" href="misc.html" />
+		</menu>
+
+		<menu ref="reports" />
+	</body>
+
+</site>

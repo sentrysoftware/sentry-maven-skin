@@ -9,7 +9,7 @@
 
 	<custom>
 		<projectVersion>${project.version}-test</projectVersion>
-		<bodyClass>sentry-studio</bodyClass>
+		<bodyClass>sentry-purple</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
 		<publishDate>${timestamp}</publishDate>
 		<noDefaultLinks>true</noDefaultLinks>
