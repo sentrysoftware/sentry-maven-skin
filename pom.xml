@@ -144,7 +144,7 @@
 						</goals>
 						<!-- optional: default phase is "generate-resources" -->
 						<configuration>
-							<nodeVersion>v14.15.3</nodeVersion>
+							<nodeVersion>v20.9.0</nodeVersion>
 						</configuration>
 					</execution>
 
