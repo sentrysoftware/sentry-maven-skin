@@ -9,4 +9,4 @@ jobs:
     uses: sentrysoftware/workflows/.github/workflows/maven-build.yml@main
     with:
       jdkVersion: "17"
-      nodeVersion: "14.x"
+      nodeVersion: "20.x"
