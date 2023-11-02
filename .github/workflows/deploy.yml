@@ -13,5 +13,5 @@ jobs:
     uses: sentrysoftware/workflows/.github/workflows/maven-central-deploy.yml@main
     with:
       jdkVersion: "17"
-      nodeVersion: "14.x"
+      nodeVersion: "20.x"
     secrets: inherit
