@@ -20,7 +20,7 @@
 		"angular-smart-table": "^2.1.11",
 		"bootstrap": "^3.4.0",
 		"elasticlunr": "^0.9.5",
-		"jquery": "^3.5.1",
+		"jquery": "^3.7.1",
 		"mark.js": "^8.11.1",
 		"moment": "^2.29.4",
 		"npm": "^7.3.0",
