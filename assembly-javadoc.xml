@@ -1,5 +1,5 @@
 <assembly>
-	<id>dist-to-jar</id>
+	<id>javadoc</id>
 	<formats>
 		<format>jar</format>
 	</formats>
@@ -7,10 +7,11 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>${project.build.directory}/dist</directory>
+			<directory>${project.basedir}</directory>
 			<outputDirectory>${file.separator}</outputDirectory>
 			<includes>
-				<include>**/*</include>
+				<include>README.md</include>
+				<include>LICENSE</include>
 			</includes>
 		</fileSet>
 	</fileSets>
