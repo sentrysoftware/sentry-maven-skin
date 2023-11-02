@@ -24,4 +24,5 @@ jobs:
       developmentVersion: ${{ inputs.developmentVersion }}
       autoRelease: false
       jdkVersion: "17"
+      nodeVersion: "14.x"
     secrets: inherit
