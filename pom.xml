@@ -7,7 +7,7 @@
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>sentry-maven-skin</artifactId>
 	<version>6.0.00-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
 	<name>Sentry Maven Skin</name>
 	<description>
@@ -74,26 +74,20 @@
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
 		<project.build.outputTimestamp>2023-10-25T22:28:48Z</project.build.outputTimestamp>
 
+		<!-- How to execute the Node.js section -->
+		<!-- On GitHub Actions, we will use the exec-maven-plugin -->
+		<!-- On local dev PC, we will use the frontend-maven-plugin -->
+		<skipFrontendPlugin>false</skipFrontendPlugin>
+		<skipExecPlugin>true</skipExecPlugin>
+
 	</properties>
 
 	<build>
 
+		<sourceDirectory>${project.basedir}/src/main/webapp</sourceDirectory>
+
 		<!-- Actual build plugins -->
 		<plugins>
-
-			<!-- source -->
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 
 			<!-- license -->
 			<plugin>
@@ -157,7 +151,7 @@
 					</execution>
 
 					<!-- generate-resources -->
-					<!-- Run "npm install" -->
+					<!-- Run "npm ci" -->
 					<execution>
 						<id>npm-install</id>
 						<phase>generate-resources</phase>
@@ -165,53 +159,115 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install</arguments>
+							<arguments>ci</arguments>
 						</configuration>
 					</execution>
 
+					<!-- prepare-package -->
+					<!-- Run "gulp" -->
 					<execution>
 						<id>gulp</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>gulp</goal>
 						</goals>
-						<configuration>
-							<!-- <arguments></arguments> -->
-						</configuration>
 					</execution>
 
 				</executions>
 				<configuration>
 					<workingDirectory>${project.basedir}</workingDirectory>
-					<!-- <installDirectory>${project.build.directory}</installDirectory> -->
+					<skip>${skipFrontendPlugin}</skip>
 				</configuration>
 			</plugin>
 
+			<!-- exec -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+
+					<!-- generate-resources -->
+					<!-- Run "npm ci" -->
+					<execution>
+						<id>exec-npm-ci</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<argument>ci</argument>
+							</arguments>
+						</configuration>
+					</execution>
+
+					<!-- prepare-package -->
+					<!-- Run "gulp" -->
+					<execution>
+						<id>gulp</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>gulp</executable>
+						</configuration>
+					</execution>
+
+				</executions>
+				<configuration>
+					<skip>${skipExecPlugin}</skip>
+				</configuration>
+
+			</plugin>
+
+			<!-- source -->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- assembly -->
+			<!-- build a fake javadoc JAR to workaround Maven Central rules -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.6.0</version>
 				<executions>
 
-					<!-- package -->
-					<!-- Build a .jar from the content of target/dist -->
 					<execution>
-						<id>assemblyBeforeMinification</id>
+						<id>javadoc</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<skipAssembly>false</skipAssembly>
 							<descriptors>
-								<descriptor>dist-to-jar.xml</descriptor>
+								<descriptor>assembly-javadoc.xml</descriptor>
 							</descriptors>
 							<attach>true</attach>
-							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 
 				</executions>
+			</plugin>
+
+			<!-- jar -->
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<classesDirectory>${project.build.directory}/dist</classesDirectory>
+				</configuration>
 			</plugin>
 
 			<!--  maven-invoker-plugin -->
@@ -286,6 +342,22 @@
 	</reporting>
 
 	<profiles>
+
+		<!-- Profile for CI (GitHub Actions) -->
+		<!-- We will execute Node.js stuff directly, as we're guaranteed a proper environment -->
+		<!-- This is much faster than installing Node.js with the frontend Maven plugin -->
+		<profile>
+			<id>CI</id>
+			<activation>
+				<property>
+					<name>env.CI</name>
+				</property>
+			</activation>
+			<properties>
+				<skipFrontendPlugin>true</skipFrontendPlugin>
+				<skipExecPlugin>false</skipExecPlugin>
+			</properties>
+		</profile>
 
 		<!-- Profile for releasing the project -->
 		<profile>
