@@ -70,7 +70,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2023-11-02T17:29:26Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2023-11-05T23:36:48Z</project.build.outputTimestamp>
 
 		<!-- How to execute the Node.js section -->
 		<!-- On GitHub Actions, we will use the exec-maven-plugin -->
