@@ -1,10 +1,12 @@
+keywords: pictures, zoom, inline, full size, thumbnail
+
 # Auto-zoom images
 
-By default, all images in the source documents are displayed as a thumbnail, which the reader needs to click on
-to see in real size.
+By default, all images in the source documents are displayed as a thumbnail, which the reader needs to click on to see in real size.
 
-If you want an image to be displayed *as is* (like ones that you would use for a bullet list, etc.),
-you will need to set its `alt` attribute to `inline`.
+![Nice moiré effect](images/zoomable-example.jpg)
+
+If you want an image to be displayed inline *as is*, you will need to set its description to `inline`.
 
 Examples:
 

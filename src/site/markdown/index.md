@@ -1,17 +1,31 @@
 # Getting Started
 
-The *Sentry Maven Skin* is an Apache Maven site skin to generate technical user documentation on Java (Maven) projects, using modern-era development tools (Maven, Markdown), and producing modern-era Web-based documentation:
+The *Sentry Maven Skin* is an [Apache Maven site](https://maven.apache.org/plugins/maven-site-plugin) skin to generate technical user documentation on Java (Maven) projects.
+
+![Sentry Maven Skin used for its own documentation](images/general-screenshot.png)
+
+It leverages a (reasonably) modern Web stack:
 
 * HTML5
 * Bootstrap CSS
+* Mobile-first
 * Search index with AngularJS
 * Image optimization
 * Excellent Lighthouse score
 * and more!
 
+![inline](images/mobile-screenshot.png)
+
+## Prerequisites
+
+The following is absolutely required to use the *Sentry Maven Skin*:
+
+* A properly setup [Maven project](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html)
+* Version 3.x of the [Maven Site plugin](https://maven.apache.org/plugins/maven-site-plugin)
+
 ## Setup of your `site` project
 
-The *Sentry Maven Skin* leverages a Java library that needs to be declared as a dependency when invoking the `maven-site-plugin`. Update you Maven `pom.xml` as below:
+The *Sentry Maven Skin* leverages Sentry's [Skin Tools Java library](https://sentrysoftware.github.io/maven-skin-tools/), that needs to be declared as a dependency when invoking the `maven-site-plugin`. Update you Maven `pom.xml` as below:
 
 ```xml
 <build>
@@ -34,7 +48,7 @@ The *Sentry Maven Skin* leverages a Java library that needs to be declared as a 
 </build>
 ```
 
-Then, specify the *Sentry Maven Skin* artifact in your `./src/site/site.xml` file:
+Then, specify the *Sentry Maven Skin* artifact in your `src/site/site.xml` file:
 
 ```xml
 <project name="${project.name}">
@@ -46,7 +60,7 @@ Then, specify the *Sentry Maven Skin* artifact in your `./src/site/site.xml` fil
   </skin>
 
   <custom>
-    <bodyClass>sentry-studio</bodyClass>
+    <bodyClass>sentry-purple</bodyClass>
     <keywords>keyword1,keyword2</keywords>
     <publishDate>$project.build.outputTimestamp</publishDate>
   </custom>
@@ -75,7 +89,7 @@ Then, specify the *Sentry Maven Skin* artifact in your `./src/site/site.xml` fil
 You're then good to go to build your documentation site:
 
 ```sh
-mvn site
+mvn clean site
 ```
 
-The site is built in `./target/site/*`.
+The site is built in `target/site/*`.
