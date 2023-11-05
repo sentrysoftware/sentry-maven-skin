@@ -979,3 +979,7 @@ code[class*="language-"] *::selection {
 	text-shadow: none;
 	background: #666;
 }
+
+code, pre {
+	white-space: pre-wrap !important;
+}

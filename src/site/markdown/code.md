@@ -1,3 +1,5 @@
+keywords: code, syntax, highlighting, coloring
+
 # Code Syntax Highlighting
 
 Fenced code blocks will be syntax-highlighted using [PrismJS](https://prismjs.com/). The language of the code block must be specified as in the below example:

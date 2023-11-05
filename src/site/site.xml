@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<site name="${project.name}">
+<project name="${project.name}">
 
 	<skin>
-		<groupId>org.apache.maven.skins</groupId>
-		<artifactId>maven-fluido-skin</artifactId>
-		<version>2.0.0-M8</version>
+		<groupId>org.sentrysoftware.maven</groupId>
+		<artifactId>sentry-maven-skin</artifactId>
+		<version>6.0.00</version>
 	</skin>
 
 	<custom>
-		<fluidoSkin>
-			<gitHub>
-				<projectId>sentrysoftware/maven-skin-tools</projectId>
-				<ribbonOrientation>right</ribbonOrientation>
-				<ribbonColor>red</ribbonColor>
-			</gitHub>
-		</fluidoSkin>
+		<noDefaultLinks>true</noDefaultLinks>
+		<keywords>maven,skin</keywords>
 	</custom>
-
-	<bannerLeft name="${project.name}" href="/index.html" />
-
-	<bannerRight href="https://sentrysoftware.com">
-		<image src="images/sentry-logo-179x75px.png" width="179" height="75"/>
-	</bannerRight>
-
-	<publishDate position="right" />
 
 	<body>
 
 		<links>
+			<item name="Fork on GitHub" href="${project.scm.url}" />
+			<item name="Maven Site Plugin" href="https://maven.apache.org/plugins/maven-site-plugin" />
+			<item name="Maven Site Descriptor"
+				href="https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html" />
+			<item name="Other Maven Skins" href="https://maven.apache.org/skins" />
 		</links>
 
 		<breadcrumbs>
@@ -36,9 +28,12 @@
 
 		<menu name="User Documentation">
 			<item name="Getting Started" href="index.html" />
-			<item name="General Settings" href="settings.html" />
+			<item name="General Settings (&lt;code&gt;site.xml&lt;/code&gt;)" href="settings.html" />
+		</menu>
+
+		<menu name="Features">
 			<item name="Navigation Links" href="nav-links.html" />
-			<item name="Subtopics" href="subtopics.html" />
+			<item name="Navigation Menu" href="nav-menu.html" />
 			<item name="Maven Properties" href="maven-properties.html" />
 			<item name="Keywords" href="keywords.html" />
 			<item name="Index and Search" href="search.html" />
@@ -54,4 +49,4 @@
 		<menu ref="reports" />
 	</body>
 
-</site>
+</project>

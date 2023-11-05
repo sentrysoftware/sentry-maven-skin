@@ -4,3 +4,5 @@ All images are automatically converted to the WEBP format. The original format i
 
 * PNG and GIF are converted to *lossless* WEBP
 * other formats are converted to *lossy* WEBP
+
+Also, all links to images are checked: the build will fail if an image referenced in a Markdown document doesn't exist.

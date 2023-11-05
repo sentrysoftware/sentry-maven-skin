@@ -1,5 +1,7 @@
 # Generate a ToC automatically
 
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+
 The *Sentry Maven Skin* now leverages Maven Doxia standard **TOC** macro, which needs to be inserted in Markdown documents as below:
 
 ```html
@@ -10,3 +12,68 @@ More information about [Maven Doxia macros](https://maven.apache.org/doxia/macro
 
 **IMPORTANT**: For the TOC macro to work in the skin, it must specify `id=toc` as in the example above.
 
+And now, some random content, in a nicely structured article, to demonstrate the ToC.
+
+In the world of documentation and information presentation, a well-organized Table of Contents (ToC) can be your key to making complex content more accessible and reader-friendly. In this article, we'll explore the concept of a Table of Contents, why it's essential, and how to create one effectively.
+
+## What is a Table of Contents?
+
+A Table of Contents, often abbreviated as ToC, is an organized list that provides an outline of the sections, chapters, or topics within a document, book, or any lengthy piece of content. It acts as a roadmap for readers, helping them navigate and locate specific information quickly.
+
+## Why a Table of Contents Matters
+
+### 1. Enhanced Readability
+
+A ToC improves the overall readability of your content by breaking it into manageable sections. Readers can jump directly to the section that interests them, making the content more engaging.
+
+### 2. Efficient Navigation
+
+Long documents or books can be daunting to readers. A well-structured Table of Contents allows them to navigate the content efficiently and find what they need without scrolling or flipping through pages.
+
+### 3. Reference Point
+
+A ToC serves as a reference point, making it easy to revisit specific sections or chapters without needing to search through the entire document.
+
+### 4. SEO Benefits
+
+In the online world, a clear and organized Table of Contents can have SEO benefits. Search engines may use it to understand the structure of your content, potentially improving your rankings.
+
+## How to Create an Effective Table of Contents
+
+Creating a Table of Contents is a straightforward process, and it's often done by following these steps:
+
+1. **Structure Your Content**: Organize your content into logical sections, chapters, or topics, and assign headings to them. Markdown uses the `#` symbol for headings, with one `#` for the main title and additional `#` symbols for subsections.
+
+   ```markdown
+   # Introduction
+   ## What is a ToC?
+   ## Why You Need a ToC
+   # Creating a ToC
+   ## Structuring Your Content
+   ## Generating Links
+   ```
+
+2. **Generate Links**: To make your Table of Contents interactive, create links from the ToC entries to the corresponding sections in your content. You can do this by using Markdown's link syntax.
+
+   ```markdown
+   - [Introduction](#introduction)
+   - [Creating a ToC](#creating-a-toc)
+   ```
+
+3. **Insert the ToC**: Place your Table of Contents at the beginning of your document or wherever you find it most suitable.
+
+4. **Update as Needed**: If your content changes or you add new sections, remember to update the Table of Contents to reflect these changes.
+
+## Advanced ToC Techniques
+
+For more advanced usage, you can consider the following:
+
+- **Custom Styling**: Customize the style of your Table of Contents using CSS or Markdown extensions to match your document's design.
+
+- **Depth Control**: Choose how many heading levels to include in your Table of Contents based on the complexity of your content.
+
+- **Ordered vs. Unordered Lists**: Decide whether you want an ordered (numbered) or unordered (bulleted) list format for your ToC.
+
+## Conclusion
+
+A well-crafted Table of Contents is a valuable tool for presenting your content in a clear and user-friendly manner. Whether you're creating a document, a book, a website, or any content with multiple sections, a ToC simplifies navigation and improves the overall reading experience. So, the next time you embark on a content creation journey, remember the power of a well-structured Table of Contents to guide your readers through your material effortlessly.
