@@ -166,6 +166,17 @@
 // Fix all protocol-relative links
 *##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
 
+// Replace old-style icon images (which don't exist in our skin) with corresponding Fontawesome icons
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=close.gif]", '<i class="fa-regular fa-rectangle-xmark"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=collapsed.gif]", '<i class="fa-solid fa-circle-chevron-up"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=expanded.gif]", '<i class="fa-solid fa-circle-chevron-down"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=external.png]", '<i class="fa-solid fa-globe"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_error_sml.gif]", '<i class="fa-solid fa-circle-exclamation text-danger"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_info_sml.gif]", '<i class="fa-solid fa-circle-info text-info"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_success_sml.gif]", '<i class="fa-solid fa-circle-check text-success"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_warning_sml.gif]", '<i class="fa-solid fa-triangle-exclamation text-warning"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=newwindow.gif]", '<i class="fa-solid fa-arrow-up-right-from-square"></i>', -1))#*
+
 // Check all images
 *##set($bodyElement = $imageTool.checkImageLinks($bodyElement, ${project.reporting.outputDirectory}, $currentFileName))#*
 

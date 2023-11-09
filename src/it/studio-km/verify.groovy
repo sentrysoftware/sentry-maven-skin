@@ -26,7 +26,7 @@ assert result =~ /<zoomable.*min-height: *101px;/ : "Zoomable thumbnail height i
 assert result =~ /<zoomable.*max-width: *1895px;/ : "Zoomable max width is the picture width"
 assert result =~ /<zoomable.*max-height: *963px;/ : "Zoomable max height is the picture height"
 
-assert result =~ '<source srcset="(\\./)?images/Events\\.webp" type="image/webp"></source>' : "Images refer to their WEBP version"
+assert result =~ '<source srcset="(\\./)?images/Events\\.webp" type="image/webp">' : "Images refer to their WEBP version"
 
 assert result =~ 'images/Events\\.png".*width="1895"' : "Images have their width set"
 assert result =~ 'images/Events\\.png".*height="963"' : "Images have their height set"
@@ -34,9 +34,9 @@ assert result =~ 'images/Events\\.png".*width: *1895px;' : "Images have their st
 assert result =~ 'images/Events\\.png".*height: *963px;' : "Images have their style set with height"
 
 assert result.contains('<table border="0" class="bodyTable table table-striped table-hover">')
-assert result.contains('<h2 id="Filtering_Events">Filtering Events</h2>')
-assert result.contains('<h2 id="Keyboard_Shortcuts_28special29">Keyboard Shortcuts (special)</h2>')
-assert result.contains('<li><a href="#Keyboard_Shortcuts_28special29" du-smooth-scroll="">Keyboard Shortcuts (special)</a></li>')
+assert result.contains('<h2 id="filtering-events">Filtering Events</h2>')
+assert result.contains('<h2 id="keyboard-shortcuts-28special-29">Keyboard Shortcuts (special)</h2>')
+assert result.contains('<li><a href="#keyboard-shortcuts-28special-29" du-smooth-scroll="">Keyboard Shortcuts (special)</a></li>')
 
 // TOC has been inserted
 assert result =~ /(?s)toc-inline-container.*Table of Contents.*ul id="toc"/
@@ -49,7 +49,7 @@ assert result =~ /<h5.*Getting Started/
 assert result =~ /href="console.html".*Operating the Console/
 assert result =~ /class="active".*href="events.html".*Managing Events/
 assert result =~ /href="subdir\/agent.html".*Configuring the Agent/
-assert result =~ /(?s)<div class="toc">.*<li><a href="#Filtering_Events" du-smooth-scroll="">Filtering Events/
+assert result =~ /(?s)<div class="toc">.*<li><a href="#filtering-events" du-smooth-scroll="">Filtering Events/
 
 // Document's footer
 assert result =~ /Keywords:/ : "Keywords section is present"
@@ -110,3 +110,9 @@ assert !basicHtml.contains("prism.js") : "Page without code must not load prism.
 // Enabled for extend-summary.html (because it has code)
 def extendHtml = new File(basedir, "target/site/extend-summary.html").text
 assert extendHtml.contains("prism.js") : "Page with code must load prism.js"
+
+// Icons
+def iconsHtml = new File(basedir, "target/site/icons.html").text
+assert !iconsHtml.contains("close.gif") : "In icons.html, image close.gif must have been removed"
+assert iconsHtml.contains('<i class="fa-regular fa-rectangle-xmark"></i>') : "In icons.html, the fa-circle-xmark icon must have been inserted"
+assert !iconsHtml.contains("icon_error_sml.gif") : "In icons.html, all instances of images that represent icons must have been removed"
