@@ -65,6 +65,9 @@ assert result =~ /(?s)<footer class="footer">.*skin-test Extended 1.0-SNAPSHOT-t
 assert result =~ /Documentation as of.*1975-03-24 19:30:00/ : "Publish date is derived from site.xml, which uses a pom.xml property"
 assert result =~ /Copyright.*20[1-9][0-9]/
 
+// Rendering time
+assert result =~ /<!-- Rendering time: [0-9.]+ ms -->/
+
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
 assert agentFile.isFile() : "Documents in subdir have been rendered"

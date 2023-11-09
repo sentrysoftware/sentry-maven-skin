@@ -84,7 +84,7 @@
 	height: auto;
 }
 
-.site-logo ul.nav.navbar-nav > li > a:hover{
+.site-logo ul.nav.navbar-nav > li > a:hover {
 	opacity: 1;
 	filter: alpha(opacity=100);
 }
@@ -93,7 +93,7 @@
 	height: 50px;
 	width: 100px;
 	font-size: 0;
-	background-image:url(../images/logo-sentry.png);
+	background-image: url(../images/logo-sentry.png);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center center;

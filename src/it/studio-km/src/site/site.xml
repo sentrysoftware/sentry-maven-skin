@@ -13,6 +13,7 @@
 		<keywords>studio,km,patrol,develop,web</keywords>
 		<publishDate>${timestamp}</publishDate>
 		<noDefaultLinks>true</noDefaultLinks>
+		<showRenderingTime>true</showRenderingTime>
 	</custom>
 
 

@@ -40,7 +40,6 @@ $headElement.html()
 </head>
 
 <body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
-				<!--ZOOMSTOP-->
 #*
 	// Dark desktop header with Sentry's links *#
 	<header role="banner">
@@ -71,7 +70,6 @@ $headElement.html()
 
 			<div class="container-fluid">
 
-				<!--ZOOMRESTART-->
 				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && media == 'xs'}">#*
 
 					// The Search button (only on xs displays) *#
@@ -114,7 +112,6 @@ $headElement.html()
 						/>
 					</form>
 				</div>
-				<!--ZOOMSTOP-->
 #*
 				// Search field on desktop *#
 				<form class="navbar-form navbar-right site-search hidden-xs">
@@ -262,8 +259,7 @@ $headElement.html()
 
 							//
 							// The actual document body (finally!)
-							// *#
-							<!--ZOOMRESTART-->#*
+							//
 							*#$bodyElement.html()
 #*
 							// Subtopics (if any)
@@ -325,7 +321,6 @@ $headElement.html()
 						</div>
 					</div>
 				</div>
-				<!--ZOOMSTOP-->
 
 				<!-- Search results -->
 				<div class="search-results" ng-show="siteSearch">
@@ -487,7 +482,9 @@ angular.module("sentry.site").constant("SITE_MENU", [
 ]);
 
 	</script>
-#set($renderTime = $date.systemTime - $startTime)
-<!-- Generation time: $renderTime ms -->
-</body>
+#if (!($decoration.getCustomValue("showRenderingTime").toLowerCase() == "true"))#*
+	*##set($renderingTime = $date.systemTime - $startTime)
+<!-- Rendering time: $renderingTime ms -->
+#end#*
+*#</body>
 </html>

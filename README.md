@@ -1,6 +1,8 @@
 # Sentry Maven Skin
 
-The *Sentry Maven Skin* is an Apache Maven site skin to be used to generate Sentry's technical user documentation, using modern-era development tools (git, maven, markdown), and producing modern-era Web-based documentation (HTML5, Bootstrap, etc.)
+The [*Sentry Maven Skin*](https://sentrysoftware.github.io/sentry-maven-skin) is an Apache Maven site skin to be used to generate Sentry's technical user documentation, using modern-era development tools (git, maven, markdown), and producing modern-era Web-based documentation (HTML5, Bootstrap, etc.)
+
+To use the *Sentry Maven Skin*, read the [full documentation](https://sentrysoftware.github.io/sentry-maven-skin).
 
 ## Structure and technologies
 
