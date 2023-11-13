@@ -255,9 +255,3 @@
 *##end#*
 *##set($headElement = $htmlTool.remove($headElement, "meta[name=generator]"))#*
 
-// Google Analytics Account ID
-*##set($googleAnalyticsAccountId = $decoration.googleAnalyticsAccountId)#*
-*##if (!$googleAnalyticsAccountId)#*
-	*##set($googleAnalyticsAccountId = "UA-5850468-1")#*
-*##end#*
-*#

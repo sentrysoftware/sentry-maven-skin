@@ -10,6 +10,11 @@
 
 	<description>A full documentation project (copied from Monitoring Studio)</description>
 
+	<organization>
+		<name>The Organization</name>
+		<url>https://the.org</url>
+	</organization>
+
 	<properties>
 		<skinVersion>@project.version@</skinVersion>
 		<timestamp>1975-03-24 19:30:00</timestamp>
@@ -31,7 +36,6 @@
 					<generateProjectInfo>true</generateProjectInfo>
 					<inputEncoding>UTF-8</inputEncoding>
 					<outputEncoding>UTF-8</outputEncoding>
-					<skip>${skipSite}</skip>
 				</configuration>
 				<dependencies>
 					<dependency>

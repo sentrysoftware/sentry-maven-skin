@@ -68,6 +68,22 @@ assert result =~ /Copyright.*20[1-9][0-9]/
 // Rendering time
 assert result =~ /<!-- Rendering time: [0-9.]+ ms -->/
 
+// pom.xml's organization must be listed
+assert result =~ /The Organization/
+assert result =~ /https:\/\/the\.org/
+
+// Google Analytics
+assert result.contains("https://www.googletagmanager.com/gtag/js?id=MY_GOOGLE_ID") : "Specific googleAnalyticsAccountId must be inserted"
+
+// bannerLeft and bannerRight are included
+assert result.contains("Banner Left") : "bannerLeft.name must be included"
+assert result.contains("images/logo-short.png") : "bannerLeft.src must be included"
+assert result.contains('href="https://banner.left"') : "bannerLeft.src must be included"
+
+assert result.contains("Banner Right") : "bannerRight.name must be included"
+assert result.contains("images/logo.png") : "bannerRight.src must be included"
+assert result.contains('href="https://banner.right"') : "bannerRight.src must be included"
+
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
 assert agentFile.isFile() : "Documents in subdir have been rendered"
@@ -119,3 +135,6 @@ def iconsHtml = new File(basedir, "target/site/icons.html").text
 assert !iconsHtml.contains("close.gif") : "In icons.html, image close.gif must have been removed"
 assert iconsHtml.contains('<i class="fa-regular fa-rectangle-xmark"></i>') : "In icons.html, the fa-circle-xmark icon must have been inserted"
 assert !iconsHtml.contains("icon_error_sml.gif") : "In icons.html, all instances of images that represent icons must have been removed"
+
+// Also check that the page doesn't mention Sentry
+assert !iconsHtml.contains("Sentry") : "Sentry must not be mentioned anywhere by the skin itself"
