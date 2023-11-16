@@ -1,10 +1,12 @@
+keywords: option, configuration, config
+description: ${project.name} includes a few specific settings to modify its behavior.
+
 # General Settings in `site.xml`
 
 Like any documentation using Maven Site, the general settings are stored in the [*site descriptor*](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html) (See also [reference for `src/site/site.xml`](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html)).
 
 However, the *Sentry Maven Skin* **does not honor** some of the [documented properties](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html) of `src/site/site.xml`:
 
-* `<bannerLeft>` and `<bannerRight>`
 * `<publishDate>`
 * `<poweredBy>`
 * `<breadcrumbs>`
@@ -12,12 +14,12 @@ However, the *Sentry Maven Skin* **does not honor** some of the [documented prop
 The *Sentry Maven Skin* specific configuration parameters are specified under the `<custom>` tag:
 
 ```xml
-<project name="${project.name}">
+<project name="\${project.name}">
 
 ...
 
   <custom>
-    <publishDate>$timestamp</publishDate>
+    <publishDate>\$timestamp</publishDate>
     <keywords>keyword1, keyword2, ...</keywords>
     <bodyClass>sentry-orange</bodyClass>
   </custom>

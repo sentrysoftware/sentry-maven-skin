@@ -1,3 +1,6 @@
+keywords: elastic, lunr
+description: ${project.name} includes complete search capabilities within the documentation.
+
 # Index and Search
 
 The *Sentry Maven Skin* includes complete search capabilities within the documentation and doesn't rely on external search engines like Google. Readers can search the documentation very easily.

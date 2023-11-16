@@ -1,4 +1,11 @@
+keywords: doxia
+description: ${project.name} is an Apache Maven site skin to generate technical user documentation on Java (Maven) projects.
+
 # Getting Started
+
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+
+## What is ${project.name}?
 
 The *Sentry Maven Skin* is an [Apache Maven site](https://maven.apache.org/plugins/maven-site-plugin) skin to generate technical user documentation on Java (Maven) projects.
 
@@ -25,6 +32,8 @@ The following is absolutely required to use the *Sentry Maven Skin*:
 
 ## Setup of your `site` project
 
+### `pom.xml`
+
 The *Sentry Maven Skin* leverages Sentry's [Skin Tools Java library](https://sentrysoftware.github.io/maven-skin-tools/), that needs to be declared as a dependency when invoking the `maven-site-plugin`. Update you Maven `pom.xml` as below:
 
 ```xml
@@ -48,30 +57,49 @@ The *Sentry Maven Skin* leverages Sentry's [Skin Tools Java library](https://sen
 </build>
 ```
 
+### `site.xml`
+
 Then, specify the *Sentry Maven Skin* artifact in your `src/site/site.xml` file:
 
 ```xml
-<project name="${project.name}">
+<project name="\${project.name}">
 
+  <!-- Use ${project.name} -->
   <skin>
-    <groupId>org.sentrysoftware.maven</groupId>
-    <artifactId>sentry-maven-skin</artifactId>
-    <version>6.0.00</version>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>${project.artifactId}</artifactId>
+    <version>${project.version}</version>
   </skin>
 
+  <!-- ${project.name} specific settings -->
   <custom>
-    <bodyClass>sentry-purple</bodyClass>
-    <keywords>keyword1,keyword2</keywords>
-    <publishDate>$project.build.outputTimestamp</publishDate>
+    <bodyClass>sentry-purple</bodyClass> <!-- banner color -->
+    <keywords>keyword1,keyword2</keywords> <!-- keywords in all pages -->
+    <publishDate>$project.build.outputTimestamp</publishDate> <!-- publish date for reproducible builds -->
   </custom>
+
+  <!-- Top link -->
+  <bannerLeft>
+    <name>\${project.organization.name}</name>
+    <href>\${project.organization.url}</href>
+    <!-- Use <src>images/logo-100x40.png</src> to display a logo, instead of <name> -->
+  </bannerLeft>
 
   <body>
 
+    <!-- Links in the top navigation bar -->
+    <links>
+      <item name="Link 1" href="https://some.url"/>
+      <item name="Another Resource" href="https://other.site"/>
+    </links>
+
+    <!-- Documentation content on the left -->
     <menu name="First Menu Group">
       <item name="Overview" href="index.html"/>
       <item name="Other Page" href="other-page.html"/>
     </menu>
 
+    <!-- 3 levels: menus (groups), items (pages), and sub-items (pages) -->
     <menu name="Second Menu Group">
       <item name="Write a Good Documentation" href="writing.html"/>
       <item name="Using Subdirectories" href="subdir/using.html"/>

@@ -1,4 +1,24 @@
-<!DOCTYPE html><html lang="$locale.language">
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+*#<!DOCTYPE html><html lang="$locale.language">
 #parse("tools.vm")
 
 <head>
@@ -41,7 +61,7 @@ $headElement.html()
 
 <body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
 #*
-	// Dark desktop header with Sentry's links *#
+	// Dark desktop header with the bannerLeft, links, and bannerRight *#
 	<header role="banner">
 #*
 		// Links *#
@@ -426,10 +446,12 @@ $headElement.html()
 		</div>
 
 		<div class="footer-copyright" ng-class="{'text-center': media == 'xs'}">
-			Copyright &copy; $date.get("yyyy") All Rights Reserved by Sentry Software
+			Copyright &copy;#*
+		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
+		*#$date.get("yyyy")#*
+		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
 		</div>
 	</footer>
-
 
 	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
 

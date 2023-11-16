@@ -63,14 +63,12 @@ assert result =~ /Author:.*The &quot;Proud&quot; People/ : "Document's author me
 // Page's footer
 assert result =~ /(?s)<footer class="footer">.*skin-test Extended 1.0-SNAPSHOT-test/
 assert result =~ /Documentation as of.*1975-03-24 19:30:00/ : "Publish date is derived from site.xml, which uses a pom.xml property"
-assert result =~ /Copyright.*20[1-9][0-9]/
+assert result =~ /Copyright.*1975.*20[1-9][0-9]/ : "inceptionYear must be displayed in the copyright"
+assert result =~ /The Organization/ : '${project.organization.name} must be displayed in the footer'
+assert result =~ /https:\/\/the\.org/ : '${project.organization.url} must be displayed in the footer'
 
 // Rendering time
 assert result =~ /<!-- Rendering time: [0-9.]+ ms -->/
-
-// pom.xml's organization must be listed
-assert result =~ /The Organization/
-assert result =~ /https:\/\/the\.org/
 
 // Google Analytics
 assert result.contains("https://www.googletagmanager.com/gtag/js?id=MY_GOOGLE_ID") : "Specific googleAnalyticsAccountId must be inserted"

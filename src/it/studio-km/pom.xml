@@ -10,6 +10,8 @@
 
 	<description>A full documentation project (copied from Monitoring Studio)</description>
 
+	<inceptionYear>1975</inceptionYear>
+
 	<organization>
 		<name>The Organization</name>
 		<url>https://the.org</url>
@@ -18,6 +20,10 @@
 	<properties>
 		<skinVersion>@project.version@</skinVersion>
 		<timestamp>1975-03-24 19:30:00</timestamp>
+
+		<!-- Reproducible Build -->
+		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
+		<project.build.outputTimestamp>2023-11-09T14:52:23Z</project.build.outputTimestamp>
 	</properties>
 
 	<build>

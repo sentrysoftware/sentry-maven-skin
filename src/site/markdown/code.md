@@ -1,4 +1,5 @@
 keywords: code, syntax, highlighting, coloring
+description: ${project.name} includes syntax highlighting for any code block that specifies the language
 
 # Code Syntax Highlighting
 
