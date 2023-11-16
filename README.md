@@ -1,5 +1,10 @@
 # Sentry Maven Skin
 
+![GitHub release (with filter)](https://img.shields.io/github/v/release/sentrysoftware/sentry-maven-skin)
+![Build](https://img.shields.io/github/actions/workflow/status/sentrysoftware/sentry-maven-skin/deploy.yml)
+![GitHub top language](https://img.shields.io/github/languages/top/sentrysoftware/sentry-maven-skin)
+![License](https://img.shields.io/github/license/sentrysoftware/sentry-maven-skin)
+
 The [*Sentry Maven Skin*](https://sentrysoftware.github.io/sentry-maven-skin) is an Apache Maven site skin to be used to generate Sentry's technical user documentation, using modern-era development tools (git, maven, markdown), and producing modern-era Web-based documentation (HTML5, Bootstrap, etc.)
 
 To use the *Sentry Maven Skin*, read the [full documentation](https://sentrysoftware.github.io/sentry-maven-skin).
