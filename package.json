@@ -28,7 +28,7 @@
 		"prismjs": "^1.29.0"
 	},
 	"devDependencies": {
-		"del": "^3.0.0",
+		"del": "^7.1.0",
 		"gulp": "^4.0.0",
 		"gulp-angular-embed-templates": "^2.3.0",
 		"gulp-clean-css": "^4.3.0",
