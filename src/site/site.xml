@@ -32,7 +32,7 @@
 		</menu>
 
 		<menu name="Features">
-			<item name="Navigation Links" href="nav-links.html" />
+			<item name="Top Navigation Links" href="nav-links.html" />
 			<item name="Navigation Menu" href="nav-menu.html" />
 			<item name="Maven Properties" href="maven-properties.html" />
 			<item name="Keywords" href="keywords.html" />

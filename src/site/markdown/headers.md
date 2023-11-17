@@ -1,6 +1,7 @@
 keywords: front matter, frontmatter, title, keywords, description, head, header, meta, metadata
+description: ${project.name} and Maven Site allows writers to specify additional headers, like this very description.
 
-# Additional Document Headers
+# Headers (Front Matter)
 
 Headers can be added to each Markdown document as "front matter" headers, notably to specify the document's title, author and description. These *headers* end up in the [`<head>` section](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/The_head_metadata_in_HTML) of the produced HTML pages. Any custom header can be added using the below syntax in the Markdown source:
 

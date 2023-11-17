@@ -63,7 +63,24 @@ assert result =~ /Author:.*The &quot;Proud&quot; People/ : "Document's author me
 // Page's footer
 assert result =~ /(?s)<footer class="footer">.*skin-test Extended 1.0-SNAPSHOT-test/
 assert result =~ /Documentation as of.*1975-03-24 19:30:00/ : "Publish date is derived from site.xml, which uses a pom.xml property"
-assert result =~ /Copyright.*20[1-9][0-9]/
+assert result =~ /Copyright.*1975.*20[1-9][0-9]/ : "inceptionYear must be displayed in the copyright"
+assert result =~ /The Organization/ : '${project.organization.name} must be displayed in the footer'
+assert result =~ /https:\/\/the\.org/ : '${project.organization.url} must be displayed in the footer'
+
+// Rendering time
+assert result =~ /<!-- Rendering time: [0-9.]+ ms -->/
+
+// Google Analytics
+assert result.contains("https://www.googletagmanager.com/gtag/js?id=MY_GOOGLE_ID") : "Specific googleAnalyticsAccountId must be inserted"
+
+// bannerLeft and bannerRight are included
+assert result.contains("Banner Left") : "bannerLeft.name must be included"
+assert result.contains("images/logo-short.png") : "bannerLeft.src must be included"
+assert result.contains('href="https://banner.left"') : "bannerLeft.src must be included"
+
+assert result.contains("Banner Right") : "bannerRight.name must be included"
+assert result.contains("images/logo.png") : "bannerRight.src must be included"
+assert result.contains('href="https://banner.right"') : "bannerRight.src must be included"
 
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
@@ -116,3 +133,6 @@ def iconsHtml = new File(basedir, "target/site/icons.html").text
 assert !iconsHtml.contains("close.gif") : "In icons.html, image close.gif must have been removed"
 assert iconsHtml.contains('<i class="fa-regular fa-rectangle-xmark"></i>') : "In icons.html, the fa-circle-xmark icon must have been inserted"
 assert !iconsHtml.contains("icon_error_sml.gif") : "In icons.html, all instances of images that represent icons must have been removed"
+
+// Also check that the page doesn't mention Sentry
+assert !iconsHtml.contains("Sentry") : "Sentry must not be mentioned anywhere by the skin itself"

@@ -1,3 +1,6 @@
+keywords: velocity
+description: ${project.name} allows writers to reference Maven pom.xml properties.
+
 # Maven properties (`${property}`)
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->

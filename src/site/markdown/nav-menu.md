@@ -1,3 +1,6 @@
+keywords: toc
+description: ${project.name} presents the documentation menu with 2 levels, allowing proper organization of large documentations.
+
 # Navigation Menu
 
 The navigation menu on the left is specified with [the `<menu>` elements in `src/site/site.xml`](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html#including-generated-content).

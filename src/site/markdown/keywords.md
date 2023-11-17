@@ -1,3 +1,6 @@
+keywords: elastic, lunr
+description: ${project.name} includes a dedicated mechanism for keywords, specified either globally or on each page.
+
 # Keywords
 
 Keywords are listed in the `<head>` section of the HTML pages with `<meta name="keywords">`. While they are no longer used by online search engines like Google or Bing, they are used in the [internal index and search engine](search.html).

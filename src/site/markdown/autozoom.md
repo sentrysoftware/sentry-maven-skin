@@ -1,4 +1,5 @@
 keywords: pictures, zoom, inline, full size, thumbnail
+description: ${project.name} automatically resizes images as thumbnails and allows the viewer to display the full-size image when needed.
 
 # Auto-zoom images
 

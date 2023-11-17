@@ -1,3 +1,6 @@
+title: The Real Title
+description: ${project.name} uses the first heading as the document title by default. This can be customized with the title header.
+
 # Automatic Title
 
 The page title is automatically built from the project name and the first heading found in the document.

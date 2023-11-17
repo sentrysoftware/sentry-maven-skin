@@ -13,33 +13,48 @@
 		<keywords>studio,km,patrol,develop,web</keywords>
 		<publishDate>${timestamp}</publishDate>
 		<noDefaultLinks>true</noDefaultLinks>
+		<showRenderingTime>true</showRenderingTime>
 	</custom>
 
+	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
+
+	<bannerLeft>
+		<name>Banner Left</name>
+		<src>images/logo-short.png</src>
+		<href>https://banner.left</href>
+	</bannerLeft>
+
+	<bannerRight>
+		<name>Banner Right</name>
+		<src>images/logo.png</src>
+		<href>https://banner.right</href>
+	</bannerRight>
 
 	<body>
 
 		<links>
-			<item name="${project.name}" href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+			<item name="${project.name}"
+				href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
 			<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
 		</links>
 
 		<menu name="Getting Started">
-			<item name="Overview" href="index.html"/>
-			<item name="Foreword" href="foreword.html"/>
-			<item name="Installing Monitoring Studio" href="installing-studio.html"/>
+			<item name="Overview" href="index.html" />
+			<item name="Foreword" href="foreword.html" />
+			<item name="Installing Monitoring Studio" href="installing-studio.html" />
 		</menu>
 
 		<menu name="Operating the Web Interface">
-			<item name="Operating the Console" href="console.html"/>
-			<item name="Managing Events" href="events.html"/>
-			<item name="Configuring the Agent" href="subdir/agent.html"/>
-			<item name="Other Tools" href="tools.html"/>
+			<item name="Operating the Console" href="console.html" />
+			<item name="Managing Events" href="events.html" />
+			<item name="Configuring the Agent" href="subdir/agent.html" />
+			<item name="Other Tools" href="tools.html" />
 		</menu>
 
 		<menu name="Using Monitoring Studio">
-			<item name="General Concepts" href="general-concepts.html"/>
-			<item name="Hosts and Templates" href="hosts-templates.html"/>
-			<item name="Configuring Monitoring Studio" href="studio-settings.html"/>
+			<item name="General Concepts" href="general-concepts.html" />
+			<item name="Hosts and Templates" href="hosts-templates.html" />
+			<item name="Configuring Monitoring Studio" href="studio-settings.html" />
 			<item name="Basic Monitors" href="basic-monitors/index.html">
 				<item name="Filesystem" href="basic-monitors/filesystem.html" />
 				<item name="Process" href="basic-monitors/process.html" />
@@ -48,12 +63,12 @@
 				<item name="Windows Performance Counter" href="basic-monitors/windows-perf.html" />
 				<item name="Windows Service" href="basic-monitors/windows-service.html" />
 			</item>
-			<item name="Monitors with Content" href="content-monitors.html"/>
-			<item name="Content Parsing Monitors" href="content-parsing-monitors.html"/>
-			<item name="Dynamic Instances" href="dynamic-instances.html"/>
-			<item name="Alert Messages and Actions" href="alerts.html"/>
-			<item name="TrueSight CMA Policies" href="cma-policies.html"/>
-			<item name="Use Cases" href="use-cases.html"/>
+			<item name="Monitors with Content" href="content-monitors.html" />
+			<item name="Content Parsing Monitors" href="content-parsing-monitors.html" />
+			<item name="Dynamic Instances" href="dynamic-instances.html" />
+			<item name="Alert Messages and Actions" href="alerts.html" />
+			<item name="TrueSight CMA Policies" href="cma-policies.html" />
+			<item name="Use Cases" href="use-cases.html" />
 		</menu>
 
 		<menu name="Appendixes">
@@ -88,10 +103,12 @@
 				<item name="Studio Windows Service" href="	X_WINSERVICE.html" />
 				<item name="Studio WMI Query" href="X_WMIQUERY.html" />
 			</item>
-			<item name="PATROL REST API Documentation" href="../swagger-ui/?url=../openapi.yaml"/>
+			<item name="PATROL REST API Documentation" href="../swagger-ui/?url=../openapi.yaml" />
 			<item name="Extensions for KM Developers" href="extend-summary.html" />
 			<item name="Time/Date Formats for Macros" href="macros.html" />
 		</menu>
+
+		<menu ref="reports" />
 
 	</body>
 </project>

@@ -1,4 +1,24 @@
-<!DOCTYPE html><html lang="$locale.language">
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+*#<!DOCTYPE html><html lang="$locale.language">
 #parse("tools.vm")
 
 <head>
@@ -28,50 +48,68 @@ $headElement.html()
 	<link rel="stylesheet" href="$relativePath/css/site.css">
 #*
 	// Global site tag (gtag.js) - Google Analytics *#
-#if ($googleAnalyticsAccountId)
-	<script async src="https://www.googletagmanager.com/gtag/js?id=$googleAnalyticsAccountId"></script>
+#if ($decoration.googleAnalyticsAccountId)
+	<script async src="https://www.googletagmanager.com/gtag/js?id=$decoration.googleAnalyticsAccountId"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
-		gtag('config', '$googleAnalyticsAccountId');
+		gtag('config', '$decoration.googleAnalyticsAccountId');
 	</script>
 #end
 </head>
 
 <body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
-				<!--ZOOMSTOP-->
 #*
-	// Dark desktop header with Sentry's links *#
+	// Dark desktop header with the bannerLeft, links, and bannerRight *#
 	<header role="banner">
 #*
 		// Links *#
 		<div class="hidden-xs navbar navbar-inverse site-logo">
-			<ul class="nav navbar-nav">
-				<li class="logo"><a href="https://www.sentrysoftware.com" title="Visit Sentry Software's Web site"></a></li>
-#links($decoration.body.links)
-#if (!($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true"))
-				<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
-				<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
-				<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
-				<li><a href="https://www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
-				<li><a href="https://docs.bmc.com" target="_blank">docs.bmc.com</a></li>
+#if ($decoration.bannerLeft.href)
+			<div class="navbar-header">
+				<a class="navbar-brand" href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">#*
+*##if ($decoration.bannerLeft.src)#*
+				*#<img src="$PathTool.calculateLink($decoration.bannerLeft.src, $relativePath)" alt="$!decoration.bannerLeft.alt">#*
+*##end#*
+*##if ($decoration.bannerLeft.name)#*
+	*#$decoration.bannerLeft.name#*
+*##end#*
+			*#</a>
+			</div>
 #end
-			</ul>
-		</div>
-
-		<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
-				<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
+#links($decoration.body.links)
+			</ul>
+#if ($decoration.bannerRight.href)#*
+*#		<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">#*
+*##if ($decoration.bannerRight.src)#*
+					*#<img src="$PathTool.calculateLink($decoration.bannerRight.src, $relativePath)" alt="$!decoration.bannerRight.alt">#*
+*##end#*
+*##if ($decoration.bannerRight.name)#*
+	*#$!decoration.bannerRight.name#*
+*##end#*
+				*#</a>
+				</li>
+			</ul>
+#end#*
+*#	</div>
+
+#if ($decoration.bannerLeft.href)#*
+*#		<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+			<ul class="nav navbar-nav">
+				<li><a href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">$!decoration.bannerLeft.name</a></li>
 			</ul>
 		</div>
-#*
+#end#*
+
 		// Banner *#
 		<div class="navbar site-banner">
 
 			<div class="container-fluid">
 
-				<!--ZOOMRESTART-->
 				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && media == 'xs'}">#*
 
 					// The Search button (only on xs displays) *#
@@ -114,7 +152,6 @@ $headElement.html()
 						/>
 					</form>
 				</div>
-				<!--ZOOMSTOP-->
 #*
 				// Search field on desktop *#
 				<form class="navbar-form navbar-right site-search hidden-xs">
@@ -262,8 +299,7 @@ $headElement.html()
 
 							//
 							// The actual document body (finally!)
-							// *#
-							<!--ZOOMRESTART-->#*
+							//
 							*#$bodyElement.html()
 #*
 							// Subtopics (if any)
@@ -325,7 +361,6 @@ $headElement.html()
 						</div>
 					</div>
 				</div>
-				<!--ZOOMSTOP-->
 
 				<!-- Search results -->
 				<div class="search-results" ng-show="siteSearch">
@@ -400,23 +435,23 @@ $headElement.html()
 		<!-- Mobile only: links -->
 		<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
-				<li><a href="https://www.sentrysoftware.com">Sentry Software</a></li>
-#links($decoration.body.links)
-#if (!($decoration.getCustomValue("noDefaultLinks").toLowerCase() == "true"))#*
-*#			<li><a href="https://www.sentrysoftware.com/support/user-documentation.html">User Documentation</a></li>
-				<li><a href="https://www.sentrysoftware.com/kb/">Knowledge Base</a></li>
-				<li><a href="https://www.sentrysoftware.com/support/patches/">Patches</a></li>
-				<li><a href="https://www.sentrysoftware.com/support/product-lifecycle.html">Product Lifecycle</a></li>
-				<li><a href="https://docs.bmc.com" target="_blank">docs.bmc.com</a></li>
+#if ($decoration.bannerLeft.href && $decoration.bannerLeft.name)#*
+*#			<li><a href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">$!decoration.bannerLeft.name</a></li>
+#end#*
+*##links($decoration.body.links)
+#if ($decoration.bannerRight.href && $decoration.bannerRight.name)#*
+*#			<li><a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">$!decoration.bannerRight.name</a></li>
 #end#*
 *#		</ul>
 		</div>
 
 		<div class="footer-copyright" ng-class="{'text-center': media == 'xs'}">
-			Copyright &copy; $date.get("yyyy") All Rights Reserved by Sentry Software
+			Copyright &copy;#*
+		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
+		*#$date.get("yyyy")#*
+		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
 		</div>
 	</footer>
-
 
 	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
 
@@ -487,7 +522,9 @@ angular.module("sentry.site").constant("SITE_MENU", [
 ]);
 
 	</script>
-#set($renderTime = $date.systemTime - $startTime)
-<!-- Generation time: $renderTime ms -->
-</body>
+#if ($decoration.getCustomValue("showRenderingTime", "false").toLowerCase() == "true")#*
+	*##set($renderingTime = $date.systemTime - $startTime)
+<!-- Rendering time: $renderingTime ms -->
+#end#*
+*#</body>
 </html>
