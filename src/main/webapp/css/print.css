@@ -1,13 +1,31 @@
+/* style sheet for "A4" printing */
+@media print and (width: 21cm) and (height: 29.7cm) {
+	@page {
+		margin: 0.98cm;
+	}
+}
+
+/* style sheet for "letter" printing */
+@media print and (width: 8.5in) and (height: 11in) {
+	@page {
+		margin: 0.4in;
+	}
+}
+
 @media print {
 
-	.navbar,
+	.site-logo-xs,
+	.parents-xs,
+	.home-xs,
+	.subtopics-xs,
 	.breadcrumb,
-	.toc-separator
-	#toc-bar,
-	#toc-sidebar,
-	footer,
-	.subfooter {
+	nav[role="navigation"],
+	footer {
 		display: none !important;
+	}
+
+	.main-content {
+		width: 100% !important;
 	}
 
 	body {
@@ -28,22 +46,25 @@
 	}
 
 	a[href]:after {
-		content: " (" attr(href) ")";
+		content: none !important;
+		padding-left: 0;
+		padding-right: 0;
 	}
 
 	abbr[title]:after {
 		content: " (" attr(title) ")";
 	}
 
-	/*
-	 * Don't show links for images, or javascript/internal links, or header links
-	 */
-
-	header a:after,
-	.ir a:after,
-	a[href^="javascript:"]:after,
-	a[href^="#"]:after {
-		content: "" !important;
+	/* Show zoomable images */
+	zoomable {
+		width: 100%;
+	}
+	zoomable img {
+		opacity: 1;
+	}
+	.zoomable .zoomable-title {
+		opacity: 1;
+		font-size: 100%;
 	}
 
 	pre,
@@ -63,10 +84,6 @@
 
 	img {
 		max-width: 100% !important;
-	}
-
-	@page {
-		margin: 0.5cm;
 	}
 
 	p,

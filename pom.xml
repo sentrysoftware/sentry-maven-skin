@@ -14,7 +14,7 @@
 		However, because Reflow is no longer maintained, we had to fork the projet and go with our own!
 	</description>
 	<inceptionYear>2017</inceptionYear>
-	<url>https://sentrysoftware.github.io/sentry-maven-skin</url>
+	<url>https://sentrysoftware.org/sentry-maven-skin</url>
 
 	<organization>
 		<name>Sentry Software</name>

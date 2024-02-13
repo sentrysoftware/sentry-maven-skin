@@ -218,6 +218,35 @@ limitations under the License.
 	)
 )#*
 
+// Present links as footnotes for printing
+*##set($urlFootnoteMap = {})#*
+*##set($footnoteCounter = 1)#*
+*##set($aLinkList = $bodyElement.select("a[href]"))#*
+*##if($aLinkList && !$aLinkList.isEmpty())#*
+	*##foreach ($aLinkElement in $aLinkList)#*
+		*##set($href = $aLinkElement.attr("href"))#*
+		// For all external links, add the "externalLink" class
+		// An external link is a URL starting with http(s)://, but not the URL to the project or organization
+		// Maven Doxia actually already tries to do that, but it's not perfect
+		// We're "fixing" this here, so remove the externalLink class when the link refers to the project's URL.
+		*##if($href && ($href.startsWith("http://") || $href.startsWith("https://")) && !($project.url && $href.startsWith($project.url)) && !($project.organization.url && $href.startsWith($project.organization.url)))#*
+			*##set($_ = $aLinkElement.addClass("externalLink"))#*
+		*##else#*
+			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
+		*##end#*
+		*##if($href && !$href.startsWith("#") && !$href.startsWith("javascript:"))#*
+			*##if($urlFootnoteMap[$href])#*
+				*##set($footnoteIndex = $urlFootnoteMap[$href])#*
+			*##else#*
+				*##set($footnoteIndex = $footnoteCounter)#*
+				*##set($urlFootnoteMap[$href] = $footnoteIndex)#*
+				*##set($footnoteCounter = $footnoteCounter + 1)#*
+			*##end#*
+			*##set($_ = $aLinkElement.after("<sup class='visible-print-inline'>[$footnoteIndex]</sup>"))#*
+		*##end#*
+	*##end#*
+*##end#*
+
 // Bootstrap CSS class for tables
 *##set($bodyElement = $htmlTool.addClass($bodyElement, "table.bodyTable", ["table", "table-striped", "table-hover"]))#*
 *##set($bodyElement = $htmlTool.fixTableHeads($bodyElement))#*

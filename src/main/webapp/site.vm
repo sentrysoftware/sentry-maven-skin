@@ -206,8 +206,17 @@ $headElement.html()
 						// Main content
 *#					<div class="col-md-12#if ($StringUtils.isNotBlank($tocContent)) col-lg-8 col-lg-pull-4#end">
 #*
-*##if ($alignedFileName != "index.html")#*
-
+						// Site title as a header (for print only)
+*#					<div class="page-header visible-print-block">
+							<h3>#*
+*##if ($decoration.bannerLeft.name)#*
+							*#<small>$decoration.bannerLeft.name</small><br/>#*
+*##end#*
+*#							$project.name $project.version
+							</h3>
+						</div>#*
+*#
+#if ($alignedFileName != "index.html")#*
 							// Breadcrumb to parents (full desktop)
 *#						<div class="parents hidden-xs">
 								<ol class="breadcrumb">
@@ -346,6 +355,18 @@ $headElement.html()
 									*#<span class="label label-default">$keyword</span>
 #*							*##end#*
 								*#</div>
+#*						*##end#*
+
+							// List of links, for print only
+							*##if (!$urlFootnoteMap.isEmpty())#*
+								*#<div class="footnotes visible-print-block">
+								Links:
+								<ul class="list-unstyled">
+								#foreach ($url in $urlFootnoteMap.keySet())#*
+									*#<li>[$urlFootnoteMap[$url]] $url</li>
+								#end#*
+							*#</ul>
+							</div>
 #*						*##end#*
 
 							// Author
