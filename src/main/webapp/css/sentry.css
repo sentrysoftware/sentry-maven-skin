@@ -360,6 +360,18 @@ body.sentry-purple .site-banner { background-color: #b071dc; }
 	text-decoration: underline;
 }
 
+.main-content a.externalLink:after {
+	content: "\f08e";
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	font-size: smaller;
+	display: inline-block;
+	text-decoration: none;
+	padding-left: 3px;
+	padding-right: 2px;
+}
+
 .main-content ul ul,
 .main-content ul ol,
 .main-content ol ol,
