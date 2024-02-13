@@ -11,7 +11,7 @@ All properties defined in `pom.xml` can be referenced in the Markdown source doc
 >
 > This is different from the default behavior of Maven Site and most skins. An extra-processing is performed with the *Sentry Maven Skin* to allow this feature.
 
-Similarly, all properties defined in `site/site.xml` under the `<custom>` tag can also be referenced with the `$decoration.getCustomValue("propertyName")` syntax.
+Similarly, all properties defined in `site/site.xml` under the `<custom>` tag can also be referenced with the `${esc.d}decoration.getCustomValue("propertyName")` syntax.
 
 ## Properties in `pom.xml`
 
@@ -54,10 +54,10 @@ Same principle goes with `src/site/site.xml`, with properties listed under `<cus
 
 ```
 
-In the source documents (`src/site/markdown/*.md`, or others), you can use `$decoration.getCustomValue("productShortName")` and `$decoration.getCustomValue("serviceUrl")`, which will be replaced with with their corresponding value:
+In the source documents (`src/site/markdown/*.md`, or others), you can use `${esc.d}decoration.getCustomValue("productShortName")` and `${esc.d}decoration.getCustomValue("serviceUrl")`, which will be replaced with with their corresponding value:
 
 ```md
-**$decoration.getCustomValue("productShortName")** allows administrators to setup the monitoring of any application through an [API]($decoration.getCustomValue("serviceUrl"))...
+**${esc.d}decoration.getCustomValue("productShortName")** allows administrators to setup the monitoring of any application through an [API](${esc.d}decoration.getCustomValue("serviceUrl"))...
 ```
 
 This will produce the below result:
