@@ -447,6 +447,7 @@ body.sentry-purple .site-banner { background-color: #b071dc; }
 }
 
 .main-content .document-footer .keywords,
+.main-content .document-footer .footnotes,
 .main-content .document-footer .authors,
 .main-content .document-footer .date {
 	margin-bottom: 15px;

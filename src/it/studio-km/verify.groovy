@@ -136,3 +136,12 @@ assert !iconsHtml.contains("icon_error_sml.gif") : "In icons.html, all instances
 
 // Also check that the page doesn't mention Sentry
 assert !iconsHtml.contains("Sentry") : "Sentry must not be mentioned anywhere by the skin itself"
+
+// Links (for printing)
+def linksHtml = new File(basedir, "target/site/links.html").text
+assert linksHtml.contains("[1] index.html") : "Internal links must be listed as footnote"
+assert linksHtml.contains("[2] https://onehome.org") : "External links must be listed as footnote"
+assert linksHtml.contains("[3] https://the.org") : "Organization's URL must be listed as footnote"
+assert !linksHtml.contains("[4]") : "No anchors must be listed as footnote and identical URLs must be listed once"
+assert linksHtml.contains("<a href=\"index.html\">This</a>") : "Internal links don't have the class externalLink"
+assert linksHtml.contains("<a class=\"externalLink\" href=\"https://onehome.org\">") : "External links must have the externalLink class"
