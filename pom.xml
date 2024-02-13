@@ -97,8 +97,10 @@
 					<copyrightOwners>Sentry Software</copyrightOwners>
 					<copyrightStringFormat>Copyright %1$s %2$s</copyrightStringFormat>
 					<includes>
-						<include>main/webapp/**/*.vm</include>
-						<include>main/webapp/**/*.js</include>
+						<include>**/*.vm</include>
+						<include>**/*.js</include>
+						<include>**/*.css</include>
+						<include>**/*.xml</include>
 					</includes>
 					<trimHeaderLine>true</trimHeaderLine>
 					<canUpdateCopyright>true</canUpdateCopyright>
