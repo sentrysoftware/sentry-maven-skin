@@ -27,15 +27,21 @@
 		<version>6.2.00</version>
 	</skin>
 
+	<bannerLeft>
+		<src>images/sentry-logo-114x40-white.png</src>
+		<href>https://sentrysoftware.org</href>
+	</bannerLeft>
+
 	<custom>
 		<noDefaultLinks>true</noDefaultLinks>
 		<keywords>maven,skin</keywords>
+		<bodyClass>sentry-skin</bodyClass>
 	</custom>
 
 	<body>
 
 		<links>
-			<item name="Fork on GitHub" href="${project.scm.url}" />
+			<item name="GitHub Repository" href="${project.scm.url}" />
 			<item name="Maven Site Plugin" href="https://maven.apache.org/plugins/maven-site-plugin" />
 			<item name="Maven Site Descriptor"
 				href="https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html" />
@@ -47,23 +53,24 @@
 		</breadcrumbs>
 
 		<menu name="User Documentation">
-			<item name="Getting Started" href="index.html" />
+			<item name="Home" href="index.html" />
+			<item name="Getting Started" href="start.html" />
 			<item name="General Settings (&lt;code&gt;site.xml&lt;/code&gt;)" href="settings.html" />
-		</menu>
-
-		<menu name="Features">
-			<item name="Top Navigation Links" href="nav-links.html" />
-			<item name="Navigation Menu" href="nav-menu.html" />
-			<item name="Maven Properties" href="maven-properties.html" />
-			<item name="Keywords" href="keywords.html" />
-			<item name="Index and Search" href="search.html" />
-			<item name="Headers (Front Matter)" href="headers.html" />
-			<item name="Automatic ToC" href="toc.html" />
-			<item name="Automatic Title" href="title.html" />
-			<item name="Autozoom Images" href="autozoom.html" />
-			<item name="Conversion to WEBP" href="webp.html" />
-			<item name="Code Syntax Highlighting" href="code.html" />
-			<item name="Miscellaneous" href="misc.html" />
+			<item name="Features" href="features.html">
+				<item name="Top Navigation Links" href="nav-links.html" />
+				<item name="Navigation Menu" href="nav-menu.html" />
+				<item name="Maven Properties" href="maven-properties.html" />
+				<item name="Keywords" href="keywords.html" />
+				<item name="Index and Search" href="search.html" />
+				<item name="Headers (Front Matter)" href="headers.html" />
+				<item name="Automatic ToC" href="toc.html" />
+				<item name="Automatic Title" href="title.html" />
+				<item name="Autozoom Images" href="autozoom.html" />
+				<item name="Conversion to WEBP" href="webp.html" />
+				<item name="Code Syntax Highlighting" href="code.html" />
+				<item name="Printing" href="print.html" />
+				<item name="Miscellaneous" href="misc.html" />
+			</item>
 		</menu>
 
 		<menu ref="reports" />

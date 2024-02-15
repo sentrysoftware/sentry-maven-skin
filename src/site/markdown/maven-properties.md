@@ -9,7 +9,7 @@ All properties defined in `pom.xml` can be referenced in the Markdown source doc
 
 > **Note**
 >
-> This is different from the default behavior of Maven Site and most skins. An extra-processing is performed with the *Sentry Maven Skin* to allow this feature.
+> This is different from the default behavior of Maven Site and most skins. An extra-processing is performed with the **${project.name}** to allow this feature.
 
 Similarly, all properties defined in `site/site.xml` under the `<custom>` tag can also be referenced with the `${esc.d}decoration.getCustomValue("propertyName")` syntax.
 

@@ -67,6 +67,7 @@
 		<project.build.encoding>UTF-8</project.build.encoding>
 		<project.build.sourceEncoding>${project.build.encoding}</project.build.sourceEncoding>
 		<project.build.resourceEncoding>${project.build.encoding}</project.build.resourceEncoding>
+		<project.reporting.outputEncoding>${project.build.encoding}</project.reporting.outputEncoding>
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
