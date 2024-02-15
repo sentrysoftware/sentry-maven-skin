@@ -11,26 +11,142 @@ System.out.println("Hello, World!");
 ```
 ````
 
-Supported languages (or syntax highlighting types) are:
+## Supported languages
 
-| Language | Markdown markup |
-|---|---|
-| Command line | <pre><code class="language-md">```batch</code></pre> |
-| Commands with output | <pre><code class="language-md">```shell-session<br/>$ ls -l test<br/>test: Not found<br/></code></pre> |
-| CSS | <pre><code class="language-md">```css</code></pre> |
-| Dockerfile | <pre><code class="language-md">```docker</code></pre> |
-| HTML | <pre><code class="language-md">```html</code></pre> |
-| JavaScript | <pre><code class="language-md">```js</code></pre> |
-| JSON | <pre><code class="language-md">```json</code></pre> |
-| Markdown | <pre><code class="language-md">```md</code></pre> |
-| PowerShell | <pre><code class="language-md">```ps</code></pre> |
-| PSL | <pre><code class="language-md">```psl</code></pre> |
-| Regular expressions | <pre><code class="language-md">```regex</code></pre> |
-| Shell script (Linux) | <pre><code class="language-md">```bash</code></pre> |
-| Shell script (Windows) | <pre><code class="language-md">```batch</code></pre> |
-| SQL | <pre><code class="language-md">```sql</code></pre> |
-| XML | <pre><code class="language-md">```xml</code></pre> |
-| YAML | <pre><code class="language-md">```yaml</code></pre> |
+### Command lines (Linux)
+
+````md
+```bash
+echo $HOME > /tmp/my-home.txt
+```
+````
+
+### Command lines (Windows)
+
+````md
+```batch
+echo %USERNAME% > username.txt
+```
+````
+
+### Command lines (with output)
+
+````md
+```shell-session
+$ ls -l
+test: Not found
+```
+````
+
+### CSS
+
+````md
+```css
+body.my-theme > a {
+  color: #012345;
+}
+```
+````
+
+### Docker file
+
+````md
+```docker
+FROM ubuntu:22.04
+COPY . /app
+RUN make /app
+CMD python /app/app.py
+```
+````
+
+### HTML
+
+````md
+```html
+<a href="https://onehome.org" title="Moving">OneHome</a>
+```
+````
+
+### JavaScript
+
+````md
+```js
+function printPage() {
+  window.print();
+}
+```
+````
+
+### JSON
+
+````md
+```json
+{
+	"myArray": [3, 1, 4, 1, 5, 2, 9],
+	"other": null
+}
+```
+````
+
+### Markdown
+
+````md
+```md
+This is a **bold** move, [do it!](https://sentrysoftware.org).
+```
+````
+
+### PowerShell
+
+````md
+```ps
+Get-CimInstance -ClassName Win32_OperatingSystem | Invoke-CimMethod -MethodName Shutdown
+```
+````
+
+### PSL
+
+````md
+```psl
+print("home: ".get("/patrolHome")."\n");
+```
+````
+
+### Regular Expressions
+
+````md
+```regex
+[Bb]rainf\*\*k
+```
+````
+
+### SQL
+
+````md
+```sql
+SELECT value FROM table WHERE name="test" -- Testing
+```
+````
+
+### xml
+
+````md
+```xml
+<item name="test">42</item> <!-- Test -->
+```
+````
+
+### YAML
+
+````md
+```yaml
+myArray: [3, 1, 4, 1, 5, 9, 2]
+other:
+  main: null # This is null
+  rest: "nothing"
+```
+````
 
 > **Note:**
+>
 > Syntax highlighting for fenced code blocks is available only when using version 3.10 (and later) of *maven-site-plugin*.
