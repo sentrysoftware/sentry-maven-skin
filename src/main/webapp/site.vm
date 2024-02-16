@@ -179,7 +179,7 @@ $headElement.html()
 			<nav class="left-menu hidden-xs col-sm-4 col-md-3" role="navigation">
 				#foreach ($menu in $decoration.body.menus)
 					<h5 class="text-uppercase">$menu.name</h5>
-#*				*##leftMenu($menu.items)#*
+#*				*##leftMenu($menu.items, false)#*
 				*##end
 			</nav>
 #*
