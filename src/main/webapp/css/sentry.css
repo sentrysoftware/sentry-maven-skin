@@ -170,6 +170,7 @@ body.sentry-purple .site-banner { background-color: #b071dc; }
 
 .site-banner .navbar-header .header-title {
 	font-size: 30px;
+	font-weight: bold;
 	line-height: 30px;
 	margin-top: 0;
 }
