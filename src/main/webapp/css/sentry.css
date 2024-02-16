@@ -541,7 +541,7 @@ nav.left-menu ul > li:not(.active) > a:hover {
 nav.left-menu ul > li.active > a,
 nav.left-menu ul > li.active > a:hover {
 	background-color: #0070E0;
-	background-image: url(../images/arrow.png);
+	background-image: url("data:image/svg+xml,%3Csvg width='13px' height='25px' viewBox='0 0 50 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,50 55,0 55,100' fill='white' stroke='none'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right;
 }
