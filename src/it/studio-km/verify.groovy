@@ -1,5 +1,11 @@
 // Verify that the files have been created properly
-assert new File(basedir, "target/site/index.html").isFile()
+def indexFile = new File(basedir, "target/site/index.html")
+assert indexFile.isFile() : "Documents must have been rendered"
+
+// Verify that the left menu is correct
+def indexHtml = indexFile.text
+assert indexHtml.contains('<li class="active"><a href="index.html"') : "index.html must be listed as an active entry"
+assert indexHtml.indexOf('<li class="active"><a href="index.html"') == indexHtml.lastIndexOf('<li class="active"><a href="index.html"') : "No duplicate of index.html in the left menu"
 
 // Verify that the created HTML files contain the proper information
 String result = new File(basedir, "target/site/events.html").text

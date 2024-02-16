@@ -94,20 +94,30 @@ limitations under the License.
 
 *##end#*
 
-
 **
 * leftMenu
 *
-* Recursive macro that creates the left menu with all the links from the menus
-* in site.xml.
+* Macro that builds the left menu from $decoration.body.menus
 *
-* Must be called for each menu instance in $decoration.body.menus
+**
+*##macro(leftMenu)#*
+	*##set($hrefList = [])#*
+	*##foreach ($menu in $decoration.body.menus)
+		<h5 class="text-uppercase">$menu.name</h5>
+#*	*##leftMenuRecursive($menu.items, false)#*
+	*##end#*
+*##end#*
+
+**
+* leftMenuRecursive
+*
+* Recursive macro that creates the left menu with all the specified links
 *
 * The "active" class is automatically put on the <li> element that contains
 * the URL linking to the current page.
 *
 **
-*##macro(leftMenu $links $closeable)#*
+*##macro(leftMenuRecursive $links $closeable)#*
 *#
 <ul class="nav nav-pills nav-stacked animate"#if ($closeable) ng-hide="hideSubItems"#end>
 #*
@@ -129,36 +139,45 @@ limitations under the License.
 			*##end#*
 		*##end#*
 
+		// Check if this link was already displayed, in which case we dismiss it
+		*##if($hrefList.contains($item.href))#*
+			*##set($skipItem = true)#*
+		*##else#*
+			*##set($skipItem = false)#*
+			*##call($hrefList.add($item.href))#*
+		*##end#*
+
 		// <li> or <li class="active">
-		*##if ($activeLink)<li class="active">#{else}<li>#end#*
-			// The <a href="..." target="..."> link
-			*#<a #*
-				*##if ($item.href)href="$alignedHref"#end#*
-				*##if ($item.target) target="$target"#end#*
-				*##if ($activeLink) ng-click="hideSubItems = !hideSubItems"#end#*
-				*#>#*
-				// Icon (different for topics with subtopics)
-				*##if ($item.items.empty)#*
-					*##if ($item.href == "/" || $item.href == "index.html")#*
-						*#<i class="fas fa-home"></i>#*
+		*##if(!$skipItem || $openLink)#*
+			*##if ($activeLink)<li class="active">#{else}<li>#end#*
+				// The <a href="..." target="..."> link
+				*#<a #*
+					*##if ($item.href)href="$alignedHref"#end#*
+					*##if ($item.target) target="$target"#end#*
+					*##if ($activeLink) ng-click="hideSubItems = !hideSubItems"#end#*
+					*#>#*
+					// Icon (different for topics with subtopics)
+					*##if ($item.items.empty)#*
+						*##if ($item.href == "/" || $item.href == "index.html")#*
+							*#<i class="fas fa-home"></i>#*
+						*##else#*
+							*#<i class="fas fa-file-alt"></i>#*
+						*##end#*
 					*##else#*
-						*#<i class="fas fa-file-alt"></i>#*
+						*##if ($openLink || $activeLink)#*
+							*#<i ng-class="hideSubItems ? 'fas fa-folder' : 'fas fa-folder-open'"></i>#*
+						*##else#*
+							*#<i class="fas fa-folder"></i>#*
+						*##end#*
 					*##end#*
-				*##else#*
-					*##if ($openLink || $activeLink)#*
-						*#<i ng-class="hideSubItems ? 'fas fa-folder' : 'fas fa-folder-open'"></i>#*
-					*##else#*
-						*#<i class="fas fa-folder"></i>#*
-					*##end#*
-				*##end#*
-				*# $item.name#*
-				*##if (!$item.items.empty) <span class="badge">$item.items.size()</span>#end#*
-			*#</a>#*
-		*#</li>
+					*# $item.name#*
+					*##if (!$item.items.empty) <span class="badge">$item.items.size()</span>#end#*
+				*#</a>#*
+			*#</li>
 #*
-		// If link is active and has subitems, show them
-		*##if (($openLink || $activeLink) && !$item.items.empty)#leftMenu($item.items, $activeLink)#end
-#*
+			// If link is active and has subitems, show them
+			*##if (($openLink || $activeLink) && !$item.items.empty)#leftMenuRecursive($item.items, $activeLink)#end
+#*	*##end#*
 	*##end#*
 
 *#</ul>
