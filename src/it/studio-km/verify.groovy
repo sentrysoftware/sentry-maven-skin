@@ -74,13 +74,13 @@ assert result =~ /<!-- Rendering time: [0-9.]+ ms -->/
 assert result.contains("https://www.googletagmanager.com/gtag/js?id=MY_GOOGLE_ID") : "Specific googleAnalyticsAccountId must be inserted"
 
 // bannerLeft and bannerRight are included
-assert result.contains("Banner Left") : "bannerLeft.name must be included"
+assert result.contains('<a href="https://banner.left">Banner Left</a></li>') : "bannerLeft.name must be included only in xs mode"
 assert result.contains("images/logo-short.png") : "bannerLeft.src must be included"
-assert result.contains('href="https://banner.left"') : "bannerLeft.src must be included"
+assert result.contains('href="https://banner.left"') : "bannerLeft.href must be included"
 
-assert result.contains("Banner Right") : "bannerRight.name must be included"
+assert result.contains('<a href="https://banner.right">Banner Right</a></li>') : "bannerRight.name must be included only in xs mode"
 assert result.contains("images/logo.png") : "bannerRight.src must be included"
-assert result.contains('href="https://banner.right"') : "bannerRight.src must be included"
+assert result.contains('href="https://banner.right"') : "bannerRight.href must be included"
 
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")

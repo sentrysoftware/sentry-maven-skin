@@ -71,9 +71,8 @@ $headElement.html()
 				<a class="navbar-brand" href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">#*
 *##if ($decoration.bannerLeft.src)#*
 				*#<img src="$PathTool.calculateLink($decoration.bannerLeft.src, $relativePath)" alt="$!decoration.bannerLeft.alt">#*
-*##end#*
-*##if ($decoration.bannerLeft.name)#*
-	*#$decoration.bannerLeft.name#*
+*##elseif ($decoration.bannerLeft.name)#*
+				*#$decoration.bannerLeft.name#*
 *##end#*
 			*#</a>
 			</div>
@@ -87,8 +86,7 @@ $headElement.html()
 					<a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">#*
 *##if ($decoration.bannerRight.src)#*
 					*#<img src="$PathTool.calculateLink($decoration.bannerRight.src, $relativePath)" alt="$!decoration.bannerRight.alt">#*
-*##end#*
-*##if ($decoration.bannerRight.name)#*
+*##elseif ($decoration.bannerRight.name)#*
 	*#$!decoration.bannerRight.name#*
 *##end#*
 				*#</a>
