@@ -214,10 +214,9 @@ limitations under the License.
 		${project.reporting.outputDirectory},
 		$currentFileName,
 		200, 0,
-		"<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></div>"
+		"<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></zoomable>"
 	)
 )#*
-
 // Present links as footnotes for printing
 *##set($urlFootnoteMap = {})#*
 *##set($footnoteCounter = 1)#*
