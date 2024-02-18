@@ -7,7 +7,6 @@ Like any documentation using Maven Site, the general settings are stored in the 
 
 However, the **${project.name} does not honor** some of the [documented properties](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html) of `src/site/site.xml`:
 
-* `<publishDate>`
 * `<poweredBy>`
 * `<breadcrumbs>`
 
@@ -19,7 +18,6 @@ The **${project.name}** specific configuration parameters are specified under th
 ...
 
   <custom>
-    <publishDate>\$timestamp</publishDate>
     <keywords>keyword1, keyword2, ...</keywords>
     <bodyClass>sentry-orange</bodyClass>
   </custom>
@@ -32,9 +30,8 @@ The **${project.name}** specific configuration parameters are specified under th
 |---|---|---|
 | `<project name="...">` | Title of the documentation <br/>Recommended value: `<project name="\$project.name">` | |
 | `<bodyClass>` | CSS class to be added to the `<body>` element of each page (which will control the color of the title).<br/>Predefined values are: `sentry-purple` (purple), `sentry-green` (green) or `sentry-orange` (orange) | None (blue) |
-| `<publishDate>` | Publish date of the documentation<br/>Recommended value: `${esc.d}project.build.outputTimestamp` (i.e. build time)<br/>Note: The date and time format is free | Current date |
+| `<publishDate>` | Publish date of the documentation<br/>It is recommended to use a static value, or leave empty so the skin will use the build date.<br/>Note: Format should be ISO (e.g. 2024-02-18T19:30:00Z), so the value can be interpreted properly. | `${esc.d}project.build.outputTimestamp` or current date |
 | `<keywords>` | Comma-separated list of keywords that will be added to all pages in this documentation (and merged with the keywords set in each individual page) | |
 | `<projectVersion>` | Version of the documentation (or of the product being documented). Useful to override the version defined in the Maven project. | `\$project.version` |
-| `<showRenderingTime>` | Whether to insert in each generated page the time it took to render the page with the skin. For a reproducible build, leave this to `false`. | `false` |
 
 Values in `src/site/site.xml` can refer to properties defined in `pom.xml`.

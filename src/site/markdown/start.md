@@ -78,7 +78,6 @@ Then, specify the **${project.name}** artifact in your `src/site/site.xml` file:
   <custom>
     <bodyClass>sentry-purple</bodyClass> <!-- banner color -->
     <keywords>keyword1,keyword2</keywords> <!-- keywords in all pages -->
-    <publishDate>$project.build.outputTimestamp</publishDate> <!-- publish date for reproducible builds -->
   </custom>
 
   <!-- Top link -->

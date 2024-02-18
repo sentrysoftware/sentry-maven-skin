@@ -31,9 +31,7 @@
 		<projectVersion>${project.version}-test</projectVersion>
 		<bodyClass>sentry-purple</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
-		<publishDate>${timestamp}</publishDate>
 		<noDefaultLinks>true</noDefaultLinks>
-		<showRenderingTime>true</showRenderingTime>
 	</custom>
 
 	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
