@@ -310,8 +310,16 @@ limitations under the License.
 *##set($bodyText = $htmlTool.text($bodyElement, "body").get(0) )#*
 *##call($indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText))#*
 
-// publishDate: either the one in site.xml, or current date
-*##set($publishDateString = $decoration.getCustomValue("publishDate", $date.get($decoration.publishDate.format)))#*
+// publishDate: either <custom><publishDate> in site.xml,
+// or project.build.outputTimestamp defind in pom.xml, or current date
+*##set($publishDateString = $decoration.getCustomValue("publishDate", $context.get("project.build.outputTimestamp")))#*
+*##if($StringUtils.isBlank($publishDateString))#*
+	*#$log.debug("No publishDate defined under <custom> in site.xml, and no project.build.outputTimestamp in pom.xml.")#*
+	*#$log.debug("Will use current date, so the build is not reproducible.")#*
+	*##set($publishDate = $date.systemDate)#*
+*##else#*
+	*##set($publishDate = $date.toDate($publishDateString))#*
+*##end#*
 
 // generator: who we are and where we come from
 *##set($generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $decoration.skin.artifactId $decoration.skin.version")#*

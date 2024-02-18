@@ -445,7 +445,7 @@ $headElement.html()
 		<p class="footer-title" ng-class="{'text-center': media == 'xs'}">
 			<strong>$decoration.name $decoration.getCustomValue("projectVersion", $project.version)</strong>
 			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
-			Documentation as of <strong>$publishDateString</strong>
+			Documentation as of <strong>$date.format($decoration.publishDate.format, $publishDate)</strong>
 		</p>
 
 		<!-- Mobile only: links -->
@@ -464,7 +464,7 @@ $headElement.html()
 		<div class="footer-copyright" ng-class="{'text-center': media == 'xs'}">
 			Copyright &copy;#*
 		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
-		*#$date.get("yyyy")#*
+		*#$date.getYear($publishDate)#*
 		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
 		</div>
 	</footer>
@@ -538,9 +538,7 @@ angular.module("sentry.site").constant("SITE_MENU", [
 ]);
 
 	</script>
-#if ($decoration.getCustomValue("showRenderingTime", "false").toLowerCase() == "true")#*
-	*##set($renderingTime = $date.systemTime - $startTime)
-<!-- Rendering time: $renderingTime ms -->
-#end#*
+#set($renderingTime = $date.systemTime - $startTime)#*
+*#$log.debug("Rendering time: $renderingTime ms")#*
 *#</body>
 </html>

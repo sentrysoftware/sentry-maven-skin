@@ -37,6 +37,14 @@ This will produce the below result:
 
 > **MetricsHub** allows administrators to setup the monitoring of any application through an [API](https://metricshub.com/api)...
 
+### Dotted properties
+
+If a property name contains dots, it cannot be referred to using the `${esc.d}property.subname` syntax. You will need to use `${esc.d}{context.get("property.name")}` as in the example below:
+
+```md
+This documentation has been generated on ${esc.d}{context.get("project.build.outputTimestamp")}.
+```
+
 ## Properties in `src/site/site.xml`
 
 Same principle goes with `src/site/site.xml`, with properties listed under `<custom>`:
@@ -67,3 +75,7 @@ This will produce the below result:
 > **Note**
 >
 > The syntax to reference values in `pom.xml` looks nicer and easier than the syntax for `src/site/site.xml`. However, it's the latter method that is recommended so that documentation information remains in `src/site/site.xml` rather than spread across several configuration files.
+
+## Other properties
+
+Documents processed with Maven Site can also reference other objects that are defined by the [Doxia SiteTools Site Renderer](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-renderer/). This includes various tools and useful metadata related to the project.
