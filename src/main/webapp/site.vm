@@ -70,7 +70,7 @@ $headElement.html()
 			<div class="navbar-header">
 				<a class="navbar-brand" href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">#*
 *##if ($decoration.bannerLeft.src)#*
-				*#<img src="$PathTool.calculateLink($decoration.bannerLeft.src, $relativePath)" alt="$!decoration.bannerLeft.alt">#*
+				*#<img src="$PathTool.calculateLink($decoration.bannerLeft.src, $relativePath)" #if($decoration.bannerLeft.alt)alt="$!decoration.bannerLeft.alt"#end>#*
 *##elseif ($decoration.bannerLeft.name)#*
 				*#$decoration.bannerLeft.name#*
 *##end#*
@@ -85,7 +85,7 @@ $headElement.html()
 				<li>
 					<a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">#*
 *##if ($decoration.bannerRight.src)#*
-					*#<img src="$PathTool.calculateLink($decoration.bannerRight.src, $relativePath)" alt="$!decoration.bannerRight.alt">#*
+					*#<img src="$PathTool.calculateLink($decoration.bannerRight.src, $relativePath)" #if($decoration.bannerRight.alt)alt="$!decoration.bannerRight.alt"#end>#*
 *##elseif ($decoration.bannerRight.name)#*
 	*#$!decoration.bannerRight.name#*
 *##end#*
@@ -95,14 +95,21 @@ $headElement.html()
 #end#*
 *#	</div>
 
-#if ($decoration.bannerLeft.href)#*
-*#		<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+## On mobile, display the bannerLeft name (if any), and the breadcrumbs at the very top
+#if ($decoration.bannerLeft.href && $decoration.bannerLeft.name)#*
+*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
 				<li><a href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">$!decoration.bannerLeft.name</a></li>
 			</ul>
 		</div>
 #end#*
-
+*##if (($decoration.bannerLeft.href && $decoration.bannerLeft.name) || $decoration.body.breadcrumbs)#*
+*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs breadcrumb-xs">
+			<ul class="nav navbar-nav">
+#links($decoration.body.breadcrumbs)
+			</ul>
+		</div>
+#end#*
 		// Banner *#
 		<div class="navbar site-banner">
 
@@ -115,20 +122,26 @@ $headElement.html()
 						class="navbar-toggle hidden-lg hidden-md hidden-sm"
 						ng-click="showSearchInput = !showSearchInput; clearSearch()"
 						title="{{ showSearchInput ? 'Close the search' : 'Search' }}"
+						type="button"
 					>
 						<i ng-class="showSearchInput ? 'fas fa-times' : 'fa fa-search'"></i>
 					</button>#*
 
 					// The documentation title *#
 					<div class="navbar-brand">
-						<div class="header-title">$decoration.name</div>
+#*				*##if($decoration.body.breadcrumbs && $decoration.body.breadcrumbs.size() > 0)#*
+*#					<ol class="breadcrumb hidden-xs">
+#links($decoration.body.breadcrumbs)
+						</ol>
+#*				*##end#*
+*#					<div class="header-title">$decoration.name</div>
 						<div class="header-subtitle">
 							Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong>
 						</div>
 					</div>#*
 
 					// The documentation title minimized (when search is on, on mobile) *#
-					<div class="navbar-brand header-xxs">
+					<div class="navbar-brand header-xxs visible-xs">
 						<div class="header-title">$decoration.name</div>
 						<div class="header-subtitle">
 							Version <strong>$decoration.getCustomValue("projectVersion", $project.version)</strong>
@@ -441,20 +454,31 @@ $headElement.html()
 
 	<!--Footer in mobile and desktop-->
 	<footer class="footer">
-
+#*
+		// Footer*#
 		<p class="footer-title" ng-class="{'text-center': media == 'xs'}">
 			<strong>$decoration.name $decoration.getCustomValue("projectVersion", $project.version)</strong>
 			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
 			Documentation as of <strong>$date.format($decoration.publishDate.format, $publishDate)</strong>
 		</p>
+#*
+		// Additional links
+*##if($additionalLinks)#* *#
+<div class="hidden-xs navbar navbar-inverse site-logo additional-links">
+		<ul class="nav navbar-nav">
+			#links($additionalLinks)
+		</ul>
+</div>
+#end#*
 
-		<!-- Mobile only: links -->
-		<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+		// Mobile only: links
+*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
 #if ($decoration.bannerLeft.href && $decoration.bannerLeft.name)#*
 *#			<li><a href="$PathTool.calculateLink($decoration.bannerLeft.href, $relativePath)">$!decoration.bannerLeft.name</a></li>
 #end#*
 *##links($decoration.body.links)
+#links($additionalLinks)
 #if ($decoration.bannerRight.href && $decoration.bannerRight.name)#*
 *#			<li><a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">$!decoration.bannerRight.name</a></li>
 #end#*
@@ -462,9 +486,9 @@ $headElement.html()
 		</div>
 
 		<div class="footer-copyright" ng-class="{'text-center': media == 'xs'}">
-			Copyright &copy;#*
+			<span class="copyright">Copyright &copy;#*
 		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
-		*#$date.getYear($publishDate)#*
+		*#$date.getYear($publishDate)</span>#*
 		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
 		</div>
 	</footer>

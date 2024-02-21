@@ -81,9 +81,10 @@ limitations under the License.
 
 		// <li> or <li class="active">
 		*##if ($activeLink)<li class="active">#{else}<li>#end#*
-			// The <a href="..." target="..."> link
+			// The <a href="..." class="externalLink?" target="..."> link
 			*#<a #*
 				*##if ($item.href)href="$alignedHref"#end#*
+				*##if($item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="externalLink"#end#*
 				*##if ($item.target) target="$target"#end#*
 				*#>#*
 				*#$item.name#*
@@ -331,3 +332,14 @@ limitations under the License.
 *##end#*
 *##set($headElement = $htmlTool.remove($headElement, "meta[name=generator]"))#*
 
+// Additional links
+*##set($additionalLinks = [])#*
+*##if($decoration.getCustomChild("additionalLinks"))#*
+	*##foreach($itemXml in $decoration.getCustomChild("additionalLinks").getChildren())#*
+		*##set($item = {})#*
+		*##foreach($itemChild in $itemXml.getChildren())#*
+			*##call($item.put($itemChild.name, $itemChild.value))#*
+		*##end#*
+		*##call($additionalLinks.add($item))#*
+	*##end#*
+*##end
