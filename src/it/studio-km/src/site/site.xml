@@ -31,7 +31,16 @@
 		<projectVersion>${project.version}-test</projectVersion>
 		<bodyClass>sentry-purple</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
-		<noDefaultLinks>true</noDefaultLinks>
+		<additionalLinks>
+			<link>
+				<name>Code of Ethics</name>
+				<href>https://the.org/ethics.html</href>
+			</link>
+			<link>
+				<name>Privacy</name>
+				<href>https://the.org/cookies.html</href>
+			</link>
+		</additionalLinks>
 	</custom>
 
 	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
@@ -51,10 +60,15 @@
 	<body>
 
 		<links>
-			<item name="${project.name}"
-				href="https://www.sentrysoftware.com/products/km-monitoring-studio-x.html" />
+			<item name="Terms of Service" href="https://the.org/legal" />
 			<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
 		</links>
+
+		<breadcrumbs>
+			<item name="Great KMs" href="https://sentrysoftware.com/bmc/products/index.html" />
+			<item name="Application Monitoring" />
+		</breadcrumbs>
+
 
 		<menu name="Getting Started">
 			<item name="Overview" href="index.html" />

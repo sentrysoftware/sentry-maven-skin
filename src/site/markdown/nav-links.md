@@ -37,7 +37,7 @@ If you don't have any logo to display, simply use the `<name>` property to speci
 
 ## `<links>`
 
-In `src/site/site.xml`, use the `<links>` tag under `<body>` to specify additional links in the navigation bar. Specify each link as an [`<item>` element](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html#item):
+In `src/site/site.xml`, use the `<links>` tag under `<body>` to specify links in the top navigation bar. Specify each link as an [`<item>` element](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html#item):
 
 ```xml
 <project name="My Documentation">
@@ -57,3 +57,30 @@ In `src/site/site.xml`, use the `<links>` tag under `<body>` to specify addition
 ## `<bannerRight>`
 
 Very similar to `<bannerLeft>`, this element will be displayed on the right of the navigation bar. You can specify either `<src>`, `<name>`, or both.
+
+## `<additionalLinks>`
+
+In `src/site/site.xml`, use the `<additionalLinks>` tag under `<custom>` to specify additional links in the footer of the page. Such additional links are typically used for mandatory legal documents, like terms of use, disclaimer, privacy policy, etc.
+
+Specify each link as a `<link>` element, as in the example below:
+
+```xml
+<project name="My Documentation">
+
+  ...
+
+  <custom>
+    <additionalLinks>
+      <link>
+        <name>My Link Text</name>
+        <href>https://w3c.org</href>
+        <target>_blank</href>
+      </link>
+      <link>
+        <name>Another Useful Link</name>
+        <href>https://onehome.org</href>
+      </link>
+    </additionalLinks>
+  </custom>
+
+```

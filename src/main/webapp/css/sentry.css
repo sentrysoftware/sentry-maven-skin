@@ -76,6 +76,17 @@
 	min-height: 0;
 }
 
+.site-logo.additional-links {
+	padding-left: 0;
+	padding-right: 0;
+	margin-left: -10px;
+}
+
+/* Breadcrumbs in mobile mode */
+.site-logo.site-logo-xs.breadcrumb-xs {
+	background-color: #555;
+}
+
 .site-logo.site-logo-xs ul.nav.navbar-nav {
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -87,7 +98,7 @@
 	letter-spacing: 1px;
 	font-weight: 400;
 	text-transform: uppercase;
-	font-size: 10px;
+	font-size: 11px;
 	color: #fff;
 	opacity: .6;
 	filter: alpha(opacity=50);
@@ -117,15 +128,17 @@
 	padding-top: 5px;
 	padding-bottom: 5px;
 	line-height: 40px;
-	margin-right: 15px;
 	font-size: 13px;
+}
+
+.site-logo ul.nav.navbar-nav.navbar-right > li > a {
+	margin-right: 15px;
 }
 
 .site-logo .navbar-header > a.navbar-brand > img,
 .site-logo ul.nav.navbar-nav.navbar-right > li > a > img {
 	max-height: 40px;
 	display: inline;
-	margin-right: 10px;
 	vertical-align: top;
 }
 
@@ -182,6 +195,43 @@ body.sentry-purple .site-banner { background-color: #b071dc; }
 	opacity: .8;
 }
 
+/* Breadcrumbs above the main banner */
+.site-banner ol.breadcrumb {
+	margin-top: -10px;
+	margin-bottom: -3px;
+	padding: 0;
+	background-color: inherit;
+	margin-bottom: 0;
+	border: none;
+	font-family: 'Lato-Regular';
+	font-size: 13px;
+	text-transform: none;
+}
+
+.site-banner ol.breadcrumb > li:not(:has(a)),
+.site-banner ol.breadcrumb > li > a:not([href]),
+.site-banner ol.breadcrumb > li > a:hover:not([href]) {
+	cursor: default;
+	opacity: 0.8;
+}
+
+.site-banner ol.breadcrumb > li+li:before {
+	opacity: 0.8;
+}
+
+.site-banner ol.breadcrumb > li > a {
+	color: white;
+	text-decoration: none;
+	opacity: 0.8;
+	transition: .2s ease-in-out;
+}
+
+.site-banner ol.breadcrumb > li > a:hover {
+	text-decoration: none;
+	opacity: 1;
+}
+
+/* The reduced title for xs displays when showing search results */
 .site-banner .navbar-header .header-xxs {
 	position: absolute;
 }
@@ -375,12 +425,20 @@ body.sentry-purple .site-banner { background-color: #b071dc; }
 	line-height: 1.5;
 }
 
+/* For small devices, use smaller margins */
+@media only screen and (max-width: 575.98px) {
+	.main-content {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
 .main-content a {
 	color: #0070E0;
 	text-decoration: underline;
 }
 
-.main-content a.externalLink:after {
+a.externalLink:after {
 	content: "\f08e";
 	font-family: FontAwesome;
 	font-weight: normal;
@@ -805,7 +863,10 @@ nav.left-menu .ng-hide-animate {
 .footer {
 	background-color: #343434;
 	color: #fff;
-	padding: 15px;
+	padding-top: 50px;
+	padding-bottom: 30px;
+	padding-left: 100px;
+	padding-right: 15px;;
 }
 
 .footer > .footer-title {
@@ -818,13 +879,26 @@ nav.left-menu .ng-hide-animate {
 }
 
 .footer > .footer-copyright {
-	font-family: 'Lato-Regular', sans-serif;
-	font-size: 10px;
+	font-family: 'Raleway-Regular', sans-serif;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	font-size: 11px;
+}
+
+.footer > .footer-copyright > .copyright {
 	opacity: .62;
 }
 
 .footer > .footer-copyright a {
 	color: #fff;
+	opacity: .62;
+	transition: .2s ease-in-out;
+	text-decoration: none;
+}
+
+.footer > .footer-copyright a:hover {
+	opacity: 1;
+	text-decoration: none;
 }
 
 /**

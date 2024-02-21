@@ -10,7 +10,7 @@ The **${project.name}** is an [Apache Maven site](https://maven.apache.org/plugi
 It leverages a (reasonably) modern Web stack:
 
 * HTML5
-* Bootstrap CSS
+* Bootstrap 3 CSS
 * Mobile-first
 * Nice rendering for print
 * Search index with AngularJS

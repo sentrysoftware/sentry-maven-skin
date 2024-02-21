@@ -78,6 +78,12 @@ Then, specify the **${project.name}** artifact in your `src/site/site.xml` file:
   <custom>
     <bodyClass>sentry-purple</bodyClass> <!-- banner color -->
     <keywords>keyword1,keyword2</keywords> <!-- keywords in all pages -->
+      <additionalLinks> <!-- additional links in the footer -->
+        <link>
+          <name>Code of Ethics</name>
+          <href>ethics.html</href>
+        </link>
+    </additionalLinks>
   </custom>
 
   <!-- Top link -->
@@ -150,7 +156,7 @@ body.my-theme .badge {
 }
 ```
 
-We recommend using the [`<bodyClass>` setting in `site.xml`](settings.html) to specify a class to the body element, so that you can reference it in `site.css`. In the above example, you would set `bodyClass` to `my-theme`.
+We recommend using the [`<bodyClass>` setting in `site.xml`](settings.html) to specify a class to the body element, so that you can reference it in `site.css`. In the above example, you would specify `<bodyClass>my-theme</bodyClass>`.
 
 ### Generating the documentation site
 
@@ -161,3 +167,17 @@ mvn clean site
 ```
 
 The site is built in `target/site/*`.
+
+### Live rendering
+
+Additionally, you can build the site *live* and make it available on a local Web server with the below command:
+
+```bash
+mvn site:run
+```
+
+This command spawns a Web server with the content of your documentation site. Each page is rendered *live* when you request it in your browser, so changes in your Markdown are taken into account immediately. This is particularly useful when you write your documentation and needs to see how it looks very quickly.
+
+> **Note**
+>
+> Only the changes in your documentation sources (e.g. the Markdown `*.md` files) are taken into account. Changes in `site.xml` or `pom.xml` require to restart `mvn site:run`.
