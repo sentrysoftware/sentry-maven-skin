@@ -41,6 +41,16 @@
 				<href>https://the.org/cookies.html</href>
 			</link>
 		</additionalLinks>
+		<social>
+			<twitter>TheASF</twitter>
+			<facebook>ApacheSoftwareFoundation</facebook>
+			<linkedin>the-apache-software-foundation</linkedin>
+			<custom>
+				<title>Join us on Slack!</title>
+				<href>https://infra.apache.org/slack.html</href>
+				<icon>fa-brands fa-slack</icon>
+			</custom>
+		</social>
 	</custom>
 
 	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>

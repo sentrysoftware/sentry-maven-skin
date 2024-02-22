@@ -342,4 +342,36 @@ limitations under the License.
 		*##end#*
 		*##call($additionalLinks.add($item))#*
 	*##end#*
+*##end#*
+
+// Build the links to social networks
+*##set($socialLinks = [])#*
+*##if($decoration.getCustomChild("social"))#*
+	*##foreach($itemXml in $decoration.getCustomChild("social").getChildren())#*
+		*##set($item = {})#*
+		*##if($itemXml.name == "facebook")#*
+			*##call($socialLinks.add({"href": "https://www.facebook.com/$itemXml.value", "icon": "fa-brands fa-facebook-f", "title": "Follow $itemXml.value on Facebook"}))#*
+		*##elseif($itemXml.name == "linkedin")#*
+			*##if($itemXml.value.startsWith("in/"))#*
+				*##set($linkedInAccount = $itemXml.value)#*
+				*##set($linkedInTitle = "Connect with $linkedInAccount.substring(3)")#*
+			*##elseif($itemXml.value.startsWith("company/"))#*
+				*##set($linkedInAccount = $itemXml.value)#*
+				*##set($linkedInTitle = "Follow $linkedInAccount.substring(8)")#*
+			*##else#*
+				*##set($linkedInAccount = "company/$itemXml.value")#*
+				*##set($linkedInTitle = "Follow $itemXml.value")#*
+			*##end#*
+			*##call($socialLinks.add({"href": "https://www.linkedin.com/$linkedInAccount", "icon": "fa-brands fa-linkedin", "title": "$linkedInTitle on LinkedIn"}))#*
+		*##elseif($itemXml.name == "twitter")#*
+			*##call($socialLinks.add({"href": "https://twitter.com/$itemXml.value", "icon": "fa-brands fa-x-twitter", "title": "Follow @$itemXml.value on X (Twitter)"}))#*
+		*##elseif($itemXml.name == "custom")#*
+			*##if($itemXml.getChild("href")) #set($socialCustomHref = $itemXml.getChild("href").value)#else#set($socialCustomHref = "")#end#*
+			*##if($itemXml.getChild("icon")) #set($socialCustomIcon = $itemXml.getChild("icon").value)#else#set($socialCustomIcon = "")#end#*
+			*##if($itemXml.getChild("title")) #set($socialCustomTitle = $itemXml.getChild("title").value)#else#set($socialCustomTitle = "")#end#*
+			*##call($socialLinks.add({"href": $socialCustomHref, "icon": $socialCustomIcon, "title": $socialCustomTitle}))#*
+		*##else#*
+			*#$log.debug("Unknown social network <$itemXml.name> under <custom><social> in site descriptor")#*
+		*##end#*
+	*##end#*
 *##end

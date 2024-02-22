@@ -54,6 +54,46 @@ In `src/site/site.xml`, use the `<links>` tag under `<body>` to specify links in
     </links>
 ```
 
+## `<social>`
+
+You can specify one or several social networks to link to in the top navigation bar, so your readers can subscribe easily. In `src/site/site.xml`, use the `<social>` element under `<custom>` to list your social networks:
+
+<table>
+<tr><th>Social network</th><th>Configuration</th></tr>
+<tr><td>Facebook</td><td><code>&lt;facebook>YourAccount&lt;/facebook></code></td></tr>
+<tr><td>LinkedIn</td><td>
+  <code>&lt;linkedin>in/YourAccount&lt;/linkedin></code> for a personnal account<br/>
+  <code>&lt;linkedin>company/YourAccount&lt;/linkedin></code> for an organization
+</td></tr>
+<tr><td>Twitter</td><td><code>&lt;twitter>YourHandle&lt;/twitter></code></td></tr>
+<tr><td>Other</td><td><pre><code class="language-xml">&lt;custom>
+  &lt;icon>fontawesome-icon-class&lt;/icon>
+  &lt;title>Description of the link&lt;/title>
+  &lt;href>https://my-network.net/me&lt;/href>
+&lt;/custom>
+</code></pre></td></tr>
+</table>
+
+The below example declares 2 social networks in `src/site/site.xml` to be included in the top navigation bar, Twitter and Slack:
+
+```xml
+<project name="My Documentation">
+
+  ...
+
+  <custom>
+    <social>
+      <twitter>TheASF</twitter>
+      <custom>
+        <title>Join us on Slack!</title>
+        <href>https://infra.apache.org/slack.html</href>
+        <icon>fa-brands fa-slack</icon>
+      </custom>
+    </social>
+    ...
+  </custom>
+```
+
 ## `<bannerRight>`
 
 Very similar to `<bannerLeft>`, this element will be displayed on the right of the navigation bar. You can specify either `<src>`, `<name>`, or both.
@@ -81,6 +121,6 @@ Specify each link as a `<link>` element, as in the example below:
         <href>https://onehome.org</href>
       </link>
     </additionalLinks>
+    ...
   </custom>
-
 ```

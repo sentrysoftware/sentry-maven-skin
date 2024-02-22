@@ -84,6 +84,9 @@ Then, specify the **${project.name}** artifact in your `src/site/site.xml` file:
           <href>ethics.html</href>
         </link>
     </additionalLinks>
+    <social>
+      <linkedin>company/microsoft</linkedin>
+    </social>
   </custom>
 
   <!-- Top link -->

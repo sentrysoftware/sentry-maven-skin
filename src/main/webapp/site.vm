@@ -80,18 +80,23 @@ $headElement.html()
 			<ul class="nav navbar-nav">
 #links($decoration.body.links)
 			</ul>
-#if ($decoration.bannerRight.href)#*
+#if ($decoration.bannerRight.href || $socialLinks)#*
 *#		<ul class="nav navbar-nav navbar-right">
-				<li>
+#foreach($socialLink in $socialLinks)#*
+*#			<li><a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a></li>
+#end#*
+	*##if ($decoration.bannerRight.href)#*
+*#			<li>
 					<a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">#*
-*##if ($decoration.bannerRight.src)#*
+		*##if ($decoration.bannerRight.src)#*
 					*#<img src="$PathTool.calculateLink($decoration.bannerRight.src, $relativePath)" #if($decoration.bannerRight.alt)alt="$!decoration.bannerRight.alt"#end>#*
-*##elseif ($decoration.bannerRight.name)#*
+		*##elseif ($decoration.bannerRight.name)#*
 	*#$!decoration.bannerRight.name#*
-*##end#*
+		*##end#*
 				*#</a>
 				</li>
-			</ul>
+		#end#*
+*#		</ul>
 #end#*
 *#	</div>
 
@@ -479,7 +484,14 @@ $headElement.html()
 #end#*
 *##links($decoration.body.links)
 #links($additionalLinks)
-#if ($decoration.bannerRight.href && $decoration.bannerRight.name)#*
+#if($socialLinks)#*
+*#<li class="icons">#*
+*##foreach($socialLink in $socialLinks)#*
+	*#<a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a>
+#end#*
+*#</li>
+#end#*
+*##if ($decoration.bannerRight.href && $decoration.bannerRight.name)#*
 *#			<li><a href="$PathTool.calculateLink($decoration.bannerRight.href, $relativePath)">$!decoration.bannerRight.name</a></li>
 #end#*
 *#		</ul>
@@ -490,7 +502,16 @@ $headElement.html()
 		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
 		*#$date.getYear($publishDate)</span>#*
 		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
-		</div>
+#if($socialLinks)#*
+	*#<span class="pull-right hidden-xs icons">
+			#*
+			*##foreach($socialLink in $socialLinks)#* *#<a href="$socialLink.href" target="_blank" title="$socialLink.title">
+					<i class="$socialLink.icon"></i>
+			</a>
+	#end#*
+	*#</span>
+#end#*
+*#	</div>
 	</footer>
 
 	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
