@@ -22,6 +22,10 @@ The **${project.name}** specific configuration parameters are specified under th
         <target>_blank</href>
       </link>
     </additionalLinks>
+    <social>
+      <twitter>TheASF</twitter>
+      <facebook>ApacheSoftwareFoundation</facebook>
+    </social>
   </custom>
 ...
 ```
@@ -36,5 +40,6 @@ The **${project.name}** specific configuration parameters are specified under th
 | `<keywords>` | Comma-separated list of keywords that will be added to all pages in this documentation (and merged with the keywords set in each individual page) | |
 | `<projectVersion>` | Version of the documentation (or of the product being documented). Useful to override the version defined in the Maven project. | `\$project.version` |
 | `<additionalLinks>` | Specify one or multiple `<link>` items that will be displayed in the footer of the generated pages. Useful for legal references, like terms of use, disclaimer, privacy policy, etc.<br/>Specify `<name>` for the text to display, `<href>` for the link, and `<target>` to open in a new window or tab. | *None* |
+| `<social>` | Specify social network accounts and handles that will be displayed in the top navigation bar.<br/>Supported networks include: `<twitter>`, `<facebook>`, `<linkedin>`, `<custom>`. | *None* |
 
 Values in `src/site/site.xml` can refer to properties defined in `pom.xml`.

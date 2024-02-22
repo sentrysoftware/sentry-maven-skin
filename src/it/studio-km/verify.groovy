@@ -18,10 +18,11 @@ assert result.contains('<meta name="author" content="The &quot;Proud&quot; Peopl
 
 assert result.contains("<b>skin-test</b> allows you") : "pom.xml properties must be replaced with their values"
 
-// Links, breadcrumbs, and additionalLinks
+// Links, breadcrumbs, additionalLinks, and social networks
 assert result =~ '<li><a +href="https://youtu.be/Th6NweyurWs" +class="externalLink">YouTube</a></li>' : "Links specified in site.xml are added to the HTML"
 assert result =~ '<li><a +href="https://sentrysoftware.com/bmc/products/index.html" +class="externalLink">Great KMs</a></li>' : "Breadcrumbs specified in site.xml are added to the HTML"
 assert result =~ '<li><a +href="https://the.org/cookies.html">Privacy</a></li>' : "Additional links specified in site.xml are added to the HTML"
+assert result.contains("https://twitter.com/TheASF") && result.contains("Follow @TheASF") && result.contains("fa-brands fa-x-twitter") : "Social networks must be added to the HTML"
 
 assert new File(basedir, "target/site/images/Events-thumbnail.jpg").isFile() : "JPG thumbnails have been generated"
 assert new File(basedir, "target/site/images/Events_Details-thumbnail.jpg").isFile() : "JPG thumbnails have been generated"

@@ -866,7 +866,17 @@ nav.left-menu .ng-hide-animate {
 	padding-top: 50px;
 	padding-bottom: 30px;
 	padding-left: 100px;
-	padding-right: 15px;;
+	padding-right: 30px;
+}
+
+/* On mobile, don't add that extra space */
+@media only screen and (max-width: 575.98px) {
+	.footer {
+		padding-top: 30px;
+		padding-bottom: 30px;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 }
 
 .footer > .footer-title {
@@ -878,6 +888,21 @@ nav.left-menu .ng-hide-animate {
 	opacity: .8;
 }
 
+/* Social network icons in the xs footer */
+.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.icons {
+	text-align: center;
+}
+
+.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.icons > a {
+	display: inline;
+}
+
+/* Social network icons in the footer */
+.footer > .footer-copyright .icons a {
+	margin-left: 15px;
+}
+
+/* Copyright */
 .footer > .footer-copyright {
 	font-family: 'Raleway-Regular', sans-serif;
 	letter-spacing: 1px;
