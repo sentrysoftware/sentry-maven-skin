@@ -57,8 +57,9 @@
 			<item name="Getting Started" href="start.html" />
 			<item name="General Settings (&lt;code&gt;site.xml&lt;/code&gt;)" href="settings.html" />
 			<item name="Features" href="features.html">
-				<item name="Top Navigation Links" href="nav-links.html" />
+				<item name="Navigation Links" href="nav-links.html" />
 				<item name="Navigation Menu" href="nav-menu.html" />
+				<item name="Styling (Colors, Fonts)" href="styles.html" />
 				<item name="Maven Properties" href="maven-properties.html" />
 				<item name="Keywords" href="keywords.html" />
 				<item name="Index and Search" href="search.html" />

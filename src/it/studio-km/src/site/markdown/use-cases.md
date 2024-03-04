@@ -1,6 +1,6 @@
 # Use Cases
 
->  This section provides configuration and action examples to illustrate monitoring scenarios that can be performed with **${project.name}**.
+> This section provides configuration and action examples to illustrate monitoring scenarios that can be performed with **${project.name}**.
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
@@ -114,11 +114,12 @@ From the **Dynamic Object** Monitor page, create a **Numeric Value Extraction** 
 
 Use the **Dry Run** button to verify that the response is successful and click **Create** to save your Monitor.
 
-
 **${project.name}** returns a list of all the discovered temporary files in this format: ```<file-path>;<modification-time-epoch>;<size-bytes>``` in the **Results** section of the **/var/tmp>100MB** Monitor in the **Console** menu.
 
 Example:
-```/var/tmp/sysidconfig.log;1324058185;630
+
+```
+/var/tmp/sysidconfig.log;1324058185;630
 /var/tmp/swupas/swupas.error.log;1308687869;0
 /var/tmp/swupas/swupas.log;1308687869;0
 /var/tmp/puredisk/2012-01-16_02:59-pdde-install.log;1326679198;121047
@@ -128,7 +129,6 @@ Example:
 /var/tmp/puredisk/2014-03-06_06:11-pdde-install.log;1394082692;226
 /var/tmp/puredisk/2014-03-06_18:59-pdde-install.log;1394128786;226
 ```
-
 
 ## Verifying the Deployment Status of an Application
 

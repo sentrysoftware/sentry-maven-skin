@@ -24,8 +24,9 @@ angular.module(
 	"sentry.site",
 	[
 		"ngAnimate",
-		"matchMedia",
-		"duScroll"
+		"matchMediaLight",
+		"duScroll",
+		"ui.toggle"
 	]
 );
 
@@ -41,8 +42,8 @@ angular.module("sentry.site").config(["$animateProvider", function($animateProvi
  **/
 angular.module("sentry.site").controller(
 	"siteController",
-	["$scope", "$location", "screenSize", "siteIndex", "$document", "$anchorScroll", "RELATIVE_ROOT", "SITE_MENU", "$timeout",
-		function($scope, $location, screenSize, siteIndex, $document, $anchorScroll, RELATIVE_ROOT, SITE_MENU, $timeout) {
+	["$scope", "$location", "siteIndex", "$document", "$anchorScroll", "RELATIVE_ROOT", "SITE_MENU", "$timeout", "$rootScope", "mediaWatcher",
+		function($scope, $location, siteIndex, $document, $anchorScroll, RELATIVE_ROOT, SITE_MENU, $timeout, $rootScope, mediaWatcher) {
 
 			/**
 			 * initialize
@@ -68,9 +69,9 @@ angular.module("sentry.site").controller(
 				});
 
 				// Setup the screen size listener, so that the HTML can leverage this, the AngularJS way
-				$scope.media = screenSize.onRuleChange($scope, function(media) {
-					$scope.media = media;
-				});
+				// $scope.media = screenSize.onRuleChange($scope, function(media) {
+				// 	$scope.media = media;
+				// });
 
 				// Watch scroll and show the "back-to-top" arrow if we are not at the top
 				$document.on("scroll", function() {
@@ -219,6 +220,17 @@ angular.module("sentry.site").controller(
 				$event.preventDefault();
 				return false;
 
+			};
+
+			/**
+			 * Switches color schemes between light and dark
+			 */
+			$scope.switchColors = function() {
+				if ($rootScope.$matchMedia.dark) {
+					mediaWatcher.forceDark();
+				} else {
+					mediaWatcher.forceLight();
+				}
 			};
 
 			// Init
