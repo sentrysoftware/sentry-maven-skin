@@ -131,35 +131,22 @@ Write the content of your documentation in the `./src/site/markdown/` directory 
 
 ### Styling
 
-You can customize the look and feel of your documentation by writing a CSS stylesheet in `./src/site/resources/css/site.css` as in the example below:
+You can [customize the look and feel](styles.md) of your documentation by writing a CSS stylesheet in `./src/site/resources/css/site.css` as in the example below:
 
 ```css
-body.my-theme .site-banner {
-  background-color: #a68ab6;
-  font-weight: bold;
+/* Colors for <bodyClass>my-theme</bodyClass> */
+body.my-theme {
+  --banner-bgcolor: #266fd0;
+  --link-color: #d50c37;
 }
 
-body.my-theme nav.left-menu ul>li.active>a,
-body.my-theme nav.left-menu ul>li.active>a:hover {
-  background-color: #ffec38;
-  color: black;
-}
-
-body.my-theme .toc-side-container .toc ul li a,
-body.my-theme .main-content a {
-  color: #8318ad;
-}
-
-body.my-theme .search-results-content .progressbar .bar {
-  background-color: #8318ad;
-}
-
-body.my-theme .badge {
-  background-color: #a68ab6
+/* Lighter red for dark mode (body.dark) */
+body.my-theme.dark {
+  --link-color: #ff6989;
 }
 ```
 
-We recommend using the [`<bodyClass>` setting in `site.xml`](settings.html) to specify a class to the body element, so that you can reference it in `site.css`. In the above example, you would specify `<bodyClass>my-theme</bodyClass>`.
+Use the [`<bodyClass>` setting in `site.xml`](settings.html) to specify a class to the body element, so that you can reference it in `site.css`. In the above example, you would specify `<bodyClass>my-theme</bodyClass>`.
 
 ### Generating the documentation site
 

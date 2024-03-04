@@ -88,7 +88,7 @@
 
 	pre,
 	blockquote {
-		border: 1px solid #999;
+		border-left: 5px solid #999 !important;
 		page-break-inside: avoid;
 	}
 

@@ -62,7 +62,7 @@ assert result =~ /href="subdir\/agent.html".*Configuring the Agent/
 assert result =~ /(?s)<div class="toc">.*<li><a href="#filtering-events" du-smooth-scroll="">Filtering Events/
 
 // Document's footer
-assert result =~ /Keywords:/ : "Keywords section is present"
+assert result =~ /<div class="keywords"/ : "Keywords section is present"
 assert result =~ '<span class="label label-default">event</span>' : "Document keywords are listed"
 assert result =~ '<span class="label label-default">testevent</span>' : "Document keywords are listed (#2)"
 assert result =~ '<span class="label label-default">patrol</span>' : "site.xml keywords are listed"

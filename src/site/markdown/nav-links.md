@@ -1,13 +1,13 @@
 keywords: banner, navigation
 description: ${project.name} lets writers specify links in the top navigation bar.
 
-# Top Navigation Links
+# Navigation Links
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
 At the very top of each page, the navigation bar allows you to include a logo and link to your organization, as well as links to other resources, typically outside of the generated documentation (links to pages inside the documentation are normally listed in the menu on the left), as in the example below:
 
-![inline](images/nav-links.png)
+![How various links specified in site.xml are rendered in the documentation](images/nav-links.png)
 
 In mobile view, the main link to your organization is displayed at the top of the page, and other links at the very bottom of the page, to make the page easier to read:
 
