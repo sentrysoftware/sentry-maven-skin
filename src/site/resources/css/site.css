@@ -17,29 +17,19 @@
  * limitations under the License.
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
-body.sentry-skin .site-banner {
-	background-color: #a68ab6;
+
+body.sentry-skin {
+	--banner-bgcolor: #a68ab6;
+	--link-color: #8318ad;
 }
 
-body.sentry-skin .site-banner .header-title {
-	font-weight: bold;
-}
-
+/* Little hacks in the left menu */
 body.sentry-skin nav.left-menu ul>li.active>a,
 body.sentry-skin nav.left-menu ul>li.active>a:hover {
 	background-color: #ffec38;
 	color: black;
 }
 
-body.sentry-skin .toc-side-container .toc ul li a,
-body.sentry-skin .main-content a {
-	color: #8318ad;
-}
-
-body.sentry-skin .search-results-content .progressbar .bar {
-	background-color: #8318ad;
-}
-
-body.sentry-skin .badge {
-	background-color: #a68ab6
+body.sentry-site .left-menu code {
+	color: white;
 }

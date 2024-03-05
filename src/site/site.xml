@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
   Sentry Maven Skin
@@ -22,24 +22,71 @@
 	<skin>
 		<groupId>org.sentrysoftware.maven</groupId>
 		<artifactId>sentry-maven-skin</artifactId>
-		<version>6.2.00</version>
+		<version>6.3.00</version>
 	</skin>
 
 	<bannerLeft>
 		<src>images/sentry-logo-114x40-white.png</src>
 		<href>https://sentrysoftware.org</href>
+		<alt>Open Sentry Home</alt>
 	</bannerLeft>
 
+	<bannerRight>
+		<href>${project.scm.url}</href>
+		<name><![CDATA[<i class="fa-brands fa-github"></i> Edit on GitHub]]></name>
+	</bannerRight>
+
 	<custom>
-		<noDefaultLinks>true</noDefaultLinks>
-		<keywords>maven,skin</keywords>
+		<keywords>maven,skin,doxia</keywords>
 		<bodyClass>sentry-skin</bodyClass>
+
+		<social>
+			<twitter>sentrysoftware</twitter>
+			<linkedin>sentry-software</linkedin>
+			<custom>
+				<title>Learn about our solutions on YouTube</title>
+				<href>https://www.youtube.com/SentrySoftware</href>
+				<icon>fa-brands fa-youtube</icon>
+			</custom>
+			<custom>
+				<title>Join us on Slack!</title>
+				<href>https://sentrysoftware.com/about/join-slack-community.html</href>
+				<icon>fa-brands fa-slack</icon>
+			</custom>
+		</social>
+
+		<additionalLinks>
+			<link>
+				<name>Terms of Service</name>
+				<href>https://sentrysoftware.com/legal/general.html</href>
+			</link>
+			<link>
+				<name>Privacy Policy</name>
+				<href>https://sentrysoftware.com/legal/privacy.html</href>
+			</link>
+			<link>
+				<name>Cookie Policy</name>
+				<href>https://sentrysoftware.com/legal/cookies.html</href>
+			</link>
+			<link>
+				<name>Disclaimer</name>
+				<href>https://sentrysoftware.com/legal/disclaimer.html</href>
+			</link>
+			<link>
+				<name>Trademarks</name>
+				<href>https://sentrysoftware.com/legal/trademarks.html</href>
+			</link>
+			<link>
+				<name>Code of Ethics</name>
+				<href>https://sentrysoftware.com/legal/ethics.html</href>
+			</link>
+		</additionalLinks>
+
 	</custom>
 
 	<body>
 
 		<links>
-			<item name="GitHub Repository" href="${project.scm.url}" />
 			<item name="Maven Site Plugin" href="https://maven.apache.org/plugins/maven-site-plugin" />
 			<item name="Maven Site Descriptor"
 				href="https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html" />
@@ -47,7 +94,8 @@
 		</links>
 
 		<breadcrumbs>
-			<!-- <item name="Home" href="/" /> -->
+			<item name="Open Sentry" href="https://sentrysoftware.org" />
+			<item name="Java Libraries" />
 		</breadcrumbs>
 
 		<menu name="User Documentation">
