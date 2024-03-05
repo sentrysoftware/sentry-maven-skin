@@ -19,14 +19,18 @@
  */
 
 body.sentry-skin {
-	--banner-bgcolor: #a68ab6;
-	--link-color: #8318ad;
+	--banner-bgcolor: #87549d;
+	--link-color: #a151c3;
+}
+
+body.sentry-skin.dark {
+	--link-color: #f4d959;
 }
 
 /* Little hacks in the left menu */
 body.sentry-skin nav.left-menu ul>li.active>a,
 body.sentry-skin nav.left-menu ul>li.active>a:hover {
-	background-color: #ffec38;
+	background-color: #f4d959;
 	color: black;
 }
 
