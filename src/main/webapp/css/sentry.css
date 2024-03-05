@@ -889,6 +889,10 @@ nav.left-menu ul li a .badge {
 	color: var(--banner-fgcolor);
 }
 
+body.sentry-site nav.left-menu code {
+	color: white;
+}
+
 /* Left menu collapse animation */
 nav.left-menu .ng-hide-animate:not(.ng-hide) {
 	transform: scaleY(1);
