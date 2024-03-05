@@ -11,6 +11,8 @@ System.out.println("Hello, World!");
 ```
 ````
 
+Each block of code can be easily copied to the system's clipboard with a dedicated `[Copy]` button.
+
 ## Supported languages
 
 ### Command lines (Linux)

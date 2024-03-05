@@ -134,6 +134,8 @@ assert !basicHtml.contains("prism.js") : "Page without code must not load prism.
 // Enabled for extend-summary.html (because it has code)
 def extendHtml = new File(basedir, "target/site/extend-summary.html").text
 assert extendHtml.contains("prism.js") : "Page with code must load prism.js"
+// Code must be copy-pastable
+assert extendHtml.contains("<pre copy-to-clipboard") : "<pre> blocks must have the copy-to-clipboard attribute"
 
 // Icons
 def iconsHtml = new File(basedir, "target/site/icons.html").text
