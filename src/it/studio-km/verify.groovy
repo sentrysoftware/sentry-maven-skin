@@ -44,8 +44,8 @@ assert result =~ 'images/Events\\.png".*width: *1895px;' : "Images have their st
 assert result =~ 'images/Events\\.png".*height: *963px;' : "Images have their style set with height"
 
 assert result.contains('<table border="0" class="bodyTable table table-striped table-hover">')
-assert result.contains('<h2 id="filtering-events">Filtering Events</h2>')
-assert result.contains('<h2 id="keyboard-shortcuts-28special-29">Keyboard Shortcuts (special)</h2>')
+assert result.contains('<h2 id="filtering-events"><a href="#filtering-events">Filtering Events</a></h2>') : "Headings must have proper id attribute"
+assert result.contains('<h2 id="keyboard-shortcuts-28special-29"><a href="#keyboard-shortcuts-28special-29">Keyboard Shortcuts (special)</a></h2>') : "id attribute in headings must discard special chars"
 assert result.contains('<li><a href="#keyboard-shortcuts-28special-29" du-smooth-scroll="">Keyboard Shortcuts (special)</a></li>')
 
 // TOC has been inserted

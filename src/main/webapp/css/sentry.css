@@ -655,6 +655,50 @@ a.externalLink:after {
 	text-rendering: optimizelegibility;
 }
 
+/* Headings are surrounded by <a href="#id"> */
+/* Make sure the link is unstylized */
+.main-content h2>a,
+.main-content h3>a,
+.main-content h4>a,
+.main-content h5>a,
+.main-content h6>a {
+	color: unset;
+	text-decoration: unset;
+}
+
+/* Add a link icon after headings that appears on mouse hover and focus */
+.main-content h2>a::after,
+.main-content h3>a::after,
+.main-content h4>a::after,
+.main-content h5>a::after,
+.main-content h6>a::after {
+	content: "\f0c1";
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	font-size: smaller;
+	display: inline-block;
+	text-decoration: none;
+	padding-left: 7px;
+	padding-right: 2px;
+	opacity: 0;
+	position: absolute;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.main-content h2>a:hover::after,
+.main-content h3>a:hover::after,
+.main-content h4>a:hover::after,
+.main-content h5>a:hover::after,
+.main-content h6>a:hover::after,
+.main-content h2>a:focus::after,
+.main-content h3>a:focus::after,
+.main-content h4>a:focus::after,
+.main-content h5>a:focus::after,
+.main-content h6>a:focus::after {
+	opacity: 1;
+}
+
 .main-content .toc-heading {
 	font-size: 24px;
 }
