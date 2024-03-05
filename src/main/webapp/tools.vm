@@ -282,6 +282,9 @@ limitations under the License.
 // Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
 *##set($bodyElement = $htmlTool.setAttr($bodyElement, "a[href^=#]", "du-smooth-scroll", ""))#*
 
+// Use copy-to-clipboard for all <pre> elements
+*##set($bodyElement = $htmlTool.setAttr($bodyElement, "pre", "copy-to-clipboard", ""))#*
+
 // Extract the TOC and put it in a variable
 *##set($tocElementList = $bodyElement.select("ul#toc"))#*
 *##if (!$tocElementList.isEmpty())#*

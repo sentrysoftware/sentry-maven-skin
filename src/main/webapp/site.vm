@@ -44,6 +44,7 @@ $headElement.html()
 	<link rel="stylesheet" href="../../../node_modules/prism-themes/themes/prism-vsc-dark-plus.css">
 	<link rel="stylesheet" href="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.css">
 	<link rel="stylesheet" href="css/sentry.css">
+	<link rel="stylesheet" href="css/copy-to-clipboard.css">
 	<link rel="stylesheet" href="css/print.css">
 	<!-- endbuild -->
 	<link rel="stylesheet" href="$relativePath/css/site.css">
@@ -554,6 +555,7 @@ $headElement.html()
 	<script src="js/site-index.js"></script>
 	<script src="js/zoomable.js"></script>
 	<script src="js/truncate.js"></script>
+	<script src="js/copy-to-clipboard.js"></script>
 	<!-- endbuild -->
 
 #if (!$bodyElement.select("pre > code[class*=language-]").empty)
