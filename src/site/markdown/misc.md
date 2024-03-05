@@ -8,3 +8,4 @@ description: ${project.name} includes various features to help writers and reade
 * Bootstrap-styled tables
 * Use of `<inceptionYear>` and `<organization.name>` for the copyright in the footer
 * Easy copy-paste of code blocks
+* Easy linking to headings inside a document

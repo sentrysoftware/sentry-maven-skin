@@ -282,6 +282,18 @@ limitations under the License.
 // Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
 *##set($bodyElement = $htmlTool.setAttr($bodyElement, "a[href^=#]", "du-smooth-scroll", ""))#*
 
+// Surround all headings with <a href="#heading-ig">
+*##set($headingList = $bodyElement.select("h2[id],h3[id],h4[id],h5[id],h6[id]"))#*
+*##if($headingList && !$headingList.isEmpty())#*
+	*##foreach($headingElement in $headingList)#*
+		*##set($headingId = $headingElement.id())#*
+		*##set($headingHtml = $headingElement.html())#*
+		*##if($headingId)#*
+			*##call($headingElement.html("<a href='#$headingId'>$headingHtml</a>"))#*
+		*##end#*
+	*##end#*
+*##end#*
+
 // Use copy-to-clipboard for all <pre> elements
 *##set($bodyElement = $htmlTool.setAttr($bodyElement, "pre", "copy-to-clipboard", ""))#*
 
