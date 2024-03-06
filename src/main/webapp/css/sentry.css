@@ -195,6 +195,10 @@ body.sentry-purple {
 	vertical-align: top;
 }
 
+.site-logo ul.nav.navbar-nav.navbar-right {
+	margin-right: -10px;
+}
+
 /**
  * Site Banner
  **/
@@ -287,6 +291,11 @@ body.sentry-site .site-banner ol.breadcrumb > li > a {
 body.sentry-site .site-banner ol.breadcrumb > li > a:hover {
 	text-decoration: none;
 	opacity: 1;
+}
+
+/* Corrected margin for the search box to the right */
+body.sentry-site .site-banner .navbar-right {
+	margin-right: -10px;
 }
 
 /* The reduced title for xs displays when showing search results */
