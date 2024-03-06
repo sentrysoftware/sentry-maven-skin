@@ -22,7 +22,7 @@
 	<skin>
 		<groupId>org.sentrysoftware.maven</groupId>
 		<artifactId>sentry-maven-skin</artifactId>
-		<version>6.3.00</version>
+		<version>6.3.03</version>
 	</skin>
 
 	<bannerLeft>
