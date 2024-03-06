@@ -115,7 +115,7 @@ $headElement.html()
 			</ul>
 		</div>
 #end#*
-*##if (($decoration.bannerLeft.href && $decoration.bannerLeft.name) || $decoration.body.breadcrumbs)#*
+*##if ($decoration.body.breadcrumbs)#*
 *#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs breadcrumb-xs">
 			<ul class="nav navbar-nav">
 #links($decoration.body.breadcrumbs)
