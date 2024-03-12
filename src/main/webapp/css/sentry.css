@@ -1763,7 +1763,8 @@ body.sentry-site .alert-danger {
 /* Navigation bars with list items */
 body.sentry-site .parents-xs .list-group-item,
 body.sentry-site .home-xs .list-group-item,
-body.sentry-site .subtopics-xs .list-group-item {
+body.sentry-site .subtopics-xs .list-group-item,
+body.sentry-site .search-results-content-xs .list-group-item {
 	background-color: var(--main-bgcolor);
 	transition: background-color 1s ease-in-out;
 }

@@ -449,7 +449,10 @@ $headElement.html()
 									</span>
 								</div>
 								<div class="search-results-title"><i class="fas fa-file-alt"></i>{{result.title}}</div>
-								<div class="progressbar" aria-hidden="true"><div class="bar" ng-style="{width: result.score * 100 + '%'}"></div></div>
+								<div class="progressbar" aria-hidden="true">
+									<div class="bar-bg"></div>
+									<div class="bar-fg" ng-style="{width: result.score * 100 + '%'}"></div>
+								</div>
 								<div class="small extract">{{result.body | truncate:'100'}}</div>
 							</a>
 						</ul>
