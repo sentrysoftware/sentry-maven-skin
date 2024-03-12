@@ -4,7 +4,7 @@
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>sentry-maven-skin</artifactId>
-	<version>6.4.00-SNAPSHOT</version>
+	<version>6.5.00-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Sentry Maven Skin</name>
@@ -71,7 +71,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2024-03-06T18:17:25Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2024-03-12T20:04:40Z</project.build.outputTimestamp>
 
 		<!-- How to execute the Node.js section -->
 		<!-- On GitHub Actions, we will use the exec-maven-plugin -->
