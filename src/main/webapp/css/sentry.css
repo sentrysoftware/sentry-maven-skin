@@ -118,7 +118,9 @@ body {
 	--banner-fgcolor: #fff;
 	--main-bgcolor: #fff;
 	--main-fgcolor: #000;
-	--link-color: #0070E0;
+	--alternate-bgcolor: #c0defd;
+	--alternate-fgcolor: #013e7a;
+	--link-color: #266eb7;;
 
 	--success-bg: #d6e9c6;
 	--success-fg: #32661c;
@@ -151,12 +153,18 @@ body.dark {
 /* Alternate colors of the banner */
 body.sentry-green {
 	--banner-bgcolor: #76A600;
+	--alternate-bgcolor: #4a6800;
+	--alternate-fgcolor: #fff;
 }
 body.sentry-orange {
 	--banner-bgcolor: #db5d18;
+	--alternate-bgcolor: #ffb992;
+	--alternate-fgcolor: #762a00;
 }
 body.sentry-purple {
 	--banner-bgcolor: #b071dc;
+	--alternate-bgcolor: #766185;
+	--alternate-fgcolor: #fff;
 }
 
 /* Fix the pointer issue between Bootstrap and Angular */
@@ -610,7 +618,7 @@ li.dark-toggle.dark-toggle-xs {
 }
 
 .search-results-content .progressbar .bar-fg {
-	background-color: var(--link-color);
+	background-color: var(--alternate-bgcolor);
 	width: 0;
 	transition: width 0.5s ease-in-out;
 	top: -3px;
@@ -945,8 +953,8 @@ nav.left-menu ul > li:not(.active) > a:hover {
 
 nav.left-menu ul > li.active > a,
 nav.left-menu ul > li.active > a:hover {
-	background-color: var(--banner-bgcolor);
-	color: var(--banner-fgcolor);
+	background-color: var(--alternate-bgcolor);
+	color: var(--alternate-fgcolor);
 }
 
 nav.left-menu ul > li > a:focus {
@@ -980,8 +988,8 @@ nav.left-menu ul li a i {
 
 nav.left-menu ul li a .badge {
 	font-size: 70%;
-	background-color: var(--banner-bgcolor);
-	color: var(--banner-fgcolor);
+	background-color: var(--alternate-bgcolor);
+	color: var(--alternate-fgcolor);
 }
 
 body.sentry-site nav.left-menu code {
@@ -1058,8 +1066,8 @@ nav.left-menu .ng-hide-animate {
 
 .parents-xs ul > a > .badge,
 .parents-xs ul > li > .badge {
-	color: var(--banner-fgcolor);
-	background-color: var(--banner-bgcolor);
+	color: var(--alternate-fgcolor);
+	background-color: var(--alternate-bgcolor);
 }
 
 /**
@@ -1252,8 +1260,8 @@ nav.left-menu .ng-hide-animate {
 .subtopics-xs ul > li > .badge,
 .home-xs ul > a > .badge,
 .home-xs ul > li > .badge {
-	color: var(--banner-fgcolor);
-	background-color: var(--banner-bgcolor);
+	color: var(--alternate-fgcolor);
+	background-color: var(--alternate-bgcolor);
 }
 
 .home-xs::after {
@@ -1356,7 +1364,7 @@ nav.left-menu .ng-hide-animate {
 	font-size: 20px;
 	line-height: 36px;
 	text-align: center;
-	color: var(--banner-fgcolor);
+	color: var(--alternate-fgcolor);
 	top: auto;
 	left: auto;
 	right: 30px;
@@ -1367,7 +1375,7 @@ nav.left-menu .ng-hide-animate {
 }
 
 .back-to-top:hover {
-	background-color: var(--banner-bgcolor);
+	background-color: var(--alternate-bgcolor);
 }
 
 
@@ -1594,7 +1602,7 @@ body.sentry-site :not(pre) > code::after {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: var(--banner-bgcolor);
+	background-color: var(--alternate-bgcolor);
 	opacity: 0.25;
 	z-index: -1;
 	border-radius: 4px;

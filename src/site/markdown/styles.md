@@ -5,7 +5,29 @@ description: ${project.name}'s look and feel can be easily customized for your d
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-${project.name}'s look and feel can be easily customized for your documentation with a few CSS properties.
+The ${project.name}'s look and feel can be easily customized for your documentation with a simple configuration setting, or a few CSS properties.
+
+## Basic Themes
+
+By default, the ${project.name} comes in nice shades of blue, featuring *Raleway* and *Lato* elegant fonts. Using the `<bodyClass>` property under `<custom>` in `src/site/site.xml`, you can specify a different color scheme:
+
+| `<bodyClass>`   | Screenshot                                                                      |
+| --------------- | ------------------------------------------------------------------------------- |
+| `sentry-blue`   | ![Screenshot of the skin's default color scheme (blue)](images/sentry-blue.png) |
+| `sentry-green`  | ![Screenshot of the `sentry-green` color scheme](images/sentry-green.png)       |
+| `sentry-orange` | ![Screenshot of the `sentry-orange` color scheme](images/sentry-orange.png)     |
+| `sentry-purple` | ![Screenshot of the `sentry-purple` color scheme](images/sentry-purple.png)     |
+
+Example of `site.xml`:
+
+```xml
+<project>
+  ...
+  <custom>
+    <bodyClass>sentry-orange</bodyClass>
+    ...
+  </custom>
+```
 
 ## How CSS customization works
 
@@ -15,7 +37,7 @@ In this `site.css`, you will redefine the [value of a few CSS variables](https:/
 
 ## Colors
 
-You will mainly set 5 CSS variables to modify the colors of the skin for your documentation:
+You will mainly set 7 CSS variables to modify the colors of the skin for your documentation:
 
 | CSS Variable | Description |
 |---|---|
@@ -23,12 +45,16 @@ You will mainly set 5 CSS variables to modify the colors of the skin for your do
 | `--banner-fgcolor` | Text color in the title banner. Must provide enough contrast with `banner-bgcolor` for accessibility. |
 | `--main-bgcolor` | Main content background color (usually `white`). |
 | `--main-fgcolor` | Main content text color (usually `black`). |
+| `--alternate-bgcolor` | Alternate background color for highlighting content (typically a shade of `var(--banner-bgcolor)`). |
+| `--alternate-fgcolor` | Alternate foreground color for highlighted content (typically white or a shade of `var(--banner-fgcolor)`). |
 |  `--link-color` | Color for the links (usually something blue). |
 
 ```css
 /* We're only customizing the title banner background color and the links */
 body {
   --banner-bgcolor: #266fd0;
+  --alternate-bgcolor: var(--banner-bgcolor);
+  --alternate-fgcolor: var(--banner-fgcolor);
   --link-color: #d50c37;
 }
 ```
@@ -47,6 +73,8 @@ When the user is displaying your documentation using a dark colors scheme, the `
 /* Default colors in light mode */
 body {
   --banner-bgcolor: #266fd0;
+  --alternate-bgcolor: var(--banner-bgcolor);
+  --alternate-fgcolor: var(--banner-fgcolor);
   --link-color: #d50c37;
 }
 /* Use a lighter red when in dark mode */

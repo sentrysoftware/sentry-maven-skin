@@ -18,20 +18,15 @@
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-body.sentry-skin {
-	--banner-bgcolor: #87549d;
-	--link-color: #a151c3;
-}
-
-body.sentry-skin.dark {
-	--link-color: #f4d959;
-}
-
 /* Little hacks in the left menu */
-body.sentry-skin nav.left-menu ul>li.active>a,
-body.sentry-skin nav.left-menu ul>li.active>a:hover {
-	background-color: #f4d959;
-	color: black;
+body.sentry-site nav.left-menu ul>li.active>a,
+body.sentry-site nav.left-menu ul>li.active>a:hover {
+	background-color: #c0defd;
+	color: #013e7a;
+}
+
+body.sentry-site nav.left-menu ul>li.active>a code {
+	color: #013e7a;
 }
 
 body.sentry-site .left-menu code {
