@@ -22,18 +22,18 @@
  **/
 
 @font-face {
-	font-family: 'Raleway-Bold';
+	font-family: 'Raleway';
 	src: url('../fonts/Raleway-Bold.woff2') format('woff2'),
 			 url('../fonts/Raleway-Bold.woff') format('woff'),
 			 url('../fonts/Raleway-Bold.ttf') format('truetype'),
 			 local('Helvetica');
-	font-weight: normal;
+	font-weight: bold;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Raleway-Regular';
+	font-family: 'Raleway';
 	src: url('../fonts/Raleway-Regular.woff2') format('woff2'),
 			 url('../fonts/Raleway-Regular.woff') format('woff'),
 			 url('../fonts/Raleway-Regular.ttf') format('truetype'),
@@ -44,7 +44,7 @@
 }
 
 @font-face {
-	font-family: 'Lato-Regular';
+	font-family: 'Lato';
 	src: url('../fonts/Lato-Regular.woff2') format('woff2'),
 			 url('../fonts/Lato-Regular.woff') format('woff'),
 			 url('../fonts/Lato-Regular.ttf') format('truetype'),
@@ -57,6 +57,60 @@
 /**
  * Variables
  **/
+
+/* Fonts */
+/* START SNIPPET: fonts */
+:root {
+	--content-font: 'Lato', sans-serif;
+	--content-font-size: 15px;
+
+	--title-font: 'Raleway', sans-serif;
+	--heading-font: 'Raleway', sans-serif;
+
+	--top-font: var(--heading-font);
+	--top-font-size: small;
+	--top-font-weight: normal;
+	--top-font-style: normal;
+
+	--left-title-font: var(--title-font);
+	--left-title-font-size: var(--content-font-size);
+	--left-title-font-weight: var(--main-title-font-weight);
+	--left-title-font-style: var(--main-title-font-style);
+
+	--left-font: var(--content-font);
+	--left-font-size: var(--content-font-size);
+	--left-font-weight: normal;
+	--left-font-style: normal;
+
+	--banner-font: var(--title-font);
+	--banner-font-size: xx-large;
+	--banner-font-weight: bold;
+	--banner-font-style: normal;
+
+	--main-title-font: var(--title-font);
+	--main-title-font-size: 40px;
+	--main-title-font-weight: bold;
+	--main-title-font-style: normal;
+
+	--h2-font-size: xx-large;
+	--h2-font-weight: bold;
+	--h2-font-style: normal;
+
+	--h3-font-size: x-large;
+	--h3-font-weight: normal;
+	--h3-font-style: normal;
+
+	--h4-font-size: large;
+	--h4-font-weight: normal;
+	--h4-font-style: italic;
+
+	/* Bottom same as top */
+	--bottom-font: var(--top-font);
+	--bottom-font-size: var(--top-font-size);
+	--bottom-font-weight: var(--top-font-weight);
+	--bottom-font-style: var(--top-font-style);
+}
+/* END SNIPPET: fonts */
 
 /* START SNIPPET: colors */
 body {
@@ -74,11 +128,8 @@ body {
 	--warning-fg: #7f6c08;
 	--danger-bg: #ebccd1;
 	--danger-fg: #680c0c;
-/* END SNIPPET: colors */
-	--title-heavy-font: 'Raleway-Bold', sans-serif;
-	--title-font: 'Raleway-Regular', sans-serif;
-	--content-font: 'Lato-Regular', sans-serif;
 }
+/* END SNIPPET: colors */
 
 /* Dark colors */
 /* START SNIPPET: dark-colors */
@@ -111,6 +162,13 @@ body.sentry-purple {
 /* Fix the pointer issue between Bootstrap and Angular */
 .nav, .pagination, .carousel, .panel-title a, a, th { cursor: pointer; }
 
+/**
+ * General settings
+ */
+html,body {
+	font-family: var(--content-font);
+	font-size: var(--content-font-size);
+}
 
 /**
  * Logo Banner
@@ -147,11 +205,13 @@ body.sentry-purple {
 
 .site-logo ul.nav.navbar-nav > li > a,
 .site-logo .navbar-header > a {
-	font-family: var(--title-font);
+	font-family: var(--top-font);
+	font-weight: var(--top-font-weight);
+	font-style: var(--top-font-style);
+	font-size: var(--top-font-size);
 	letter-spacing: 1px;
 	font-weight: 400;
 	text-transform: uppercase;
-	font-size: 11px;
 	color: #fff;
 	opacity: .6;
 	filter: alpha(opacity=50);
@@ -181,7 +241,7 @@ body.sentry-purple {
 	padding-top: 5px;
 	padding-bottom: 5px;
 	line-height: 40px;
-	font-size: 13px;
+	font-size: small;
 }
 
 .site-logo ul.nav.navbar-nav.navbar-right > li > a {
@@ -203,13 +263,15 @@ body.sentry-purple {
  * Site Banner
  **/
 
-.site-banner {
-	padding-top: 15px;
-	padding-bottom: 15px;
+body.sentry-site .site-banner {
+	padding-top: 10px;
+	padding-bottom: 10px;
 	border-radius: 0;
 	border-width: 0;
-	font-family: var(--title-font);
-	font-weight: 300;
+	font-family: var(--banner-font);
+	font-size: var(--banner-font-size);
+	font-weight: var(--banner-font-weight);
+	font-style: var(--banner-font-style);
 	color: var(--banner-fgcolor);
 	margin-bottom: 0;
 }
@@ -225,27 +287,28 @@ body.sentry-site .site-banner { background-color: var(--banner-bgcolor) }
 body.sentry-site .site-banner .navbar-brand {
 	padding-top: 10px;
 	padding-bottom: 10px;
-	max-width: calc(100vw - 65px);
+	/* Leaves space for the search loop, which is 2em (xx-large) + 20px padding + 15px margin */
+	max-width: calc(100vw - 2em - 35px);
 	height: unset;
 	position: relative;
+	font-size: inherit;
 }
 
 body.sentry-site .site-banner .navbar-toggle {
 	border-style: none;
-	font-size: 30px;
 }
 
 body.sentry-site .site-banner .navbar-header .header-title {
-	font-family: var(--title-heavy-font);
-	font-size: 30px;
-	font-weight: bold;
-	line-height: 30px;
+	line-height: 1em;
 	margin-top: 0;
 }
 
 body.sentry-site .site-banner .navbar-header .header-subtitle {
-	font-size: 14px;
-	line-height: 14px;
+	font-family: var(--heading-font);
+	font-size: var(--content-font-size);
+	font-weight: normal;
+	font-style: normal;
+	line-height: 1em;
 	letter-spacing: 1px;
 }
 
@@ -259,14 +322,14 @@ body.sentry-site .site-banner .navbar-header .header-subtitle .version {
 
 /* Breadcrumbs above the main banner */
 body.sentry-site .site-banner ol.breadcrumb {
-	margin-top: -10px;
 	margin-bottom: -3px;
 	padding: 0;
 	background-color: inherit;
-	margin-bottom: 0;
 	border: none;
 	font-family: var(--content-font);
-	font-size: 13px;
+	font-size: var(--content-font-size);
+	font-weight: normal;
+	font-style: normal;
 	text-transform: none;
 }
 
@@ -304,14 +367,14 @@ body.sentry-site .site-banner .navbar-header .header-xxs {
 }
 
 body.sentry-site .site-banner .navbar-header .header-xxs .header-title {
-	font-size: 14px;
-	line-height: 14px;
-	margin-top: -14px;
+	font-size: medium;
+	line-height: 1em;
+	margin-top: -1em;
 }
 
 body.sentry-site .site-banner .navbar-header .header-xxs .header-subtitle {
-	font-size: 10px;
-	line-height: 10px;
+	font-size: x-small;
+	line-height: 1em;
 }
 
 /* Show the "normal" banner when no .show-search-xs */
@@ -404,15 +467,21 @@ li.dark-toggle.dark-toggle-xs {
  * Search input
  **/
 
+.site-search .form-group {
+	font-family: var(--content-font);
+	font-size: var(--content-font-size);
+}
 .site-search input.form-control {
+	font-family: var(--content-font);
+	font-size: var(--content-font-size);
+	font-weight: normal;
+	font-style: normal;
 	padding: 5px 25px 5px 5px;
 	border: none;
 	border-bottom: 1px solid var(--banner-fgcolor);
 	background: transparent;
 	color: var(--banner-fgcolor) !important;
-	font-family: var(--content-font);
 	border-radius: 0;
-	font-size: 13px;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	width: 300px !important;
@@ -449,16 +518,15 @@ li.dark-toggle.dark-toggle-xs {
 }
 
 .site-search.navbar-form > .form-group.has-feedback > i.form-control-feedback {
-	top: 10px;
-	font-size: 18px;
+	top: calc(28px - 1em);
+	font-size: larger;
 }
 
-.site-search-xs {
+.site-search.site-search-xs {
 	box-shadow: none;
 	margin-top: 14px;
 	margin-left: 0;
 	margin-right: 0;
-	max-width: calc(100vw - 50px);
 	position: absolute;
 	opacity: 0;
 	transition: opacity 0.1s;
@@ -469,7 +537,9 @@ li.dark-toggle.dark-toggle-xs {
 }
 
 .site-search.site-search-xs input.form-control {
-	font-size: 20px;
+	font-size: x-large;
+	width: calc(100vw - 35px - 2em);
+	padding: 5px;
 }
 
 /**
@@ -492,12 +562,12 @@ li.dark-toggle.dark-toggle-xs {
 }
 
 .search-results .search-results-content .search-results-title {
-	font-size: 18px;
+	font-size: larger;
 	margin-bottom: 5px;
 }
 
 .search-results .search-results-content.search-results-content-xs .search-results-title {
-	font-size: 15px;
+	font-size: var(--content-font-size);
 }
 
 .search-results .search-results-content a {
@@ -576,6 +646,7 @@ li.dark-toggle.dark-toggle-xs {
 	padding-top: 15px;
 	padding-bottom: 15px;
 	font-family: var(--content-font);
+	font-size: var(--content-font-size);
 	line-height: 1.5;
 	background-color: var(--main-bgcolor);
 	color: var(--main-fgcolor);
@@ -620,7 +691,12 @@ a.externalLink:after {
 
 .main-content h1 {
 	text-transform: uppercase;
-	font-size: 40px;
+	font-family: var(--main-title-font);
+	font-size: var(--main-title-font-size);
+	font-weight: var(--main-title-font-weight);
+	font-style: var(--main-title-font-style);
+	line-height: 1em;
+	text-rendering: optimizelegibility;
 }
 
 .main-content h1::after {
@@ -641,27 +717,28 @@ a.externalLink:after {
 .main-content .toc-heading {
 	margin-top: 30px;
 	margin-bottom: 10px;
+	font-family: var(--heading-font);
+	line-height: 1em;
+	color: inherit;
+	text-rendering: optimizelegibility;
 }
 
-.main-content h1,
 .main-content h2 {
-	font-family: var(--title-heavy-font);
-	font-weight: bold;
-	line-height: 40px;
-	color: inherit;
-	text-rendering: optimizelegibility;
+	font-size: var(--h2-font-size);
+	font-weight: var(--h2-font-weight);
+	font-style: var(--h2-font-style);
 }
 
-.main-content h3,
-.main-content h4,
-.main-content h5,
-.main-content h6,
-.main-content .toc-heading {
-	font-family: var(--title-font);
-	font-weight: 400;
-	line-height: 20px;
-	color: inherit;
-	text-rendering: optimizelegibility;
+.main-content h3 {
+	font-size: var(--h3-font-size);
+	font-weight: var(--h3-font-weight);
+	font-style: var(--h3-font-style);
+}
+
+.main-content h4 {
+	font-size: var(--h4-font-size);
+	font-weight: var(--h4-font-weight);
+	font-style: var(--h4-font-style);
 }
 
 /* Headings are surrounded by <a href="#id"> */
@@ -709,7 +786,10 @@ a.externalLink:after {
 }
 
 .main-content .toc-heading {
-	font-size: 24px;
+	font-family: var(--heading-font);
+	font-size: var(--h3-font-size);
+	font-weight: var(--h3-font-weight);
+	font-style: var(--h3-font-style);
 }
 
 .main-content blockquote {
@@ -766,7 +846,9 @@ a.externalLink:after {
 	position: relative;
 	color: var(--main-bgcolor);
 	background: none;
-	font-weight: normal;
+	font-family: var(--main-title-font);
+	font-weight: var(--main-title-font-weight);
+	font-style: var(--main-title-font-style);
 	letter-spacing: 1px;
 	text-transform: lowercase;
 	transition: color 0.2s ease-in-out;
@@ -808,17 +890,23 @@ a.externalLink:after {
  * Left menu
  **/
 
-nav.left-menu {
+body.sentry-site nav.left-menu {
+	font-family: var(--left-font);
+	font-size: var(--left-font-size);
+	font-weight: var(--left-font-weight);
+	font-style: var(--left-font-style);
 	background-color: #383838;
 	border: none;
 	padding: 0;
 }
 
 nav.left-menu h5 {
-	font-family: var(--title-heavy-font);
+	font-family: var(--left-title-font);
+	font-size: var(--left-title-font-size);
+	font-weight: var(--left-title-font-weight);
+	font-style: var(--left-title-font-style);
 	letter-spacing: 1px;
 	text-transform: uppercase;
-	font-size: 12px;
 	color: #fff;
 	opacity: 0.9;
 	margin-top: 20px;
@@ -843,8 +931,6 @@ nav.left-menu ul > li {
 nav.left-menu ul > li > a {
 	padding-top: 6px;
 	padding-bottom: 6px;
-	font-size: 13px;
-	font-family: var(--content-font);
 	border-bottom: 1px solid #464646;
 	border-radius: 0px;
 	background-color: #343434;
@@ -989,7 +1075,7 @@ nav.left-menu .ng-hide-animate {
 	position: relative;
 	padding: 10px 20px;
 	margin-top: 20px;
-	font-size: 13px;
+	font-size: var(--content-font-size);
 	border-radius: 2px;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
@@ -1016,10 +1102,11 @@ nav.left-menu .ng-hide-animate {
 }
 
 .toc-side-container .toc > .toc-heading {
-	font-family: var(--title-font);
-	font-weight: 600;
+	font-family: var(--main-title-font);
+	font-weight: var(--main-title-font-weight);
+	font-style: var(--main-title-font-style);
 	text-transform: uppercase;
-	font-size: 20px;
+	font-size: larger;
 	display: block;
 	opacity: 0.6;
 	margin: 5px 0 5px 0;
@@ -1192,6 +1279,12 @@ nav.left-menu .ng-hide-animate {
 	padding-bottom: 30px;
 	padding-left: 100px;
 	padding-right: 30px;
+	font-family: var(--bottom-font);
+	font-size: var(--bottom-font-size);
+	font-weight: var(--bottom-font-weight);
+	font-style: var(--bottom-font-style);
+	letter-spacing: 1px;
+	text-transform: uppercase;
 }
 
 /* On mobile, don't add that extra space */
@@ -1205,11 +1298,7 @@ nav.left-menu .ng-hide-animate {
 }
 
 .footer > .footer-title {
-	font-family: var(--title-font);
-	letter-spacing: 1px;
-	text-transform: uppercase;
 	margin: 0;
-	font-size: 11px;
 	opacity: .8;
 }
 
@@ -1238,13 +1327,6 @@ nav.left-menu .ng-hide-animate {
 }
 
 /* Copyright */
-.footer > .footer-copyright {
-	font-family: var(--title-font);
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	font-size: 11px;
-}
-
 .footer > .footer-copyright > .copyright {
 	opacity: .62;
 }
