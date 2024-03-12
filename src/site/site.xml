@@ -38,7 +38,6 @@
 
 	<custom>
 		<keywords>maven,skin,doxia</keywords>
-		<bodyClass>sentry-skin</bodyClass>
 
 		<social>
 			<twitter>sentrysoftware</twitter>

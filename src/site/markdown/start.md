@@ -136,6 +136,8 @@ You can [customize the look and feel](styles.md) of your documentation by writin
 ```css
 body {
   --banner-bgcolor: #266fd0;
+  --alternate-bgcolor: var(--banner-bgcolor);
+  --alternate-fgcolor: var(--banner-fgcolor);
   --link-color: #d50c37;
 }
 
