@@ -131,22 +131,19 @@ Write the content of your documentation in the `./src/site/markdown/` directory 
 
 ### Styling
 
-You can [customize the look and feel](styles.md) of your documentation by writing a CSS stylesheet in `./src/site/resources/css/site.css` as in the example below:
+You can [customize the look and feel](styles.md) of your documentation by writing a CSS stylesheet in `./src/site/resources/css/site.css` that overrides the skin's CSS variables as in the example below:
 
 ```css
-/* Colors for <bodyClass>my-theme</bodyClass> */
-body.my-theme {
+body {
   --banner-bgcolor: #266fd0;
   --link-color: #d50c37;
 }
 
-/* Lighter red for dark mode (body.dark) */
-body.my-theme.dark {
+/* Lighter red for dark mode ('dark' class on the <body> element) */
+body.dark {
   --link-color: #ff6989;
 }
 ```
-
-Use the [`<bodyClass>` setting in `site.xml`](settings.html) to specify a class to the body element, so that you can reference it in `site.css`. In the above example, you would specify `<bodyClass>my-theme</bodyClass>`.
 
 ### Generating the documentation site
 
