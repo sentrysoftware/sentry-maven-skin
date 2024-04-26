@@ -78,7 +78,7 @@ assert result =~ /The Organization/ : '${project.organization.name} must be disp
 assert result =~ /https:\/\/the\.org/ : '${project.organization.url} must be displayed in the footer'
 
 // Google Analytics
-assert result.contains("https://www.googletagmanager.com/gtag/js?id=MY_GOOGLE_ID") : "Specific googleAnalyticsAccountId must be inserted"
+assert result.contains("(window,document,'script','dataLayer','MY_GOOGLE_ID')") : "Specific googleAnalyticsAccountId must be inserted"
 
 // bannerLeft and bannerRight are included
 assert result.contains('<a href="https://banner.left">Banner Left</a></li>') : "bannerLeft.name must be included only in xs mode"
