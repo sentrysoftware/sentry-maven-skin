@@ -24,6 +24,7 @@ angular.module(
 	"sentry.site",
 	[
 		"ngAnimate",
+		"ngSanitize",
 		"matchMediaLight",
 		"duScroll",
 		"ui.toggle"

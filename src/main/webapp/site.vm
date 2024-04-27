@@ -421,8 +421,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							<div class="search-results-entry" ng-repeat="result in resultArray track by result.href">
 								<div class="search-results-parents small text-muted">
 									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title">
-										<a ng-if="parent.path" ng-href="{{parent.path}}">{{parent.title}}</a>
-										<span ng-if="!parent.path">{{parent.title}}</span>
+										<a ng-if="parent.path" ng-href="{{parent.path}}" ng-bind-html="parent.title"></a>
+										<span ng-if="!parent.path" ng-bind-html="parent.title"></span>
 									</span>
 								</div>
 								<p class="search-results-title"><a ng-href="{{result.href}}"><i class="fas fa-file-alt"></i>{{result.title}}</a></p>
@@ -442,9 +442,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 								class="list-group-item"
 							>
 								<div class="search-results-parents small" aria-hidden="true">
-									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title">
-										{{parent.title}}
-									</span>
+									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title" ng-bind-html="parent.title"></span>
 								</div>
 								<div class="search-results-title"><i class="fas fa-file-alt"></i>{{result.title}}</div>
 								<div class="progressbar" aria-hidden="true">
@@ -548,6 +546,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<script src="../../../node_modules/mark.js/dist/mark.min.js" charset="UTF-8"></script>
 	<script src="../../../node_modules/angular/angular.min.js"></script>
 	<script src="../../../node_modules/angular-animate/angular-animate.min.js"></script>
+	<script src="../../../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
 	<script src="../../../node_modules/angular-scroll/angular-scroll.min.js"></script>
 	<script src="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.js"></script>
 	<script src="../../../node_modules/angular-match-media-light/dist/match-media-light.min.js"></script>

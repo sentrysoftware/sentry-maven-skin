@@ -85,7 +85,7 @@
 		</menu>
 
 		<menu name="Operating the Web Interface">
-			<item name="Operating the Console" href="console.html" />
+			<item name="Operating the Console &lt;i class='fa-regular fa-compass'>&lt;/i>" href="console.html" />
 			<item name="Managing Events" href="events.html" />
 			<item name="Configuring the Agent" href="subdir/agent.html" />
 			<item name="Other Tools" href="tools.html" />
@@ -95,7 +95,7 @@
 			<item name="General Concepts" href="general-concepts.html" />
 			<item name="Hosts and Templates" href="hosts-templates.html" />
 			<item name="Configuring Monitoring Studio" href="studio-settings.html" />
-			<item name="Basic Monitors" href="basic-monitors/index.html">
+			<item name="Basic Monitors &lt;i class='fa-regular fa-snowflake'>&lt;/i>" href="basic-monitors/index.html">
 				<item name="Filesystem" href="basic-monitors/filesystem.html" />
 				<item name="Process" href="basic-monitors/process.html" />
 				<item name="SNMP Trap" href="basic-monitors/snmp-trap.html" />
