@@ -26,7 +26,7 @@
 		"mark.js": "^8.11.1",
 		"npm": "^10.8.2",
 		"prism-themes": "^1.5.0",
-		"prismjs": "^1.29.0"
+		"prismjs": "^1.30.0"
 	},
 	"devDependencies": {
 		"del": "^3.0.0",
