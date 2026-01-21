@@ -18,7 +18,7 @@ on:
         
 jobs:
   build:
-    uses: sentrysoftware/workflows/.github/workflows/maven-build.yml@main
+    uses: sentrysoftware/workflows/.github/workflows/maven-build.yml@v5
     with:
       jdkVersion: "17"
       nodeVersion: "20.x"

@@ -24,7 +24,7 @@
 		"elasticlunr": "^0.9.5",
 		"jquery": "^3.7.1",
 		"mark.js": "^8.11.1",
-		"npm": "^11.3.0",
+		"npm": "^11.7.0",
 		"prism-themes": "^1.5.0",
 		"prismjs": "^1.30.0"
 	},
