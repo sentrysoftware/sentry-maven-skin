@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.sentrysoftware</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>2</version>
+		<version>5</version>
 	</parent>
 
 	<groupId>org.sentrysoftware.maven</groupId>
@@ -70,6 +70,12 @@
 		<!-- On local dev PC, we will use the frontend-maven-plugin -->
 		<skipFrontendPlugin>false</skipFrontendPlugin>
 		<skipExecPlugin>true</skipExecPlugin>
+
+		<!-- Disable code analysis plugins (not useful for this project) -->
+		<checkstyle.skip>true</checkstyle.skip>
+		<pmd.skip>true</pmd.skip>
+		<cpd.skip>true</cpd.skip>
+		<spotbugs.skip>true</spotbugs.skip>
 
 	</properties>
 
@@ -208,7 +214,7 @@
 			<!--  maven-invoker-plugin -->
 			<plugin>
 				<artifactId>maven-invoker-plugin</artifactId>
-				<version>3.9.0</version>
+				<version>3.9.1</version>
 				<configuration>
 					<debug>true</debug>
 					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -218,7 +224,7 @@
 					<postBuildHookScript>verify</postBuildHookScript>
 					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
 					<extraArtifacts>
-						<!-- <extraArtifact>org.sentrysoftware.maven.maven-skin-tools:1.0.00</extraArtifact> -->
+						<extraArtifact>org.sentrysoftware.maven:maven-skin-tools:1.5.00</extraArtifact>
 					</extraArtifacts>
 					<settingsFile>src/it/settings.xml</settingsFile>
 					<goals>
@@ -239,6 +245,39 @@
 
 		</plugins>
 	</build>
+
+	<!-- Reporting: disable useless reports inherited from parent -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports />
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports />
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports />
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<profiles>
 

@@ -22,7 +22,7 @@
 	<skin>
 		<groupId>org.sentrysoftware.maven</groupId>
 		<artifactId>sentry-maven-skin</artifactId>
-		<version>6.3.03</version>
+		<version>6.4.01</version>
 	</skin>
 
 	<bannerLeft>
@@ -108,6 +108,7 @@
 				<item name="Maven Properties" href="maven-properties.html" />
 				<item name="Keywords" href="keywords.html" />
 				<item name="Index and Search" href="search.html" />
+				<item name="AI Indexing" href="ai-indexing.html" />
 				<item name="Headers (Front Matter)" href="headers.html" />
 				<item name="Automatic ToC" href="toc.html" />
 				<item name="Automatic Title" href="title.html" />

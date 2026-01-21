@@ -15,7 +15,10 @@ assert result.contains('<meta name="description" content="Monitoring Studio X al
 assert result.contains('<meta name="keywords" content="event,testevent,blank space,studio,km,patrol,develop,web" />') : "Document's keywords is a merge of source's keywords and site.xml's keywords"
 assert result =~ /<meta name="generator" content="Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin .*, from markdown"/ : "Document's generator is set correctly"
 assert result.contains('<meta name="author" content="The &quot;Proud&quot; People" />') : "Document's author is set according to source's metadata"
-
+assert result.contains('<meta property="article:published_time" content="1980-05-22') : "Document's published time is set correctly"
+assert result.contains('<meta property="article:modified_time" content="1980-05-22') : "Document's modified time is set correctly"
+assert result.contains('<link rel="canonical" href="https://the.org/docs/events.html">') : "Document's canonical link is set according to project's URL"
+assert result.contains('<link rel="alternate" type="text/markdown" href="events.md">') : "Document's canonical link is set according to project's URL"
 assert result.contains("<b>skin-test</b> allows you") : "pom.xml properties must be replaced with their values"
 
 // Links, breadcrumbs, additionalLinks, and social networks
@@ -88,6 +91,24 @@ assert result.contains('href="https://banner.left"') : "bannerLeft.href must be 
 assert result.contains('<a href="https://banner.right">Banner Right</a></li>') : "bannerRight.name must be included only in xs mode"
 assert result.contains("images/logo.png") : "bannerRight.src must be included"
 assert result.contains('href="https://banner.right"') : "bannerRight.href must be included"
+
+// Verify that the corresponding .md files are generated
+def mdFile = new File(basedir, "target/site/extend-summary.md")
+assert mdFile.isFile() : "Markdown version of the HTML files must have been generated"
+def mdContent = mdFile.text
+assert mdContent.contains('description: skin-test can be extended') : "In generated Markdown, Frontmatter header must be set according to source's metadata"
+assert mdContent.contains('date_published: 1980-05-22') : "In generated Markdown, Frontmatter published date must be set correctly"
+assert mdContent.contains('date_modified: 1980-05-22') : "In generated Markdown, Frontmatter modified date must be set correctly"
+assert mdContent.contains('# Extending skin-test') : "In generated Markdown, content must be present"
+
+// Verify that the llms.txt file is generated
+def llmsFile = new File(basedir, "target/site/llms.txt")
+assert llmsFile.isFile() : "llms.txt file must have been generated"
+def llmsContent = llmsFile.text
+assert llmsContent.contains('# skin-test Extended') : "In llms.txt, title must be present"
+assert llmsContent.contains('> A full documentation project (copied from Monitoring Studio)') : "In llms.txt, description must be present"
+assert llmsContent.contains('## Getting Started') : "In llms.txt, menu section must be present"
+assert llmsContent.contains('- [Operating the Console](console.md)') : "In llms.txt, menu items must be present"
 
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
