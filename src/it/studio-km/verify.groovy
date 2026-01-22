@@ -18,7 +18,7 @@ assert result.contains('<meta name="author" content="The &quot;Proud&quot; Peopl
 assert result.contains('<meta property="article:published_time" content="1980-05-22') : "Document's published time is set correctly"
 assert result.contains('<meta property="article:modified_time" content="1980-05-22') : "Document's modified time is set correctly"
 assert result.contains('<link rel="canonical" href="https://the.org/docs/events.html">') : "Document's canonical link is set according to project's URL"
-assert result.contains('<link rel="alternate" type="text/markdown" href="events.md">') : "Document's canonical link is set according to project's URL"
+assert result.contains('<link rel="alternate" type="text/markdown" href="events.md">') : "Document's alternate link is set according to project's URL"
 assert result.contains("<b>skin-test</b> allows you") : "pom.xml properties must be replaced with their values"
 
 // Links, breadcrumbs, additionalLinks, and social networks
