@@ -15,7 +15,7 @@ on:
         description: Open SSH session in the runner
         required: false
         default: false
-        
+
 jobs:
   build:
     uses: sentrysoftware/workflows/.github/workflows/maven-build.yml@v5
@@ -24,3 +24,6 @@ jobs:
       nodeVersion: "20.x"
       debug: ${{ github.event_name == 'workflow_dispatch' && inputs.debug }}
       ssh: ${{ github.event_name == 'workflow_dispatch' && inputs.ssh }}
+      uploadCheckstyleReport: false
+      uploadPMDReport: false
+      uploadSpotbugsReport: false
