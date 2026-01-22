@@ -186,6 +186,35 @@ limitations under the License.
 *##end#*
 
 
+**
+* getMenuSection
+*
+* Returns the menu name (section) that the current file belongs to.
+* Returns empty string if the file is not found in any menu.
+*
+* This is used by AIIndexTool.updateLlmsTxt() to categorize pages in llms.txt
+**
+*##macro(getMenuSection)#*
+	*##foreach($menu in $decoration.body.menus)#*
+		*##foreach($item in $menu.items)#*
+			*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+			*##if ($alignedHref == $alignedFileName)#*
+				*#$menu.name#*
+				*##break($foreach.parent)#*
+			*##else#*
+				*##foreach($subItem in $item.items)#*
+					*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
+					*##if ($alignedSubHref == $alignedFileName)#*
+						*#$menu.name#*
+						*##break($foreach.parent)#*
+					*##end#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end#*
+
+
 /////////////////////////////////////////////////////
 //
 //   Initialization

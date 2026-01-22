@@ -33,11 +33,24 @@ limitations under the License.
 	<meta name="generator" content="$esc.html($generator)" />
 #foreach ($author in $authors)
 	<meta name="author" content="$author" />
-#end#*
+#end
+	<meta property="article:published_time" content="$date.format('iso', $publishDate)" />
+	<meta property="article:modified_time" content="$date.format('iso', $publishDate)" />
+#*
 
 // Header from the document *#
 $headElement.html()
-
+##
+## Canonical link
+#if ($project.url)
+	<link rel="canonical" href="$PathTool.calculateLink($currentFileName, $project.url)">
+#end
+##
+## AI Indexing: generate Markdown files for AI platforms and inserts a <link rel="alternate" /> in the head
+	$aiIndexTool.convertToMarkdown(${project.reporting.outputDirectory}, $currentFileName, $headElement, $bodyElement, $publishDate, $project.url)#*
+*##set($menuSection = "#getMenuSection()")#*
+*##call($aiIndexTool.updateLlmsTxt("${project.reporting.outputDirectory}/llms.txt", $currentFileName, $shortTitle, $decoration.name, $project.description, $menuSection))#*
+*#
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
@@ -57,6 +70,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','$decoration.googleAnalyticsAccountId');</script>
 #end
+##
+## schema.org metadata
+<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "TechArticle",
+	"headline": "$esc.java($shortTitle)",
+	"datePublished": "$date.format('YYYY-MM-dd', $publishDate)",
+	"dateModified": "$date.format('YYYY-MM-dd', $publishDate)",
+#if ($project.url)
+	"mainEntityOfPage": "$esc.java($PathTool.calculateLink($currentFileName, $project.url))"
+#end
+}
+</script>
 </head>
 
 <body class="sentry-site $!decoration.getCustomValue('bodyClass')" ng-class="{'dark': $matchMedia.dark }" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
@@ -473,7 +500,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		<p class="footer-title" ng-class="{'text-center': $matchMedia.size == 'xs'}">
 			<strong>$decoration.name $decoration.getCustomValue("projectVersion", $project.version)</strong>
 			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
-			Documentation as of <strong>$date.format($decoration.publishDate.format, $publishDate)</strong>
+			Documentation as of <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">$date.format($decoration.publishDate.format, $publishDate)</time></strong>
 		</p>
 #*
 		// Additional links
