@@ -594,25 +594,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 #if (!$bodyElement.select("pre > code[class*=language-]").empty)
 	<!-- build:js js/prism.js -->
 	<script src="../../../node_modules/prismjs/prism.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-markup.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-clike.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-bash.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-batch.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-css.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-docker.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-ini.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-javascript.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-java.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-json.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-markdown.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-powershell.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-psl.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-shell-session.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-regex.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-sql.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-velocity.js"></script>
-	<script src="../../../node_modules/prismjs/components/prism-yaml.js"></script>
+	<script src="../../../node_modules/prismjs/plugins/autoloader/prism-autoloader.js"></script>
 	<!-- endbuild -->
+	<script>Prism.plugins.autoloader.languages_path = "$relativePath/js/prism/";</script>
 #end
 	<script>
 angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.java($relativePath)");
