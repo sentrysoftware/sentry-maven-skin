@@ -25,6 +25,16 @@ angular.module("sentry.site").factory("siteIndex", ["$http", "$q", "RELATIVE_ROO
 	var index = null;
 
 	/**
+	 * Loading state
+	 **/
+	var loading = false;
+
+	/**
+	 * Pending fetch promise (to avoid multiple simultaneous fetches)
+	 **/
+	var fetchPromise = null;
+
+	/**
 	 * get
 	 **/
 	function get() {
@@ -35,17 +45,34 @@ angular.module("sentry.site").factory("siteIndex", ["$http", "$q", "RELATIVE_ROO
 			// Already got it, return the classMap (sort of Cache)
 			deferred.resolve(index);
 
+		} else if (fetchPromise) {
+
+			// Already fetching, return the existing promise
+			return fetchPromise;
+
 		} else {
 
 			// First time, so go fetch!
+			loading = true;
+
+			fetchPromise = deferred.promise;
 
 			$http.get(RELATIVE_ROOT + "/index.json", { responseType: "json" }).then(function(response) {
 
 				// Store the index
 				index = elasticlunr.Index.load(response.data);
 
+				// No longer loading
+				loading = false;
+				fetchPromise = null;
+
 				// Resolve the deferred
 				deferred.resolve(index);
+			}, function(error) {
+				// Handle error
+				loading = false;
+				fetchPromise = null;
+				deferred.reject(error);
 			});
 		}
 
@@ -53,7 +80,23 @@ angular.module("sentry.site").factory("siteIndex", ["$http", "$q", "RELATIVE_ROO
 		return deferred.promise;
 	}
 
+	/**
+	 * prefetch - Pre-fetches the index without returning results
+	 **/
+	function prefetch() {
+		get();
+	}
+
+	/**
+	 * isLoading - Returns true if the index is currently being fetched
+	 **/
+	function isLoading() {
+		return loading;
+	}
+
 	return {
-		get: get
+		get: get,
+		prefetch: prefetch,
+		isLoading: isLoading
 	};
 }]);

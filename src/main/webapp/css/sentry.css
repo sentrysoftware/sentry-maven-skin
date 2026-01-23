@@ -642,6 +642,15 @@ li.dark-toggle.dark-toggle-xs {
 	padding: 0;
 }
 
+.search-loading {
+	padding: 20px 0;
+}
+
+.search-loading .fa-spinner {
+	margin-right: 8px;
+	font-size: 1.2em;
+}
+
 
 /**
  * Main content

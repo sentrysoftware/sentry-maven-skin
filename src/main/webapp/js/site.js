@@ -90,6 +90,13 @@ angular.module("sentry.site").controller(
 			};
 
 			/**
+			 * prefetchSearchIndex - Pre-fetches the search index when user focuses on search
+			 **/
+			$scope.prefetchSearchIndex = function() {
+				siteIndex.prefetch();
+			};
+
+			/**
 			 * search
 			 **/
 			$scope.search = function(what) {
@@ -109,7 +116,13 @@ angular.module("sentry.site").controller(
 					// Clear the highlighting
 					$scope.mark.unmark();
 
+					// Set loading state
+					$scope.searchLoading = siteIndex.isLoading();
+
 					siteIndex.get().then(function(index) {
+
+						// Clear loading state
+						$scope.searchLoading = false;
 
 						$scope.resultArray = index.search(what, {
 							bool: "AND",
@@ -156,6 +169,9 @@ angular.module("sentry.site").controller(
 							$scope.mark.mark(keywords, { accuracy: "complementary", diacritics: true });
 						}, 0, false);
 
+					}, function() {
+						// Error fetching index
+						$scope.searchLoading = false;
 					});
 
 					// Update URL
