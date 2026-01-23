@@ -116,9 +116,18 @@ images = series(imagesSrc, imagesJstree, favicon);
 exports.images = images;
 
 /**
+ * PrismJS components (for autoloader)
+ **/
+function prismComponents() {
+	return src(LIB + "/prismjs/components/*.min.js")
+		.pipe(dest(DIST + "/js/prism/"));
+}
+exports.prismComponents = prismComponents;
+
+/**
  * Resources
  **/
-resources = series(fonts, images);
+resources = series(fonts, images, prismComponents);
 exports.resources = resources;
 
 /**
