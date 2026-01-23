@@ -13,7 +13,13 @@ System.out.println("Hello, World!");
 
 Each block of code can be easily copied to the system's clipboard with a dedicated `[Copy]` button.
 
-## Supported languages
+## Supported Languages
+
+All [290+ languages supported by PrismJS](https://prismjs.com/#supported-languages) are available, including Java, Python, JavaScript, TypeScript, Go, Rust, Kotlin, C#, Ruby, PHP, SQL, YAML, and many more.
+
+Language components are loaded automatically on demand using the PrismJS autoloader plugin. This means you can use any language identifier supported by PrismJS without any additional configuration.
+
+## Examples
 
 ### Command lines (Linux)
 
@@ -146,6 +152,42 @@ myArray: [3, 1, 4, 1, 5, 9, 2]
 other:
   main: null # This is null
   rest: "nothing"
+```
+````
+
+### Java
+
+````md
+```java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+````
+
+### Python
+
+````md
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+print(greet("World"))
+```
+````
+
+### TypeScript
+
+````md
+```typescript
+interface User {
+    name: string;
+    age: number;
+}
+
+const greet = (user: User): string => `Hello, ${user.name}!`;
 ```
 ````
 
