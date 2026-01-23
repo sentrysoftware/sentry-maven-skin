@@ -22,33 +22,33 @@
  **/
 
 @font-face {
-	font-family: 'Raleway';
-	src: url('../fonts/Raleway-Bold.woff2') format('woff2'),
-			 url('../fonts/Raleway-Bold.woff') format('woff'),
-			 url('../fonts/Raleway-Bold.ttf') format('truetype'),
-			 local('Helvetica');
+	font-family: 'RobotoSlab';
+	src: url('../fonts/RobotoSlab-Bold.woff2') format('woff2'),
+		url('../fonts/RobotoSlab-Bold.woff') format('woff'),
+		url('../fonts/RobotoSlab-Bold.ttf') format('truetype'),
+		local('Helvetica');
 	font-weight: bold;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Raleway';
-	src: url('../fonts/Raleway-Regular.woff2') format('woff2'),
-			 url('../fonts/Raleway-Regular.woff') format('woff'),
-			 url('../fonts/Raleway-Regular.ttf') format('truetype'),
-			 local('Helvetica');
+	font-family: 'RobotoSlab';
+	src: url('../fonts/RobotoSlab-Regular.woff2') format('woff2'),
+		url('../fonts/RobotoSlab-Regular.woff') format('woff'),
+		url('../fonts/RobotoSlab-Regular.ttf') format('truetype'),
+		local('Helvetica');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Lato';
-	src: url('../fonts/Lato-Regular.woff2') format('woff2'),
-			 url('../fonts/Lato-Regular.woff') format('woff'),
-			 url('../fonts/Lato-Regular.ttf') format('truetype'),
-			 local('Arial');
+	font-family: 'Roboto';
+	src: url('../fonts/Roboto-Regular.woff2') format('woff2'),
+		url('../fonts/Roboto-Regular.woff') format('woff'),
+		url('../fonts/Roboto-Regular.ttf') format('truetype'),
+		local('Arial');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -61,11 +61,11 @@
 /* Fonts */
 /* START SNIPPET: fonts */
 :root {
-	--content-font: 'Lato', sans-serif;
+	--content-font: 'Roboto', sans-serif;
 	--content-font-size: 15px;
 
-	--title-font: 'Raleway', sans-serif;
-	--heading-font: 'Raleway', sans-serif;
+	--title-font: 'RobotoSlab', sans-serif;
+	--heading-font: 'RobotoSlab', sans-serif;
 
 	--top-font: var(--heading-font);
 	--top-font-size: small;
