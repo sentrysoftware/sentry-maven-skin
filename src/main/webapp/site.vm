@@ -610,6 +610,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<script src="../../../node_modules/prismjs/components/prism-shell-session.js"></script>
 	<script src="../../../node_modules/prismjs/components/prism-regex.js"></script>
 	<script src="../../../node_modules/prismjs/components/prism-sql.js"></script>
+	<script src="../../../node_modules/prismjs/components/prism-velocity.js"></script>
 	<script src="../../../node_modules/prismjs/components/prism-yaml.js"></script>
 	<!-- endbuild -->
 #end
