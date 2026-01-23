@@ -115,6 +115,7 @@
 				<item name="Autozoom Images" href="autozoom.html" />
 				<item name="Conversion to WEBP" href="webp.html" />
 				<item name="Code Syntax Highlighting" href="code.html" />
+				<item name="UI Components (Tabs, Accordion, ...)" href="ui-components.html" />
 				<item name="Printing" href="print.html" />
 				<item name="Miscellaneous" href="misc.html" />
 			</item>

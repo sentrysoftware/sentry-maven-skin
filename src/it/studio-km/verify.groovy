@@ -179,3 +179,38 @@ assert linksHtml.contains("<a class=\"externalLink\" href=\"https://onehome.org\
 // Rendering time
 def buildLog = new File(basedir, "build.log").text
 assert buildLog =~ /Rendering time: [0-9.]+ ms/
+
+// UI Components (Angular UI Bootstrap)
+def uiComponentsFile = new File(basedir, "target/site/ui-components.html")
+assert uiComponentsFile.isFile() : "UI Components demo page must have been generated"
+def uiComponentsHtml = uiComponentsFile.text
+
+// Note: Element syntax like <uib-tabset> does NOT work - it gets stripped by Doxia's XHTML parser
+// Only the attribute syntax with <div> elements works: <div uib-tabset="">
+
+// Test attribute syntax: <div uib-tabset=""> and <div uib-tab="">
+assert uiComponentsHtml.contains('uib-tabset=""') : "Attribute syntax uib-tabset must be preserved in the HTML output"
+assert uiComponentsHtml.contains('uib-tab=""') : "Attribute syntax uib-tab must be preserved in the HTML output"
+assert uiComponentsHtml.contains('heading="Tab A"') : "Tab heading attribute must be preserved"
+assert uiComponentsHtml.contains('heading="Tab B"') : "Tab heading attribute must be preserved"
+assert uiComponentsHtml.contains('heading="Tab C"') : "Tab heading attribute must be preserved"
+
+// Test attribute syntax: <div uib-accordion=""> and <div uib-accordion-group="">
+assert uiComponentsHtml.contains('uib-accordion=""') : "Attribute syntax uib-accordion must be preserved in the HTML output"
+assert uiComponentsHtml.contains('uib-accordion-group=""') : "Attribute syntax uib-accordion-group must be preserved"
+assert uiComponentsHtml.contains('heading="Panel A"') : "Accordion group heading attribute must be preserved"
+assert uiComponentsHtml.contains('heading="Panel B"') : "Accordion group heading attribute must be preserved"
+
+// Test collapse
+assert uiComponentsHtml.contains('uib-collapse="demoCollapse"') : "Attribute uib-collapse must be preserved in the HTML output"
+
+// Test tooltip and popover
+assert uiComponentsHtml.contains('uib-tooltip="This is a tooltip!"') : "Attribute uib-tooltip must be preserved in the HTML output"
+assert uiComponentsHtml.contains('uib-popover="Popover content here"') : "Attribute uib-popover must be preserved in the HTML output"
+assert uiComponentsHtml.contains('popover-title="Popover Title"') : "Attribute popover-title must be preserved in the HTML output"
+assert uiComponentsHtml.contains("popover-trigger=") : "Attribute popover-trigger must be preserved in the HTML output"
+assert uiComponentsHtml.contains('popover-placement="right"') : "Attribute popover-placement must be preserved in the HTML output"
+assert uiComponentsHtml.contains('tooltip-placement="top"') : "Attribute tooltip-placement must be preserved in the HTML output"
+
+// Verify ui-bootstrap-tpls.js is included
+assert uiComponentsHtml.contains("ui-bootstrap-tpls") || uiComponentsHtml.contains("main-combined.js") : "UI Bootstrap library must be included"

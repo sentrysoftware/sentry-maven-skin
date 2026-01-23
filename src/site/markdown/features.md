@@ -22,4 +22,5 @@ description: ${project.name} comes with a bundle of features to make your docume
 | [Autozoom Images](autozoom.html) | Click-to-zoom images |
 | [Conversion to WEBP](webp.html) | Automatic image optimization |
 | [Code Highlighting](code.html) | Syntax highlighting for code blocks |
+| [UI Components](ui-components.html) | **New!** Tabs, accordion, carousel, and more |
 | [Printing](print.html) | Print-friendly layouts |

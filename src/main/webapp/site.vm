@@ -583,6 +583,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<script src="../../../node_modules/angular-scroll/angular-scroll.min.js"></script>
 	<script src="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.js"></script>
 	<script src="../../../node_modules/angular-match-media-light/dist/match-media-light.min.js"></script>
+	<script src="../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 	<script src="../../../node_modules/elasticlunr/release/elasticlunr.min.js"></script>
 	<script src="js/site.js"></script>
 	<script src="js/site-index.js"></script>

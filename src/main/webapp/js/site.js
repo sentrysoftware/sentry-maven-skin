@@ -27,7 +27,8 @@ angular.module(
 		"ngSanitize",
 		"matchMediaLight",
 		"duScroll",
-		"ui.toggle"
+		"ui.toggle",
+		"ui.bootstrap"
 	]
 );
 
