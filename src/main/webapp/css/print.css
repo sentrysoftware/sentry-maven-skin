@@ -117,4 +117,70 @@
 		page-break-after: avoid;
 	}
 
+	/*
+	 * Angular UI Bootstrap components: show all content when printing
+	 */
+
+	/* Tabs: show all tab content vertically, hide tab navigation */
+	[uib-tabset] > .nav-tabs {
+		display: none !important;
+	}
+	[uib-tabset] > .tab-content > .tab-pane {
+		display: block !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		margin-bottom: 1em;
+		padding: 0.5em;
+		border: 1px solid #ccc;
+	}
+	[uib-tabset] > .tab-content > .tab-pane::before {
+		content: attr(heading);
+		display: block;
+		font-weight: bold;
+		margin-bottom: 0.5em;
+		border-bottom: 1px solid #ccc;
+		padding-bottom: 0.25em;
+	}
+
+	/* Accordion: expand all panels */
+	[uib-accordion] .panel-collapse {
+		display: block !important;
+		height: auto !important;
+		visibility: visible !important;
+	}
+	[uib-accordion] .panel-collapse.collapse {
+		display: block !important;
+	}
+	[uib-accordion] .panel-collapse.collapsing {
+		display: block !important;
+		height: auto !important;
+	}
+
+	/* Collapse: show all collapsed content */
+	[uib-collapse] {
+		display: block !important;
+		height: auto !important;
+		visibility: visible !important;
+		overflow: visible !important;
+	}
+	[uib-collapse].collapse:not(.in) {
+		display: block !important;
+		height: auto !important;
+	}
+	[uib-collapse].collapsing {
+		display: block !important;
+		height: auto !important;
+	}
+
+	/* Carousel: show all slides vertically */
+	[uib-carousel] .carousel-inner > .item {
+		display: block !important;
+		opacity: 1 !important;
+		margin-bottom: 1em;
+	}
+	[uib-carousel] .carousel-control,
+	[uib-carousel] .carousel-indicators {
+		display: none !important;
+	}
+
 }

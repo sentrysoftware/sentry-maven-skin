@@ -146,6 +146,8 @@
 			<item name="PATROL REST API Documentation" href="../swagger-ui/?url=../openapi.yaml" />
 			<item name="Extensions for KM Developers" href="extend-summary.html" />
 			<item name="Time/Date Formats for Macros" href="macros.html" />
+			<item name="Code Syntax Highlighting" href="code.html" />
+			<item name="UI Components Demo" href="ui-components.html" />
 		</menu>
 
 		<menu ref="reports" />

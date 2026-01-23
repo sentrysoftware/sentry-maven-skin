@@ -1785,3 +1785,311 @@ body.sentry-site .search-results-content-xs .list-group-item {
 	background-color: var(--main-bgcolor);
 	transition: background-color 1s ease-in-out;
 }
+
+/**
+ * Angular UI Bootstrap Components
+ **/
+
+/* Tabs: remove underline from tab titles */
+body.sentry-site .nav-tabs > li > a {
+	text-decoration: none;
+}
+
+body.sentry-site .nav-tabs > li > a:hover,
+body.sentry-site .nav-tabs > li > a:focus {
+	text-decoration: none;
+}
+
+/* Tabs: proper colors for light and dark mode */
+body.sentry-site .nav-tabs {
+	border-bottom: 1px solid var(--main-fgcolor);
+}
+
+/* Inactive tab: no border, no background */
+body.sentry-site .nav-tabs > li > a {
+	color: var(--main-fgcolor);
+	background-color: transparent;
+	border-color: transparent;
+	transition: background-color 0.2s ease-in-out;
+}
+
+/* Hovered tab: no border, alternate background */
+body.sentry-site .nav-tabs > li > a:hover,
+body.sentry-site .nav-tabs > li > a:focus {
+	color: var(--alternate-fgcolor);
+	background-color: var(--alternate-bgcolor);
+	border-color: transparent;
+}
+
+/* Active tab: border, background matches content */
+body.sentry-site .nav-tabs > li.active > a,
+body.sentry-site .nav-tabs > li.active > a:hover,
+body.sentry-site .nav-tabs > li.active > a:focus {
+	color: var(--main-fgcolor);
+	background-color: var(--main-bgcolor);
+	border-color: var(--main-fgcolor);
+	border-bottom-color: var(--main-bgcolor);
+	opacity: 1;
+}
+
+/* Tab content area */
+body.sentry-site .tab-content {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+}
+
+/* Accordion panels: proper colors for light and dark mode */
+body.sentry-site .panel {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+	border-color: var(--main-fgcolor);
+}
+
+body.sentry-site .panel-default {
+	border-color: var(--main-fgcolor);
+}
+
+/* Panel heading with subtle background using pseudo-element */
+body.sentry-site .panel > .panel-heading,
+body.sentry-site .panel-default > .panel-heading {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+	border-color: var(--main-fgcolor);
+	position: relative;
+}
+
+body.sentry-site .panel > .panel-heading::before,
+body.sentry-site .panel-default > .panel-heading::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--main-fgcolor);
+	opacity: 0.1;
+	pointer-events: none;
+}
+
+body.sentry-site .panel > .panel-heading + .panel-collapse > .panel-body,
+body.sentry-site .panel-default > .panel-heading + .panel-collapse > .panel-body {
+	border-top-color: var(--main-fgcolor);
+}
+
+body.sentry-site .panel-body {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+}
+
+body.sentry-site .panel-title > a {
+	color: var(--main-fgcolor);
+	text-decoration: none;
+	position: relative;
+	z-index: 1;
+}
+
+body.sentry-site .panel-title > a:hover,
+body.sentry-site .panel-title > a:focus {
+	text-decoration: none;
+	color: var(--main-fgcolor);
+}
+
+/* Panel title margins fix */
+body.sentry-site .panel-heading h4.panel-title {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Tooltip and Popover: proper colors for light and dark mode */
+body.sentry-site .tooltip-inner {
+	background-color: var(--main-fgcolor);
+	color: var(--main-bgcolor);
+}
+
+body.sentry-site .tooltip.top .tooltip-arrow,
+body.sentry-site .tooltip.top-left .tooltip-arrow,
+body.sentry-site .tooltip.top-right .tooltip-arrow {
+	border-top-color: var(--main-fgcolor);
+}
+
+body.sentry-site .tooltip.bottom .tooltip-arrow,
+body.sentry-site .tooltip.bottom-left .tooltip-arrow,
+body.sentry-site .tooltip.bottom-right .tooltip-arrow {
+	border-bottom-color: var(--main-fgcolor);
+}
+
+body.sentry-site .tooltip.left .tooltip-arrow {
+	border-left-color: var(--main-fgcolor);
+}
+
+body.sentry-site .tooltip.right .tooltip-arrow {
+	border-right-color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover {
+	background-color: var(--main-bgcolor);
+	border-color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover-title {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+	border-bottom-color: var(--main-fgcolor);
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+body.sentry-site .popover-content {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover.top > .arrow {
+	border-top-color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover.top > .arrow::after {
+	border-top-color: var(--main-bgcolor);
+}
+
+body.sentry-site .popover.bottom > .arrow {
+	border-bottom-color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover.bottom > .arrow::after {
+	border-bottom-color: var(--main-bgcolor);
+}
+
+body.sentry-site .popover.left > .arrow {
+	border-left-color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover.left > .arrow::after {
+	border-left-color: var(--main-bgcolor);
+}
+
+body.sentry-site .popover.right > .arrow {
+	border-right-color: var(--main-fgcolor);
+}
+
+body.sentry-site .popover.right > .arrow::after {
+	border-right-color: var(--main-bgcolor);
+}
+
+/* Collapse / Well: subtle background using pseudo-element */
+body.sentry-site .well {
+	background-color: var(--main-bgcolor);
+	border-color: var(--main-fgcolor);
+	color: var(--main-fgcolor);
+	position: relative;
+}
+
+body.sentry-site .well::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--main-fgcolor);
+	opacity: 0.05;
+	pointer-events: none;
+	border-radius: inherit;
+}
+
+body.sentry-site .collapse,
+body.sentry-site .collapsing {
+	background-color: var(--main-bgcolor);
+	color: var(--main-fgcolor);
+}
+
+/* Buttons: use theme colors instead of Bootstrap defaults */
+body.sentry-site .btn-primary {
+	background-color: var(--banner-bgcolor);
+	border-color: var(--banner-bgcolor);
+	color: var(--banner-fgcolor);
+}
+
+body.sentry-site .btn-primary:hover,
+body.sentry-site .btn-primary:focus,
+body.sentry-site .btn-primary:active,
+body.sentry-site .btn-primary.active {
+	background-color: var(--alternate-bgcolor);
+	border-color: var(--alternate-bgcolor);
+	color: var(--alternate-fgcolor);
+}
+
+body.sentry-site .btn-success {
+	background-color: var(--success-bg);
+	border-color: var(--success-bg);
+	color: var(--success-fg);
+}
+
+body.sentry-site .btn-success:hover,
+body.sentry-site .btn-success:focus,
+body.sentry-site .btn-success:active,
+body.sentry-site .btn-success.active {
+	background-color: var(--success-fg);
+	border-color: var(--success-fg);
+	color: var(--success-bg);
+}
+
+body.sentry-site .btn-info {
+	background-color: var(--info-bg);
+	border-color: var(--info-bg);
+	color: var(--info-fg);
+}
+
+body.sentry-site .btn-info:hover,
+body.sentry-site .btn-info:focus,
+body.sentry-site .btn-info:active,
+body.sentry-site .btn-info.active {
+	background-color: var(--info-fg);
+	border-color: var(--info-fg);
+	color: var(--info-bg);
+}
+
+body.sentry-site .btn-warning {
+	background-color: var(--warning-bg);
+	border-color: var(--warning-bg);
+	color: var(--warning-fg);
+}
+
+body.sentry-site .btn-warning:hover,
+body.sentry-site .btn-warning:focus,
+body.sentry-site .btn-warning:active,
+body.sentry-site .btn-warning.active {
+	background-color: var(--warning-fg);
+	border-color: var(--warning-fg);
+	color: var(--warning-bg);
+}
+
+body.sentry-site .btn-danger {
+	background-color: var(--danger-bg);
+	border-color: var(--danger-bg);
+	color: var(--danger-fg);
+}
+
+body.sentry-site .btn-danger:hover,
+body.sentry-site .btn-danger:focus,
+body.sentry-site .btn-danger:active,
+body.sentry-site .btn-danger.active {
+	background-color: var(--danger-fg);
+	border-color: var(--danger-fg);
+	color: var(--danger-bg);
+}
+
+body.sentry-site .btn-default {
+	background-color: var(--main-bgcolor);
+	border-color: var(--main-fgcolor);
+	color: var(--main-fgcolor);
+}
+
+body.sentry-site .btn-default:hover,
+body.sentry-site .btn-default:focus,
+body.sentry-site .btn-default:active,
+body.sentry-site .btn-default.active {
+	background-color: var(--main-fgcolor);
+	border-color: var(--main-fgcolor);
+	color: var(--main-bgcolor);
+}
