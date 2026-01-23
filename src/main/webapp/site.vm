@@ -197,6 +197,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"
 							ng-keydown="handleKeyboard($event)"
+							ng-focus="prefetchSearchIndex()"
 							focus-me="showSearchInput"
 						/>
 					</form>
@@ -214,6 +215,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"
 							ng-keydown="handleKeyboard($event)"
+							ng-focus="prefetchSearchIndex()"
 						/>
 						<i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
 					</div>
@@ -483,7 +485,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					</div>
 
 					<div ng-hide="resultArray.length">
-						<em>No results.</em>
+						<div ng-show="searchLoading" class="search-loading">
+							<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+							<em>Searching...</em>
+						</div>
+						<em ng-hide="searchLoading">No results.</em>
 					</div>
 
 				</div>
