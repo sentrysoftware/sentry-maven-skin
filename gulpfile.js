@@ -1,8 +1,8 @@
 // Constants
-const SRC_MAIN = "src/main/webapp"
-const DIST = "target/dist"
-const LIB = "node_modules"
-const TMP = "target/tmp/webapp"
+const SRC_MAIN = "src/main/webapp";
+const DIST = "target/dist";
+const LIB = "node_modules";
+const TMP = "target/tmp/webapp";
 
 // Gulp
 const { src, dest, series, parallel, watch } = require("gulp");
@@ -44,19 +44,19 @@ function jsLint() {
 }
 function templates() {
 	return src(SRC_MAIN + "/js/*.js")
-		.pipe(embedTemplates( {
-			basePath: SRC_MAIN,
-			minimize: { loose: true }
-		}))
+		.pipe(
+			embedTemplates({
+				basePath: SRC_MAIN,
+				minimize: { loose: true }
+			})
+		)
 		.pipe(dest(TMP + "/js"));
 }
 function htmlTmp() {
-	return src([SRC_MAIN + "/*.vm"])
-		.pipe(dest(TMP));
+	return src([SRC_MAIN + "/*.vm"]).pipe(dest(TMP));
 }
 function cssTmp() {
-	return src(SRC_MAIN + "/css/*.css")
-		.pipe(dest(TMP + "/css"));
+	return src(SRC_MAIN + "/css/*.css").pipe(dest(TMP + "/css"));
 }
 function mini() {
 	return src([TMP + "/*.vm"])
@@ -68,12 +68,12 @@ function mini() {
 }
 function siteVm() {
 	return src(DIST + "/*.vm")
-		.pipe(replace(/script src="js/g, "script src=\"$relativePath/js"))
-		.pipe(replace(/link rel="stylesheet" href="css/g, "link rel=\"stylesheet\" href=\"$relativePath/css"))
-		.pipe(dest(DIST + "/META-INF/maven"))
+		.pipe(replace(/script src="js/g, 'script src="$relativePath/js'))
+		.pipe(replace(/link rel="stylesheet" href="css/g, 'link rel="stylesheet" href="$relativePath/css'))
+		.pipe(dest(DIST + "/META-INF/maven"));
 }
 function removeSiteVm() {
-	return del(DIST + "/*.vm")
+	return del(DIST + "/*.vm");
 }
 
 webProd = series(jsLint, templates, htmlTmp, cssTmp, mini, siteVm, removeSiteVm);
@@ -83,16 +83,13 @@ exports.webProd = webProd;
  * Fonts
  **/
 function fa() {
-	return src(LIB + "/@fortawesome/fontawesome-free/webfonts/*")
-		.pipe(dest(DIST + "/webfonts/"));
+	return src(LIB + "/@fortawesome/fontawesome-free/webfonts/*").pipe(dest(DIST + "/webfonts/"));
 }
 function glyphicons() {
-	return src(LIB + "/bootstrap/fonts/*")
-		.pipe(dest(DIST + "/fonts/"));
+	return src(LIB + "/bootstrap/fonts/*").pipe(dest(DIST + "/fonts/"));
 }
 function srcFonts() {
-	return src(SRC_MAIN + "/fonts/*")
-		.pipe(dest(DIST + "/fonts"));
+	return src(SRC_MAIN + "/fonts/*").pipe(dest(DIST + "/fonts"));
 }
 fonts = series(fa, glyphicons, srcFonts);
 exports.fonts = fonts;
@@ -101,16 +98,13 @@ exports.fonts = fonts;
  * Images
  **/
 function imagesSrc() {
-	return src(SRC_MAIN + "/images/*")
-		.pipe(dest(DIST + "/images/"));
+	return src(SRC_MAIN + "/images/*").pipe(dest(DIST + "/images/"));
 }
 function imagesJstree() {
-	return src(LIB + "/bootstrap-jstree-theme/dist/themes/bootstrap/*.+(gif|png)")
-		.pipe(dest(DIST + "/css/"));
+	return src(LIB + "/bootstrap-jstree-theme/dist/themes/bootstrap/*.+(gif|png)").pipe(dest(DIST + "/css/"));
 }
 function favicon() {
-	return src(SRC_MAIN + "/favicon*")
-		.pipe(dest(DIST + "/"));
+	return src(SRC_MAIN + "/favicon*").pipe(dest(DIST + "/"));
 }
 images = series(imagesSrc, imagesJstree, favicon);
 exports.images = images;
@@ -119,8 +113,7 @@ exports.images = images;
  * PrismJS components (for autoloader)
  **/
 function prismComponents() {
-	return src(LIB + "/prismjs/components/*.min.js")
-		.pipe(dest(DIST + "/js/prism/"));
+	return src(LIB + "/prismjs/components/*.min.js").pipe(dest(DIST + "/js/prism/"));
 }
 exports.prismComponents = prismComponents;
 

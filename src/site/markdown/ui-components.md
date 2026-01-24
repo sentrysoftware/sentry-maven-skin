@@ -7,13 +7,13 @@ description: ${project.name} includes Angular UI Bootstrap components like tabs,
 
 ## Available Components
 
-| Component | Description |
-|-----------|-------------|
-| [Tabs](#tabs) | Organize content in switchable tabs |
-| [Accordion](#accordion) | Collapsible content panels |
-| [Collapse](#collapse) | Toggle content visibility |
-| [Carousel](#carousel) | Image or content slideshow |
-| [Popover](#popover) | Contextual popup boxes |
+| Component               | Description                         |
+| ----------------------- | ----------------------------------- |
+| [Tabs](#tabs)           | Organize content in switchable tabs |
+| [Accordion](#accordion) | Collapsible content panels          |
+| [Collapse](#collapse)   | Toggle content visibility           |
+| [Carousel](#carousel)   | Image or content slideshow          |
+| [Popover](#popover)     | Contextual popup boxes              |
 
 ## Important: Markdown Compatibility
 
@@ -26,13 +26,13 @@ Since Markdown files are converted to HTML via Maven Doxia's XHTML parser, there
 ```html
 <!-- ✓ CORRECT: Use attribute syntax with empty values -->
 <div uib-tabset="">
-  <div uib-tab="" heading="Tab 1">Content of Tab 1</div>
-  <div uib-tab="" heading="Tab 2">Content of Tab 2</div>
+	<div uib-tab="" heading="Tab 1">Content of Tab 1</div>
+	<div uib-tab="" heading="Tab 2">Content of Tab 2</div>
 </div>
 
 <!-- ✗ WRONG: Custom elements are stripped -->
 <uib-tabset>
-  <uib-tab heading="Tab 1">Content</uib-tab>
+	<uib-tab heading="Tab 1">Content</uib-tab>
 </uib-tabset>
 
 <!-- ✗ WRONG: Bare attributes cause parse errors -->
@@ -47,15 +47,15 @@ Tabs allow you to organize content into multiple panels, with only one panel vis
 
 ```html
 <div uib-tabset="">
-  <div uib-tab="" heading="Overview">
-    <p>This is the overview content.</p>
-  </div>
-  <div uib-tab="" heading="Installation">
-    <p>Installation instructions go here.</p>
-  </div>
-  <div uib-tab="" heading="Configuration">
-    <p>Configuration details go here.</p>
-  </div>
+	<div uib-tab="" heading="Overview">
+		<p>This is the overview content.</p>
+	</div>
+	<div uib-tab="" heading="Installation">
+		<p>Installation instructions go here.</p>
+	</div>
+	<div uib-tab="" heading="Configuration">
+		<p>Configuration details go here.</p>
+	</div>
 </div>
 ```
 
@@ -79,8 +79,8 @@ You can include FontAwesome icons in tab headings:
 
 ```html
 <div uib-tabset="" class="sentry-uib">
-  <div uib-tab="" heading="<i class='fas fa-home'></i> Home">Home content</div>
-  <div uib-tab="" heading="<i class='fas fa-cog'></i> Settings">Settings content</div>
+	<div uib-tab="" heading="<i class='fas fa-home'></i> Home">Home content</div>
+	<div uib-tab="" heading="<i class='fas fa-cog'></i> Settings">Settings content</div>
 </div>
 ```
 
@@ -90,8 +90,8 @@ Make tabs fill the entire width:
 
 ```html
 <div uib-tabset="" justified="true">
-  <div uib-tab="" heading="Tab 1">Content 1</div>
-  <div uib-tab="" heading="Tab 2">Content 2</div>
+	<div uib-tab="" heading="Tab 1">Content 1</div>
+	<div uib-tab="" heading="Tab 2">Content 2</div>
 </div>
 ```
 
@@ -101,8 +101,8 @@ Display tabs vertically:
 
 ```html
 <div uib-tabset="" vertical="true">
-  <div uib-tab="" heading="Tab 1">Content 1</div>
-  <div uib-tab="" heading="Tab 2">Content 2</div>
+	<div uib-tab="" heading="Tab 1">Content 1</div>
+	<div uib-tab="" heading="Tab 2">Content 2</div>
 </div>
 ```
 
@@ -114,15 +114,11 @@ Accordions display collapsible content panels for presenting information in a li
 
 ```html
 <div uib-accordion="">
-  <div uib-accordion-group="" heading="Section 1" is-open="true">
-    Content of section 1. This section is open by default.
-  </div>
-  <div uib-accordion-group="" heading="Section 2">
-    Content of section 2.
-  </div>
-  <div uib-accordion-group="" heading="Section 3">
-    Content of section 3.
-  </div>
+	<div uib-accordion-group="" heading="Section 1" is-open="true">
+		Content of section 1. This section is open by default.
+	</div>
+	<div uib-accordion-group="" heading="Section 2">Content of section 2.</div>
+	<div uib-accordion-group="" heading="Section 3">Content of section 3.</div>
 </div>
 ```
 
@@ -146,8 +142,8 @@ By default, opening one panel closes others. Set `close-others="false"` to allow
 
 ```html
 <div uib-accordion="" close-others="false">
-  <div uib-accordion-group="" heading="Section 1">Content 1</div>
-  <div uib-accordion-group="" heading="Section 2">Content 2</div>
+	<div uib-accordion-group="" heading="Section 1">Content 1</div>
+	<div uib-accordion-group="" heading="Section 2">Content 2</div>
 </div>
 ```
 
@@ -159,14 +155,10 @@ Collapse provides a simple way to hide and show content with a smooth animation.
 
 ```html
 <p>
-  <button type="button" class="btn btn-primary" ng-click="isCollapsed = !isCollapsed">
-    Toggle Content
-  </button>
+	<button type="button" class="btn btn-primary" ng-click="isCollapsed = !isCollapsed">Toggle Content</button>
 </p>
 <div uib-collapse="isCollapsed">
-  <div class="well">
-    This content can be shown or hidden by clicking the button above.
-  </div>
+	<div class="well">This content can be shown or hidden by clicking the button above.</div>
 </div>
 ```
 
@@ -194,30 +186,30 @@ Carousels cycle through elements like a slideshow.
 
 ```html
 <div uib-carousel="" interval="5000" no-wrap="false">
-  <div uib-slide="" index="0">
-    <img src="images/slide1.png" alt="Slide 1">
-    <div class="carousel-caption">
-      <h4>First Slide</h4>
-      <p>Description for the first slide.</p>
-    </div>
-  </div>
-  <div uib-slide="" index="1">
-    <img src="images/slide2.png" alt="Slide 2">
-    <div class="carousel-caption">
-      <h4>Second Slide</h4>
-      <p>Description for the second slide.</p>
-    </div>
-  </div>
+	<div uib-slide="" index="0">
+		<img src="images/slide1.png" alt="Slide 1" />
+		<div class="carousel-caption">
+			<h4>First Slide</h4>
+			<p>Description for the first slide.</p>
+		</div>
+	</div>
+	<div uib-slide="" index="1">
+		<img src="images/slide2.png" alt="Slide 2" />
+		<div class="carousel-caption">
+			<h4>Second Slide</h4>
+			<p>Description for the second slide.</p>
+		</div>
+	</div>
 </div>
 ```
 
 ### Carousel Options
 
-| Attribute | Description | Default |
-|-----------|-------------|---------|
-| `interval` | Time in milliseconds between slides | `5000` |
-| `no-wrap` | Disable continuous cycling | `false` |
-| `no-pause` | Disable pausing on hover | `false` |
+| Attribute  | Description                         | Default |
+| ---------- | ----------------------------------- | ------- |
+| `interval` | Time in milliseconds between slides | `5000`  |
+| `no-wrap`  | Disable continuous cycling          | `false` |
+| `no-pause` | Disable pausing on hover            | `false` |
 
 ## Popover
 
@@ -226,11 +218,14 @@ Popovers display additional content on hover or click.
 ### Basic Popover Example
 
 ```html
-<button type="button" class="btn btn-default"
-        uib-popover="This is the popover content!"
-        popover-title="Popover Title"
-        popover-trigger="'mouseenter'">
-  Hover me
+<button
+	type="button"
+	class="btn btn-default"
+	uib-popover="This is the popover content!"
+	popover-title="Popover Title"
+	popover-trigger="'mouseenter'"
+>
+	Hover me
 </button>
 ```
 
@@ -255,12 +250,12 @@ Popovers display additional content on hover or click.
 
 ### Popover Triggers
 
-| Trigger | Description |
-|---------|-------------|
-| `'mouseenter'` | Show on hover |
-| `'click'` | Toggle on click |
+| Trigger          | Description                               |
+| ---------------- | ----------------------------------------- |
+| `'mouseenter'`   | Show on hover                             |
+| `'click'`        | Toggle on click                           |
 | `'outsideClick'` | Show on click, hide when clicking outside |
-| `'focus'` | Show on focus |
+| `'focus'`        | Show on focus                             |
 
 ### Popover Placement
 
@@ -271,10 +266,8 @@ Use `popover-placement` to control where the popover appears: `top`, `bottom`, `
 For simple text hints, use tooltips instead of popovers:
 
 ```html
-<button type="button" class="btn btn-default"
-        uib-tooltip="This is a tooltip!"
-        tooltip-placement="top">
-  Hover for tooltip
+<button type="button" class="btn btn-default" uib-tooltip="This is a tooltip!" tooltip-placement="top">
+	Hover for tooltip
 </button>
 ```
 
@@ -301,7 +294,7 @@ Add the `sentry-uib` class to your UI Bootstrap components for consistent stylin
 
 ```html
 <div uib-tabset="" class="sentry-uib">
-  <!-- tabs content -->
+	<!-- tabs content -->
 </div>
 ```
 

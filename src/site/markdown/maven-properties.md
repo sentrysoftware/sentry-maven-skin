@@ -65,7 +65,7 @@ Same principle goes with `src/site/site.xml`, with properties listed under `<cus
 In the source documents (`src/site/markdown/*.md`, or others), you can use `${esc.d}decoration.getCustomValue("productShortName")` and `${esc.d}decoration.getCustomValue("serviceUrl")`, which will be replaced with with their corresponding value:
 
 ```md
-**${esc.d}decoration.getCustomValue("productShortName")** allows administrators to setup the monitoring of any application through an [API](${esc.d}decoration.getCustomValue("serviceUrl"))...
+**${esc.d}decoration.getCustomValue("productShortName")** allows administrators to setup the monitoring of any application through an [API](<${esc.d}decoration.getCustomValue("serviceUrl")>)...
 ```
 
 This will produce the below result:

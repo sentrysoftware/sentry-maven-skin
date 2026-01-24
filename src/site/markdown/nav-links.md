@@ -29,9 +29,9 @@ The first link and logo on the left in this navigation bar is specified with `<b
 
 The `<src>` property refers to an image storage in the `src/resources` directory. For better result, please ensure the image follows these rules:
 
-* Height of 40px to 80px (the image will be resized to 40 pixels in height to fit the bar)
-* Transparent background (PNG is strongly recommended)
-* Light colors (to ensure contrast with the dark color of the bar)
+- Height of 40px to 80px (the image will be resized to 40 pixels in height to fit the bar)
+- Transparent background (PNG is strongly recommended)
+- Light colors (to ensure contrast with the dark color of the bar)
 
 If you don't have any logo to display, simply use the `<name>` property to specify the text to display for the main link in the navigation bar. Both `<src>` and `<name>` are optional, you only need to specify one of these properties.
 

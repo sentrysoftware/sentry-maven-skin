@@ -1,0 +1,59 @@
+{
+	// Editor settings
+	"editor.formatOnSave": true,
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"files.eol": "\n",
+	"files.trimTrailingWhitespace": true,
+	"files.insertFinalNewline": true,
+
+	// Prettier as default formatter for supported files
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+
+	// File-specific settings
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[yaml]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true
+	},
+
+	// Velocity template files - no auto formatter (manual formatting required)
+	"[velocity]": {
+		"editor.formatOnSave": false,
+		"editor.tabSize": 4,
+		"editor.insertSpaces": false
+	},
+
+	// File associations
+	"files.associations": {
+		"*.vm": "velocity"
+	},
+
+	// ESLint settings
+	"eslint.validate": ["javascript"],
+
+	// Search exclusions
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/node": true,
+		"**/target": true
+	},
+
+	// Files to exclude from explorer
+	"files.exclude": {
+		"**/node_modules": true,
+		"**/node": true
+	}
+}

@@ -22,33 +22,36 @@
  **/
 
 @font-face {
-	font-family: 'RobotoSlab';
-	src: url('../fonts/RobotoSlab-Bold.woff2') format('woff2'),
-		url('../fonts/RobotoSlab-Bold.woff') format('woff'),
-		url('../fonts/RobotoSlab-Bold.ttf') format('truetype'),
-		local('Helvetica');
+	font-family: "RobotoSlab";
+	src:
+		url("../fonts/RobotoSlab-Bold.woff2") format("woff2"),
+		url("../fonts/RobotoSlab-Bold.woff") format("woff"),
+		url("../fonts/RobotoSlab-Bold.ttf") format("truetype"),
+		local("Helvetica");
 	font-weight: bold;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'RobotoSlab';
-	src: url('../fonts/RobotoSlab-Regular.woff2') format('woff2'),
-		url('../fonts/RobotoSlab-Regular.woff') format('woff'),
-		url('../fonts/RobotoSlab-Regular.ttf') format('truetype'),
-		local('Helvetica');
+	font-family: "RobotoSlab";
+	src:
+		url("../fonts/RobotoSlab-Regular.woff2") format("woff2"),
+		url("../fonts/RobotoSlab-Regular.woff") format("woff"),
+		url("../fonts/RobotoSlab-Regular.ttf") format("truetype"),
+		local("Helvetica");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Roboto';
-	src: url('../fonts/Roboto-Regular.woff2') format('woff2'),
-		url('../fonts/Roboto-Regular.woff') format('woff'),
-		url('../fonts/Roboto-Regular.ttf') format('truetype'),
-		local('Arial');
+	font-family: "Roboto";
+	src:
+		url("../fonts/Roboto-Regular.woff2") format("woff2"),
+		url("../fonts/Roboto-Regular.woff") format("woff"),
+		url("../fonts/Roboto-Regular.ttf") format("truetype"),
+		local("Arial");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -61,11 +64,11 @@
 /* Fonts */
 /* START SNIPPET: fonts */
 :root {
-	--content-font: 'Roboto', sans-serif;
+	--content-font: "Roboto", sans-serif;
 	--content-font-size: 15px;
 
-	--title-font: 'RobotoSlab', sans-serif;
-	--heading-font: 'RobotoSlab', sans-serif;
+	--title-font: "RobotoSlab", sans-serif;
+	--heading-font: "RobotoSlab", sans-serif;
 
 	--top-font: var(--heading-font);
 	--top-font-size: small;
@@ -120,7 +123,7 @@ body {
 	--main-fgcolor: #000;
 	--alternate-bgcolor: #c0defd;
 	--alternate-fgcolor: #013e7a;
-	--link-color: #266eb7;;
+	--link-color: #266eb7;
 
 	--success-bg: #d6e9c6;
 	--success-fg: #32661c;
@@ -152,7 +155,7 @@ body.dark {
 
 /* Alternate colors of the banner */
 body.sentry-green {
-	--banner-bgcolor: #76A600;
+	--banner-bgcolor: #76a600;
 	--alternate-bgcolor: #4a6800;
 	--alternate-fgcolor: #fff;
 }
@@ -168,12 +171,20 @@ body.sentry-purple {
 }
 
 /* Fix the pointer issue between Bootstrap and Angular */
-.nav, .pagination, .carousel, .panel-title a, a, th { cursor: pointer; }
+.nav,
+.pagination,
+.carousel,
+.panel-title a,
+a,
+th {
+	cursor: pointer;
+}
 
 /**
  * General settings
  */
-html,body {
+html,
+body {
 	font-family: var(--content-font);
 	font-size: var(--content-font-size);
 }
@@ -221,9 +232,9 @@ html,body {
 	font-weight: 400;
 	text-transform: uppercase;
 	color: #fff;
-	opacity: .6;
+	opacity: 0.6;
 	filter: alpha(opacity=50);
-	transition: .2s ease-in-out;
+	transition: 0.2s ease-in-out;
 	height: 50px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -285,7 +296,9 @@ body.sentry-site .site-banner {
 }
 
 /* Color of the solution */
-body.sentry-site .site-banner { background-color: var(--banner-bgcolor) }
+body.sentry-site .site-banner {
+	background-color: var(--banner-bgcolor);
+}
 
 .site-banner .navbar-header {
 	text-transform: uppercase;
@@ -348,7 +361,7 @@ body.sentry-site .site-banner ol.breadcrumb > li > a:hover:not([href]) {
 	opacity: 0.8;
 }
 
-body.sentry-site .site-banner ol.breadcrumb > li+li:before {
+body.sentry-site .site-banner ol.breadcrumb > li + li:before {
 	opacity: 0.8;
 }
 
@@ -356,7 +369,7 @@ body.sentry-site .site-banner ol.breadcrumb > li > a {
 	color: var(--banner-fgcolor);
 	text-decoration: none;
 	opacity: 0.8;
-	transition: .2s ease-in-out;
+	transition: 0.2s ease-in-out;
 }
 
 body.sentry-site .site-banner ol.breadcrumb > li > a:hover {
@@ -388,7 +401,9 @@ body.sentry-site .site-banner .navbar-header .header-xxs .header-subtitle {
 /* Show the "normal" banner when no .show-search-xs */
 body.sentry-site .site-banner .navbar-header .navbar-brand {
 	opacity: 1;
-	transition: opacity 0.1s, transform 0.1s;
+	transition:
+		opacity 0.1s,
+		transform 0.1s;
 	transform-origin: top left;
 }
 
@@ -428,29 +443,33 @@ li.dark-toggle.dark-toggle-xs {
 	border-radius: 11px;
 }
 
-.dark-toggle .toggle-off.btn.day.active, .dark-toggle .toggle-off.btn.day {
+.dark-toggle .toggle-off.btn.day.active,
+.dark-toggle .toggle-off.btn.day {
 	color: yellow;
 	background-color: #357bd5;
 	transition: background-color 0.2s ease-in-out;
 }
 
-.dark-toggle .toggle-off.btn.day.active:hover, .dark-toggle .toggle-off.btn.day:hover {
+.dark-toggle .toggle-off.btn.day.active:hover,
+.dark-toggle .toggle-off.btn.day:hover {
 	background-color: #57a0ff;
 }
 
-.dark-toggle .toggle-on.btn.night.active, .dark-toggle .toggle-on.btn.night {
+.dark-toggle .toggle-on.btn.night.active,
+.dark-toggle .toggle-on.btn.night {
 	color: rgb(247, 247, 105);
 	background-color: #1f4570;
 	transition: background-color 0.2s ease-in-out;
 }
 
-.dark-toggle .toggle-on.btn.night.active:hover, .dark-toggle .toggle-on.btn.night:hover {
+.dark-toggle .toggle-on.btn.night.active:hover,
+.dark-toggle .toggle-on.btn.night:hover {
 	background-color: #315f95;
 }
 
 .toggle.dark-toggle .toggle-handle {
 	border-radius: 20px;
-	background-color: #AEAEAE;
+	background-color: #aeaeae;
 	border-style: none;
 }
 
@@ -499,21 +518,20 @@ li.dark-toggle.dark-toggle-xs {
 /* browser variant, otherwise it's not taken into account if we */
 /* group them in a multiple selector separated with commas 🤷‍♂️ */
 .site-search input.form-control::placeholder {
- 	color: var(--banner-fgcolor);
- }
+	color: var(--banner-fgcolor);
+}
 
- .site-search input.form-control::-webkit-input-placeholder {
- 	color: var(--banner-fgcolor);
- }
+.site-search input.form-control::-webkit-input-placeholder {
+	color: var(--banner-fgcolor);
+}
 
-.site-search input.form-control:-moz-placeholder
- {
- 	color: var(--banner-fgcolor);
- }
+.site-search input.form-control:-moz-placeholder {
+	color: var(--banner-fgcolor);
+}
 
 .site-search input.form-control::-moz-placeholder {
- 	color: var(--banner-fgcolor);
- }
+	color: var(--banner-fgcolor);
+}
 
 .site-search input.form-control:-ms-input-placeholder {
 	color: var(--banner-fgcolor);
@@ -651,7 +669,6 @@ li.dark-toggle.dark-toggle-xs {
 	font-size: 1.2em;
 }
 
-
 /**
  * Main content
  **/
@@ -667,7 +684,9 @@ li.dark-toggle.dark-toggle-xs {
 	line-height: 1.5;
 	background-color: var(--main-bgcolor);
 	color: var(--main-fgcolor);
-	transition: background-color 1s ease-in-out, color 1s ease-in-out;
+	transition:
+		background-color 1s ease-in-out,
+		color 1s ease-in-out;
 }
 
 /* For small devices, use smaller margins */
@@ -717,7 +736,7 @@ a.externalLink:after {
 }
 
 .main-content h1::after {
-	content: '';
+	content: "";
 	display: block;
 	margin-top: 30px;
 	margin-bottom: 30px;
@@ -760,21 +779,21 @@ a.externalLink:after {
 
 /* Headings are surrounded by <a href="#id"> */
 /* Make sure the link is unstylized */
-.main-content h2>a,
-.main-content h3>a,
-.main-content h4>a,
-.main-content h5>a,
-.main-content h6>a {
+.main-content h2 > a,
+.main-content h3 > a,
+.main-content h4 > a,
+.main-content h5 > a,
+.main-content h6 > a {
 	color: unset;
 	text-decoration: unset;
 }
 
 /* Add a link icon after headings that appears on mouse hover and focus */
-.main-content h2>a::after,
-.main-content h3>a::after,
-.main-content h4>a::after,
-.main-content h5>a::after,
-.main-content h6>a::after {
+.main-content h2 > a::after,
+.main-content h3 > a::after,
+.main-content h4 > a::after,
+.main-content h5 > a::after,
+.main-content h6 > a::after {
 	content: "\f0c1";
 	font-family: FontAwesome;
 	font-weight: normal;
@@ -789,16 +808,16 @@ a.externalLink:after {
 	transition: opacity 0.3s ease-in-out;
 }
 
-.main-content h2>a:hover::after,
-.main-content h3>a:hover::after,
-.main-content h4>a:hover::after,
-.main-content h5>a:hover::after,
-.main-content h6>a:hover::after,
-.main-content h2>a:focus::after,
-.main-content h3>a:focus::after,
-.main-content h4>a:focus::after,
-.main-content h5>a:focus::after,
-.main-content h6>a:focus::after {
+.main-content h2 > a:hover::after,
+.main-content h3 > a:hover::after,
+.main-content h4 > a:hover::after,
+.main-content h5 > a:hover::after,
+.main-content h6 > a:hover::after,
+.main-content h2 > a:focus::after,
+.main-content h3 > a:focus::after,
+.main-content h4 > a:focus::after,
+.main-content h5 > a:focus::after,
+.main-content h6 > a:focus::after {
 	opacity: 1;
 }
 
@@ -850,7 +869,7 @@ a.externalLink:after {
 }
 
 .main-content .document-footer::before {
-	content: '';
+	content: "";
 	display: block;
 	margin-top: 45px;
 	margin-bottom: 15px;
@@ -885,7 +904,9 @@ a.externalLink:after {
 	z-index: -1;
 	border-radius: 2px;
 	pointer-events: none;
-	transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+	transition:
+		opacity 0.2s ease-in-out,
+		background-color 0.2s ease-in-out;
 }
 
 .main-content .document-footer .keywords .label:hover,
@@ -900,7 +921,7 @@ a.externalLink:after {
 	color: var(--banner-fgcolor);
 }
 .main-content .document-footer .keywords .label:hover::after {
- background-color: var(--banner-bgcolor);
+	background-color: var(--banner-bgcolor);
 }
 
 /**
@@ -934,7 +955,7 @@ nav.left-menu h5 {
 }
 
 nav.left-menu a {
-	transition:.2s ease-in-out;
+	transition: 0.2s ease-in-out;
 }
 
 nav.left-menu > ul > li:first-child {
@@ -972,7 +993,7 @@ nav.left-menu ul > li > a:focus {
 }
 
 nav.left-menu ul > li.active > a::after {
-	content: '';
+	content: "";
 	position: absolute;
 	right: 0;
 	top: 50%;
@@ -1028,7 +1049,7 @@ nav.left-menu .ng-hide-animate {
 	flex-wrap: wrap;
 }
 
-.row.display-flex > [class*='col-'] {
+.row.display-flex > [class*="col-"] {
 	display: flex;
 	flex-direction: column;
 }
@@ -1094,8 +1115,10 @@ nav.left-menu .ng-hide-animate {
 	margin-top: 20px;
 	font-size: var(--content-font-size);
 	border-radius: 2px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+	box-shadow:
+		0 1px 3px rgba(0, 0, 0, 0.12),
+		0 1px 2px rgba(0, 0, 0, 0.24);
+	transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	z-index: 1;
 }
 
@@ -1115,7 +1138,9 @@ nav.left-menu .ng-hide-animate {
 }
 
 .toc-side-container .toc:hover {
-	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	box-shadow:
+		0 10px 20px rgba(0, 0, 0, 0.19),
+		0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .toc-side-container .toc > .toc-heading {
@@ -1130,7 +1155,7 @@ nav.left-menu .ng-hide-animate {
 }
 
 .toc-side-container .toc > .toc-heading::after {
-	content: '';
+	content: "";
 	display: block;
 	margin: 20px 0;
 	width: 30px;
@@ -1214,14 +1239,13 @@ nav.left-menu .ng-hide-animate {
 	margin: 2px 0;
 }
 
-
 /**
  * Subtopics (and home on XS displays)
  **/
 
 .subtopics::before,
 .subtopics-xs::before {
-	content: '';
+	content: "";
 	display: block;
 	margin-top: 30px;
 	margin-bottom: 30px;
@@ -1260,7 +1284,7 @@ nav.left-menu .ng-hide-animate {
 .subtopics-xs ul > a > i.pull-right,
 .subtopics-xs ul > li > i.pull-right,
 .home-xs ul > a > i.pull-right,
-.home-xs ul > li  > i.pull-right {
+.home-xs ul > li > i.pull-right {
 	margin-right: 0;
 	margin-top: 5px;
 }
@@ -1274,7 +1298,7 @@ nav.left-menu .ng-hide-animate {
 }
 
 .home-xs::after {
-	content: '';
+	content: "";
 	display: block;
 	margin-top: 30px;
 	margin-bottom: 30px;
@@ -1282,8 +1306,6 @@ nav.left-menu .ng-hide-animate {
 	border-top: 2px solid var(--main-fgcolor);
 	opacity: 0.75;
 }
-
-
 
 /**
  * Footer
@@ -1316,7 +1338,7 @@ nav.left-menu .ng-hide-animate {
 
 .footer > .footer-title {
 	margin: 0;
-	opacity: .8;
+	opacity: 0.8;
 }
 
 /* Social network icons in the xs footer */
@@ -1345,13 +1367,13 @@ nav.left-menu .ng-hide-animate {
 
 /* Copyright */
 .footer > .footer-copyright > .copyright {
-	opacity: .62;
+	opacity: 0.62;
 }
 
 .footer > .footer-copyright a {
 	color: #fff;
-	opacity: .62;
-	transition: .2s ease-in-out;
+	opacity: 0.62;
+	transition: 0.2s ease-in-out;
 	text-decoration: none;
 }
 
@@ -1369,7 +1391,7 @@ nav.left-menu .ng-hide-animate {
 	position: fixed;
 	width: 40px;
 	height: 40px;
-	background-color: rgba(0,0,0,0.3);
+	background-color: rgba(0, 0, 0, 0.3);
 	font-size: 20px;
 	line-height: 36px;
 	text-align: center;
@@ -1380,13 +1402,12 @@ nav.left-menu .ng-hide-animate {
 	bottom: 50px;
 	cursor: pointer;
 	border-radius: 2px;
-	transition: .2s ease-in-out;
+	transition: 0.2s ease-in-out;
 }
 
 .back-to-top:hover {
 	background-color: var(--alternate-bgcolor);
 }
-
 
 /**
  * zoomable
@@ -1409,7 +1430,7 @@ nav.left-menu .ng-hide-animate {
 
 zoomable {
 	cursor: zoom-in;
-	transition: width .3s ease-in-out;
+	transition: width 0.3s ease-in-out;
 	display: block;
 	width: 0%;
 	background-repeat: no-repeat;
@@ -1428,12 +1449,16 @@ zoomable.zoomed {
 }
 
 zoomable .zoomable-shadow {
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	transition: box-shadow .3s ease-in-out;
+	box-shadow:
+		0 1px 3px rgba(0, 0, 0, 0.12),
+		0 1px 2px rgba(0, 0, 0, 0.24);
+	transition: box-shadow 0.3s ease-in-out;
 }
 
 zoomable .zoomable-shadow:hover {
-	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	box-shadow:
+		0 10px 20px rgba(0, 0, 0, 0.19),
+		0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .full-screen.zoomable .zoomable-shadow {
@@ -1450,7 +1475,7 @@ zoomable img {
 	opacity: 0;
 	max-width: 100%;
 	height: auto !important;
-	transition: opacity .3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 }
 
 zoomable.zoomed img {
@@ -1478,7 +1503,9 @@ zoomable.zoomed img {
 	color: #888;
 	opacity: 0;
 	font-size: 0%;
-	transition: opacity .3s ease-in-out, font-size .3s ease-in-out;
+	transition:
+		opacity 0.3s ease-in-out,
+		font-size 0.3s ease-in-out;
 }
 
 .zoomed .zoomable .zoomable-title,
@@ -1513,7 +1540,7 @@ zoomable.zoomed img {
 	padding-right: 10px;
 	text-align: right;
 	background-color: rgba(0, 0, 0, 0.2);
-	transition: opacity .3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 }
 
 .zoomed:hover .zoomable .zoomable-control,
@@ -1664,7 +1691,7 @@ body.sentry-site .table > tbody > tr::after {
 }
 
 /* Stripes */
-body.sentry-site .table-striped>tbody>tr:nth-of-type(odd)::after {
+body.sentry-site .table-striped > tbody > tr:nth-of-type(odd)::after {
 	opacity: 0.05;
 }
 
@@ -1687,48 +1714,48 @@ body.sentry-site .table-hover > tbody > tr.active::before {
 	opacity: 0.1;
 }
 
-body.sentry-site .table-hover>tbody>tr:hover>td,
-body.sentry-site .table-hover>tbody>tr:hover>th {
+body.sentry-site .table-hover > tbody > tr:hover > td,
+body.sentry-site .table-hover > tbody > tr:hover > th {
 	background: none;
 }
 
 /* Prevent Bootstrap from setting colors on cells directly */
-body.sentry-site .table>tbody>tr>td,
-body.sentry-site .table>tbody>tr>th {
+body.sentry-site .table > tbody > tr > td,
+body.sentry-site .table > tbody > tr > th {
 	background-color: inherit;
-	color:inherit;
+	color: inherit;
 }
 
 /* success, info, warning and danger colors in light and dark mode */
-body.sentry-site .table>tbody>tr.success::after {
+body.sentry-site .table > tbody > tr.success::after {
 	background-color: var(--success-bg);
 	opacity: 1;
 }
-body.sentry-site .table>tbody>tr.success {
+body.sentry-site .table > tbody > tr.success {
 	color: var(--success-fg);
 }
 
-body.sentry-site .table>tbody>tr.info::after {
+body.sentry-site .table > tbody > tr.info::after {
 	background-color: var(--info-bg);
 	opacity: 1;
 }
-body.sentry-site .table>tbody>tr.info {
+body.sentry-site .table > tbody > tr.info {
 	color: var(--info-fg);
 }
 
-body.sentry-site .table>tbody>tr.warning::after {
+body.sentry-site .table > tbody > tr.warning::after {
 	background-color: var(--warning-bg);
 	opacity: 1;
 }
-body.sentry-site .table>tbody>tr.warning {
+body.sentry-site .table > tbody > tr.warning {
 	color: var(--warning-fg);
 }
 
-body.sentry-site .table>tbody>tr.danger::after {
+body.sentry-site .table > tbody > tr.danger::after {
 	background-color: var(--danger-bg);
 	opacity: 1;
 }
-body.sentry-site .table>tbody>tr.danger {
+body.sentry-site .table > tbody > tr.danger {
 	color: var(--danger-fg);
 }
 

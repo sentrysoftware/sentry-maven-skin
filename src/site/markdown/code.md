@@ -51,7 +51,7 @@ test: Not found
 ````md
 ```css
 body.my-theme > a {
-  color: #012345;
+	color: #012345;
 }
 ```
 ````
@@ -80,7 +80,7 @@ CMD python /app/app.py
 ````md
 ```js
 function printPage() {
-  window.print();
+	window.print();
 }
 ```
 ````
@@ -150,8 +150,8 @@ SELECT value FROM table WHERE name="test" -- Testing
 ```yaml
 myArray: [3, 1, 4, 1, 5, 9, 2]
 other:
-  main: null # This is null
-  rest: "nothing"
+    main: null # This is null
+    rest: "nothing"
 ```
 ````
 
@@ -183,8 +183,8 @@ print(greet("World"))
 ````md
 ```typescript
 interface User {
-    name: string;
-    age: number;
+	name: string;
+	age: number;
 }
 
 const greet = (user: User): string => `Hello, ${user.name}!`;
@@ -193,4 +193,4 @@ const greet = (user: User): string => `Hello, ${user.name}!`;
 
 > **Note:**
 >
-> Syntax highlighting for fenced code blocks is available only when using version 3.10 (and later) of *maven-site-plugin*.
+> Syntax highlighting for fenced code blocks is available only when using version 3.10 (and later) of _maven-site-plugin_.

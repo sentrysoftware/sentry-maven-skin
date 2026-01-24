@@ -24,19 +24,19 @@
  * and expands it to full size when clicked
  **/
 
-(function() {
-
+(function () {
 	function zoomableController($element, $scope, $window) {
-
 		var $ctrl = this;
 
 		/**
 		 * Initialization
 		 */
-		$ctrl.$postLink = function() {
-
+		$ctrl.$postLink = function () {
 			// Add a click handler on the component element itself
-			$element.on("click", function() { $ctrl.zoomClick(); $scope.$applyAsync(); });
+			$element.on("click", function () {
+				$ctrl.zoomClick();
+				$scope.$applyAsync();
+			});
 
 			// Find the image "alt" text, display it in a specific div, and remove it from alt
 			var imgElement = $element.find("img");
@@ -46,57 +46,45 @@
 			// Initial state
 			$ctrl.zoomed = false;
 			$ctrl.fullScreen = false;
-
 		};
 
 		/**
 		 * Click handler on the component element
 		 */
-		$ctrl.zoomClick = function() {
-
+		$ctrl.zoomClick = function () {
 			// Toggle between zoomed and not-zoomed
 			if (!$ctrl.zoomed) {
-
 				// If 'xs' screen, go direct to full screen
 				if ($window.matchMedia("(max-width: 576px)").matches) {
 					$ctrl.enterFullScreen();
 				} else {
 					$ctrl.enterZoom();
 				}
-
-
 			} else {
-
 				$ctrl.exitZoom();
-
 			}
-
 		};
 
 		/**
 		 * Enter zoom
 		 */
-		$ctrl.enterZoom = function() {
-
+		$ctrl.enterZoom = function () {
 			$ctrl.zoomed = true;
 
 			// Add the 'zoomed' class to the component element
 			// to trigger some CSS magic
 			$element.toggleClass("zoomed", $ctrl.zoomed);
-
 		};
 
 		/**
 		 * Exit zoom (back to thumbnail)
 		 */
-		$ctrl.exitZoom = function() {
-
+		$ctrl.exitZoom = function () {
 			$ctrl.zoomed = false;
 
 			// Remove the 'zoomed' class and trigger some more
 			// CSS magic
 			$element.toggleClass("zoomed", $ctrl.zoomed);
-
 		};
 
 		/**
@@ -104,8 +92,7 @@
 		 *
 		 * @param {object} $event Event that triggered the full screen and which we want not to propagate
 		 */
-		$ctrl.enterFullScreen = function($event) {
-
+		$ctrl.enterFullScreen = function ($event) {
 			// Prevent the event from propagating (and its default behavior if any)
 			if ($event) {
 				$event.preventDefault();
@@ -127,7 +114,6 @@
 
 			// Update the component state so that we'll get the thumbnail when closing the full-screen
 			$ctrl.exitZoom();
-
 		};
 
 		/**
@@ -135,8 +121,7 @@
 		 *
 		 * @param {object} $event Event we need to stop propagating
 		 */
-		$ctrl.exitFullScreen = function($event) {
-
+		$ctrl.exitFullScreen = function ($event) {
 			// Prevent propagation
 			$event.stopPropagation();
 
@@ -150,7 +135,6 @@
 
 			// Remove the keyboard handler
 			angular.element($window).off("keydown", $ctrl.fullScreenKeyboard);
-
 		};
 
 		/**
@@ -158,8 +142,7 @@
 		 *
 		 * @param {object} $event Click event
 		 */
-		$ctrl.fullScreenClick = function($event) {
-
+		$ctrl.fullScreenClick = function ($event) {
 			// Well, if we're not in full-screen, do nothing
 			if (!$ctrl.fullScreen) {
 				return;
@@ -173,7 +156,6 @@
 			if ($event.target.className == "zoomable-shadow") {
 				$ctrl.exitFullScreen($event);
 			}
-
 		};
 
 		/**
@@ -181,8 +163,7 @@
 		 *
 		 * @param {object} $event Keyboard event
 		 */
-		$ctrl.fullScreenKeyboard = function($event) {
-
+		$ctrl.fullScreenKeyboard = function ($event) {
 			// Well, if we're not in full-screen, do nothing
 			if (!$ctrl.fullScreen) {
 				return;
@@ -190,15 +171,11 @@
 
 			// Which key was pressed?
 			if ($event.key == "Escape") {
-
 				// [Esc] exits full screen
 				$ctrl.exitFullScreen($event);
 				$scope.$applyAsync();
-
 			} else if ($event.key == "Tab") {
-
 				// Prevent tab from doing anything
-
 			} else {
 				// Do nothing and don't prevent the keyboard event from bubbling
 				return;
@@ -207,9 +184,7 @@
 			// Prevent the keyboard event from bubbling to other handlers
 			$event.preventDefault();
 			$event.stopPropagation();
-
 		};
-
 	}
 	zoomableController.$inject = ["$element", "$scope", "$window"];
 
