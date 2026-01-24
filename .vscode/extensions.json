@@ -1,0 +1,22 @@
+{
+	"recommendations": [
+		// Prettier - Code formatter
+		"esbenp.prettier-vscode",
+		// ESLint - JavaScript linter
+		"dbaeumer.vscode-eslint",
+		// EditorConfig support
+		"editorconfig.editorconfig",
+		// Velocity template support
+		"nicovank.velocity",
+		// XML support (for pom.xml, etc.)
+		"redhat.vscode-xml",
+		// YAML support
+		"redhat.vscode-yaml",
+		// Markdown support
+		"yzhang.markdown-all-in-one",
+		// GitLens - Git supercharged
+		"eamodio.gitlens",
+		// Maven for Java
+		"vscjava.vscode-maven"
+	]
+}

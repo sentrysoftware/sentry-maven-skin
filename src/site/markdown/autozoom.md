@@ -7,7 +7,7 @@ By default, all images in the source documents are displayed as a thumbnail, whi
 
 ![Nice moiré effect](images/zoomable-example.jpg)
 
-If you want an image to be displayed inline *as is*, you will need to set its description to `inline`.
+If you want an image to be displayed inline _as is_, you will need to set its description to `inline`.
 
 Examples:
 

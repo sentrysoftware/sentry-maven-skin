@@ -3,7 +3,7 @@ description: ${project.name} and Maven Site allows writers to specify additional
 
 # Headers (Front Matter)
 
-Headers can be added to each Markdown document as "front matter" headers, notably to specify the document's title, author and description. These *headers* end up in the [`<head>` section](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/The_head_metadata_in_HTML) of the produced HTML pages. Any custom header can be added using the below syntax in the Markdown source:
+Headers can be added to each Markdown document as "front matter" headers, notably to specify the document's title, author and description. These _headers_ end up in the [`<head>` section](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/The_head_metadata_in_HTML) of the produced HTML pages. Any custom header can be added using the below syntax in the Markdown source:
 
 ```md
 title: Casino Royale
@@ -20,10 +20,10 @@ date: 13 April 1953
 
 Typical headers:
 
-| Header | Description |
-|---|---|
-| `title` | To specify a document title different than its first heading. |
-| `author` | Specifies the author of the document. Multiple `author` entries are possible in the same document. |
-| `date` | Date of writing of the document (creation or update).<br/>No date format is enforced; it is recommended to be consistent across the documentation. |
-| `description` | Typically used by Search Engines as short description of the page. This is critical to SEO. |
-| `keywords` | List of keywords applicable to the page. Not used by public Search Engines, but will be used for internal *Related Topics* listing. |
+| Header        | Description                                                                                                                                        |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | To specify a document title different than its first heading.                                                                                      |
+| `author`      | Specifies the author of the document. Multiple `author` entries are possible in the same document.                                                 |
+| `date`        | Date of writing of the document (creation or update).<br/>No date format is enforced; it is recommended to be consistent across the documentation. |
+| `description` | Typically used by Search Engines as short description of the page. This is critical to SEO.                                                        |
+| `keywords`    | List of keywords applicable to the page. Not used by public Search Engines, but will be used for internal _Related Topics_ listing.                |

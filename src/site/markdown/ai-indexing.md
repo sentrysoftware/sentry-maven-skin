@@ -17,10 +17,10 @@ When your documentation site is built, the skin automatically:
 
 The `llms.txt` file provides a structured index of your documentation that AI crawlers can easily parse. It follows the [llms.txt specification](https://llmstxt.org/) with:
 
-* **H1 header** with your project name
-* **Blockquote** with your project description
-* **Sections** organized by your navigation menu structure
-* **Links** to all documentation pages
+- **H1 header** with your project name
+- **Blockquote** with your project description
+- **Sections** organized by your navigation menu structure
+- **Links** to all documentation pages
 
 Example:
 
@@ -50,8 +50,8 @@ The sections in `llms.txt` are automatically determined from your `site.xml` men
 
 For each HTML page, a corresponding `.md` file is generated with:
 
-* **YAML front matter** containing metadata (description, dates, canonical URL)
-* **Clean Markdown content** converted from the HTML body
+- **YAML front matter** containing metadata (description, dates, canonical URL)
+- **Clean Markdown content** converted from the HTML body
 
 Example front matter:
 
@@ -69,7 +69,7 @@ canonical_url: https://example.com/docs/installation.html
 Each HTML page includes a `<link rel="alternate">` tag pointing to its Markdown version:
 
 ```html
-<link rel="alternate" type="text/markdown" href="installation.md">
+<link rel="alternate" type="text/markdown" href="installation.md" />
 ```
 
 This helps AI platforms discover the Markdown versions of your pages.
@@ -78,9 +78,9 @@ This helps AI platforms discover the Markdown versions of your pages.
 
 In addition to the AI-specific files, **${project.name}** also includes:
 
-* **Canonical URLs** (`<link rel="canonical">`) when `<url>` is defined in your `pom.xml`
-* **Open Graph metadata** (`article:published_time`, `article:modified_time`)
-* **Schema.org JSON-LD** structured data for each page
+- **Canonical URLs** (`<link rel="canonical">`) when `<url>` is defined in your `pom.xml`
+- **Open Graph metadata** (`article:published_time`, `article:modified_time`)
+- **Schema.org JSON-LD** structured data for each page
 
 ## Configuration
 
@@ -112,9 +112,9 @@ To benefit from the canonical URL and complete metadata:
 
 As AI assistants become more prevalent in developer workflows, ensuring your documentation is AI-friendly provides several benefits:
 
-* **Better AI-generated answers** about your project
-* **Improved discoverability** by AI-powered search engines
-* **Structured content** that AI can easily parse and understand
-* **Future-proofing** your documentation for emerging AI platforms
+- **Better AI-generated answers** about your project
+- **Improved discoverability** by AI-powered search engines
+- **Structured content** that AI can easily parse and understand
+- **Future-proofing** your documentation for emerging AI platforms
 
 The combination of `llms.txt`, Markdown files, and structured metadata makes your documentation a first-class citizen in the AI ecosystem.

@@ -103,7 +103,7 @@
 						</goals>
 						<!-- optional: default phase is "generate-resources" -->
 						<configuration>
-							<nodeVersion>v20.9.0</nodeVersion>
+							<nodeVersion>v20.18.0</nodeVersion>
 						</configuration>
 					</execution>
 

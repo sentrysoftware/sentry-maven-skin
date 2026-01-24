@@ -38,4 +38,3 @@ On mobile, links to all subtopics are automatically added to the parent page:
 > **Note**
 >
 > The Sentry Maven Skin does not support a 3rd level of hierarchy.
-

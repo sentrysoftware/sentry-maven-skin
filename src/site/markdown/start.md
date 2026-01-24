@@ -9,8 +9,8 @@ description: Quickstart guide to setup your documentation project with Apache Ma
 
 The following is absolutely required to use the **${project.name}**:
 
-* A properly setup [Maven project](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html)
-* Version 3.x of the [Maven Site plugin](https://maven.apache.org/plugins/maven-site-plugin)
+- A properly setup [Maven project](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html)
+- Version 3.x of the [Maven Site plugin](https://maven.apache.org/plugins/maven-site-plugin)
 
 ## Setup of your `site` project
 
@@ -135,15 +135,15 @@ You can [customize the look and feel](styles.md) of your documentation by writin
 
 ```css
 body {
-  --banner-bgcolor: #266fd0;
-  --alternate-bgcolor: var(--banner-bgcolor);
-  --alternate-fgcolor: var(--banner-fgcolor);
-  --link-color: #d50c37;
+	--banner-bgcolor: #266fd0;
+	--alternate-bgcolor: var(--banner-bgcolor);
+	--alternate-fgcolor: var(--banner-fgcolor);
+	--link-color: #d50c37;
 }
 
 /* Lighter red for dark mode ('dark' class on the <body> element) */
 body.dark {
-  --link-color: #ff6989;
+	--link-color: #ff6989;
 }
 ```
 
@@ -159,13 +159,13 @@ The site is built in `target/site/*`.
 
 ### Live rendering
 
-Additionally, you can build the site *live* and make it available on a local Web server with the below command:
+Additionally, you can build the site _live_ and make it available on a local Web server with the below command:
 
 ```bash
 mvn site:run
 ```
 
-This command spawns a Web server with the content of your documentation site. Each page is rendered *live* when you request it in your browser, so changes in your Markdown are taken into account immediately. This is particularly useful when you write your documentation and needs to see how it looks very quickly.
+This command spawns a Web server with the content of your documentation site. Each page is rendered _live_ when you request it in your browser, so changes in your Markdown are taken into account immediately. This is particularly useful when you write your documentation and needs to see how it looks very quickly.
 
 > **Note**
 >

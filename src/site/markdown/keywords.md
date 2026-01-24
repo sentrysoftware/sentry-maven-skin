@@ -6,7 +6,7 @@ description: ${project.name} includes a dedicated mechanism for keywords, specif
 Keywords are listed in the `<head>` section of the HTML pages with `<meta name="keywords">`. While they are no longer used by online search engines like Google or Bing, they are used in the [internal index and search engine](search.html).
 
 ```html
-<meta name="keywords" content="HTML, CSS, JavaScript">
+<meta name="keywords" content="HTML, CSS, JavaScript" />
 ```
 
 You can specify keywords in 2 places:
@@ -31,13 +31,14 @@ You can specify keywords in 2 places:
     keywords: specific,special
 
     # Document Title
+
     ...
     ```
 
 The keywords specified in a specific page are merged with the keywords specified in `src/site/site.xml`. In the above example, the HTML page will include this header:
 
 ```html
-<meta name="keywords" content="general,topic,specific,special">
+<meta name="keywords" content="general,topic,specific,special" />
 ```
 
 As the keywords are indexed in the documentation's search index, you can specify keywords that are likely to be searched in your documentation, that should link to a page which doesn't actually contain that exact word.

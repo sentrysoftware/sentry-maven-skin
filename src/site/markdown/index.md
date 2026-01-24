@@ -11,15 +11,15 @@ The **${project.name}** is an [Apache Maven site](https://maven.apache.org/plugi
 
 It leverages a (reasonably) modern Web stack:
 
-* HTML5
-* Bootstrap 3 CSS
-* Mobile-first
-* Dark and light colors schemes
-* Nice rendering for print
-* Local search index with AngularJS (no Google!)
-* Image optimization
-* Excellent Lighthouse score for performance and accessibility
-* and more!
+- HTML5
+- Bootstrap 3 CSS
+- Mobile-first
+- Dark and light colors schemes
+- Nice rendering for print
+- Local search index with AngularJS (no Google!)
+- Image optimization
+- Excellent Lighthouse score for performance and accessibility
+- and more!
 
 [Get started with your documentation project](start.html).
 

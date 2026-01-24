@@ -47,21 +47,26 @@ Creating a Table of Contents is a straightforward process, and it's often done b
 
 1. **Structure Your Content**: Organize your content into logical sections, chapters, or topics, and assign headings to them. Markdown uses the `#` symbol for headings, with one `#` for the main title and additional `#` symbols for subsections.
 
-   ```markdown
-   # Introduction
-   ## What is a ToC?
-   ## Why You Need a ToC
-   # Creating a ToC
-   ## Structuring Your Content
-   ## Generating Links
-   ```
+    ```markdown
+    # Introduction
+
+    ## What is a ToC?
+
+    ## Why You Need a ToC
+
+    # Creating a ToC
+
+    ## Structuring Your Content
+
+    ## Generating Links
+    ```
 
 2. **Generate Links**: To make your Table of Contents interactive, create links from the ToC entries to the corresponding sections in your content. You can do this by using Markdown's link syntax.
 
-   ```markdown
-   - [Introduction](#introduction)
-   - [Creating a ToC](#creating-a-toc)
-   ```
+    ```markdown
+    - [Introduction](#introduction)
+    - [Creating a ToC](#creating-a-toc)
+    ```
 
 3. **Insert the ToC**: Place your Table of Contents at the beginning of your document or wherever you find it most suitable.
 

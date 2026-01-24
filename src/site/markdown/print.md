@@ -5,11 +5,11 @@ description: ${project.name} ensures a proper rendering of the documentation whe
 
 **${project.name}** ensures the pages are properly rendered when printed:
 
-* No banner
-* No navigation menu or links
-* Links and URLs are displayed as footnotes
-* No fancy colors, for a professional look, and faster printing
-* Identical rendering on both US Letter and A4 paper
+- No banner
+- No navigation menu or links
+- Links and URLs are displayed as footnotes
+- No fancy colors, for a professional look, and faster printing
+- Identical rendering on both US Letter and A4 paper
 
 ![Screenshot of the print preview of a page rendered with ${project.name}](images/print.png)
 

@@ -1,0 +1,19 @@
+# Prettier Ignore File
+
+# Build outputs
+target/
+node_modules/
+node/
+
+# Velocity templates (handled separately)
+*.vm
+
+# Minified files
+*.min.js
+*.min.css
+
+# Source maps
+*.map
+
+# Lock files
+package-lock.json
