@@ -6,20 +6,33 @@ This page demonstrates Angular UI Bootstrap components integrated with the Sentr
 - Custom elements like `<uib-tabset>` are **not supported** (they get stripped)
 - Only the attribute syntax with `<div>` elements works: `<div uib-tabset="">`
 - All Angular directive attributes must have a value (use `=""` for boolean directives)
+- **Headings** inside components should use `<p class="h4">Title</p>` (Bootstrap heading classes) instead of Markdown `${esc.h}${esc.h}${esc.h}${esc.h}` syntax
 
 ## Tabs
 
 Use `<div uib-tabset="">` with nested `<div uib-tab="">` elements:
 
-<div uib-tabset="" class="demo-tabset">
+<div uib-tabset="">
 <div uib-tab="" heading="Tab A">
-Content of **Tab A**. This uses the attribute syntax with div elements.
+
+<p class="h4">Tab A Title</p>
+
+Content of **Tab A**. This uses Bootstrap heading classes inside the tab.
+
 </div>
 <div uib-tab="" heading="Tab B">
-<p>Content of <strong>Tab B</strong>.</p>
+
+<p class="h4">Tab B Title</p>
+
+Content of **Tab B** with a [link](index.html).
+
 </div>
 <div uib-tab="" heading="Tab C">
-<p>Content of <strong>Tab C</strong>.</p>
+
+<p class="h4">Tab C Title</p>
+
+Content of **Tab C** with `inline code`.
+
 </div>
 </div>
 
@@ -27,12 +40,20 @@ Content of **Tab A**. This uses the attribute syntax with div elements.
 
 Use `<div uib-accordion="">` with nested `<div uib-accordion-group="">` elements:
 
-<div uib-accordion="" class="demo-accordion">
+<div uib-accordion="">
 <div uib-accordion-group="" heading="Panel A" is-open="true">
-<p>Content of Panel A using attribute syntax.</p>
+
+<p class="h4">Panel A Details</p>
+
+Content of **Panel A** using Bootstrap heading classes inside accordion.
+
 </div>
 <div uib-accordion-group="" heading="Panel B">
-<p>Content of Panel B.</p>
+
+<p class="h4">Panel B Details</p>
+
+Content of **Panel B** with *emphasis*.
+
 </div>
 </div>
 
@@ -47,7 +68,11 @@ Toggle Content
 </p>
 <div uib-collapse="demoCollapse">
 <div class="well">
-<p>This content can be toggled with the button above.</p>
+
+<p class="h4">Collapsible Content</p>
+
+This content can be **toggled** with the button above.
+
 </div>
 </div>
 

@@ -305,6 +305,9 @@ limitations under the License.
 // Clean up IDs and corresponding <a href="#..."> references for unsupported characters
 *##set($bodyElement = $htmlTool.fixIds($bodyElement))#*
 
+// Add sentry-uib class to all Angular UI Bootstrap components for consistent styling
+*##set($bodyElement = $htmlTool.addClass($bodyElement, "[uib-tabset], [uib-accordion], [uib-collapse], [uib-carousel]", "sentry-uib"))#*
+
 // Make sure all headings have IDs
 *##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*
 
