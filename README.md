@@ -58,6 +58,16 @@ built with the skin as it is in the workspace. The integration test is run with 
 mvn verify
 ```
 
+### Building This Project's Own Documentation
+
+This project uses itself as its own Maven skin (dogfooding). Because of this, you must run `mvn install` before `mvn site` to ensure the skin JAR is available in your local Maven repository:
+
+```bash
+mvn install site
+```
+
+Running `mvn site` alone will fail because the skin artifact won't be found.
+
 This command builds the skin and run it against a documentation project. The result can be seen in `./sentry-maven-skin/target/it/studio-km/site/*.html`.
 
 We recommend running [http-server](https://github.com/http-party/http-server#readme) to browse the result. Install with:

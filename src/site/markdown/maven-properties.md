@@ -1,81 +1,66 @@
-keywords: velocity
-description: ${project.name} allows writers to reference Maven pom.xml properties.
+keywords: velocity, properties, variables
+description: Reference Maven properties from pom.xml and site.xml in your documentation.
 
-# Maven properties (`${property}`)
+# Maven Properties
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-All properties defined in `pom.xml` can be referenced in the Markdown source documents (and others) using the `${propertyName}` syntax, and will be replaced with their corresponding value in the resulting HTML.
+Reference properties from `pom.xml` and `site.xml` directly in your Markdown files.
 
-> **Note**
->
-> This is different from the default behavior of Maven Site and most skins. An extra-processing is performed with the **${project.name}** to allow this feature.
+> **Note**: This feature extends the default Maven Site behavior through special processing in the skin.
 
-Similarly, all properties defined in `site/site.xml` under the `<custom>` tag can also be referenced with the `${esc.d}decoration.getCustomValue("propertyName")` syntax.
+## Properties from pom.xml
 
-## Properties in `pom.xml`
-
-Example of a `pom.xml`:
+Define properties in your `pom.xml`:
 
 ```xml
 <project>
-  ...
   <properties>
     <productShortname>MetricsHub</productShortname>
     <serviceUrl>https://metricshub.com/api</serviceUrl>
-    ...
   </properties>
+</project>
 ```
 
-In the source documents (`src/site/markdown/*.md`, or others), you can use `$productShortname` and `$serviceUrl`, which will be replaced with their corresponding value in the produced HTML:
+Reference them in Markdown using `${esc.d}propertyName`:
 
-```md
-**$productShortname** allows administrators to setup the monitoring of any application through an [API]($serviceUrl)...
+```markdown
+**${esc.d}productShortname** connects to the [API](${esc.d}serviceUrl)...
 ```
 
-This will produce the below result:
+**Result**:
 
-> **MetricsHub** allows administrators to setup the monitoring of any application through an [API](https://metricshub.com/api)...
+> **MetricsHub** connects to the [API](https://metricshub.com/api)...
 
-### Dotted properties
+### Dotted Property Names
 
-If a property name contains dots, it cannot be referred to using the `${esc.d}property.subname` syntax. You will need to use `${esc.d}{context.get("property.name")}` as in the example below:
+For properties with dots, use this syntax:
 
-```md
-This documentation has been generated on ${esc.d}{context.get("project.build.outputTimestamp")}.
+```markdown
+Generated on ${esc.d}{context.get("project.build.outputTimestamp")}.
 ```
 
-## Properties in `src/site/site.xml`
+## Properties from site.xml
 
-Same principle goes with `src/site/site.xml`, with properties listed under `<custom>`:
+Define custom properties in `src/site/site.xml`:
 
 ```xml
 <project name="My Documentation">
-
-  ...
-
   <custom>
     <productShortname>MetricsHub</productShortname>
     <serviceUrl>https://metricshub.com/api</serviceUrl>
-    ...
   </custom>
-
+</project>
 ```
 
-In the source documents (`src/site/markdown/*.md`, or others), you can use `${esc.d}decoration.getCustomValue("productShortName")` and `${esc.d}decoration.getCustomValue("serviceUrl")`, which will be replaced with with their corresponding value:
+Reference them with:
 
-```md
-**${esc.d}decoration.getCustomValue("productShortName")** allows administrators to setup the monitoring of any application through an [API](<${esc.d}decoration.getCustomValue("serviceUrl")>)...
+```markdown
+**${esc.d}decoration.getCustomValue("productShortname")** uses the [API](${esc.d}decoration.getCustomValue("serviceUrl"))...
 ```
 
-This will produce the below result:
+> **Recommendation**: Prefer `site.xml` properties to keep documentation configuration separate from build configuration.
 
-> **MetricsHub** allows administrators to setup the monitoring of any application through an [API](https://metricshub.com/api)...
+## Other Available Objects
 
-> **Note**
->
-> The syntax to reference values in `pom.xml` looks nicer and easier than the syntax for `src/site/site.xml`. However, it's the latter method that is recommended so that documentation information remains in `src/site/site.xml` rather than spread across several configuration files.
-
-## Other properties
-
-Documents processed with Maven Site can also reference other objects that are defined by the [Doxia SiteTools Site Renderer](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-renderer/). This includes various tools and useful metadata related to the project.
+Documents can also reference objects from the [Doxia Site Renderer](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-renderer/), including various tools and project metadata.

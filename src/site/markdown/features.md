@@ -1,26 +1,47 @@
-keywords: doxia
-description: ${project.name} comes with a bundle of features to make your documentation project look great.
+keywords: features, capabilities, overview
+description: Complete overview of all features in ${project.name} for building professional documentation sites.
 
-# Features
+# Features Overview
 
-**${project.name}** comes with a bundle of features to make your documentation project look great, easy to read on all devices, and helpful to your users.
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-## Overview
+A quick reference to all ${project.name} features. For a guided tour, see the [Documentation Guide](index.html#documentation-guide).
 
-| Feature                                   | Description                                                |
-| ----------------------------------------- | ---------------------------------------------------------- |
-| [Navigation Links](nav-links.html)        | Customizable navigation in the header                      |
-| [Navigation Menu](nav-menu.html)          | Sidebar menu for easy navigation                           |
-| [Styling](styles.html)                    | Custom colors, fonts, and themes                           |
-| [Maven Properties](maven-properties.html) | Use Maven properties in your pages                         |
-| [Keywords](keywords.html)                 | SEO-friendly keywords support                              |
-| [Index and Search](search.html)           | Full-text search across your site                          |
-| [AI Indexing](ai-indexing.html)           | **New!** Generate Markdown and `llms.txt` for AI platforms |
-| [Headers](headers.html)                   | Front matter and metadata support                          |
-| [Automatic ToC](toc.html)                 | Auto-generated table of contents                           |
-| [Automatic Title](title.html)             | Infer page titles from content                             |
-| [Autozoom Images](autozoom.html)          | Click-to-zoom images                                       |
-| [Conversion to WEBP](webp.html)           | Automatic image optimization                               |
-| [Code Highlighting](code.html)            | Syntax highlighting for code blocks                        |
-| [UI Components](ui-components.html)       | **New!** Tabs, accordion, carousel, and more               |
-| [Printing](print.html)                    | Print-friendly layouts                                     |
+## Setup Features
+
+| Feature                            | Description                                             |
+| ---------------------------------- | ------------------------------------------------------- |
+| [Styling](styles.html)             | Customize colors and fonts with CSS variables           |
+| [Navigation Links](nav-links.html) | Configure header bar with logo, links, and social media |
+| [Navigation Menu](nav-menu.html)   | Collapsible sidebar menu (supports 2 levels)            |
+
+## Writing Features
+
+| Feature                               | Description                              |
+| ------------------------------------- | ---------------------------------------- |
+| [Writing a Page](page-structure.html) | Structure and template for documentation |
+| [Automatic Title](title.html)         | Page titles generated from first heading |
+| [Automatic ToC](toc.html)             | Table of contents from headings          |
+| [Images](images.html)                 | Auto-zoom and WebP conversion            |
+| [Code Highlighting](code.html)        | 290+ languages with copy-to-clipboard    |
+| [UI Components](ui-components.html)   | Tabs, accordions, carousels, popovers    |
+| [Doxia Features](doxia.html)          | Macros, snippets, and Velocity variables |
+
+## Search and Discovery
+
+| Feature                         | Description                                      |
+| ------------------------------- | ------------------------------------------------ |
+| [Full-Text Search](search.html) | Built-in search index (no external services)     |
+| [AI Indexing](ai-indexing.html) | Automatic `llms.txt` generation for AI platforms |
+| [Keywords](keywords.html)       | SEO keywords (global and per-page)               |
+
+## Advanced Features
+
+| Feature                                  | Description                                 |
+| ---------------------------------------- | ------------------------------------------- |
+| [Configuration Reference](settings.html) | All site.xml options                        |
+| [Front Matter Headers](headers.html)     | Add metadata (title, description, keywords) |
+
+| [Print Support](print.html)               | Optimized CSS for printing                  |
+| [Maven Properties](maven-properties.html) | Reference pom.xml values in pages           |
+| [Additional Features](misc.html)          | Dark mode, accessibility, responsive design |

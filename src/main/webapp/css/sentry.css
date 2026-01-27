@@ -181,6 +181,16 @@ th {
 }
 
 /**
+ * Angular UI Bootstrap Carousel Animation Fix
+ * Required for ngAnimate to work properly with the carousel
+ * See: https://github.com/angular-ui/bootstrap/blob/master/src/carousel/carousel.css
+ **/
+.ng-animate.item:not(.left):not(.right) {
+	-webkit-transition: 0s ease-in-out left;
+	transition: 0s ease-in-out left;
+}
+
+/**
  * General settings
  */
 html,
@@ -725,7 +735,8 @@ a.externalLink:after {
 	margin: 0 0 10px;
 }
 
-.main-content h1 {
+.main-content h1,
+.main-content .h1 {
 	text-transform: uppercase;
 	font-family: var(--main-title-font);
 	font-size: var(--main-title-font-size);
@@ -735,7 +746,8 @@ a.externalLink:after {
 	text-rendering: optimizelegibility;
 }
 
-.main-content h1::after {
+.main-content h1::after,
+.main-content .h1::after {
 	content: "";
 	display: block;
 	margin-top: 30px;
@@ -745,11 +757,11 @@ a.externalLink:after {
 	opacity: 0.5;
 }
 
-.main-content h2,
-.main-content h3,
-.main-content h4,
-.main-content h5,
-.main-content h6,
+.main-content h2, .main-content .h2,
+.main-content h3, .main-content .h3,
+.main-content h4, .main-content .h4,
+.main-content h5, .main-content .h5,
+.main-content h6, .main-content .h6,
 .main-content .toc-heading {
 	margin-top: 30px;
 	margin-bottom: 10px;
@@ -759,19 +771,22 @@ a.externalLink:after {
 	text-rendering: optimizelegibility;
 }
 
-.main-content h2 {
+.main-content h2,
+.main-content .h2 {
 	font-size: var(--h2-font-size);
 	font-weight: var(--h2-font-weight);
 	font-style: var(--h2-font-style);
 }
 
-.main-content h3 {
+.main-content h3,
+.main-content .h3 {
 	font-size: var(--h3-font-size);
 	font-weight: var(--h3-font-weight);
 	font-style: var(--h3-font-style);
 }
 
-.main-content h4 {
+.main-content h4,
+.main-content .h4 {
 	font-size: var(--h4-font-size);
 	font-weight: var(--h4-font-weight);
 	font-style: var(--h4-font-style);

@@ -201,6 +201,34 @@ assert uiComponentsHtml.contains('uib-accordion-group=""') : "Attribute syntax u
 assert uiComponentsHtml.contains('heading="Panel A"') : "Accordion group heading attribute must be preserved"
 assert uiComponentsHtml.contains('heading="Panel B"') : "Accordion group heading attribute must be preserved"
 
+// Test that content stays INSIDE the UI components
+// Using <p><strong>Title</strong></p> format since Markdown headings (####) break out of divs due to Doxia's section wrapping
+
+// Helper function to extract content between markers
+def extractBetween = { String html, String startMarker, String endMarker ->
+    def startIdx = html.indexOf(startMarker)
+    if (startIdx < 0) return ""
+    def endIdx = html.indexOf(endMarker, startIdx)
+    if (endIdx < 0) return ""
+    return html.substring(startIdx, endIdx + endMarker.length())
+}
+
+// Extract the tabset content (up to the next h2 section marker)
+def tabsetContent = extractBetween(uiComponentsHtml, '<div uib-tabset=""', '<h2 id="accordion"')
+assert tabsetContent.contains('Tab A Title') : "Tab A content must be inside the tabset"
+assert tabsetContent.contains('Tab B Title') : "Tab B content must be inside the tabset"
+assert tabsetContent.contains('Tab C Title') : "Tab C content must be inside the tabset"
+assert tabsetContent.contains('class="h4"') : "Bootstrap heading classes must be preserved"
+
+// Extract the accordion content (up to the next h2 section marker)
+def accordionContent = extractBetween(uiComponentsHtml, '<div uib-accordion=""', '<h2 id="collapse"')
+assert accordionContent.contains('Panel A Details') : "Panel A content must be inside the accordion"
+assert accordionContent.contains('Panel B Details') : "Panel B content must be inside the accordion"
+
+// Verify sentry-uib class is automatically added to UIB components
+assert uiComponentsHtml.contains('uib-tabset="" class="sentry-uib"') || uiComponentsHtml.contains('class="sentry-uib" uib-tabset') : "sentry-uib class must be automatically added to tabset"
+assert uiComponentsHtml.contains('uib-accordion="" class="sentry-uib"') || uiComponentsHtml.contains('class="sentry-uib" uib-accordion') : "sentry-uib class must be automatically added to accordion"
+
 // Test collapse
 assert uiComponentsHtml.contains('uib-collapse="demoCollapse"') : "Attribute uib-collapse must be preserved in the HTML output"
 

@@ -1,172 +1,143 @@
-keywords: doxia
-description: Quickstart guide to setup your documentation project with Apache Maven, Doxia, and ${project.name}.
+keywords: setup, quickstart, installation, getting started
+description: Get started with ${project.name} in 5 minutes. Step-by-step setup guide.
 
-# Getting Started
+# Quick Start
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
+Get your documentation site up and running in 5 minutes.
+
 ## Prerequisites
 
-The following is absolutely required to use the **${project.name}**:
+- A [Maven project](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html) with `pom.xml`
+- Maven 3.x installed
+- Java 8 or later
 
-- A properly setup [Maven project](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html)
-- Version 3.x of the [Maven Site plugin](https://maven.apache.org/plugins/maven-site-plugin)
+## Step 1: Project Structure
 
-## Setup of your `site` project
-
-### Directory layout
-
-Below is the typical directory layout of a documentation site project with Maven:
+Create this directory structure:
 
 ```
-./  pom.xml
-│
-└───src/
-    └───site/
-        │   site.xml
-        │
-        ├─── markdown/
-        │       index.md
-        │
-        └─── resources/
-            ├─── css/
-            │       site.css
-            │
-            └─── images/
+my-project/
+├── pom.xml
+└── src/
+    └── site/
+        ├── site.xml
+        ├── markdown/
+        │   └── index.md
+        └── resources/
+            ├── css/
+            │   └── site.css (optional)
+            └── images/
+                └── logo.png (optional)
 ```
 
-### `pom.xml`
+## Step 2: Configure pom.xml
 
-The **${project.name}** leverages Sentry's [Skin Tools Java library](https://sentrysoftware.github.io/maven-skin-tools/), that needs to be declared as a dependency when invoking the `maven-site-plugin`. Update you Maven `pom.xml` as below:
+Add the Maven Site Plugin with the required dependency:
 
 ```xml
 <build>
   <plugins>
-    ...
     <plugin>
       <artifactId>maven-site-plugin</artifactId>
       <version>3.12.1</version>
-      ...
       <dependencies>
         <dependency>
           <groupId>org.sentrysoftware.maven</groupId>
           <artifactId>maven-skin-tools</artifactId>
-          <version>1.3.00</version> <!-- Check for the latest version -->
+          <version>1.5.00</version>
         </dependency>
       </dependencies>
     </plugin>
-    ...
   </plugins>
 </build>
 ```
 
-### `site.xml`
+> **Important**: Use `maven-site-plugin` version **3.12.x**. Later versions use a different site decoration model that is not yet supported.
 
-Then, specify the **${project.name}** artifact in your `src/site/site.xml` file:
+## Step 3: Configure site.xml
+
+Create `src/site/site.xml`:
 
 ```xml
 <project name="\${project.name}">
 
-  <!-- Use ${project.name} -->
   <skin>
     <groupId>${project.groupId}</groupId>
     <artifactId>${project.artifactId}</artifactId>
     <version>${project.version}</version>
   </skin>
 
-  <!-- ${project.name} specific settings -->
-  <custom>
-    <bodyClass>sentry-purple</bodyClass> <!-- banner color -->
-    <keywords>keyword1,keyword2</keywords> <!-- keywords in all pages -->
-      <additionalLinks> <!-- additional links in the footer -->
-        <link>
-          <name>Code of Ethics</name>
-          <href>ethics.html</href>
-        </link>
-    </additionalLinks>
-    <social>
-      <linkedin>company/microsoft</linkedin>
-    </social>
-  </custom>
-
-  <!-- Top link -->
   <bannerLeft>
     <name>\${project.organization.name}</name>
     <href>\${project.organization.url}</href>
-    <!-- Use <src>images/logo-100x40.png</src> to display a logo, instead of <name> -->
   </bannerLeft>
 
   <body>
-
-    <!-- Links in the top navigation bar -->
-    <links>
-      <item name="Link 1" href="https://some.url"/>
-      <item name="Another Resource" href="https://other.site"/>
-    </links>
-
-    <!-- Documentation content on the left -->
-    <menu name="First Menu Group">
+    <menu name="Documentation">
       <item name="Overview" href="index.html"/>
-      <item name="Other Page" href="other-page.html"/>
     </menu>
-
-    <!-- 3 levels: menus (groups), items (pages), and sub-items (pages) -->
-    <menu name="Second Menu Group">
-      <item name="Write a Good Documentation" href="writing.html"/>
-      <item name="Using Subdirectories" href="subdir/using.html"/>
-      <item name="Big Chapter" href="big-chapter/index.html">
-        <item name="Sub Topic 1" href="big-chapter/subtopic1.html" />
-        <item name="Sub Topic 2" href="big-chapter/subtopic2.html" />
-      </item>
-    </menu>
-
   </body>
 
 </project>
 ```
 
-### Content
+## Step 4: Write Your First Page
 
-Write the content of your documentation in the `./src/site/markdown/` directory if you choose to use Markdown. Other markup languages are supported, like APT, Confluence or XHTML. The Maven documentation explains [how to create content for a documentation site](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html).
+Create `src/site/markdown/index.md`:
 
-### Styling
+```markdown
+# Welcome
 
-You can [customize the look and feel](styles.md) of your documentation by writing a CSS stylesheet in `./src/site/resources/css/site.css` that overrides the skin's CSS variables as in the example below:
+This is my documentation built with **${project.name}**.
 
-```css
-body {
-	--banner-bgcolor: #266fd0;
-	--alternate-bgcolor: var(--banner-bgcolor);
-	--alternate-fgcolor: var(--banner-fgcolor);
-	--link-color: #d50c37;
-}
+## Features
 
-/* Lighter red for dark mode ('dark' class on the <body> element) */
-body.dark {
-	--link-color: #ff6989;
-}
+- Easy to write in Markdown
+- Beautiful output
+- Full-text search included
 ```
 
-### Generating the documentation site
+## Step 5: Build and Preview
 
-You're then good to go to build your documentation site:
+Generate your site:
 
 ```bash
 mvn clean site
 ```
 
-The site is built in `target/site/*`.
+The site is generated in `target/site/`. Open `target/site/index.html` in your browser.
 
-### Live rendering
+### Live Preview
 
-Additionally, you can build the site _live_ and make it available on a local Web server with the below command:
+For real-time preview while editing:
 
 ```bash
 mvn site:run
 ```
 
-This command spawns a Web server with the content of your documentation site. Each page is rendered _live_ when you request it in your browser, so changes in your Markdown are taken into account immediately. This is particularly useful when you write your documentation and needs to see how it looks very quickly.
+Then open [http://localhost:8080](http://localhost:8080). Changes to Markdown files are reflected immediately.
 
-> **Note**
->
-> Only the changes in your documentation sources (e.g. the Markdown `*.md` files) are taken into account. Changes in `site.xml` or `pom.xml` require to restart `mvn site:run`.
+> **Note**: Changes to `site.xml` or `pom.xml` require restarting `mvn site:run`.
+
+## Next Steps
+
+Now that your site is running, continue with:
+
+### Setup
+
+- [Styling](styles.html) - Customize colors and fonts
+- [Navigation Menu](nav-menu.html) - Add sidebar navigation
+- [Navigation Links](nav-links.html) - Configure header and logo
+
+### Writing
+
+- [Writing a Page](page-structure.html) - Structure your documentation
+- [Code Highlighting](code.html) - Format code examples
+- [Images](images.html) - Add screenshots and diagrams
+
+### Reference
+
+- [Configuration Reference](settings.html) - All site.xml options
+- [Features Overview](features.html) - Explore all features

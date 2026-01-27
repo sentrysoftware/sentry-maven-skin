@@ -1,18 +1,32 @@
-title: The Real Title
-description: ${project.name} uses the first heading as the document title by default. This can be customized with the title header.
+title: Page Titles
+keywords: title, heading, page title, browser title
+description: How the skin generates page titles from headings and the title header.
 
-# Automatic Title
+# Page Title Generation
 
-The page title is automatically built from the project name and the first heading found in the document.
+By default, the page title is built from:
+1. The **project name** (from pom.xml)
+2. The **first heading** in the document
 
-![Document and window title is automatically generated](images/title.png)
+![Document and browser title generated automatically](images/title.png)
 
-However, you can also specify the page title in the Markdown source file with [the `title` header](headers.html):
+## Custom Title
 
-```md
-title: The Real Title
+Override the automatic title using the `title` front matter header:
 
-# First Heading (not used as title)
+```markdown
+title: My Custom Title
 
-Lorem ipsum...
+# First Heading
+
+This page will use "My Custom Title" instead of "First Heading".
 ```
+
+## Title Display
+
+| Location    | Content                   |
+| ----------- | ------------------------- |
+| Browser tab | Project Name - Page Title |
+| Page header | Page Title only           |
+
+See [Front Matter Headers](headers.html) for more header options.

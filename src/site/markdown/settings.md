@@ -1,45 +1,89 @@
-keywords: option, configuration, config
-description: ${project.name} includes a few specific settings to modify its behavior.
+keywords: configuration, settings, options, site.xml
+description: Complete configuration reference for ${project.name} in site.xml.
 
-# General Settings in `site.xml`
+# Configuration Reference
 
-Like any documentation using Maven Site, the general settings are stored in the [_site descriptor_](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html) (See also [reference for `src/site/site.xml`](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html)).
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-The **${project.name}** specific configuration parameters are specified under the `<custom>` tag:
+All settings are configured in `src/site/site.xml`, the [Maven site descriptor](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html).
+
+## Quick Reference
 
 ```xml
 <project name="\${project.name}">
 
-...
+  <skin>
+    <groupId>org.sentrysoftware.maven</groupId>
+    <artifactId>sentry-maven-skin</artifactId>
+    <version>${project.version}</version>
+  </skin>
 
   <custom>
-    <keywords>keyword1, keyword2, ...</keywords>
-    <bodyClass>sentry-orange</bodyClass>
+    <bodyClass>sentry-purple</bodyClass>
+    <keywords>keyword1, keyword2</keywords>
+    <projectVersion>2.0.0</projectVersion>
     <additionalLinks>
       <link>
-        <name>My Link Text</name>
-        <href>https://w3c.org</href>
-        <target>_blank</href>
+        <name>Terms of Service</name>
+        <href>https://example.com/terms</href>
       </link>
     </additionalLinks>
     <social>
-      <twitter>TheASF</twitter>
-      <facebook>ApacheSoftwareFoundation</facebook>
+      <twitter>YourHandle</twitter>
+      <linkedin>company/YourCompany</linkedin>
     </social>
   </custom>
-...
+
+  <bannerLeft>
+    <src>images/logo.png</src>
+    <href>https://example.com</href>
+  </bannerLeft>
+
+  <body>
+    <links>
+      <item name="GitHub" href="https://github.com/you/project"/>
+    </links>
+    <menu name="Documentation">
+      <item name="Overview" href="index.html"/>
+    </menu>
+  </body>
+
+</project>
 ```
 
-## Sentry Maven Skin specific properties
+## Configuration Options
 
-| Property               | Description                                                                                                                                                                                                                                                                                              | Default                                                 |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `<project name="...">` | Title of the documentation <br/>Recommended value: `<project name="\$project.name">`                                                                                                                                                                                                                     |                                                         |
-| `<bodyClass>`          | CSS class to be added to the `<body>` element of each page (which will control the color of the title).<br/>Predefined values are: `sentry-purple` (purple), `sentry-green` (green) or `sentry-orange` (orange)                                                                                          | _None_ (blue)                                           |
-| `<publishDate>`        | Publish date of the documentation<br/>It is recommended to use a static value, or leave empty so the skin will use the build date.<br/>Note: Format should be ISO (e.g. `2024-02-18T19:30:00Z`), so the value can be interpreted properly.                                                               | `${esc.d}project.build.outputTimestamp` or current date |
-| `<keywords>`           | Comma-separated list of keywords that will be added to all pages in this documentation (and merged with the keywords set in each individual page)                                                                                                                                                        |                                                         |
-| `<projectVersion>`     | Version of the documentation (or of the product being documented). Useful to override the version defined in the Maven project.                                                                                                                                                                          | `\$project.version`                                     |
-| `<additionalLinks>`    | Specify one or multiple `<link>` items that will be displayed in the footer of the generated pages. Useful for legal references, like terms of use, disclaimer, privacy policy, etc.<br/>Specify `<name>` for the text to display, `<href>` for the link, and `<target>` to open in a new window or tab. | _None_                                                  |
-| `<social>`             | Specify social network accounts and handles that will be displayed in the top navigation bar.<br/>Supported networks include: `<twitter>`, `<facebook>`, `<linkedin>`, `<custom>`.                                                                                                                       | _None_                                                  |
+### `<custom>` Settings
 
-Values in `src/site/site.xml` can refer to properties defined in `pom.xml`.
+| Setting             | Description                                                                   | Default                   |
+| ------------------- | ----------------------------------------------------------------------------- | ------------------------- |
+| `<bodyClass>`       | Color theme: `sentry-purple`, `sentry-green`, `sentry-orange`, or none (blue) | Blue                      |
+| `<keywords>`        | Global keywords for all pages (comma-separated)                               | None                      |
+| `<projectVersion>`  | Override the displayed version                                                | `${esc.d}project.version` |
+| `<publishDate>`     | Documentation publish date (ISO format)                                       | Build timestamp           |
+| `<additionalLinks>` | Footer links (legal, privacy, etc.)                                           | None                      |
+| `<social>`          | Social media links in header                                                  | None                      |
+
+### `<bannerLeft>` and `<bannerRight>`
+
+| Setting  | Description                            |
+| -------- | -------------------------------------- |
+| `<src>`  | Path to logo image                     |
+| `<href>` | Link URL when clicked                  |
+| `<name>` | Text to display (alternative to image) |
+| `<alt>`  | Alt text for image                     |
+
+### `<body>` Settings
+
+| Setting         | Description              |
+| --------------- | ------------------------ |
+| `<links>`       | Top navigation bar links |
+| `<breadcrumbs>` | Breadcrumb navigation    |
+| `<menu>`        | Sidebar navigation menu  |
+
+## See Also
+
+- [Navigation Links](nav-links.html) - Header and footer links
+- [Navigation Menu](nav-menu.html) - Sidebar menu configuration
+- [Styling](styles.html) - Color themes and CSS customization
+- [Keywords](keywords.html) - SEO keywords configuration

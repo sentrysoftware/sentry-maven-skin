@@ -1,40 +1,71 @@
-keywords: toc
-description: ${project.name} presents the documentation menu with 2 levels, allowing proper organization of large documentations.
+keywords: menu, sidebar, navigation, hierarchy
+description: Configure the sidebar navigation menu with up to 2 levels of hierarchy.
 
 # Navigation Menu
 
-The navigation menu on the left is specified with [the `<menu>` elements in `src/site/site.xml`](https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html#including-generated-content).
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-It is possible to specify a 2nd level of hierarchy in the pages of the documentation, as `<item>` elements can contain other `<item>` elements, as in the example below:
+The sidebar menu organizes your documentation into sections and pages.
+
+## Basic Structure
+
+Define menus in `src/site/site.xml` under `<body>`:
 
 ```xml
-...
-    <menu name="Using MetricsHub">
-      <item name="General Concepts" href="general-concepts.html"/>
-      <item name="Resources and Connectors" href="resource-connectors.html"/>
-      <item name="Configuring MetricsHub" href="m8b-settings.html"/>
-      <item name="Basic Monitors" href="basic-monitors/index.html">
-        <item name="Filesystem" href="basic-monitors/filesystem.html" />
-        <item name="Process" href="basic-monitors/process.html" />
-        ...
-      </item>
-      ...
-    </menu>
-...
+<body>
+  <menu name="Getting Started">
+    <item name="Overview" href="index.html"/>
+    <item name="Installation" href="install.html"/>
+  </menu>
+
+  <menu name="User Guide">
+    <item name="Configuration" href="config.html"/>
+    <item name="Usage" href="usage.html"/>
+  </menu>
+</body>
 ```
 
-This will generate the below navigation menu:
+## Two-Level Hierarchy
 
-![inline](images/menu-collapse.png)
+Nest `<item>` elements for sub-pages:
 
-The menu is expanded when the corresponding topic is opened:
+```xml
+<menu name="Documentation">
+  <item name="Basic Monitors" href="monitors/index.html">
+    <item name="Filesystem" href="monitors/filesystem.html"/>
+    <item name="Process" href="monitors/process.html"/>
+    <item name="Network" href="monitors/network.html"/>
+  </item>
+  <item name="Advanced Topics" href="advanced/index.html">
+    <item name="Custom Scripts" href="advanced/scripts.html"/>
+    <item name="API Reference" href="advanced/api.html"/>
+  </item>
+</menu>
+```
 
-![inline](images/menu-expand.png)
+### Collapsed View
 
-On mobile, links to all subtopics are automatically added to the parent page:
+![Collapsed menu showing folder icons](images/menu-collapse.png)
 
-![inline](images/menu-expand-mobile.png)
+### Expanded View
 
-> **Note**
->
-> The Sentry Maven Skin does not support a 3rd level of hierarchy.
+![Expanded menu showing sub-items](images/menu-expand.png)
+
+### Mobile View
+
+On mobile, sub-items are shown as links within the parent page:
+
+![Mobile menu with inline sub-items](images/menu-expand-mobile.png)
+
+## Limitations
+
+- Maximum **2 levels** of hierarchy (menu > item > item)
+- Third-level nesting is not supported
+
+## Next Steps
+
+Your site is now set up! Start writing documentation:
+
+- [Writing a Page](page-structure.html) - Structure your content
+- [Code Highlighting](code.html) - Format code examples
+- [Images](images.html) - Add screenshots

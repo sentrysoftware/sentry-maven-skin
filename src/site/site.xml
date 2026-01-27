@@ -22,7 +22,7 @@
 	<skin>
 		<groupId>org.sentrysoftware.maven</groupId>
 		<artifactId>sentry-maven-skin</artifactId>
-		<version>6.4.01</version>
+		<version>${project.version}</version>
 	</skin>
 
 	<bannerLeft>
@@ -97,28 +97,33 @@
 			<item name="Java Libraries" />
 		</breadcrumbs>
 
-		<menu name="User Documentation">
-			<item name="Home" href="index.html" />
-			<item name="Getting Started" href="start.html" />
-			<item name="General Settings (&lt;code&gt;site.xml&lt;/code&gt;)" href="settings.html" />
-			<item name="Features" href="features.html">
-				<item name="Navigation Links" href="nav-links.html" />
-				<item name="Navigation Menu" href="nav-menu.html" />
-				<item name="Styling (Colors, Fonts)" href="styles.html" />
-				<item name="Maven Properties" href="maven-properties.html" />
-				<item name="Keywords" href="keywords.html" />
-				<item name="Index and Search" href="search.html" />
-				<item name="AI Indexing" href="ai-indexing.html" />
-				<item name="Headers (Front Matter)" href="headers.html" />
-				<item name="Automatic ToC" href="toc.html" />
-				<item name="Automatic Title" href="title.html" />
-				<item name="Autozoom Images" href="autozoom.html" />
-				<item name="Conversion to WEBP" href="webp.html" />
-				<item name="Code Syntax Highlighting" href="code.html" />
-				<item name="UI Components (Tabs, Accordion, ...)" href="ui-components.html" />
-				<item name="Printing" href="print.html" />
-				<item name="Miscellaneous" href="misc.html" />
-			</item>
+		<menu name="Getting Started">
+			<item name="Overview" href="index.html" />
+			<item name="Quick Start" href="start.html" />
+			<item name="Styling (Colors, Fonts)" href="styles.html" />
+			<item name="Navigation Links" href="nav-links.html" />
+			<item name="Navigation Menu" href="nav-menu.html" />
+		</menu>
+
+		<menu name="Writing Documentation">
+			<item name="Writing a Page" href="page-structure.html" />
+			<item name="Automatic Title" href="title.html" />
+			<item name="Automatic ToC" href="toc.html" />
+			<item name="Images" href="images.html" />
+			<item name="Code Highlighting" href="code.html" />
+			<item name="UI Components (Tabs, ...)" href="ui-components.html" />
+			<item name="Doxia Features" href="doxia.html" />
+		</menu>
+
+		<menu name="Advanced">
+			<item name="Configuration Reference" href="settings.html" />
+			<item name="Front Matter Headers" href="headers.html" />
+			<item name="Keywords (SEO)" href="keywords.html" />
+			<item name="Full-Text Search" href="search.html" />
+			<item name="AI Indexing (llms.txt)" href="ai-indexing.html" />
+			<item name="Print Support" href="print.html" />
+			<item name="Maven Properties" href="maven-properties.html" />
+			<item name="Miscellaneous" href="misc.html" />
 		</menu>
 
 		<menu ref="reports" />

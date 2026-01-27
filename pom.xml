@@ -86,6 +86,21 @@
 		<!-- Actual build plugins -->
 		<plugins>
 
+			<!-- site -->
+			<!-- Sentry Maven Skin requires maven-skin-tools as a dependency -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.12.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.sentrysoftware.maven</groupId>
+						<artifactId>maven-skin-tools</artifactId>
+						<version>1.5.00</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 			<!-- frontend -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
@@ -244,6 +259,21 @@
 			</plugin>
 
 		</plugins>
+
+		<!-- Release plugin configuration -->
+		<!-- Override preparationGoals to include "install" before "site" -->
+		<!-- This is needed because this project uses itself as its own skin -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+					<configuration>
+						<preparationGoals>clean install site</preparationGoals>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 	</build>
 
 	<!-- Reporting: disable useless reports inherited from parent -->

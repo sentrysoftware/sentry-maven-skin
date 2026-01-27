@@ -1,28 +1,21 @@
-keywords: llms.txt, ai, llm, chatgpt, copilot, claude, gemini, markdown
-description: ${project.name} automatically generates llms.txt and Markdown files to optimize your documentation for AI platforms indexing.
+keywords: llms.txt, ai, llm, chatgpt, copilot, claude, gemini
+description: Automatic llms.txt and Markdown generation for AI platform indexing.
 
 # AI Indexing
 
-**${project.name}** automatically generates files to help AI platforms (like ChatGPT, GitHub Copilot, Claude, Gemini, etc.) better understand and index your documentation. This improves the quality of AI-assisted answers about your project.
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-## How does it work?
+${project.name} automatically generates files to help AI platforms (ChatGPT, GitHub Copilot, Claude, Gemini) understand your documentation.
 
-When your documentation site is built, the skin automatically:
+## Generated Files
 
-1. **Creates an `llms.txt` file** at the root of your site, following the [llms.txt convention](https://llmstxt.org/)
-2. **Generates a Markdown (`.md`) version** of each HTML page
-3. **Adds `<link rel="alternate">` tags** in each HTML page pointing to the Markdown version
+During build, the skin creates:
 
-### The llms.txt File
+1. **`llms.txt`** - Structured index following the [llms.txt convention](https://llmstxt.org/)
+2. **`.md` files** - Markdown version of each HTML page
+3. **`<link>` tags** - References to Markdown versions in HTML
 
-The `llms.txt` file provides a structured index of your documentation that AI crawlers can easily parse. It follows the [llms.txt specification](https://llmstxt.org/) with:
-
-- **H1 header** with your project name
-- **Blockquote** with your project description
-- **Sections** organized by your navigation menu structure
-- **Links** to all documentation pages
-
-Example:
+### llms.txt Format
 
 ```markdown
 # My Project
@@ -32,69 +25,53 @@ Example:
 ## Getting Started
 
 - [Installation](installation.html)
-- [Quick Start Guide](quickstart.html)
+- [Quick Start](quickstart.html)
 
 ## User Guide
 
 - [Configuration](configuration.html)
-- [Advanced Usage](advanced.html)
-
-## Other
-
-- [Project Summary](summary.html)
 ```
 
-The sections in `llms.txt` are automatically determined from your `site.xml` menu structure. Pages that don't belong to any menu are placed in the "Other" section.
+Sections are generated from your `site.xml` menu structure.
 
 ### Markdown Files
 
-For each HTML page, a corresponding `.md` file is generated with:
-
-- **YAML front matter** containing metadata (description, dates, canonical URL)
-- **Clean Markdown content** converted from the HTML body
-
-Example front matter:
+Each HTML page gets a corresponding `.md` file with YAML front matter:
 
 ```yaml
 ---
-description: Learn how to install and configure the library
+description: Learn how to install the library
 date_published: 2024-01-15
 date_modified: 2024-01-15
-canonical_url: https://example.com/docs/installation.html
+canonical_url: https://example.com/docs/install.html
 ---
 ```
 
 ### Link Tags
 
-Each HTML page includes a `<link rel="alternate">` tag pointing to its Markdown version:
+HTML pages include a link to their Markdown version:
 
 ```html
-<link rel="alternate" type="text/markdown" href="installation.md" />
+<link rel="alternate" type="text/markdown" href="page.md"/>
 ```
 
-This helps AI platforms discover the Markdown versions of your pages.
+## SEO Features
 
-## SEO and Structured Data
+Also included automatically:
 
-In addition to the AI-specific files, **${project.name}** also includes:
-
-- **Canonical URLs** (`<link rel="canonical">`) when `<url>` is defined in your `pom.xml`
-- **Open Graph metadata** (`article:published_time`, `article:modified_time`)
-- **Schema.org JSON-LD** structured data for each page
+- Canonical URLs (`<link rel="canonical">`)
+- Open Graph metadata
+- Schema.org JSON-LD structured data
 
 ## Configuration
 
-This feature is enabled by default and requires no configuration. The files are generated automatically during the site build.
+This feature is **enabled by default** with no configuration needed.
 
-To benefit from the canonical URL and complete metadata:
-
-1. Define `<url>` in your `pom.xml`:
+For best results, define `<url>` in your `pom.xml`:
 
 ```xml
 <project>
-    ...
-    <url>https://example.com/docs</url>
-    ...
+  <url>https://example.com/docs</url>
 </project>
 ```
 

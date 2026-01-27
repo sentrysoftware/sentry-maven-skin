@@ -84,6 +84,16 @@ This single command does everything:
 - **Test site**: `target/it/studio-km/target/site/` (HTML output)
 - **Build log** (on failure): `target/it/studio-km/build.log`
 
+### Building This Project's Own Documentation
+
+This project uses itself as its own Maven skin (dogfooding via `${project.version}` in `site.xml`). Because of this, you **must** run `install` before `site`:
+
+```bash
+mvn install site
+```
+
+> **Important**: Running `mvn site` alone will fail with `NoSuchFileException: target/classes` because the skin JAR won't exist yet.
+
 ### Viewing Test Results
 
 To preview the generated test documentation:
@@ -277,6 +287,9 @@ The project uses GitHub Actions. The CI workflow:
 ```bash
 # Full build with tests
 mvn verify
+
+# Build and generate this project's own documentation
+mvn install site
 
 # Clean build artifacts
 mvn clean
