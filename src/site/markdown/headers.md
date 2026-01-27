@@ -1,29 +1,48 @@
-keywords: front matter, frontmatter, title, keywords, description, head, header, meta, metadata
-description: ${project.name} and Maven Site allows writers to specify additional headers, like this very description.
+keywords: front matter, metadata, title, description, author
+description: Add metadata to your pages using front matter headers.
 
-# Headers (Front Matter)
+# Front Matter Headers
 
-Headers can be added to each Markdown document as "front matter" headers, notably to specify the document's title, author and description. These _headers_ end up in the [`<head>` section](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/The_head_metadata_in_HTML) of the produced HTML pages. Any custom header can be added using the below syntax in the Markdown source:
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-```md
-title: Casino Royale
-author: Ian Fleming
-description: The story concerns the British secret agent James Bond, gambling at the casino in Royale-les-Eaux to bankrupt Le Chiffre, the treasurer of a French communist union and a secret member of Soviet state intelligence. Bond is supported in his endeavours by Vesper Lynd, a member of his own service, as well as Felix Leiter of the CIA and René Mathis of the French Deuxième Bureau.
-date: 13 April 1953
+Add metadata to your Markdown pages using front matter headers at the top of the file.
 
-# Casino Royale (James Bond)
+## Basic Usage
 
-'A dry martini,' Bond said 'in a deep Champagne goblet. Three measures of Gordon's, one of Vodka, half a measure of Kina Lillet. Shake it very well until it's ice cold, then add a thin slice of lemon peel. Got it?'
+```markdown
+title: Installation Guide
+author: John Doe
+description: Step-by-step installation instructions
+keywords: install, setup, configuration
+date: 2024-01-15
 
-'Certainly, monsieur.'
+# Installation Guide
+
+Your content here...
 ```
 
-Typical headers:
+## Supported Headers
 
-| Header        | Description                                                                                                                                        |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`       | To specify a document title different than its first heading.                                                                                      |
-| `author`      | Specifies the author of the document. Multiple `author` entries are possible in the same document.                                                 |
-| `date`        | Date of writing of the document (creation or update).<br/>No date format is enforced; it is recommended to be consistent across the documentation. |
-| `description` | Typically used by Search Engines as short description of the page. This is critical to SEO.                                                        |
-| `keywords`    | List of keywords applicable to the page. Not used by public Search Engines, but will be used for internal _Related Topics_ listing.                |
+| Header        | Description                              |
+| ------------- | ---------------------------------------- |
+| `title`       | Page title (overrides first heading)     |
+| `author`      | Document author (multiple allowed)       |
+| `description` | SEO description for search engines       |
+| `keywords`    | Page-specific keywords (comma-separated) |
+| `date`        | Document date (creation or update)       |
+
+## How It Works
+
+Headers are added to the HTML `<head>` section:
+
+```html
+<meta name="author" content="John Doe">
+<meta name="description" content="Step-by-step installation...">
+<meta name="keywords" content="install, setup, configuration">
+```
+
+## Tips
+
+- **Description** is critical for SEO - keep it under 160 characters
+- **Keywords** merge with global keywords from `site.xml`
+- **Multiple authors** can be specified with separate `author` lines

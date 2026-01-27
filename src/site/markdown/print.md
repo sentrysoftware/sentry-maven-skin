@@ -1,18 +1,24 @@
-keywords: print,render
-description: ${project.name} ensures a proper rendering of the documentation when printed.
+keywords: print, pdf, render, paper
+description: Print-optimized output for professional documentation and PDF generation.
 
-# Printing
+# Print Support
 
-**${project.name}** ensures the pages are properly rendered when printed:
+Pages render cleanly when printed or saved as PDF.
 
-- No banner
-- No navigation menu or links
-- Links and URLs are displayed as footnotes
-- No fancy colors, for a professional look, and faster printing
-- Identical rendering on both US Letter and A4 paper
+![Print preview example](images/print.png)
 
-![Screenshot of the print preview of a page rendered with ${project.name}](images/print.png)
+## Print Optimizations
 
-> **Note**
->
-> Print on actual paper only when necessary! The rendering has been polished so you can create a PDF from a page of your documentation.
+| Feature    | Print Behavior              |
+| ---------- | --------------------------- |
+| Navigation | Hidden                      |
+| Banner     | Hidden                      |
+| Links      | Displayed as footnotes      |
+| Colors     | Minimal, professional       |
+| Paper size | US Letter and A4 compatible |
+
+## Creating PDFs
+
+Use your browser's Print function (Ctrl+P or Cmd+P) and select "Save as PDF" for high-quality documentation exports.
+
+> **Tip**: The print stylesheet produces clean, professional output suitable for formal documentation packages.

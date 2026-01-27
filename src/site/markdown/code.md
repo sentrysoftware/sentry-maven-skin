@@ -1,9 +1,15 @@
-keywords: code, syntax, highlighting, coloring
-description: ${project.name} includes syntax highlighting for any code block that specifies the language
+keywords: code, syntax, highlighting, prism
+description: Syntax highlighting for 290+ programming languages with copy-to-clipboard.
 
 # Code Syntax Highlighting
 
-Fenced code blocks will be syntax-highlighted using [PrismJS](https://prismjs.com/). The language of the code block must be specified as in the below example:
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+
+Code blocks are automatically syntax-highlighted using [PrismJS](https://prismjs.com/).
+
+## Basic Usage
+
+Specify the language after the opening fence:
 
 ````md
 ```java
@@ -11,17 +17,36 @@ System.out.println("Hello, World!");
 ```
 ````
 
-Each block of code can be easily copied to the system's clipboard with a dedicated `[Copy]` button.
+Every code block includes a **Copy** button for easy clipboard copying.
 
 ## Supported Languages
 
-All [290+ languages supported by PrismJS](https://prismjs.com/#supported-languages) are available, including Java, Python, JavaScript, TypeScript, Go, Rust, Kotlin, C#, Ruby, PHP, SQL, YAML, and many more.
+All [290+ PrismJS languages](https://prismjs.com/#supported-languages) are supported, including:
 
-Language components are loaded automatically on demand using the PrismJS autoloader plugin. This means you can use any language identifier supported by PrismJS without any additional configuration.
+- **Web**: HTML, CSS, JavaScript, TypeScript, JSON
+- **Backend**: Java, Python, Go, Rust, C#, Ruby, PHP
+- **Config**: YAML, XML, TOML, INI, Properties
+- **Shell**: Bash, PowerShell, Batch
+- **Database**: SQL, GraphQL
+- **And many more...**
+
+Language components load automatically on demand.
 
 ## Examples
 
-### Command lines (Linux)
+### Java
+
+````md
+```java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello!");
+    }
+}
+```
+````
+
+### Shell Commands
 
 ````md
 ```bash
@@ -29,55 +54,54 @@ echo $HOME > /tmp/my-home.txt
 ```
 ````
 
-### Command lines (Windows)
-
-````md
-```batch
-echo %USERNAME% > username.txt
-```
-````
-
-### Command lines (with output)
+### Shell with Output
 
 ````md
 ```shell-session
 $ ls -l
-test: Not found
+total 0
+-rw-r--r-- 1 user user 0 Jan 1 00:00 file.txt
 ```
 ````
 
-### CSS
+### YAML
 
 ````md
-```css
-body.my-theme > a {
-	color: #012345;
-}
+```yaml
+server:
+  port: 8080
+  host: localhost
 ```
 ````
 
-### Docker file
+### XML
+
+````md
+```xml
+<dependency>
+  <groupId>org.example</groupId>
+  <artifactId>my-lib</artifactId>
+</dependency>
+```
+````
+
+### SQL
+
+````md
+```sql
+SELECT * FROM users WHERE active = true;
+```
+````
+
+### Docker
 
 ````md
 ```docker
 FROM ubuntu:22.04
 COPY . /app
-RUN make /app
-CMD python /app/app.py
+CMD ["python", "/app/app.py"]
 ```
 ````
-
-### HTML
-
-````md
-```html
-<a href="https://onehome.org" title="Moving">OneHome</a>
-```
-````
-
-### JavaScript
-
-````md
 ```js
 function printPage() {
 	window.print();
@@ -194,3 +218,9 @@ const greet = (user: User): string => `Hello, ${user.name}!`;
 > **Note:**
 >
 > Syntax highlighting for fenced code blocks is available only when using version 3.10 (and later) of _maven-site-plugin_.
+
+## Next Steps
+
+- [Images](images.html) - Add screenshots and diagrams
+- [UI Components](ui-components.html) - Tabs, accordions, and more
+- [Doxia Features](doxia.html) - Include code from external files

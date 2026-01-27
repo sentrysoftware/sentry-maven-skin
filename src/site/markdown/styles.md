@@ -1,127 +1,103 @@
-keywords: css, color, font
-description: ${project.name}'s look and feel can be easily customized for your documentation with a few CSS properties.
+keywords: css, color, font, theme, customization
+description: Customize colors and fonts with simple CSS variables or use built-in color themes.
 
-# Styling
+# Styling (Colors and Fonts)
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-The ${project.name}'s look and feel can be easily customized for your documentation with a simple configuration setting, or a few CSS properties.
+Customize the look and feel of your documentation with built-in themes or custom CSS variables.
 
-## Basic Themes
+## Built-in Themes
 
-By default, the ${project.name} comes in nice shades of blue, featuring _Raleway_ and _Lato_ elegant fonts. Using the `<bodyClass>` property under `<custom>` in `src/site/site.xml`, you can specify a different color scheme:
-
-| `<bodyClass>`   | Screenshot                                                                      |
-| --------------- | ------------------------------------------------------------------------------- |
-| `sentry-blue`   | ![Screenshot of the skin's default color scheme (blue)](images/sentry-blue.png) |
-| `sentry-green`  | ![Screenshot of the `sentry-green` color scheme](images/sentry-green.png)       |
-| `sentry-orange` | ![Screenshot of the `sentry-orange` color scheme](images/sentry-orange.png)     |
-| `sentry-purple` | ![Screenshot of the `sentry-purple` color scheme](images/sentry-purple.png)     |
-
-Example of `site.xml`:
+The easiest way to change colors is to use a built-in theme. In `src/site/site.xml`:
 
 ```xml
-<project>
-  ...
-  <custom>
-    <bodyClass>sentry-orange</bodyClass>
-    ...
-  </custom>
+<custom>
+  <bodyClass>sentry-purple</bodyClass>
+</custom>
 ```
 
-## How CSS customization works
+| Theme           | Preview                                   |
+| --------------- | ----------------------------------------- |
+| Default (blue)  | ![Blue theme](images/sentry-blue.png)     |
+| `sentry-green`  | ![Green theme](images/sentry-green.png)   |
+| `sentry-orange` | ![Orange theme](images/sentry-orange.png) |
+| `sentry-purple` | ![Purple theme](images/sentry-purple.png) |
 
-Create a `src/site/resources/css/site.css` file in your project. This CSS will be loaded with your documentation and that will override the CSS that ships by default with the skin.
+## Custom Colors
 
-In this `site.css`, you will redefine the [value of a few CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) on the `<body>` element for colors, and on the `:root` element for the fonts.
-
-## Colors
-
-You will mainly set 7 CSS variables to modify the colors of the skin for your documentation:
-
-| CSS Variable          | Description                                                                                                 |
-| --------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `--banner-bgcolor`    | Main theme color, used in the title banner background.                                                      |
-| `--banner-fgcolor`    | Text color in the title banner. Must provide enough contrast with `banner-bgcolor` for accessibility.       |
-| `--main-bgcolor`      | Main content background color (usually `white`).                                                            |
-| `--main-fgcolor`      | Main content text color (usually `black`).                                                                  |
-| `--alternate-bgcolor` | Alternate background color for highlighting content (typically a shade of `var(--banner-bgcolor)`).         |
-| `--alternate-fgcolor` | Alternate foreground color for highlighted content (typically white or a shade of `var(--banner-fgcolor)`). |
-| `--link-color`        | Color for the links (usually something blue).                                                               |
+Create `src/site/resources/css/site.css` to override CSS variables:
 
 ```css
-/* We're only customizing the title banner background color and the links */
 body {
-	--banner-bgcolor: #266fd0;
-	--alternate-bgcolor: var(--banner-bgcolor);
-	--alternate-fgcolor: var(--banner-fgcolor);
-	--link-color: #d50c37;
+  --banner-bgcolor: #266fd0;
+  --banner-fgcolor: white;
+  --link-color: #d50c37;
 }
 ```
 
-### Colors default values
+### Color Variables
 
-Default values for all customizable colors are (variable names are self-explanatory):
+| Variable              | Description                     |
+| --------------------- | ------------------------------- |
+| `--banner-bgcolor`    | Header background color         |
+| `--banner-fgcolor`    | Header text color               |
+| `--main-bgcolor`      | Page background (usually white) |
+| `--main-fgcolor`      | Page text color (usually black) |
+| `--alternate-bgcolor` | Accent background color         |
+| `--alternate-fgcolor` | Accent text color               |
+| `--link-color`        | Link color                      |
+
+### Default Values
 
 <!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=colors} -->
 
-### Dark colors
+### Dark Mode Colors
 
-When the user is displaying your documentation using a dark colors scheme, the `dark` class is added to the `<body>` element, so you can customize the colors to use when in dark mode with the `body.dark` CSS selector:
+Customize colors for dark mode with the `body.dark` selector:
 
 ```css
-/* Default colors in light mode */
 body {
-	--banner-bgcolor: #266fd0;
-	--alternate-bgcolor: var(--banner-bgcolor);
-	--alternate-fgcolor: var(--banner-fgcolor);
-	--link-color: #d50c37;
+  --link-color: #d50c37;
 }
-/* Use a lighter red when in dark mode */
+
 body.dark {
-	--link-color: #ff6989;
+  --link-color: #ff6989;
 }
 ```
 
-Default values for colors in dark are:
+Default dark mode values:
 
 <!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=dark-colors} -->
 
-## Fonts
+## Custom Fonts
 
-3 main font families are used by the ${project.name}, which can be customized with the below CSS variables defined on the `:root` pseudo-element:
-
-| CSS Variable          | Description                                                             | Default   |
-| --------------------- | ----------------------------------------------------------------------- | --------- |
-| `--title-font`        | Mainly used for the project title in the banner and the document title. | `Raleway` |
-| `--heading-font`      | Used for headings in the document, and header and footer.               | `Raleway` |
-| `--content-font`      | Used in the main content of your documentation, everywhere else.        | `Lato`    |
-| `--content-font-size` | Associated default font size for the main content.                      | `15px`    |
-
-Each of these variables can specify [several alternate fonts](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) if the first one is not available on the reader's system.
-
-Example of `site.css`:
+Override font families on the `:root` element:
 
 ```css
 :root {
-	--title-font: "Gill Sans", sans-serif;
-	--heading-font: system-ui;
-	--content-font: Georgia, serif;
-	--content-font-size: medium;
+  --title-font: "Gill Sans", sans-serif;
+  --heading-font: system-ui;
+  --content-font: Georgia, serif;
+  --content-font-size: 16px;
 }
 ```
 
-### All fonts customizable properties
+### Font Variables
 
-Actually, the font family, size, weight and style can all be customized with CSS variables defined on the `:root` element. The HTML page is split in 6 main sections with separate settings:
+| Variable              | Description             | Default    |
+| --------------------- | ----------------------- | ---------- |
+| `--title-font`        | Project title in banner | RobotoSlab |
+| `--heading-font`      | Section headings        | RobotoSlab |
+| `--content-font`      | Body text               | Roboto     |
+| `--content-font-size` | Base font size          | 15px       |
 
-- `top-...` for the very top header
-- `banner-...` for the colorful banner with the project title
-- `left-...` for the navigation menu on the left
-- `main-title-...` for the document title
-- `content-...` for the content default properties
-- `bottom-...` for the page footer
-
-The default values for all fonts properties are:
+### All Font Properties
 
 <!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=fonts} -->
+
+## Next Steps
+
+- [Navigation Links](nav-links.html) - Configure header and logo
+- [Navigation Menu](nav-menu.html) - Set up sidebar navigation
+- [Writing a Page](page-structure.html) - Start writing documentation

@@ -1,22 +1,36 @@
-keywords: elastic, lunr
-description: ${project.name} includes complete search capabilities within the documentation.
+keywords: search, index, elasticlunr
+description: Built-in full-text search across your documentation without external services.
 
-# Index and Search
+# Full-Text Search
 
-The **${project.name}** includes complete search capabilities within the documentation and doesn't rely on external search engines like Google. Readers can search the documentation very easily.
+<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 
-![User documentation is easily searchable with clear result listing, including category, matching score and highlighted matching excerpts](images/search.png)
+${project.name} includes built-in full-text search - no Google or external services required.
 
-Search also works on mobile:
+![Search results with highlighted matches](images/search.png)
+
+Works great on mobile too:
 
 ![inline](images/search-mobile.png)
 
-## How does it work?
+## How It Works
 
-The content of each page is automatically indexed with [elasticlunr.js](https://elasticlunr.com/). _Elasticlunr.js_ is a Javascript front-end only indexing and searching solution.
+1. During build, all pages are indexed using [elasticlunr.js](https://elasticlunr.com/)
+2. The index is saved to `target/site/index.json`
+3. When users search, the index loads and results appear instantly
 
-The **${project.name}** will build an _Elasticlunr.js_ index and each page will be able to search the entire project documentation. The _Elasticlunr.js_ indexer is executed by the **${project.name}** using [GraalVM's JavaScript engine](https://www.graalvm.org/latest/reference-manual/js/). Then the _Elasticlunr.js_ client is loaded as part of the AngularJS app running on each page.
+The indexer runs on [GraalVM's JavaScript engine](https://www.graalvm.org/latest/reference-manual/js/) during the Maven build.
 
-The index file is `target/site/index.json` and can be leveraged and merged with other documentation indexes, but this will require extra work (in Javascript only).
+## Features
 
-The **index.json** file is lazily loaded when the user starts typing in the _Search_ box. Its size grows with the size of the documentation.
+- **Instant results** as you type
+- **Highlighted excerpts** showing matching text
+- **Relevance scoring** for result ranking
+- **No external dependencies** - works offline
+- **Lazy loading** - index loads only when needed
+
+## Configuration
+
+Search works automatically with no configuration needed.
+
+> **Note**: The `index.json` file size grows with your documentation size.
