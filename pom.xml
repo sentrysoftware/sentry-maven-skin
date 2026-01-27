@@ -10,7 +10,7 @@
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>sentry-maven-skin</artifactId>
-	<version>6.5.01-SNAPSHOT</version>
+	<version>6.6.00</version>
 
 	<name>Sentry Maven Skin</name>
 	<description>
@@ -42,7 +42,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sentrysoftware/sentry-maven-skin.git</connection>
 		<url>https://github.com/sentrysoftware/sentry-maven-skin</url>
-		<tag>HEAD</tag>
+		<tag>v6.6.00</tag>
 	</scm>
 
 	<developers>
@@ -63,7 +63,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2026-01-23T20:51:48Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2026-01-27T13:49:15Z</project.build.outputTimestamp>
 
 		<!-- How to execute the Node.js section -->
 		<!-- On GitHub Actions, we will use the exec-maven-plugin -->
