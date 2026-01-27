@@ -24,11 +24,14 @@ angular.module("sentry.site", ["ngAnimate", "ngSanitize", "matchMediaLight", "du
 
 /**
  * Prevent animations for anything not marked with the class "animate"
+ * Exception: carousel elements need animations to work properly
+ * - "carousel" class is added to the carousel container
+ * - "item" class is added to each slide (where animations actually happen)
  **/
 angular.module("sentry.site").config([
 	"$animateProvider",
 	function ($animateProvider) {
-		$animateProvider.classNameFilter(/( |^)animate( |$)/);
+		$animateProvider.classNameFilter(/animate|carousel|item/);
 	}
 ]);
 

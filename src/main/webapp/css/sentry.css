@@ -181,6 +181,16 @@ th {
 }
 
 /**
+ * Angular UI Bootstrap Carousel Animation Fix
+ * Required for ngAnimate to work properly with the carousel
+ * See: https://github.com/angular-ui/bootstrap/blob/master/src/carousel/carousel.css
+ **/
+.ng-animate.item:not(.left):not(.right) {
+	-webkit-transition: 0s ease-in-out left;
+	transition: 0s ease-in-out left;
+}
+
+/**
  * General settings
  */
 html,

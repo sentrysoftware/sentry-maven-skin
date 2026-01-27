@@ -256,10 +256,10 @@ limitations under the License.
 // Specify the size of the images (makes the rendering more efficient)
 *##set($bodyElement = $imageTool.explicitImageSize($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
 
-// Surround all <IMG> not marked as "inline" with a thumbnail
+// Surround all <IMG> not marked as "inline" and not inside a carousel with a thumbnail
 *##set($bodyElement = $imageTool.convertImagesToThumbnails(
 		$bodyElement,
-		"img:not(img[alt=inline])",
+		"img:not([alt=inline]):not([uib-carousel] img)",
 		${project.reporting.outputDirectory},
 		$currentFileName,
 		200, 0,
