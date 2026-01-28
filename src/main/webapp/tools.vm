@@ -29,7 +29,28 @@ limitations under the License.
 *    - add AngularJS directives where necessary
 *
 ***********************************************************************
-
+*#
+##
+## Compatibility between Maven Site Plugin 3.x and 4.x
+## In 3.x, the site model is available as $decoration
+## In 4.x, it's available as $site (and $decoration is deprecated)
+## This ensures both variables are always available:
+## - $site is used throughout our templates (modern)
+## - $decoration remains available for backward compatibility with existing user docs
+##
+## Note: Custom configuration access works the same in both versions:
+## - $site.getCustomValue("key") - convenience method for simple values
+## - $site.getCustomValue("key", "default") - with default value
+## - $site.getCustomChild("key") - returns DOM element for complex structures
+## These are equivalent to $site.custom.getChild("key").getValue() but cleaner.
+##
+#if (!$site && $decoration)#*
+	*##set ($site = $decoration)#*
+*##end#*
+*##if (!$decoration && $site)#*
+	*##set ($decoration = $site)#*
+*##end
+#*
 
 
 **
@@ -98,12 +119,12 @@ limitations under the License.
 **
 * leftMenu
 *
-* Macro that builds the left menu from $decoration.body.menus
+* Macro that builds the left menu from $site.body.menus
 *
 **
 *##macro(leftMenu)#*
 	*##set($hrefList = [])#*
-	*##foreach ($menu in $decoration.body.menus)
+	*##foreach ($menu in $site.body.menus)
 		<h5 class="text-uppercase">$menu.name</h5>
 #*	*##leftMenuRecursive($menu.items, false)#*
 	*##end#*
@@ -195,7 +216,7 @@ limitations under the License.
 * This is used by AIIndexTool.updateLlmsTxt() to categorize pages in llms.txt
 **
 *##macro(getMenuSection)#*
-	*##foreach($menu in $decoration.body.menus)#*
+	*##foreach($menu in $site.body.menus)#*
 		*##foreach($item in $menu.items)#*
 			*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
 			*##if ($alignedHref == $alignedFileName)#*
@@ -229,9 +250,17 @@ limitations under the License.
 *##set($headContent = $render.eval($headContent))#*
 *##set($shortTitle = $render.eval($shortTitle))#*
 
-// Parse the body and header content
-*##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
-*##set($headElement = $htmlTool.parseContent($headContent))#*
+// Parse the body and header content (guard against null content in Maven Site Plugin 4.x)
+*##if($bodyContent)#*
+	*##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
+*##else#*
+	*##set($bodyElement = $htmlTool.parseContent(""))#*
+*##end#*
+*##if($headContent)#*
+	*##set($headElement = $htmlTool.parseContent($headContent))#*
+*##else#*
+	*##set($headElement = $htmlTool.parseContent(""))#*
+*##end#*
 
 // Fix all protocol-relative links
 *##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
@@ -346,7 +375,7 @@ limitations under the License.
 
 // Extract the keywords
 *##set($keywordsArray = $htmlTool.getAttr($headElement, "meta[name=keywords]", "content"))#*
-*##call($keywordsArray.add($decoration.getCustomValue("keywords")))#*
+*##call($keywordsArray.add($site.getCustomValue("keywords")))#*
 *##if (!$keywordsArray.isEmpty())#*
 	*##set($keywords = $display.list($display.list($keywordsArray, ",").trim().split("\s*,\s*"), ","))#*
 	*##set($keywordsArray = $keywords.split("\s*,\s*"))#*
@@ -360,7 +389,7 @@ limitations under the License.
 
 // publishDate: either <custom><publishDate> in site.xml,
 // or project.build.outputTimestamp defind in pom.xml, or current date
-*##set($publishDateString = $decoration.getCustomValue("publishDate", $context.get("project.build.outputTimestamp")))#*
+*##set($publishDateString = $site.getCustomValue("publishDate", $context.get("project.build.outputTimestamp")))#*
 *##if($StringUtils.isBlank($publishDateString))#*
 	*#$log.debug("No publishDate defined under <custom> in site.xml, and no project.build.outputTimestamp in pom.xml.")#*
 	*#$log.debug("Will use current date, so the build is not reproducible.")#*
@@ -370,7 +399,7 @@ limitations under the License.
 *##end#*
 
 // generator: who we are and where we come from
-*##set($generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $decoration.skin.artifactId $decoration.skin.version")#*
+*##set($generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $site.skin.artifactId $site.skin.version")#*
 *##if ($docRenderingContext.doxiaSource)#*
 	*##set($generator = "$generator, from $docRenderingContext.parserId")#*
 *##end#*
@@ -381,8 +410,8 @@ limitations under the License.
 
 // Additional links
 *##set($additionalLinks = [])#*
-*##if($decoration.getCustomChild("additionalLinks"))#*
-	*##foreach($itemXml in $decoration.getCustomChild("additionalLinks").getChildren())#*
+*##if($site.getCustomChild("additionalLinks"))#*
+	*##foreach($itemXml in $site.getCustomChild("additionalLinks").getChildren())#*
 		*##set($item = {})#*
 		*##foreach($itemChild in $itemXml.getChildren())#*
 			*##call($item.put($itemChild.name, $itemChild.value))#*
@@ -393,8 +422,8 @@ limitations under the License.
 
 // Build the links to social networks
 *##set($socialLinks = [])#*
-*##if($decoration.getCustomChild("social"))#*
-	*##foreach($itemXml in $decoration.getCustomChild("social").getChildren())#*
+*##if($site.getCustomChild("social"))#*
+	*##foreach($itemXml in $site.getCustomChild("social").getChildren())#*
 		*##set($item = {})#*
 		*##if($itemXml.name == "facebook")#*
 			*##call($socialLinks.add({"href": "https://www.facebook.com/$itemXml.value", "icon": "fa-brands fa-facebook-f", "title": "Follow $itemXml.value on Facebook"}))#*
