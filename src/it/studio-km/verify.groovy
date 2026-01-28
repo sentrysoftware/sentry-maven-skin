@@ -18,7 +18,7 @@ assert result.contains('<meta name="author" content="The &quot;Proud&quot; Peopl
 assert result.contains('<meta property="article:published_time" content="1980-05-22') : "Document's published time is set correctly"
 assert result.contains('<meta property="article:modified_time" content="1980-05-22') : "Document's modified time is set correctly"
 assert result.contains('<link rel="canonical" href="https://the.org/docs/events.html">') : "Document's canonical link is set according to project's URL"
-assert result.contains('<link rel="alternate" type="text/markdown" href="events.md">') : "Document's alternate link is set according to project's URL"
+assert result.contains('<link rel="alternate" type="text/markdown" href="events.html.md">') : "Document's alternate link must use .html.md extension (per llmstxt.org convention)"
 assert result.contains("<b>skin-test</b> allows you") : "pom.xml properties must be replaced with their values"
 
 // Links, breadcrumbs, additionalLinks, and social networks
@@ -92,23 +92,24 @@ assert result.contains('<a href="https://banner.right">Banner Right</a></li>') :
 assert result.contains("images/logo.png") : "bannerRight.src must be included"
 assert result.contains('href="https://banner.right"') : "bannerRight.href must be included"
 
-// Verify that the corresponding .md files are generated
-def mdFile = new File(basedir, "target/site/extend-summary.md")
-assert mdFile.isFile() : "Markdown version of the HTML files must have been generated"
+// Verify that the corresponding .html.md files are generated (using .html.md extension per llmstxt.org convention)
+def mdFile = new File(basedir, "target/site/extend-summary.html.md")
+assert mdFile.isFile() : "Markdown version of the HTML files must have been generated with .html.md extension"
 def mdContent = mdFile.text
 assert mdContent.contains('description: skin-test can be extended') : "In generated Markdown, Frontmatter header must be set according to source's metadata"
 assert mdContent.contains('date_published: 1980-05-22') : "In generated Markdown, Frontmatter published date must be set correctly"
 assert mdContent.contains('date_modified: 1980-05-22') : "In generated Markdown, Frontmatter modified date must be set correctly"
 assert mdContent.contains('# Extending skin-test') : "In generated Markdown, content must be present"
 
-// Verify that the llms.txt file is generated
+// Verify that the llms.txt file is generated with absolute URLs and multi-line blockquote format
 def llmsFile = new File(basedir, "target/site/llms.txt")
 assert llmsFile.isFile() : "llms.txt file must have been generated"
 def llmsContent = llmsFile.text
 assert llmsContent.contains('# skin-test Extended') : "In llms.txt, title must be present"
-assert llmsContent.contains('> A full documentation project (copied from Monitoring Studio)') : "In llms.txt, description must be present"
+assert llmsContent.contains('> A full documentation project (copied from Monitoring Studio)') : "In llms.txt, description must be present (multi-line blockquote format)"
 assert llmsContent.contains('## Getting Started') : "In llms.txt, menu section must be present"
-assert llmsContent.contains('- [Operating the Console](console.md)') : "In llms.txt, menu items must be present"
+assert llmsContent.contains('- [Operating the Console](https://the.org/docs/console.html.md)') : "In llms.txt, menu items must use absolute URLs with .html.md extension"
+assert llmsContent.contains('https://the.org/docs/') : "In llms.txt, URLs must be absolute when project URL is configured"
 
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")

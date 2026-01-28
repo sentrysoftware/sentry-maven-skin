@@ -46,7 +46,7 @@ Add the Maven Site Plugin with the required dependency:
         <dependency>
           <groupId>org.sentrysoftware.maven</groupId>
           <artifactId>maven-skin-tools</artifactId>
-          <version>1.5.00</version>
+          <version>${skinToolsVersion}</version>
         </dependency>
       </dependencies>
     </plugin>

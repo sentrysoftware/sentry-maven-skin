@@ -11,32 +11,40 @@ ${project.name} automatically generates files to help AI platforms (ChatGPT, Git
 
 During build, the skin creates:
 
-1. **`llms.txt`** - Structured index following the [llms.txt convention](https://llmstxt.org/)
-2. **`.md` files** - Markdown version of each HTML page
-3. **`<link>` tags** - References to Markdown versions in HTML
+1. **`llms.txt`** - Structured index following the [llmstxt.org](https://llmstxt.org/) proposal format
+2. **`.html.md` files** - Markdown version of each HTML page (using the `.html.md` extension convention per llmstxt.org)
+3. **`<link>` tags** - References to Markdown versions in HTML headers
 
 ### llms.txt Format
+
+The `llms.txt` file follows the [llmstxt.org proposal](https://llmstxt.org/) and includes:
 
 ```markdown
 # My Project
 
 > A powerful library for doing amazing things
+> that spans multiple lines when needed.
 
 ## Getting Started
 
-- [Installation](installation.html)
-- [Quick Start](quickstart.html)
+- [Installation](https://example.com/docs/installation.html.md)
+- [Quick Start](https://example.com/docs/quickstart.html.md)
 
 ## User Guide
 
-- [Configuration](configuration.html)
+- [Configuration](https://example.com/docs/configuration.html.md)
 ```
 
-Sections are generated from your `site.xml` menu structure.
+Key features:
+
+- **Absolute URLs**: When `<url>` is defined in `pom.xml`, links are absolute (e.g., `https://example.com/docs/page.html.md`)
+- **Multi-line blockquotes**: Project descriptions are properly formatted with `> ` prefix on each line
+- **`.html.md` extension**: URLs use the `.html.md` convention (appending `.md` to the original HTML URL)
+- **Menu sections**: Sections are generated from your `site.xml` menu structure
 
 ### Markdown Files
 
-Each HTML page gets a corresponding `.md` file with YAML front matter:
+Each HTML page gets a corresponding `.html.md` file with YAML front matter:
 
 ```yaml
 ---
@@ -47,13 +55,17 @@ canonical_url: https://example.com/docs/install.html
 ---
 ```
 
+The `.html.md` extension convention (appending `.md` to the original URL) allows AI platforms to easily determine the Markdown equivalent of any HTML page.
+
 ### Link Tags
 
 HTML pages include a link to their Markdown version:
 
 ```html
-<link rel="alternate" type="text/markdown" href="page.md"/>
+<link rel="alternate" type="text/markdown" href="page.html.md"/>
 ```
+
+This tells AI crawlers where to find the Markdown version of the current page.
 
 ## SEO Features
 
@@ -75,7 +87,9 @@ For best results, define `<url>` in your `pom.xml`:
 </project>
 ```
 
-2. Define `<description>` in your `pom.xml`:
+When `<url>` is defined, links in `llms.txt` become absolute URLs, making them easier for AI platforms to index regardless of context. If `<url>` is not defined, links remain relative.
+
+Also define `<description>` in your `pom.xml`:
 
 ```xml
 <project>

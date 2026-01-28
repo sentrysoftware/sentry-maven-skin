@@ -61,6 +61,9 @@
 		<!-- UTF-8 -->
 		<project.reporting.outputEncoding>${project.build.encoding}</project.reporting.outputEncoding>
 
+		<!-- maven-skin-tools version (used in docs and integration tests) -->
+		<skinToolsVersion>1.6.00</skinToolsVersion>
+
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
 		<project.build.outputTimestamp>2026-01-27T13:50:50Z</project.build.outputTimestamp>
@@ -96,7 +99,7 @@
 					<dependency>
 						<groupId>org.sentrysoftware.maven</groupId>
 						<artifactId>maven-skin-tools</artifactId>
-						<version>1.5.00</version>
+						<version>${skinToolsVersion}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -239,7 +242,7 @@
 					<postBuildHookScript>verify</postBuildHookScript>
 					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
 					<extraArtifacts>
-						<extraArtifact>org.sentrysoftware.maven:maven-skin-tools:1.5.00</extraArtifact>
+						<extraArtifact>org.sentrysoftware.maven:maven-skin-tools:${skinToolsVersion}</extraArtifact>
 					</extraArtifacts>
 					<settingsFile>src/it/settings.xml</settingsFile>
 					<goals>
