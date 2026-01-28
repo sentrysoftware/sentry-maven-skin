@@ -80,6 +80,12 @@ assert result =~ /Copyright.*1975.*1980/ : "inceptionYear must be displayed in t
 assert result =~ /The Organization/ : '${project.organization.name} must be displayed in the footer'
 assert result =~ /https:\/\/the\.org/ : '${project.organization.url} must be displayed in the footer'
 
+// schema.org JSON-LD metadata
+assert result =~ /"datePublished":\s*"1980-05-22T/ : "schema.org datePublished must be in ISO format with time"
+assert result =~ /"dateModified":\s*"1980-05-22T/ : "schema.org dateModified must be in ISO format with time"
+assert result =~ /"@type":\s*"Person"/ : "schema.org author must use Person type"
+assert result =~ /"@type":\s*"Person"[\s\S]*?"name":\s*"The / : "schema.org author must have a name field"
+
 // Google Analytics
 assert result.contains("(window,document,'script','dataLayer','MY_GOOGLE_ID')") : "Specific googleAnalyticsAccountId must be inserted"
 

@@ -77,10 +77,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	"@context": "https://schema.org",
 	"@type": "TechArticle",
 	"headline": "$esc.java($shortTitle)",
-	"datePublished": "$date.format('YYYY-MM-dd', $publishDate)",
-	"dateModified": "$date.format('YYYY-MM-dd', $publishDate)",
+	"datePublished": "$date.format('iso', $publishDate)",
+	"dateModified": "$date.format('iso', $publishDate)",
 #if ($project.url)
-	"mainEntityOfPage": "$esc.java($PathTool.calculateLink($currentFileName, $project.url))"
+	"mainEntityOfPage": "$esc.java($PathTool.calculateLink($currentFileName, $project.url))",
+#end
+#if (!$authors.isEmpty())
+	"author": [
+#foreach ($author in $authors)
+		{
+			"@type": "Person",
+			"name": "$esc.java($author)"
+		}#if ($foreach.hasNext),#end
+
+#end
+	]
 #end
 }
 </script>
