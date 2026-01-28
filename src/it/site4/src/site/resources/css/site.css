@@ -1,0 +1,8 @@
+/* Custom CSS for Site4 Test */
+/* This file tests that custom CSS is properly included */
+
+.custom-highlight {
+    background-color: #ffffcc;
+    padding: 5px;
+    border-radius: 3px;
+}
