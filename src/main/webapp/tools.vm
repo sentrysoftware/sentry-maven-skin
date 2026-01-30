@@ -68,6 +68,50 @@ limitations under the License.
 
 
 **
+* Banner helper macros
+*
+* Support both Maven Site Plugin 3.x and 4.x syntax for banner configuration.
+*
+* 3.x syntax (deprecated):
+*   <bannerLeft>
+*     <src>images/logo.png</src>
+*     <href>https://example.com</href>
+*     <alt>Logo</alt>
+*   </bannerLeft>
+*
+* 4.x syntax (current):
+*   <bannerLeft>
+*     <name>My Organization</name>
+*     <href>https://example.com</href>
+*     <image src="images/logo.png" alt="Logo"/>
+*   </bannerLeft>
+*
+* These macros return the appropriate value regardless of which syntax is used.
+**
+*##macro(bannerImageSrc $banner)#*
+	*##if ($banner.image && $banner.image.src)#*
+		*#$banner.image.src#*
+	*##elseif ($banner.src)#*
+		*#$banner.src#*
+	*##end#*
+*##end#*
+
+*##macro(bannerImageAlt $banner)#*
+	*##if ($banner.image && $banner.image.alt)#*
+		*#$banner.image.alt#*
+	*##elseif ($banner.alt)#*
+		*#$banner.alt#*
+	*##elseif ($banner.name)#*
+		*#$banner.name#*
+	*##end#*
+*##end#*
+
+*##macro(hasBannerImage $banner)#*
+	*##if (($banner.image && $banner.image.src) || $banner.src)true#end#*
+*##end#*
+
+
+**
 * links
 *
 * Outputs a list of links
@@ -264,6 +308,343 @@ limitations under the License.
 
 // Fix all protocol-relative links
 *##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
+
+// Transform blockquotes with GitHub-style callouts into styled callouts
+// Syntax: > [!NOTE]\n> Content...
+// Types: NOTE, TIP, IMPORTANT, WARNING, CAUTION
+*##set($calloutBlockquotes = $bodyElement.select("blockquote"))#*
+*##foreach($blockquote in $calloutBlockquotes)#*
+	*##set($firstParagraph = $blockquote.selectFirst("p"))#*
+	*##if($firstParagraph)#*
+		*##set($firstText = $firstParagraph.text().trim())#*
+		// Check for [!NOTE], [!TIP], [!IMPORTANT], [!WARNING], [!CAUTION] at the beginning
+		*##if($firstText.matches("^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\].*"))#*
+			// Extract the callout type (NOTE, TIP, etc.)
+			*##set($calloutType = $firstText.replaceAll("^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\].*", "$1").toLowerCase())#*
+			// Map types to icons
+			*##if($calloutType == "note")#*
+				*##set($calloutIcon = "fa-solid fa-circle-info")#*
+				*##set($calloutLabel = "Note")#*
+			*##elseif($calloutType == "tip")#*
+				*##set($calloutIcon = "fa-solid fa-lightbulb")#*
+				*##set($calloutLabel = "Tip")#*
+			*##elseif($calloutType == "important")#*
+				*##set($calloutIcon = "fa-solid fa-circle-exclamation")#*
+				*##set($calloutLabel = "Important")#*
+			*##elseif($calloutType == "warning")#*
+				*##set($calloutIcon = "fa-solid fa-triangle-exclamation")#*
+				*##set($calloutLabel = "Warning")#*
+			*##elseif($calloutType == "caution")#*
+				*##set($calloutIcon = "fa-solid fa-bolt")#*
+				*##set($calloutLabel = "Caution")#*
+			*##end#*
+			// Remove the [!TYPE] marker from the first paragraph, keeping remaining text
+			*##set($firstParagraphHtml = $firstParagraph.html())#*
+			*##set($remainingText = $firstParagraphHtml.replaceFirst("^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*", ""))#*
+			// If there's remaining text in first paragraph, update it; otherwise remove it
+			*##if($remainingText.trim().isEmpty())#*
+				*##call($firstParagraph.remove())#*
+			*##else#*
+				*##call($firstParagraph.html($remainingText))#*
+			*##end#*
+			// Get the content HTML
+			*##set($calloutContent = $blockquote.html())#*
+			// Build the callout HTML
+			*##set($calloutHtml = "<div class='callout callout-$calloutType'><div class='callout-title'><i class='$calloutIcon'></i> $calloutLabel</div>$calloutContent</div>")#*
+			// Replace the blockquote with the callout
+			*##call($blockquote.before($calloutHtml))#*
+			*##call($blockquote.remove())#*
+		*##end#*
+	*##end#*
+*##end#*
+
+// Transform blockquotes with COLLAPSIBLE marker into UIB collapse components
+// Syntax (new): > [!COLLAPSIBLE]\n> Title\n> Content...
+// Syntax (legacy): > COLLAPSIBLE: Title\n> Content...
+*##set($collapsibleCounter = 0)#*
+*##set($collapsibleBlockquotes = $bodyElement.select("blockquote"))#*
+*##foreach($blockquote in $collapsibleBlockquotes)#*
+	*##set($firstParagraph = $blockquote.selectFirst("p"))#*
+	*##if($firstParagraph)#*
+		*##set($firstText = $firstParagraph.text().trim())#*
+		*##set($isCollapsibleMarker = $firstText.matches("^\[!COLLAPSIBLE[^\]]*\].*"))#*
+		*##if($firstText.startsWith("COLLAPSIBLE:") || $isCollapsibleMarker)#*
+			*##set($collapsibleCounter = $collapsibleCounter + 1)#*
+			*##set($collapsibleVarName = "collapsible$collapsibleCounter")#*
+			*##if($isCollapsibleMarker)#*
+				// Title can be on the same line or in the next paragraph when using [!COLLAPSIBLE]
+				*##set($inlineTitle = $firstText.replaceFirst("^\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").trim())#*
+				*##if($inlineTitle && $inlineTitle.length() > 0)#*
+					*##set($collapsibleTitle = $inlineTitle)#*
+				*##else#*
+					*##set($titleParagraph = $firstParagraph.nextElementSibling())#*
+					*##if($titleParagraph && $titleParagraph.tagName().equalsIgnoreCase("p"))#*
+						*##set($collapsibleTitle = $titleParagraph.text().trim())#*
+						*##call($titleParagraph.remove())#*
+					*##else#*
+						*##set($collapsibleTitle = "Details")#*
+					*##end#*
+				*##end#*
+				*##call($firstParagraph.remove())#*
+			*##else#*
+				// Legacy inline title after COLLAPSIBLE:
+				*##set($collapsibleTitle = $firstText.substring(12).trim())#*
+				*##call($firstParagraph.remove())#*
+			*##end#*
+			*##if(!$collapsibleTitle || $collapsibleTitle.length() == 0)#*
+				*##set($collapsibleTitle = "Details")#*
+			*##end#*
+			*##if($collapsibleTitle)#*
+				*##set($collapsibleTitle = $collapsibleTitle.replaceAll("\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").replace("[!COLLAPSIBLE]", "").trim())#*
+			*##end#*
+			// Get the remaining content HTML
+			*##set($collapsibleContent = $blockquote.html())#*
+			// Build the UIB collapse component HTML (collapsed by default)
+			*##set($collapseHtml = "<p><button type='button' class='btn btn-primary' ng-click='$collapsibleVarName = !$collapsibleVarName'><i class='fas fa-chevron-right' ng-class='{&quot;fa-rotate-90&quot;: $collapsibleVarName}'></i> $collapsibleTitle</button></p><div uib-collapse='!$collapsibleVarName' class='sentry-uib'><div class='well'>$collapsibleContent</div></div>")#*
+			*##set($collapseHtml = $collapseHtml.replaceAll("\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").replace("[!COLLAPSIBLE]", ""))#*
+			// Replace the blockquote with the collapse component
+			*##call($blockquote.before($collapseHtml))#*
+			*##call($blockquote.remove())#*
+		*##end#*
+	*##end#*
+*##end#*
+
+// Transform blockquotes with TABS marker into UIB tabset components
+// Syntax (new): > [!TABS justified=true, vertical=true, active=myVar]
+// Syntax (legacy): > TABS: justified=true, vertical=true, active=myVar
+//         > - Tab Title 1
+//         >
+//         >   Tab content 1
+//         >
+//         > - Tab Title 2
+//         >
+//         >   Tab content 2
+*##set($tabsCounter = 0)#*
+*##set($tabsBlockquotes = $bodyElement.select("blockquote"))#*
+*##foreach($blockquote in $tabsBlockquotes)#*
+	*##set($firstParagraph = $blockquote.selectFirst("p"))#*
+	*##if($firstParagraph)#*
+		*##set($firstText = $firstParagraph.text())#*
+		*##set($isTabsMarker = $firstText.matches("^\[!TABS[^\]]*\].*"))#*
+		*##if($firstText.startsWith("TABS:") || $isTabsMarker)#*
+			*##set($tabsCounter = $tabsCounter + 1)#*
+			// Parse options from the TABS marker line
+			*##if($isTabsMarker)#*
+				*##set($tabsOptionsStr = $firstText.replaceFirst("^\[!TABS\s*([^\]]*)\].*$", "$1").trim())#*
+			*##else#*
+				*##set($tabsOptionsStr = $firstText.substring(5).trim())#*
+			*##end#*
+			*##set($justifiedAttr = "")#*
+			*##set($verticalAttr = "")#*
+			*##set($activeVar = "tabsActive$tabsCounter")#*
+			// Parse comma-separated options
+			*##if($tabsOptionsStr && $tabsOptionsStr.length() > 0)#*
+				*##foreach($option in $tabsOptionsStr.split(","))#*
+					*##set($optionTrimmed = $option.trim())#*
+					*##if($optionTrimmed.startsWith("justified="))#*
+						*##set($justifiedVal = $optionTrimmed.substring(10).trim())#*
+						*##if($justifiedVal == "true")#set($justifiedAttr = "justified='true'")#end#*
+					*##elseif($optionTrimmed.startsWith("vertical="))#*
+						*##set($verticalVal = $optionTrimmed.substring(9).trim())#*
+						*##if($verticalVal == "true")#set($verticalAttr = "vertical='true'")#end#*
+					*##elseif($optionTrimmed.startsWith("active="))#*
+						*##set($activeVar = $optionTrimmed.substring(7).trim())#*
+					*##end#*
+				*##end#*
+			*##end#*
+			// Remove the marker paragraph so only the tab list remains
+			*##call($firstParagraph.remove())#*
+			// Find the list (ul or ol) containing the tabs
+			*##set($tabsList = $blockquote.selectFirst("ul, ol"))#*
+			*##if($tabsList)#*
+				// Build the tabset HTML
+				*##set($tabsHtml = "<uib-tabset $justifiedAttr $verticalAttr active='$activeVar' class='sentry-uib'>")#*
+				*##set($tabIndex = 0)#*
+				*##foreach($tabItem in $tabsList.select(":root > li"))#*
+					// The first <p> in the <li> is the tab heading, the rest is content
+					*##set($tabHeadingP = $tabItem.selectFirst("p"))#*
+					*##if($tabHeadingP)#*
+						// Use HTML for the heading to allow formatting
+						*##set($tabHeadingHtml = $tabHeadingP.html())#*
+						*##call($tabHeadingP.remove())#*
+						*##set($tabContent = $tabItem.html())#*
+					*##else#*
+						// Fallback: use ownText as heading if no <p>
+						*##set($tabHeadingText = $tabItem.ownText())#*
+						*##set($tabHeadingHtml = $tabHeadingText.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))#*
+						*##set($tabContent = "")#*
+						*##foreach($child in $tabItem.children())#*
+							*##set($tabContent = "${tabContent}${child.outerHtml()}")#*
+						*##end#*
+					*##end#*
+					*##set($tabsHtml = "${tabsHtml}<uib-tab index='$tabIndex'><uib-tab-heading>$tabHeadingHtml</uib-tab-heading>$tabContent</uib-tab>")#*
+					*##set($tabIndex = $tabIndex + 1)#*
+				*##end#*
+				*##set($tabsHtml = "${tabsHtml}</uib-tabset>")#*
+				// Replace the blockquote with the tabset
+				*##call($blockquote.before($tabsHtml))#*
+				*##call($blockquote.remove())#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end#*
+
+// Transform blockquotes with ACCORDION marker into UIB accordion components
+// Syntax (new): > [!ACCORDION close-others=false, is-open=0]
+// Syntax (legacy): > ACCORDION: close-others=false, is-open=0
+//         > - Panel Title 1
+//         >
+//         >   Panel content 1
+//         >
+//         > - Panel Title 2
+//         >
+//         >   Panel content 2
+*##set($accordionCounter = 0)#*
+*##set($accordionBlockquotes = $bodyElement.select("blockquote"))#*
+*##foreach($blockquote in $accordionBlockquotes)#*
+	*##set($firstParagraph = $blockquote.selectFirst("p"))#*
+	*##if($firstParagraph)#*
+		*##set($firstText = $firstParagraph.text())#*
+		*##set($isAccordionMarker = $firstText.matches("^\[!ACCORDION[^\]]*\].*"))#*
+		*##if($firstText == "ACCORDION" || $firstText.startsWith("ACCORDION:") || $isAccordionMarker)#*
+			*##set($accordionCounter = $accordionCounter + 1)#*
+			// Parse options from the ACCORDION: line
+			*##set($closeOthersAttr = "")#*
+			*##set($isOpenIndex = 0)#*
+			*##if($isAccordionMarker)#*
+				*##set($accordionOptionsStr = $firstText.replaceFirst("^\[!ACCORDION\s*([^\]]*)\].*$", "$1").trim())#*
+			*##elseif($firstText.startsWith("ACCORDION:"))#*
+				*##set($accordionOptionsStr = $firstText.substring(10).trim())#*
+				// Parse comma-separated options
+				*##if($accordionOptionsStr && $accordionOptionsStr.length() > 0)#*
+					*##foreach($option in $accordionOptionsStr.split(","))#*
+						*##set($optionTrimmed = $option.trim())#*
+						*##if($optionTrimmed.startsWith("close-others="))#*
+							*##set($closeOthersVal = $optionTrimmed.substring(13).trim())#*
+							*##set($closeOthersAttr = "close-others='$closeOthersVal'")#*
+						*##elseif($optionTrimmed.startsWith("is-open="))#*
+							*##set($isOpenIndex = $Integer.parseInt($optionTrimmed.substring(8).trim()))#*
+						*##end#*
+					*##end#*
+				*##end#*
+			*##end#*
+			// Remove the ACCORDION marker paragraph
+			*##call($firstParagraph.remove())#*
+			// Find the list (ul or ol) containing the panels
+			*##set($accordionList = $blockquote.selectFirst("ul, ol"))#*
+			*##if($accordionList)#*
+				// Build the accordion HTML
+				*##set($accordionHtml = "<uib-accordion $closeOthersAttr class='sentry-uib'>")#*
+				*##set($panelIndex = 0)#*
+				*##foreach($panelItem in $accordionList.select(":root > li"))#*
+					// The first <p> in the <li> is the panel heading, the rest is content
+					*##set($panelHeadingP = $panelItem.selectFirst("p"))#*
+					*##if($panelHeadingP)#*
+						// Use HTML for the heading to allow formatting
+						*##set($panelHeadingHtml = $panelHeadingP.html())#*
+						*##call($panelHeadingP.remove())#*
+						*##set($panelContent = $panelItem.html())#*
+					*##else#*
+						// Fallback: use ownText as heading if no <p>
+						*##set($panelHeadingText = $panelItem.ownText())#*
+						*##set($panelHeadingHtml = $panelHeadingText.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))#*
+						*##set($panelContent = "")#*
+						*##foreach($child in $panelItem.children())#*
+							*##set($panelContent = "${panelContent}${child.outerHtml()}")#*
+						*##end#*
+					*##end#*
+					// Determine if this panel should be open
+					*##if($panelIndex == $isOpenIndex)#*
+						*##set($accordionHtml = "${accordionHtml}<div uib-accordion-group class='panel-default' is-open='true'><uib-accordion-heading>$panelHeadingHtml</uib-accordion-heading>$panelContent</div>")#*
+					*##else#*
+						*##set($accordionHtml = "${accordionHtml}<div uib-accordion-group class='panel-default'><uib-accordion-heading>$panelHeadingHtml</uib-accordion-heading>$panelContent</div>")#*
+					*##end#*
+					*##set($panelIndex = $panelIndex + 1)#*
+				*##end#*
+				*##set($accordionHtml = "${accordionHtml}</uib-accordion>")#*
+				// Replace the blockquote with the accordion
+				*##call($blockquote.before($accordionHtml))#*
+				*##call($blockquote.remove())#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end#*
+
+// Transform blockquotes with CAROUSEL marker into UIB carousel components
+// Syntax (new): > [!CAROUSEL interval=5000, no-wrap=false, no-pause=true, active=slideVar]
+// Syntax (legacy): > CAROUSEL: interval=5000, no-wrap=false, no-pause=true, active=slideVar
+//         > * ![Image 1 description](path/to/image1.png)
+//         > * ![Image 2 description](path/to/image2.png)
+//         > * ![Image 3 description](path/to/image3.png)
+*##set($carouselCounter = 0)#*
+*##set($carouselBlockquotes = $bodyElement.select("blockquote"))#*
+*##foreach($blockquote in $carouselBlockquotes)#*
+	*##set($firstParagraph = $blockquote.selectFirst("p"))#*
+	*##if($firstParagraph)#*
+		*##set($firstText = $firstParagraph.text().trim())#*
+		*##set($isCarouselMarker = $firstText.matches("^\[!CAROUSEL[^\]]*\].*"))#*
+		*##if($firstText == "CAROUSEL" || $firstText.startsWith("CAROUSEL:") || $isCarouselMarker)#*
+			*##set($carouselCounter = $carouselCounter + 1)#*
+			// Parse options from the CAROUSEL: line
+			*##set($intervalAttr = "")#*
+			*##set($noWrapAttr = "")#*
+			*##set($noPauseAttr = "")#*
+			*##set($activeVar = "carouselActive$carouselCounter")#*
+			*##if($isCarouselMarker)#*
+				*##set($carouselOptionsStr = $firstText.replaceFirst("^\[!CAROUSEL\s*([^\]]*)\].*$", "$1").trim())#*
+			*##elseif($firstText.startsWith("CAROUSEL:"))#*
+				*##set($carouselOptionsStr = $firstText.substring(9).trim())#*
+				// Parse comma-separated options
+				*##if($carouselOptionsStr && $carouselOptionsStr.length() > 0)#*
+					*##foreach($option in $carouselOptionsStr.split(","))#*
+						*##set($optionTrimmed = $option.trim())#*
+						*##if($optionTrimmed.startsWith("interval="))#*
+							*##set($intervalVal = $optionTrimmed.substring(9).trim())#*
+							*##set($intervalAttr = "interval='$intervalVal'")#*
+						*##elseif($optionTrimmed.startsWith("no-wrap="))#*
+							*##set($noWrapVal = $optionTrimmed.substring(8).trim())#*
+							*##set($noWrapAttr = "no-wrap='$noWrapVal'")#*
+						*##elseif($optionTrimmed.startsWith("no-pause="))#*
+							*##set($noPauseVal = $optionTrimmed.substring(9).trim())#*
+							*##set($noPauseAttr = "no-pause='$noPauseVal'")#*
+						*##elseif($optionTrimmed.startsWith("active="))#*
+							*##set($activeVar = $optionTrimmed.substring(7).trim())#*
+						*##end#*
+					*##end#*
+				*##end#*
+			*##end#*
+			// Remove the CAROUSEL marker paragraph
+			*##call($firstParagraph.remove())#*
+			// Find the list containing the images
+			*##set($imageList = $blockquote.selectFirst("ul, ol"))#*
+			*##if($imageList)#*
+				// Build the carousel HTML
+				*##set($carouselHtml = "<div uib-carousel='' $intervalAttr $noWrapAttr $noPauseAttr active='$activeVar' ng-init='$activeVar = 0' class='sentry-uib'>")#*
+				*##set($slideIndex = 0)#*
+				*##foreach($slideItem in $imageList.select(":root > li"))#*
+					// Get the image element
+					*##set($slideImg = $slideItem.selectFirst("img"))#*
+					*##if($slideImg)#*
+						*##set($imgSrc = $slideImg.attr("src"))#*
+						*##set($imgAlt = $slideImg.attr("alt"))#*
+						*##set($carouselHtml = "${carouselHtml}<div uib-slide index='$slideIndex'>")#*
+						*##set($carouselHtml = "${carouselHtml}<img src='$imgSrc' alt='$imgAlt'>")#*
+						// Add caption from alt text if available
+						*##if($imgAlt && $imgAlt.length() > 0)#*
+							*##set($carouselHtml = "${carouselHtml}<div class='carousel-caption'><p>$imgAlt</p></div>")#*
+						*##end#*
+						*##set($carouselHtml = "${carouselHtml}</div>")#*
+						*##set($slideIndex = $slideIndex + 1)#*
+					*##end#*
+				*##end#*
+				*##set($carouselHtml = "${carouselHtml}</div>")#*
+				// Replace the blockquote with the carousel
+				*##call($blockquote.before($carouselHtml))#*
+				*##call($blockquote.remove())#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end#*
 
 // Replace old-style icon images (which don't exist in our skin) with corresponding Fontawesome icons
 *##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=close.gif]", '<i class="fa-regular fa-rectangle-xmark"></i>', -1))#*

@@ -1847,6 +1847,35 @@ body.sentry-site .nav-tabs {
 	border-bottom: 1px solid var(--main-fgcolor);
 }
 
+/* Tabs: add spacing below tab headers */
+body.sentry-site .sentry-uib .nav-tabs {
+	margin-bottom: 10px;
+}
+
+/* Inactive tab: subtle background shade using pseudo-element */
+body.sentry-site .nav-tabs > li:not(.active) > a {
+	position: relative;
+}
+
+body.sentry-site .nav-tabs > li:not(.active) > a::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--main-fgcolor);
+	opacity: 0.1;
+	pointer-events: none;
+	border-radius: 4px 4px 0 0;
+	transition: opacity 0.2s ease-in-out;
+}
+
+body.sentry-site .nav-tabs > li:not(.active) > a:hover::before,
+body.sentry-site .nav-tabs > li:not(.active) > a:focus::before {
+	opacity: 0;
+}
+
 /* Inactive tab: no border, no background */
 body.sentry-site .nav-tabs > li > a {
 	color: var(--main-fgcolor);
@@ -1872,6 +1901,21 @@ body.sentry-site .nav-tabs > li.active > a:focus {
 	border-color: var(--main-fgcolor);
 	border-bottom-color: var(--main-bgcolor);
 	opacity: 1;
+}
+
+/* Justified tabs: border comes from each anchor, not from the ul */
+body.sentry-site .nav-tabs.nav-justified {
+	border-bottom: none;
+}
+
+body.sentry-site .nav-tabs.nav-justified > li > a {
+	border-bottom: 1px solid var(--main-fgcolor);
+}
+
+body.sentry-site .nav-tabs.nav-justified > li.active > a,
+body.sentry-site .nav-tabs.nav-justified > li.active > a:hover,
+body.sentry-site .nav-tabs.nav-justified > li.active > a:focus {
+	border-bottom-color: var(--main-bgcolor);
 }
 
 /* Tab content area */
@@ -2134,4 +2178,77 @@ body.sentry-site .btn-default.active {
 	background-color: var(--main-fgcolor);
 	border-color: var(--main-fgcolor);
 	color: var(--main-bgcolor);
+}
+
+/**
+ * Callouts / Admonitions (GitHub-style)
+ * NOTE, TIP, IMPORTANT, WARNING, CAUTION
+ **/
+
+.callout {
+	--callout-bg: var(--main-bgcolor);
+	--callout-fg: var(--main-fgcolor);
+	margin: 1em 0;
+	padding: 0.75em 1em;
+	border-left: 4px solid var(--callout-fg);
+	border-top: 1px solid var(--callout-bg);
+	border-right: 1px solid var(--callout-bg);
+	border-bottom: 1px solid var(--callout-bg);
+	border-radius: 4px;
+	background-color: var(--callout-bg);
+}
+
+.callout .callout-title {
+	font-weight: bold;
+	margin-bottom: 0.5em;
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.callout .callout-title i {
+	font-size: 1.1em;
+}
+
+.callout > *:last-child {
+	margin-bottom: 0;
+}
+
+.callout .callout-title {
+	color: var(--callout-fg);
+}
+
+/* NOTE - info (blue) */
+.callout.callout-note {
+	--callout-bg: var(--info-bg);
+	--callout-fg: var(--info-fg);
+}
+
+/* TIP - success (green) */
+.callout.callout-tip {
+	--callout-bg: var(--success-bg);
+	--callout-fg: var(--success-fg);
+}
+
+/* IMPORTANT - purple */
+.callout.callout-important {
+	--callout-bg: var(--alternate-bgcolor);
+	--callout-fg: var(--alternate-fgcolor);
+}
+
+body.dark .callout.callout-important {
+	--callout-bg: var(--alternate-fgcolor);
+	--callout-fg: var(--alternate-bgcolor);
+}
+
+/* WARNING - warning (yellow/orange) */
+.callout.callout-warning {
+	--callout-bg: var(--warning-bg);
+	--callout-fg: var(--warning-fg);
+}
+
+/* CAUTION - danger (red) */
+.callout.callout-caution {
+	--callout-bg: var(--danger-bg);
+	--callout-fg: var(--danger-fg);
 }

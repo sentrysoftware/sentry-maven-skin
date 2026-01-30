@@ -2,60 +2,95 @@
 
 This page demonstrates Angular UI Bootstrap components integrated with the Sentry Maven Skin.
 
-**Important:** Due to Maven Doxia's XHTML parser limitations:
-- Custom elements like `<uib-tabset>` are **not supported** (they get stripped)
-- Only the attribute syntax with `<div>` elements works: `<div uib-tabset="">`
-- All Angular directive attributes must have a value (use `=""` for boolean directives)
-- **Headings** inside components should use `<p class="h4">Title</p>` (Bootstrap heading classes) instead of Markdown `${esc.h}${esc.h}${esc.h}${esc.h}` syntax
+**Important:**
+- Use UIB elements like `<uib-tabset>` and `<uib-accordion>` for Angular UI Bootstrap.
+- Use `<uib-tab-heading>` and `<uib-accordion-heading>` to allow rich HTML in headings.
+- All Angular directive attributes must have a value (use `=""` for boolean directives).
+- **Headings** inside components should use `<p class="h4">Title</p>` (Bootstrap heading classes) instead of Markdown `${esc.h}${esc.h}${esc.h}${esc.h}` syntax.
+
+## Callouts
+
+GitHub-style callouts for notes, tips, warnings, etc.
+
+> [!NOTE]
+> This is a note callout with useful information.
+
+> [!TIP]
+> This is a helpful tip for users.
+
+> [!IMPORTANT]
+> Key information users need to know.
+
+> [!WARNING]
+> Urgent info that needs immediate attention.
+
+> [!CAUTION]
+> Advises about risks or negative outcomes.
 
 ## Tabs
 
-Use `<div uib-tabset="">` with nested `<div uib-tab="">` elements:
+Use `<uib-tabset>` with nested `<uib-tab>` elements:
 
-<div uib-tabset="">
-<div uib-tab="" heading="Tab A">
-
-<p class="h4">Tab A Title</p>
-
-Content of **Tab A**. This uses Bootstrap heading classes inside the tab.
-
-</div>
-<div uib-tab="" heading="Tab B">
-
-<p class="h4">Tab B Title</p>
-
-Content of **Tab B** with a [link](index.html).
-
-</div>
-<div uib-tab="" heading="Tab C">
-
-<p class="h4">Tab C Title</p>
-
-Content of **Tab C** with `inline code`.
-
-</div>
-</div>
+> [!TABS active=demoTabs]
+> - <span class="fa fa-home"></span> Tab A
+>
+>   <p class="h4">Tab A Title</p>
+>
+>   Content of **Tab A**. This uses Bootstrap heading classes inside the tab.
+>
+> - Tab B
+>
+>   <p class="h4">Tab B Title</p>
+>
+>   Content of **Tab B** with a [link](index.html).
+>
+> - Tab C
+>
+>   <p class="h4">Tab C Title</p>
+>
+>   Content of **Tab C** with `inline code`.
 
 ## Accordion
 
-Use `<div uib-accordion="">` with nested `<div uib-accordion-group="">` elements:
+### Markdown Syntax
 
-<div uib-accordion="">
-<div uib-accordion-group="" heading="Panel A" is-open="true">
+> [!ACCORDION]
+> - Panel A
+>
+>   Content of **Panel A** using the simple Markdown syntax.
+>
+> - Panel B
+>
+>   Content of **Panel B** with *emphasis*.
+
+### HTML Syntax
+
+Use `<uib-accordion>` with nested `<uib-accordion-group>` elements:
+
+<uib-accordion>
+<uib-accordion-group is-open="true">
+
+<uib-accordion-heading>
+Panel A
+</uib-accordion-heading>
 
 <p class="h4">Panel A Details</p>
 
 Content of **Panel A** using Bootstrap heading classes inside accordion.
 
-</div>
-<div uib-accordion-group="" heading="Panel B">
+</uib-accordion-group>
+<uib-accordion-group>
+
+<uib-accordion-heading>
+Panel B
+</uib-accordion-heading>
 
 <p class="h4">Panel B Details</p>
 
 Content of **Panel B** with *emphasis*.
 
-</div>
-</div>
+</uib-accordion-group>
+</uib-accordion>
 
 ## Collapse
 
@@ -75,6 +110,15 @@ This content can be **toggled** with the button above.
 
 </div>
 </div>
+
+## Carousel
+
+Use a blockquote with the `[!CAROUSEL]` marker followed by a list of images:
+
+> [!CAROUSEL]
+> * ![Studio Events Screenshot](./images/Events.png)
+> * ![Console Overview Screenshot](./images/Console_Overview.png)
+> * ![Internal Architecture Diagram](./images/Internal_Architecture.png)
 
 ## Tooltips and Popovers
 

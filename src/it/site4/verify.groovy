@@ -28,10 +28,16 @@ assert indexHtml.contains("SITE4_GOOGLE_ID") : "Google Analytics ID must be inse
 // ============================================================================
 // TEST: Banner left and right
 // ============================================================================
+// TEST: Banner left and right (with new <image> sub-element syntax)
+// ============================================================================
 assert indexHtml.contains('href="https://example.org"') : "bannerLeft.href must be included"
 assert indexHtml.contains("Banner Left") : "bannerLeft.name must be included"
+assert indexHtml.contains('src="images/icon.png"') : "bannerLeft.image.src must be included (new 4.x syntax)"
+assert indexHtml.contains('alt="Banner Left Logo"') : "bannerLeft.image.alt must be included (new 4.x syntax)"
 assert indexHtml.contains('href="https://maven.apache.org"') : "bannerRight.href must be included"
 assert indexHtml.contains("Banner Right") : "bannerRight.name must be included"
+assert indexHtml.contains('src="images/test-image.png"') : "bannerRight.image.src must be included (new 4.x syntax)"
+assert indexHtml.contains('alt="Banner Right Logo"') : "bannerRight.image.alt must be included (new 4.x syntax)"
 
 // ============================================================================
 // TEST: Navigation menus
@@ -137,6 +143,27 @@ def uiComponentsHtml = uiComponentsFile.text
 // Basic structure check - div elements should be present
 assert uiComponentsHtml.contains('<div') : "Div elements must be present"
 assert uiComponentsHtml.contains('UI Components') : "Page title must be present"
+
+// ============================================================================
+// TEST: Collapsible sections ([!COLLAPSIBLE] blockquote syntax)
+// ============================================================================
+assert uiComponentsHtml.contains('uib-collapse=') : "UIB collapse directive must be present for collapsible sections"
+assert uiComponentsHtml.contains('Click to expand this FAQ item') : "Collapsible title must be extracted correctly"
+assert uiComponentsHtml.contains('collapsed content') : "Collapsible content must be preserved"
+assert uiComponentsHtml.contains('fa-chevron') : "Chevron icons must be present in toggle button"
+assert !uiComponentsHtml.contains('[!COLLAPSIBLE]') : "Collapsible marker must be removed from output"
+
+// ============================================================================
+// TEST: Tabs ([!TABS] blockquote syntax)
+// ============================================================================
+assert uiComponentsHtml.contains('<uib-tabset') : "UIB tabset element must be present"
+assert uiComponentsHtml.contains('<uib-tab') : "UIB tab element must be present"
+assert uiComponentsHtml.contains('active="demoTabs"') : "Custom active variable must be set"
+assert uiComponentsHtml.contains('justified="true"') : "Justified attribute must be parsed"
+assert uiComponentsHtml.contains('First') && uiComponentsHtml.contains('Tab') : "Tab heading must be extracted"
+assert uiComponentsHtml.contains('<uib-tab-heading>') : "Tab headings must use uib-tab-heading"
+assert uiComponentsHtml.contains('fa-home') : "Tab heading HTML must be preserved"
+assert uiComponentsHtml.contains('first tab') : "Tab content must be preserved"
 
 // ============================================================================
 // TEST: Images
