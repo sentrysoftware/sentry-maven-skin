@@ -144,15 +144,22 @@ Use Markdown tables for structured data:
 | `retries` | int | Number of retry attempts |
 ```
 
-## Notes and Warnings
+## Callouts (Notes and Warnings)
 
-Use blockquotes for callouts:
+Use [callout syntax](ui-components.html#callouts) for important information:
 
 ```markdown
-> **Note**: This requires version 2.0 or later.
+> [!NOTE]
+> This requires version 2.0 or later.
 
-> **Warning**: This action cannot be undone.
+> [!WARNING]
+> This action cannot be undone.
+
+> [!TIP]
+> Use keyboard shortcuts for faster navigation.
 ```
+
+See [UI Components](ui-components.html#callouts) for all callout types (NOTE, TIP, IMPORTANT, WARNING, CAUTION).
 
 ## Cross-References
 

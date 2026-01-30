@@ -43,6 +43,7 @@ Headers are added to the HTML `<head>` section:
 
 ## Tips
 
-- **Description** is critical for SEO - keep it under 160 characters
-- **Keywords** merge with global keywords from `site.xml`
-- **Multiple authors** can be specified with separate `author` lines
+> [!TIP]
+> - **Description** is critical for SEO - keep it under 160 characters
+> - **Keywords** merge with global keywords from `site.xml`
+> - **Multiple authors** can be specified with separate `author` lines

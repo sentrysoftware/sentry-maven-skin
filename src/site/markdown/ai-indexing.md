@@ -79,13 +79,14 @@ Also included automatically:
 
 This feature is **enabled by default** with no configuration needed.
 
-For best results, define `<url>` in your `pom.xml`:
-
-```xml
-<project>
-  <url>https://example.com/docs</url>
-</project>
-```
+> [!TIP]
+> For best results, define `<url>` in your `pom.xml` to generate absolute URLs in `llms.txt`:
+>
+> ```xml
+> <project>
+>   <url>https://example.com/docs</url>
+> </project>
+> ```
 
 When `<url>` is defined, links in `llms.txt` become absolute URLs, making them easier for AI platforms to index regardless of context. If `<url>` is not defined, links remain relative.
 

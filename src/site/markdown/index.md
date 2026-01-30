@@ -47,20 +47,10 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 
 ## Screenshots
 
-<div uib-carousel="" interval="5000" no-wrap="false" active="carouselIndex" ng-init="carouselIndex = 0">
-<div uib-slide="" index="0">
-<img src="images/general-screenshot.png" alt="Desktop View: Clean, professional layout for technical documentation" />
-<div class="carousel-caption"><p class="h4">Desktop View</p><p>Clean, professional layout for technical documentation</p></div>
-</div>
-<div uib-slide="" index="1">
-<img src="images/dark.png" alt="Dark Mode: Automatic detection with manual toggle" />
-<div class="carousel-caption"><p class="h4">Dark Mode</p><p>Automatic detection with manual toggle</p></div>
-</div>
-<div uib-slide="" index="2">
-<img src="images/search-2.png" alt="Built-in Search: Full-text search index, no external services required" />
-<div class="carousel-caption"><p class="h4">Built-in Search</p><p>Full-text search index, no external services required</p></div>
-</div>
-</div>
+> CAROUSEL
+> * ![Desktop View: Clean, professional layout for technical documentation](images/general-screenshot.png)
+> * ![Dark Mode: Automatic detection with manual toggle](images/dark.png)
+> * ![Built-in Search: Full-text search index, no external services required](images/search-2.png)
 
 ## Performance
 

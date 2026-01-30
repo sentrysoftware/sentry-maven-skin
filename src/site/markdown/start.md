@@ -54,7 +54,8 @@ Add the Maven Site Plugin with the required dependency:
 </build>
 ```
 
-> **Important**: Use `maven-site-plugin` version **3.12.x**. Later versions use a different site decoration model that is not yet supported.
+> [!IMPORTANT]
+> Use `maven-site-plugin` version **3.12.x**. Later versions use a different site decoration model that is not yet supported.
 
 ## Step 3: Configure site.xml
 
@@ -119,7 +120,8 @@ mvn site:run
 
 Then open [http://localhost:8080](http://localhost:8080). Changes to Markdown files are reflected immediately.
 
-> **Note**: Changes to `site.xml` or `pom.xml` require restarting `mvn site:run`.
+> [!NOTE]
+> Changes to `site.xml` or `pom.xml` require restarting `mvn site:run`.
 
 ## Next Steps
 

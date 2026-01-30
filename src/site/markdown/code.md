@@ -102,9 +102,13 @@ COPY . /app
 CMD ["python", "/app/app.py"]
 ```
 ````
+
+### JavaScript
+
+````md
 ```js
 function printPage() {
-	window.print();
+  window.print();
 }
 ```
 ````
@@ -114,8 +118,8 @@ function printPage() {
 ````md
 ```json
 {
-	"myArray": [3, 1, 4, 1, 5, 2, 9],
-	"other": null
+  "myArray": [3, 1, 4, 1, 5, 2, 9],
+  "other": null
 }
 ```
 ````
@@ -123,7 +127,7 @@ function printPage() {
 ### Markdown
 
 ````md
-```md
+```markdown
 This is a **bold** move, [do it!](https://sentrysoftware.org).
 ```
 ````
@@ -215,8 +219,7 @@ const greet = (user: User): string => `Hello, ${user.name}!`;
 ```
 ````
 
-> **Note:**
->
+> [!NOTE]
 > Syntax highlighting for fenced code blocks is available only when using version 3.10 (and later) of _maven-site-plugin_.
 
 ## Next Steps

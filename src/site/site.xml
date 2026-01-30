@@ -27,16 +27,12 @@
 		<version>${project.version}</version>
 	</skin>
 
-	<bannerLeft>
-		<src>images/sentry-logo-114x40-white.png</src>
-		<href>https://sentrysoftware.org</href>
-		<alt>Open Sentry Home</alt>
+	<bannerLeft name="Sentry Software" href="https://sentrysoftware.com">
+		<image src="images/sentry-logo-120x40-white.png" alt="Sentry Software Logo" />
 	</bannerLeft>
 
-	<bannerRight>
-		<href>${project.scm.url}</href>
-		<name><![CDATA[<i class="fa-brands fa-github"></i> Edit on GitHub]]></name>
-	</bannerRight>
+	<bannerRight name="Edit on GitHub &lt;i class='fa-brands fa-github'&gt;&lt;/i&gt;"
+		href="${project.scm.url}" />
 
 	<custom>
 		<keywords>maven,skin,doxia</keywords>
@@ -89,9 +85,8 @@
 
 		<links>
 			<item name="Maven Site Plugin" href="https://maven.apache.org/plugins/maven-site-plugin" />
-			<item name="Maven Site Descriptor"
-				href="https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html" />
 			<item name="Other Maven Skins" href="https://maven.apache.org/skins" />
+			<item name="Open Sentry" href="https://sentrysoftware.com" />
 		</links>
 
 		<breadcrumbs>
