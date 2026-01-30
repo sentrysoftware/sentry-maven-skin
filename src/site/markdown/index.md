@@ -47,7 +47,7 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 
 ## Screenshots
 
-> CAROUSEL
+> [!CAROUSEL]
 > * ![Desktop View: Clean, professional layout for technical documentation](images/general-screenshot.png)
 > * ![Dark Mode: Automatic detection with manual toggle](images/dark.png)
 > * ![Built-in Search: Full-text search index, no external services required](images/search-2.png)
