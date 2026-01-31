@@ -68,34 +68,13 @@ limitations under the License.
 
 
 **
-* Banner helper macros
+* Banner helper macro - returns the alt text for a banner image
 *
-* Support both Maven Site Plugin 3.x and 4.x syntax for banner configuration.
+* Supports both Maven Site Plugin 3.x and 4.x syntax for banner configuration.
 *
-* 3.x syntax (deprecated):
-*   <bannerLeft>
-*     <src>images/logo.png</src>
-*     <href>https://example.com</href>
-*     <alt>Logo</alt>
-*   </bannerLeft>
-*
-* 4.x syntax (current):
-*   <bannerLeft>
-*     <name>My Organization</name>
-*     <href>https://example.com</href>
-*     <image src="images/logo.png" alt="Logo"/>
-*   </bannerLeft>
-*
-* These macros return the appropriate value regardless of which syntax is used.
+* 3.x syntax: <bannerLeft><alt>Logo</alt></bannerLeft>
+* 4.x syntax: <bannerLeft><image alt="Logo"/></bannerLeft>
 **
-*##macro(bannerImageSrc $banner)#*
-	*##if ($banner.image && $banner.image.src)#*
-		*#$banner.image.src#*
-	*##elseif ($banner.src)#*
-		*#$banner.src#*
-	*##end#*
-*##end#*
-
 *##macro(bannerImageAlt $banner)#*
 	*##if ($banner.image && $banner.image.alt)#*
 		*#$banner.image.alt#*
@@ -104,10 +83,6 @@ limitations under the License.
 	*##elseif ($banner.name)#*
 		*#$banner.name#*
 	*##end#*
-*##end#*
-
-*##macro(hasBannerImage $banner)#*
-	*##if (($banner.image && $banner.image.src) || $banner.src)true#end#*
 *##end#*
 
 
@@ -358,9 +333,9 @@ limitations under the License.
 	*##end#*
 *##end#*
 
-// Transform blockquotes with COLLAPSIBLE marker into UIB collapse components
-// Syntax (new): > [!COLLAPSIBLE]\n> Title\n> Content...
-// Syntax (legacy): > COLLAPSIBLE: Title\n> Content...
+// Transform blockquotes with [!COLLAPSIBLE] marker into UIB collapse components
+// Syntax: > [!COLLAPSIBLE]\n> Title\n> Content...
+// Or:     > [!COLLAPSIBLE] Title\n> Content...
 *##set($collapsibleCounter = 0)#*
 *##set($collapsibleBlockquotes = $bodyElement.select("blockquote"))#*
 *##foreach($blockquote in $collapsibleBlockquotes)#*
@@ -368,29 +343,23 @@ limitations under the License.
 	*##if($firstParagraph)#*
 		*##set($firstText = $firstParagraph.text().trim())#*
 		*##set($isCollapsibleMarker = $firstText.matches("^\[!COLLAPSIBLE[^\]]*\].*"))#*
-		*##if($firstText.startsWith("COLLAPSIBLE:") || $isCollapsibleMarker)#*
+		*##if($isCollapsibleMarker)#*
 			*##set($collapsibleCounter = $collapsibleCounter + 1)#*
 			*##set($collapsibleVarName = "collapsible$collapsibleCounter")#*
-			*##if($isCollapsibleMarker)#*
-				// Title can be on the same line or in the next paragraph when using [!COLLAPSIBLE]
-				*##set($inlineTitle = $firstText.replaceFirst("^\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").trim())#*
-				*##if($inlineTitle && $inlineTitle.length() > 0)#*
-					*##set($collapsibleTitle = $inlineTitle)#*
-				*##else#*
-					*##set($titleParagraph = $firstParagraph.nextElementSibling())#*
-					*##if($titleParagraph && $titleParagraph.tagName().equalsIgnoreCase("p"))#*
-						*##set($collapsibleTitle = $titleParagraph.text().trim())#*
-						*##call($titleParagraph.remove())#*
-					*##else#*
-						*##set($collapsibleTitle = "Details")#*
-					*##end#*
-				*##end#*
-				*##call($firstParagraph.remove())#*
+			// Title can be on the same line or in the next paragraph
+			*##set($inlineTitle = $firstText.replaceFirst("^\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").trim())#*
+			*##if($inlineTitle && $inlineTitle.length() > 0)#*
+				*##set($collapsibleTitle = $inlineTitle)#*
 			*##else#*
-				// Legacy inline title after COLLAPSIBLE:
-				*##set($collapsibleTitle = $firstText.substring(12).trim())#*
-				*##call($firstParagraph.remove())#*
+				*##set($titleParagraph = $firstParagraph.nextElementSibling())#*
+				*##if($titleParagraph && $titleParagraph.tagName().equalsIgnoreCase("p"))#*
+					*##set($collapsibleTitle = $titleParagraph.text().trim())#*
+					*##call($titleParagraph.remove())#*
+				*##else#*
+					*##set($collapsibleTitle = "Details")#*
+				*##end#*
 			*##end#*
+			*##call($firstParagraph.remove())#*
 			*##if(!$collapsibleTitle || $collapsibleTitle.length() == 0)#*
 				*##set($collapsibleTitle = "Details")#*
 			*##end#*
@@ -409,9 +378,8 @@ limitations under the License.
 	*##end#*
 *##end#*
 
-// Transform blockquotes with TABS marker into UIB tabset components
-// Syntax (new): > [!TABS justified=true, vertical=true, active=myVar]
-// Syntax (legacy): > TABS: justified=true, vertical=true, active=myVar
+// Transform blockquotes with [!TABS] marker into UIB tabset components
+// Syntax: > [!TABS justified=true, vertical=true, active=myVar]
 //         > - Tab Title 1
 //         >
 //         >   Tab content 1
@@ -426,14 +394,10 @@ limitations under the License.
 	*##if($firstParagraph)#*
 		*##set($firstText = $firstParagraph.text())#*
 		*##set($isTabsMarker = $firstText.matches("^\[!TABS[^\]]*\].*"))#*
-		*##if($firstText.startsWith("TABS:") || $isTabsMarker)#*
+		*##if($isTabsMarker)#*
 			*##set($tabsCounter = $tabsCounter + 1)#*
-			// Parse options from the TABS marker line
-			*##if($isTabsMarker)#*
-				*##set($tabsOptionsStr = $firstText.replaceFirst("^\[!TABS\s*([^\]]*)\].*$", "$1").trim())#*
-			*##else#*
-				*##set($tabsOptionsStr = $firstText.substring(5).trim())#*
-			*##end#*
+			// Parse options from the [!TABS ...] marker line
+			*##set($tabsOptionsStr = $firstText.replaceFirst("^\[!TABS\s*([^\]]*)\].*$", "$1").trim())#*
 			*##set($justifiedAttr = "")#*
 			*##set($verticalAttr = "")#*
 			*##set($activeVar = "tabsActive$tabsCounter")#*
@@ -489,9 +453,8 @@ limitations under the License.
 	*##end#*
 *##end#*
 
-// Transform blockquotes with ACCORDION marker into UIB accordion components
-// Syntax (new): > [!ACCORDION close-others=false, is-open=0]
-// Syntax (legacy): > ACCORDION: close-others=false, is-open=0
+// Transform blockquotes with [!ACCORDION] marker into UIB accordion components
+// Syntax: > [!ACCORDION close-others=false, is-open=0]
 //         > - Panel Title 1
 //         >
 //         >   Panel content 1
@@ -506,25 +469,21 @@ limitations under the License.
 	*##if($firstParagraph)#*
 		*##set($firstText = $firstParagraph.text())#*
 		*##set($isAccordionMarker = $firstText.matches("^\[!ACCORDION[^\]]*\].*"))#*
-		*##if($firstText == "ACCORDION" || $firstText.startsWith("ACCORDION:") || $isAccordionMarker)#*
+		*##if($isAccordionMarker)#*
 			*##set($accordionCounter = $accordionCounter + 1)#*
-			// Parse options from the ACCORDION: line
+			// Parse options from the [!ACCORDION ...] marker
 			*##set($closeOthersAttr = "")#*
 			*##set($isOpenIndex = 0)#*
-			*##if($isAccordionMarker)#*
-				*##set($accordionOptionsStr = $firstText.replaceFirst("^\[!ACCORDION\s*([^\]]*)\].*$", "$1").trim())#*
-			*##elseif($firstText.startsWith("ACCORDION:"))#*
-				*##set($accordionOptionsStr = $firstText.substring(10).trim())#*
-				// Parse comma-separated options
-				*##if($accordionOptionsStr && $accordionOptionsStr.length() > 0)#*
-					*##foreach($option in $accordionOptionsStr.split(","))#*
-						*##set($optionTrimmed = $option.trim())#*
-						*##if($optionTrimmed.startsWith("close-others="))#*
-							*##set($closeOthersVal = $optionTrimmed.substring(13).trim())#*
-							*##set($closeOthersAttr = "close-others='$closeOthersVal'")#*
-						*##elseif($optionTrimmed.startsWith("is-open="))#*
-							*##set($isOpenIndex = $Integer.parseInt($optionTrimmed.substring(8).trim()))#*
-						*##end#*
+			*##set($accordionOptionsStr = $firstText.replaceFirst("^\[!ACCORDION\s*([^\]]*)\].*$", "$1").trim())#*
+			// Parse comma-separated options
+			*##if($accordionOptionsStr && $accordionOptionsStr.length() > 0)#*
+				*##foreach($option in $accordionOptionsStr.split(","))#*
+					*##set($optionTrimmed = $option.trim())#*
+					*##if($optionTrimmed.startsWith("close-others="))#*
+						*##set($closeOthersVal = $optionTrimmed.substring(13).trim())#*
+						*##set($closeOthersAttr = "close-others='$closeOthersVal'")#*
+					*##elseif($optionTrimmed.startsWith("is-open="))#*
+						*##set($isOpenIndex = $Integer.parseInt($optionTrimmed.substring(8).trim()))#*
 					*##end#*
 				*##end#*
 			*##end#*
@@ -570,9 +529,8 @@ limitations under the License.
 	*##end#*
 *##end#*
 
-// Transform blockquotes with CAROUSEL marker into UIB carousel components
-// Syntax (new): > [!CAROUSEL interval=5000, no-wrap=false, no-pause=true, active=slideVar]
-// Syntax (legacy): > CAROUSEL: interval=5000, no-wrap=false, no-pause=true, active=slideVar
+// Transform blockquotes with [!CAROUSEL] marker into UIB carousel components
+// Syntax: > [!CAROUSEL interval=5000, no-wrap=false, no-pause=true, active=slideVar]
 //         > * ![Image 1 description](path/to/image1.png)
 //         > * ![Image 2 description](path/to/image2.png)
 //         > * ![Image 3 description](path/to/image3.png)
@@ -583,33 +541,29 @@ limitations under the License.
 	*##if($firstParagraph)#*
 		*##set($firstText = $firstParagraph.text().trim())#*
 		*##set($isCarouselMarker = $firstText.matches("^\[!CAROUSEL[^\]]*\].*"))#*
-		*##if($firstText == "CAROUSEL" || $firstText.startsWith("CAROUSEL:") || $isCarouselMarker)#*
+		*##if($isCarouselMarker)#*
 			*##set($carouselCounter = $carouselCounter + 1)#*
-			// Parse options from the CAROUSEL: line
+			// Parse options from the [!CAROUSEL ...] marker
 			*##set($intervalAttr = "")#*
 			*##set($noWrapAttr = "")#*
 			*##set($noPauseAttr = "")#*
 			*##set($activeVar = "carouselActive$carouselCounter")#*
-			*##if($isCarouselMarker)#*
-				*##set($carouselOptionsStr = $firstText.replaceFirst("^\[!CAROUSEL\s*([^\]]*)\].*$", "$1").trim())#*
-			*##elseif($firstText.startsWith("CAROUSEL:"))#*
-				*##set($carouselOptionsStr = $firstText.substring(9).trim())#*
-				// Parse comma-separated options
-				*##if($carouselOptionsStr && $carouselOptionsStr.length() > 0)#*
-					*##foreach($option in $carouselOptionsStr.split(","))#*
-						*##set($optionTrimmed = $option.trim())#*
-						*##if($optionTrimmed.startsWith("interval="))#*
-							*##set($intervalVal = $optionTrimmed.substring(9).trim())#*
-							*##set($intervalAttr = "interval='$intervalVal'")#*
-						*##elseif($optionTrimmed.startsWith("no-wrap="))#*
-							*##set($noWrapVal = $optionTrimmed.substring(8).trim())#*
-							*##set($noWrapAttr = "no-wrap='$noWrapVal'")#*
-						*##elseif($optionTrimmed.startsWith("no-pause="))#*
-							*##set($noPauseVal = $optionTrimmed.substring(9).trim())#*
-							*##set($noPauseAttr = "no-pause='$noPauseVal'")#*
-						*##elseif($optionTrimmed.startsWith("active="))#*
-							*##set($activeVar = $optionTrimmed.substring(7).trim())#*
-						*##end#*
+			*##set($carouselOptionsStr = $firstText.replaceFirst("^\[!CAROUSEL\s*([^\]]*)\].*$", "$1").trim())#*
+			// Parse comma-separated options
+			*##if($carouselOptionsStr && $carouselOptionsStr.length() > 0)#*
+				*##foreach($option in $carouselOptionsStr.split(","))#*
+					*##set($optionTrimmed = $option.trim())#*
+					*##if($optionTrimmed.startsWith("interval="))#*
+						*##set($intervalVal = $optionTrimmed.substring(9).trim())#*
+						*##set($intervalAttr = "interval='$intervalVal'")#*
+					*##elseif($optionTrimmed.startsWith("no-wrap="))#*
+						*##set($noWrapVal = $optionTrimmed.substring(8).trim())#*
+						*##set($noWrapAttr = "no-wrap='$noWrapVal'")#*
+					*##elseif($optionTrimmed.startsWith("no-pause="))#*
+						*##set($noPauseVal = $optionTrimmed.substring(9).trim())#*
+						*##set($noPauseAttr = "no-pause='$noPauseVal'")#*
+					*##elseif($optionTrimmed.startsWith("active="))#*
+						*##set($activeVar = $optionTrimmed.substring(7).trim())#*
 					*##end#*
 				*##end#*
 			*##end#*

@@ -18,12 +18,10 @@ Display your logo on the left side of the navigation bar.
 > [!TABS]
 > - Maven Site Plugin 4.x
 >
->   The current syntax uses an `<image>` sub-element:
+>   The current syntax uses attributes for `name` and `href`, plus an `<image>` sub-element:
 >
 >   ```xml
->   <bannerLeft>
->     <name>My Organization</name>
->     <href>https://example.com</href>
+>   <bannerLeft name="My Organization" href="https://example.com">
 >     <image src="images/logo.png" alt="My Organization Logo"/>
 >   </bannerLeft>
 >   ```

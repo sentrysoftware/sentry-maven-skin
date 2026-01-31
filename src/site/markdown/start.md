@@ -54,8 +54,8 @@ Add the Maven Site Plugin with the required dependency:
 </build>
 ```
 
-> [!IMPORTANT]
-> Use `maven-site-plugin` version **3.12.x**. Later versions use a different site decoration model that is not yet supported.
+> [!NOTE]
+> This skin supports both `maven-site-plugin` **3.12.x** and **4.x**. The examples in this guide use 3.x syntax, which works with both versions.
 
 ## Step 3: Configure site.xml
 
