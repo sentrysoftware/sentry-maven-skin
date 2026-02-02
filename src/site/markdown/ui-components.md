@@ -115,7 +115,7 @@ Use a blockquote with the `[!TABS]` marker and a bullet list:
 
 - Start a blockquote with `> [!TABS]` followed by optional parameters
 - Use a bullet list (`-` or `*`) for each tab
-- The first line of each list item becomes the tab heading (plain text)
+- The first line of each list item becomes the tab heading (supports inline Markdown/HTML)
 - Add a blank line, then the tab content with full Markdown support
 
 **Available options:**
