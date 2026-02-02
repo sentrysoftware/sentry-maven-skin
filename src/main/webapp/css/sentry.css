@@ -1924,6 +1924,11 @@ body.sentry-site .tab-content {
 	color: var(--main-fgcolor);
 }
 
+/* Hide print-only tab headings on screen */
+body.sentry-site .sentry-print-tab-heading {
+	display: none;
+}
+
 /* Accordion panels: proper colors for light and dark mode */
 body.sentry-site .panel {
 	background-color: var(--main-bgcolor);

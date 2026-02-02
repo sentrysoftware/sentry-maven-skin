@@ -363,15 +363,11 @@ limitations under the License.
 			*##if(!$collapsibleTitle || $collapsibleTitle.length() == 0)#*
 				*##set($collapsibleTitle = "Details")#*
 			*##end#*
-			*##if($collapsibleTitle)#*
-				*##set($collapsibleTitle = $collapsibleTitle.replaceAll("\[!COLLAPSIBLE[^\]]*\]\s*", "").replace("[!COLLAPSIBLE]", "").trim())#*
-			*##end#*
 			// Get the remaining content HTML
 			*##set($collapsibleContent = $blockquote.html())#*
 			// Build the UIB collapse component HTML (collapsed by default)
 			// Note: $collapsibleTitle is escaped to prevent XSS from entity-escaped markup in Markdown
 			*##set($collapseHtml = "<p><button type='button' class='btn btn-primary' ng-click='$collapsibleVarName = !$collapsibleVarName'><i class='fas fa-chevron-right' ng-class='{&quot;fa-rotate-90&quot;: $collapsibleVarName}'></i> $esc.html($collapsibleTitle)</button></p><div uib-collapse='!$collapsibleVarName' class='sentry-uib'><div class='well'>$collapsibleContent</div></div>")#*
-			*##set($collapseHtml = $collapseHtml.replaceAll("\[!COLLAPSIBLE[^\]]*\]\s*", "").replace("[!COLLAPSIBLE]", ""))#*
 			// Replace the blockquote with the collapse component
 			*##call($blockquote.before($collapseHtml))#*
 			*##call($blockquote.remove())#*
@@ -445,7 +441,7 @@ limitations under the License.
 							*##set($tabContent = "${tabContent}${child.outerHtml()}")#*
 						*##end#*
 					*##end#*
-					*##set($tabsHtml = "${tabsHtml}<uib-tab index='$tabIndex'><uib-tab-heading>$tabHeadingHtml</uib-tab-heading>$tabContent</uib-tab>")#*
+*##set($tabsHtml = "${tabsHtml}<uib-tab index='$tabIndex'><uib-tab-heading>$tabHeadingHtml</uib-tab-heading><p class='sentry-print-tab-heading'><strong>$tabHeadingHtml</strong></p>$tabContent</uib-tab>")#*
 					*##set($tabIndex = $tabIndex + 1)#*
 				*##end#*
 				*##set($tabsHtml = "${tabsHtml}</uib-tabset>")#*
@@ -591,7 +587,7 @@ limitations under the License.
 			*##set($imageList = $blockquote.selectFirst("ul, ol"))#*
 			*##if($imageList)#*
 				// Build the carousel HTML
-				*##set($carouselHtml = "<div uib-carousel='' $intervalAttr $noWrapAttr $noPauseAttr active='$activeVar' ng-init='$activeVar = 0' class='sentry-uib'>")#*
+				*##set($carouselHtml = "<div uib-carousel $intervalAttr $noWrapAttr $noPauseAttr active='$activeVar' ng-init='$activeVar = 0' class='sentry-uib'>")#*
 				*##set($slideIndex = 0)#*
 				*##foreach($slideItem in $imageList.select(":root > li"))#*
 					// Get the image element
@@ -599,8 +595,8 @@ limitations under the License.
 					*##if($slideImg)#*
 						*##set($imgSrc = $esc.html($slideImg.attr("src")))#*
 						*##set($imgAlt = $esc.html($slideImg.attr("alt")))#*
-						*##set($carouselHtml = "${carouselHtml}<div uib-slide index='$slideIndex'>")#*
-						*##set($carouselHtml = "${carouselHtml}<img src='$imgSrc' alt='$imgAlt'>")#*
+*##set($carouselHtml = "${carouselHtml}<div uib-slide index='$slideIndex'>")#*
+*##set($carouselHtml = "${carouselHtml}<img src='$imgSrc' alt='$imgAlt'>")#*
 						// Add caption from alt text if available
 						*##if($imgAlt && $imgAlt.length() > 0)#*
 							*##set($carouselHtml = "${carouselHtml}<div class='carousel-caption'><p>$imgAlt</p></div>")#*
@@ -686,9 +682,6 @@ limitations under the License.
 
 // Clean up IDs and corresponding <a href="#..."> references for unsupported characters
 *##set($bodyElement = $htmlTool.fixIds($bodyElement))#*
-
-// Add sentry-uib class to all Angular UI Bootstrap components for consistent styling
-*##set($bodyElement = $htmlTool.addClass($bodyElement, "[uib-tabset], [uib-accordion], [uib-collapse], [uib-carousel]", "sentry-uib"))#*
 
 // Make sure all headings have IDs
 *##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*

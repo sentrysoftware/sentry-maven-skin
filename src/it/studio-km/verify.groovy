@@ -193,13 +193,13 @@ assert uiComponentsFile.isFile() : "UI Components demo page must have been gener
 def uiComponentsHtml = uiComponentsFile.text
 
 // Test element syntax: <uib-tabset> and <uib-tab>
-assert uiComponentsHtml.contains('<uib-tabset') : "Element syntax uib-tabset must be preserved in the HTML output"
-assert uiComponentsHtml.contains('<uib-tab') : "Element syntax uib-tab must be preserved in the HTML output"
+assert uiComponentsHtml.contains('<uib-tabset') : "Element uib-tabset must be present in the HTML output"
+assert uiComponentsHtml.contains('<uib-tab') : "Element uib-tab must be present in the HTML output"
 assert uiComponentsHtml.contains('<uib-tab-heading>') : "Tab heading elements must be preserved"
 
-// Test element syntax: <uib-accordion> and <uib-accordion-group>
-assert uiComponentsHtml.contains('<uib-accordion') : "Element syntax uib-accordion must be preserved in the HTML output"
-assert uiComponentsHtml.contains('uib-accordion-group') : "Accordion group directive must be preserved"
+// Test element syntax: <uib-accordion> and <div uib-accordion-group>
+assert uiComponentsHtml.contains('<uib-accordion') : "Element uib-accordion must be present in the HTML output"
+assert uiComponentsHtml.contains('<div uib-accordion-group') : "Attribute uib-accordion-group on div must be present in the HTML output"
 assert uiComponentsHtml.contains('<uib-accordion-heading>') : "Accordion heading elements must be preserved"
 
 // Test that content stays INSIDE the UI components

@@ -121,10 +121,10 @@
 	 */
 
 	/* Tabs: show all tab content vertically, hide tab navigation */
-	[uib-tabset] > .nav-tabs {
+	.sentry-uib > .nav-tabs {
 		display: none !important;
 	}
-	[uib-tabset] > .tab-content > .tab-pane {
+	.sentry-uib > .tab-content > .tab-pane {
 		display: block !important;
 		opacity: 1 !important;
 		visibility: visible !important;
@@ -132,25 +132,24 @@
 		padding: 0.5em;
 		border: 1px solid #ccc;
 	}
-	[uib-tabset] > .tab-content > .tab-pane::before {
-		content: attr(heading);
-		display: block;
-		font-weight: bold;
+	/* Show print-only tab headings */
+	.sentry-print-tab-heading {
+		display: block !important;
 		margin-bottom: 0.5em;
 		border-bottom: 1px solid #ccc;
 		padding-bottom: 0.25em;
 	}
 
 	/* Accordion: expand all panels */
-	[uib-accordion] .panel-collapse {
+	uib-accordion .panel-collapse {
 		display: block !important;
 		height: auto !important;
 		visibility: visible !important;
 	}
-	[uib-accordion] .panel-collapse.collapse {
+	uib-accordion .panel-collapse.collapse {
 		display: block !important;
 	}
-	[uib-accordion] .panel-collapse.collapsing {
+	uib-accordion .panel-collapse.collapsing {
 		display: block !important;
 		height: auto !important;
 	}
@@ -175,10 +174,31 @@
 	[uib-carousel] .carousel-inner > .item {
 		display: block !important;
 		opacity: 1 !important;
-		margin-bottom: 1em;
+		margin-bottom: 1.5em;
+	}
+	[uib-carousel] .carousel-inner > .item img {
+		width: auto !important;
+		height: auto !important;
+		max-width: 100% !important;
 	}
 	[uib-carousel] .carousel-control,
 	[uib-carousel] .carousel-indicators {
 		display: none !important;
+	}
+	/* Carousel caption: display below image, centered */
+	[uib-carousel] .carousel-caption {
+		position: static !important;
+		left: auto !important;
+		right: auto !important;
+		bottom: auto !important;
+		text-align: center;
+		padding: 0.5em 0;
+		margin-top: 0.25em;
+		background: transparent !important;
+		text-shadow: none !important;
+	}
+	[uib-carousel] .carousel-caption p {
+		margin: 0;
+		font-style: italic;
 	}
 }
