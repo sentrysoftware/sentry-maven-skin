@@ -347,7 +347,7 @@ limitations under the License.
 			*##set($collapsibleCounter = $collapsibleCounter + 1)#*
 			*##set($collapsibleVarName = "collapsible$collapsibleCounter")#*
 			// Title can be on the same line or in the next paragraph
-			*##set($inlineTitle = $firstText.replaceFirst("^\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").trim())#*
+			*##set($inlineTitle = $firstText.replaceFirst("^\[!COLLAPSIBLE[^\]]*\]\s*", "").trim())#*
 			*##if($inlineTitle && $inlineTitle.length() > 0)#*
 				*##set($collapsibleTitle = $inlineTitle)#*
 			*##else#*
@@ -364,13 +364,14 @@ limitations under the License.
 				*##set($collapsibleTitle = "Details")#*
 			*##end#*
 			*##if($collapsibleTitle)#*
-				*##set($collapsibleTitle = $collapsibleTitle.replaceAll("\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").replace("[!COLLAPSIBLE]", "").trim())#*
+				*##set($collapsibleTitle = $collapsibleTitle.replaceAll("\[!COLLAPSIBLE[^\]]*\]\s*", "").replace("[!COLLAPSIBLE]", "").trim())#*
 			*##end#*
 			// Get the remaining content HTML
 			*##set($collapsibleContent = $blockquote.html())#*
 			// Build the UIB collapse component HTML (collapsed by default)
-			*##set($collapseHtml = "<p><button type='button' class='btn btn-primary' ng-click='$collapsibleVarName = !$collapsibleVarName'><i class='fas fa-chevron-right' ng-class='{&quot;fa-rotate-90&quot;: $collapsibleVarName}'></i> $collapsibleTitle</button></p><div uib-collapse='!$collapsibleVarName' class='sentry-uib'><div class='well'>$collapsibleContent</div></div>")#*
-			*##set($collapseHtml = $collapseHtml.replaceAll("\\[!COLLAPSIBLE[^\\]]*\\]\\s*", "").replace("[!COLLAPSIBLE]", ""))#*
+			// Note: $collapsibleTitle is escaped to prevent XSS from entity-escaped markup in Markdown
+			*##set($collapseHtml = "<p><button type='button' class='btn btn-primary' ng-click='$collapsibleVarName = !$collapsibleVarName'><i class='fas fa-chevron-right' ng-class='{&quot;fa-rotate-90&quot;: $collapsibleVarName}'></i> $esc.html($collapsibleTitle)</button></p><div uib-collapse='!$collapsibleVarName' class='sentry-uib'><div class='well'>$collapsibleContent</div></div>")#*
+			*##set($collapseHtml = $collapseHtml.replaceAll("\[!COLLAPSIBLE[^\]]*\]\s*", "").replace("[!COLLAPSIBLE]", ""))#*
 			// Replace the blockquote with the collapse component
 			*##call($blockquote.before($collapseHtml))#*
 			*##call($blockquote.remove())#*

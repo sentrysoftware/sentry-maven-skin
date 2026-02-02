@@ -394,7 +394,7 @@ Use a blockquote with the `[!CAROUSEL]` marker and a list of images:
 | Option           | Description                              | Default                                    |
 | ---------------- | ---------------------------------------- | ------------------------------------------ |
 | `active=varName` | AngularJS variable to track active slide | `carouselActive1`, `carouselActive2`, etc. |
-| `interval=5000`  | Time in milliseconds between slides      | (default auto-play)                        |
+| `interval=5000`  | Time in milliseconds between slides      | `5000` (Angular UI Bootstrap default)      |
 | `no-wrap=true`   | Disable continuous cycling               | `false`                                    |
 | `no-pause=true`  | Disable pausing on hover                 | `false`                                    |
 
