@@ -67,7 +67,7 @@ sentry-maven-skin/
 ### Quick Build
 
 ```bash
-mvn verify
+mvn install site
 ```
 
 This single command does everything:
@@ -89,7 +89,7 @@ This single command does everything:
 This project uses itself as its own Maven skin (dogfooding via `${project.version}` in `site.xml`). Because of this, you **must** run `install` before `site`:
 
 ```bash
-mvn install site
+mvn clean install site
 ```
 
 > **Important**: Running `mvn site` alone will fail with `NoSuchFileException: target/classes` because the skin JAR won't exist yet.
@@ -173,7 +173,7 @@ The project includes:
 ### Running Tests
 
 ```bash
-mvn verify
+mvn install
 ```
 
 The integration test:
@@ -199,13 +199,13 @@ The `verify.groovy` script checks:
 ### Frontend Changes (CSS, JS, HTML)
 
 1. Edit files in `src/main/webapp/`
-2. Run `mvn verify` to build and test
+2. Run `mvn clean install site` to build and test
 3. Preview results in `target/it/studio-km/target/site/`
 
 ### Velocity Template Changes
 
 1. Edit `src/main/webapp/site.vm` or `src/main/webapp/tools.vm`
-2. Run `mvn verify` to build and test
+2. Run `mvn clean install site` to build and test
 3. Check generated HTML in `target/it/studio-km/target/site/`
 
 ### Adding New Dependencies
@@ -244,7 +244,7 @@ mvn verify
 
 ### Changes Not Reflected in Test Site
 
-Ensure you're running `mvn verify` (not just `mvn package`). The integration test happens during the `verify` phase.
+Ensure you're running `mvn clean install site` (not just `mvn verify`). The integration test happens during the `verify` phase.
 
 ### Velocity Syntax Errors
 
@@ -280,16 +280,16 @@ The project uses GitHub Actions. The CI workflow:
 
 1. Runs on Ubuntu with pre-installed Node.js
 2. Uses the `CI` profile in Maven (skips frontend-maven-plugin, uses system Node.js)
-3. Runs `mvn verify` to build and test
+3. Runs `mvn clean install site` to build and test
 
 ## Useful Commands Summary
 
 ```bash
 # Full build with tests
-mvn verify
+mvn clean install site
 
 # Build and generate this project's own documentation
-mvn install site
+mvn clean install site
 
 # Clean build artifacts
 mvn clean
