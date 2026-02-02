@@ -1,347 +1,425 @@
-keywords: tabs, accordion, carousel, collapse, popover, ui, bootstrap, components, angular
-description: Interactive UI components including tabs, accordion, carousel, and popovers.
+keywords: tabs, accordion, carousel, collapse, callouts, notes, admonitions, ui, bootstrap, components
+description: Interactive UI components including tabs, accordion, carousel, collapsible sections, and callouts.
 
 # UI Components (Tabs, Accordion, etc.)
 
-The skin includes [Angular UI Bootstrap](https://angular-ui.github.io/bootstrap/) components for interactive documentation.
+The skin includes [Angular UI Bootstrap](https://angular-ui.github.io/bootstrap/) components for interactive documentation, with a simple Markdown syntax.
 
 ## Available Components
 
-| Component               | Description                         |
-| ----------------------- | ----------------------------------- |
-| [Tabs](#tabs)           | Organize content in switchable tabs |
-| [Accordion](#accordion) | Collapsible content panels          |
-| [Collapse](#collapse)   | Toggle content visibility           |
-| [Carousel](#carousel)   | Image or content slideshow          |
-| [Popover](#popover)     | Contextual popup boxes              |
+| Component               | Description                              |
+| ----------------------- | ---------------------------------------- |
+| [Callouts](#callouts)   | Notes, tips, warnings, and cautions      |
+| [Tabs](#tabs)           | Organize content in switchable tabs      |
+| [Code Tabs](#code-tabs) | Show code examples in multiple languages |
+| [Accordion](#accordion) | Collapsible content panels               |
+| [Collapse](#collapse)   | Toggle content visibility                |
+| [Carousel](#carousel)   | Image slideshow                          |
 
-## Important: Syntax Rules
+## Callouts
 
-Since Markdown files are converted to HTML via Maven Doxia's Flexmark parser, there are specific rules for using UI components:
+Callouts highlight important information using GitHub-style admonition syntax. They help draw attention to notes, tips, warnings, and other key content.
 
-1. **Custom elements like `<uib-tabset>` are NOT supported** - they get stripped by the parser
-2. **Use attribute-based syntax** with standard `<div>` elements
-3. **All directive attributes must have a value** - use `=""`
-4. **Only inline Markdown works inside components** - bold, italic, links, and inline code
-5. **Block-level Markdown breaks out of components** - headings, lists, blockquotes, and code blocks will escape the `<div>` structure
-6. **Use Bootstrap heading classes for titles** - use `<p class="h3">Title</p>` instead of `<h3>` tags
-7. **The `sentry-uib` class is added automatically** - no need to specify it manually
+### Syntax
 
-```html
-<!-- Correct: Use div elements with Bootstrap heading classes -->
-<div uib-tabset="">
-  <div uib-tab="" heading="Tab 1">
-    <p class="h4">Section Title</p>
-    <p>Use <strong>inline formatting</strong>, <em>emphasis</em>, and <a href="url">links</a>.</p>
-  </div>
-</div>
+Use a blockquote starting with `[!TYPE]` where TYPE is one of: NOTE, TIP, IMPORTANT, WARNING, or CAUTION.
 
-<!-- Wrong: Custom elements are stripped -->
-<uib-tabset>
-  <uib-tab heading="Tab 1">Content</uib-tab>
-</uib-tabset>
+```markdown
+> [!NOTE]
+> Useful information that users should know, even when skimming content.
 
-<!-- Wrong: Heading tags create section wrappers that break out -->
-<div uib-tab="" heading="Tab 1">
-  <h4>This breaks out of the div!</h4>
-</div>
+> [!TIP]
+> Helpful advice for doing things better or more easily.
+
+> [!IMPORTANT]
+> Key information users need to know to achieve their goal.
+
+> [!WARNING]
+> Urgent info that needs immediate user attention to avoid problems.
+
+> [!CAUTION]
+> Advises about risks or negative outcomes of certain actions.
 ```
+
+### Live Demo
+
+> [!NOTE]
+> Useful information that users should know, even when skimming content.
+
+> [!TIP]
+> Helpful advice for doing things better or more easily.
+
+> [!IMPORTANT]
+> Key information users need to know to achieve their goal.
+
+> [!WARNING]
+> Urgent info that needs immediate user attention to avoid problems.
+
+> [!CAUTION]
+> Advises about risks or negative outcomes of certain actions.
+
+### With Rich Content
+
+Callouts support full Markdown formatting inside:
+
+```markdown
+> [!TIP]
+> You can include **bold**, *italic*, and `code` in callouts.
+>
+> - Lists work too
+> - Multiple items
+>
+> And even [links](https://example.com) and code blocks:
+>
+> ```java
+> System.out.println("Hello!");
+> ```
+```
+
+> [!TIP]
+> You can include **bold**, *italic*, and `code` in callouts.
+>
+> - Lists work too
+> - Multiple items
+>
+> And even [links](https://example.com) and code blocks:
+>
+> ```java
+> System.out.println("Hello!");
+> ```
 
 ## Tabs
 
 Tabs organize content into multiple panels, with one panel visible at a time.
 
-### Basic Tabs Example
+### Syntax
 
-```html
-<div uib-tabset="">
-  <div uib-tab="" heading="Overview">
-    <p class="h4">Overview</p>
-    <p>This is the overview content with <strong>inline</strong> formatting.</p>
-  </div>
-  <div uib-tab="" heading="Installation">
-    <p class="h4">Installation</p>
-    <p>Add the dependency, configure <code>site.xml</code>, then run <code>mvn site</code>.</p>
-  </div>
-  <div uib-tab="" heading="Configuration">
-    <p class="h4">Configuration</p>
-    <p>Configuration details with a <code>code snippet</code> example.</p>
-  </div>
-</div>
+Use a blockquote with the `[!TABS]` marker and a bullet list:
+
+```markdown
+> [!TABS]
+> - First Tab
+>
+>   Content of the **first tab** with Markdown formatting.
+>
+> - Second Tab
+>
+>   Content of the *second tab*.
+>
+> - Third Tab
+>
+>   Content with `code` and [links](url).
 ```
+
+**How it works:**
+
+- Start a blockquote with `> [!TABS]` followed by optional parameters
+- Use a bullet list (`-` or `*`) for each tab
+- The first line of each list item becomes the tab heading (supports inline Markdown/HTML)
+- Add a blank line, then the tab content with full Markdown support
+
+**Available options:**
+
+| Option           | Description                            | Default                            |
+| ---------------- | -------------------------------------- | ---------------------------------- |
+| `active=varName` | AngularJS variable to track active tab | `tabsActive1`, `tabsActive2`, etc. |
+| `justified=true` | Make tabs fill the entire width        | `false`                            |
+| `vertical=true`  | Display tabs vertically                | `false`                            |
 
 ### Live Demo
 
-<div uib-tabset="">
-  <div uib-tab="" heading="Overview">
-    <p class="h4">Overview</p>
-    <p>This is the <strong>overview</strong> content. Tabs are great for organizing related information.</p>
-  </div>
-  <div uib-tab="" heading="Installation">
-    <p class="h4">Installation</p>
-    <p>To install the skin, add the <strong>skin dependency</strong> to your <code>site.xml</code>, add the <strong>maven-skin-tools</strong> dependency to your <code>pom.xml</code>, then run <code>mvn site</code> to generate your documentation.</p>
-    <p>Check the <a href="start.html">Quick Start</a> guide for detailed instructions.</p>
-  </div>
-  <div uib-tab="" heading="Configuration">
-    <p class="h4">Configuration</p>
-    <p>Configure the skin in your <code>site.xml</code> file. See <a href="settings.html">Configuration Reference</a> for all options.</p>
-  </div>
-</div>
-
-### Tabs with Icons
-
-Include FontAwesome icons in tab headings:
-
-```html
-<div uib-tabset="">
-  <div uib-tab="" heading="<i class='fas fa-home'></i> Home">
-    <p>This is the <strong>home</strong> tab with an icon in the heading.</p>
-  </div>
-  <div uib-tab="" heading="<i class='fas fa-cog'></i> Settings">
-    <p>Configure your preferences here.</p>
-  </div>
-</div>
-```
+> [!TABS active=demoMarkdownTabs]
+> - <span class="fa fa-home"></span> _Overview_
+>
+>   This is the **overview** content created with the simple Markdown syntax.
+>   Tabs are great for organizing related information.
+>
+> - Installation
+>
+>   To install the skin:
+>   1. Add the skin dependency to your `site.xml`
+>   2. Add `maven-skin-tools` to your `pom.xml`
+>   3. Run `mvn site`
+>
+>   Check the [Quick Start](start.html) guide for details.
+>
+> - Configuration
+>
+>   Configure the skin in your `site.xml` file.
+>   See [Configuration Reference](settings.html) for all options.
 
 ### Justified Tabs
 
-Make tabs fill the entire width:
-
-```html
-<div uib-tabset="" justified="true">
-  <div uib-tab="" heading="Tab 1">
-    <p>First tab content with <strong>bold</strong> text.</p>
-  </div>
-  <div uib-tab="" heading="Tab 2">
-    <p>Second tab content with <em>emphasis</em>.</p>
-  </div>
-</div>
-```
+> [!TABS justified=true]
+> - Tab One
+>
+>   These tabs fill the entire width because `justified=true` is set.
+>
+> - Tab Two
+>
+>   The second tab content.
 
 ### Vertical Tabs
 
-Display tabs vertically:
+> [!TABS vertical=true]
+> - Vertical Tab 1
+>
+>   Vertical tabs are great for side navigation.
+>
+> - Vertical Tab 2
+>
+>   More content in the second tab.
 
-```html
-<div uib-tabset="" vertical="true">
-  <div uib-tab="" heading="Tab 1">
-    <p>Vertical tabs are great for <strong>side navigation</strong>.</p>
-  </div>
-  <div uib-tab="" heading="Tab 2">
-    <p>More content in the second tab.</p>
-  </div>
-</div>
-```
+### Code Tabs
+
+A common use case for tabs in technical documentation is showing the same code example in multiple programming languages. Combine tabs with fenced code blocks:
+
+````markdown
+> [!TABS]
+> - Java
+>
+>   ```java
+>   public class HelloWorld {
+>       public static void main(String[] args) {
+>           System.out.println("Hello, World!");
+>       }
+>   }
+>   ```
+>
+> - Python
+>
+>   ```python
+>   def main():
+>       print("Hello, World!")
+>
+>   if __name__ == "__main__":
+>       main()
+>   ```
+>
+> - JavaScript
+>
+>   ```javascript
+>   function main() {
+>     console.log("Hello, World!");
+>   }
+>
+>   main();
+>   ```
+````
+
+**Live Demo:**
+
+> [!TABS]
+> - Java
+>
+>   ```java
+>   public class HelloWorld {
+>       public static void main(String[] args) {
+>           System.out.println("Hello, World!");
+>       }
+>   }
+>   ```
+>
+> - Python
+>
+>   ```python
+>   def main():
+>       print("Hello, World!")
+>
+>   if __name__ == "__main__":
+>       main()
+>   ```
+>
+> - JavaScript
+>
+>   ```javascript
+>   function main() {
+>     console.log("Hello, World!");
+>   }
+>
+>   main();
+>   ```
+
+> [!TIP]
+> Code tabs are perfect for API documentation, SDK examples, and tutorials where users may work with different programming languages.
 
 ## Accordion
 
 Accordions display collapsible content panels for presenting information in limited space.
 
-### Basic Accordion Example
+### Syntax
 
-```html
-<div uib-accordion="">
-  <div uib-accordion-group="" heading="Section 1" is-open="true">
-    <p>This section is <strong>open by default</strong>. Use <em>inline formatting</em>, <code>code</code>, and <a href="url">links</a>.</p>
-  </div>
-  <div uib-accordion-group="" heading="Section 2">
-    <p>More content with inline formatting.</p>
-  </div>
-  <div uib-accordion-group="" heading="Section 3">
-    <p>Final section content.</p>
-  </div>
-</div>
+Use a blockquote with the `[!ACCORDION]` marker and a bullet list:
+
+```markdown
+> [!ACCORDION]
+> - First Panel Title
+>
+>   Content of the **first panel** with Markdown formatting.
+>
+> - Second Panel Title
+>
+>   Content of the *second panel*.
+>
+> - Third Panel Title
+>
+>   Content with `code` and [links](url).
 ```
+
+**How it works:**
+
+- Start a blockquote with `> [!ACCORDION]` followed by optional parameters
+- Use a bullet list (`-` or `*`) for each panel
+- The first line of each list item becomes the panel heading; inline Markdown/HTML formatting in this line is preserved
+- Add a blank line, then the panel body content with full Markdown support
+
+**Available options:**
+
+| Option               | Description                                     | Default           |
+| -------------------- | ----------------------------------------------- | ----------------- |
+| `is-open=N`          | Index of the panel to open by default (0-based) | `0` (first panel) |
+| `close-others=false` | Allow multiple panels open simultaneously       | `true`            |
 
 ### Live Demo
 
-<div uib-accordion="">
-  <div uib-accordion-group="" heading="What is Sentry Maven Skin?" is-open="true">
-    <p>Sentry Maven Skin is a <strong>modern, responsive skin</strong> for Maven-generated documentation sites. It provides a professional look and feel, full-text search, dark and light themes, and mobile-friendly design.</p>
-  </div>
-  <div uib-accordion-group="" heading="How do I install it?">
-    <p>Add the skin dependency to your <code>site.xml</code>, add <code>maven-skin-tools</code> to your <code>pom.xml</code>, then run <code>mvn site</code>. See the <a href="start.html">Quick Start</a> for complete instructions.</p>
-  </div>
-  <div uib-accordion-group="" heading="Is it free?">
-    <p>Yes! Sentry Maven Skin is <strong>open source</strong> and licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</p>
-  </div>
-</div>
+> [!ACCORDION]
+> - What is Sentry Maven Skin?
+>
+>   Sentry Maven Skin is a **modern, responsive skin** for Maven-generated
+>   documentation sites. It provides:
+>
+>   - Professional look and feel
+>   - Full-text search
+>   - Dark and light themes
+>   - Mobile-friendly design
+>
+> - How do I install it?
+>
+>   Add the skin dependency to your `site.xml`, add `maven-skin-tools` to your
+>   `pom.xml`, then run `mvn site`. See the [Quick Start](start.html) for details.
+>
+> - Is it free?
+>
+>   Yes! Sentry Maven Skin is **open source** and licensed under the
+>   [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
-### Close Others
+### With Options
 
-Allow multiple panels open simultaneously:
-
-```html
-<div uib-accordion="" close-others="false">
-  <div uib-accordion-group="" heading="Section 1">
-    <p>First section with <strong>bold</strong> content.</p>
-  </div>
-  <div uib-accordion-group="" heading="Section 2">
-    <p>Second section with <em>more</em> content.</p>
-  </div>
-</div>
+```markdown
+> [!ACCORDION close-others=false, is-open=1]
+> - Panel One
+>
+>   This accordion allows multiple panels open at once.
+>
+> - Panel Two (Open by Default)
+>
+>   This panel is open by default because `is-open=1`.
 ```
 
-## Collapse
+## Collapse (Collapsible Sections)
 
-Hide and show content with smooth animation.
+Hide and show content with smooth animation. This is perfect for optional details, FAQ sections, or reducing page clutter.
 
-### Basic Collapse Example
+### Syntax
 
-```html
-<p>
-  <button type="button" class="btn btn-primary" ng-click="isCollapsed = !isCollapsed">Toggle Content</button>
-</p>
-<div uib-collapse="isCollapsed">
-  <div class="well">
-    <p><strong>Hidden Details</strong></p>
-    <p>This content can be <strong>shown or hidden</strong> by clicking the button above.</p>
-  </div>
-</div>
+Use a blockquote with the `[!COLLAPSIBLE]` marker, followed by the title on the next line:
+
+```markdown
+> [!COLLAPSIBLE]
+> Click to expand this section
+>
+> This content will be **hidden by default** and can be revealed
+> by clicking the title. You can use all Markdown formatting:
+>
+> - Lists work perfectly
+> - Including **bold** and *italic* text
+> - And [links](https://example.com) too
+>
+> Even code blocks are supported.
 ```
+
+**How it works:**
+
+- Start a blockquote with `> [!COLLAPSIBLE]` (no additional parameters are currently supported)
+- Put the title on the next line of the same blockquote
+- Add a blank line (`>` alone) to separate the title from the content
+- All following paragraphs in the blockquote become the collapsible content
+- Standard Markdown formatting is fully supported inside
 
 ### Live Demo
 
-<p>
-  <button type="button" class="btn btn-primary" ng-click="demoCollapsed = !demoCollapsed">
-    <i class="fas fa-chevron-down" ng-hide="demoCollapsed"></i>
-    <i class="fas fa-chevron-up" ng-show="demoCollapsed"></i>
-    Toggle Details
-  </button>
-</p>
-<div uib-collapse="!demoCollapsed">
-  <div class="well">
-    <p><strong>Additional Details</strong></p>
-    <p>This content is <strong>hidden by default</strong> and can be revealed by clicking the button. This is useful for showing optional information, keeping the page clean, and progressive disclosure of details.</p>
-  </div>
-</div>
+> [!COLLAPSIBLE]
+> What is Sentry Maven Skin?
+>
+> Sentry Maven Skin is a **modern, responsive skin** for Maven-generated
+> documentation sites. It provides:
+>
+> - Professional look and feel
+> - Full-text search
+> - Dark and light themes
+> - Mobile-friendly design
+>
+> See the [Quick Start](start.html) guide to get started!
+
+> [!COLLAPSIBLE]
+> How do I install it?
+>
+> Add the skin dependency to your `site.xml`, add `maven-skin-tools` to your
+> `pom.xml`, then run `mvn site`. It's that simple!
 
 ## Carousel
 
-Cycle through elements like a slideshow.
+Cycle through images like a slideshow. Perfect for screenshots, galleries, or step-by-step visual guides.
 
-### Basic Carousel Example
+### Syntax
 
-```html
-<div uib-carousel="" interval="5000" no-wrap="false" active="activeSlide" ng-init="activeSlide = 0">
-  <div uib-slide="" index="0">
-    <img src="images/slide1.png" alt="Slide 1" />
-    <div class="carousel-caption">
-      <p class="h4">First Slide</p>
-      <p>Description for the first slide.</p>
-    </div>
-  </div>
-  <div uib-slide="" index="1">
-    <img src="images/slide2.png" alt="Slide 2" />
-    <div class="carousel-caption">
-      <p class="h4">Second Slide</p>
-      <p>Description for the second slide.</p>
-    </div>
-  </div>
-</div>
+Use a blockquote with the `[!CAROUSEL]` marker and a list of images:
+
+```markdown
+> [!CAROUSEL]
+> * ![First image description](images/slide1.png)
+> * ![Second image description](images/slide2.png)
+> * ![Third image description](images/slide3.png)
 ```
 
-### Carousel Options
+**How it works:**
 
-| Attribute  | Description                                         | Default |
-| ---------- | --------------------------------------------------- | ------- |
-| `active`   | Variable to track active slide index (required)     | -       |
-| `ng-init`  | Initialize the active variable (e.g., `active = 0`) | -       |
-| `interval` | Time in ms between slides                           | `5000`  |
-| `no-wrap`  | Disable continuous cycling                          | `false` |
-| `no-pause` | Disable pausing on hover                            | `false` |
+- Start a blockquote with `> [!CAROUSEL]` followed by optional parameters
+- Use a bullet list (`-` or `*`) for each slide
+- Each list item contains an image using standard Markdown syntax: `![alt text](path)`
+- The alt text becomes both the image description and the carousel caption
 
-## Popover
+**Available options:**
 
-Display additional content on hover or click.
-
-### Basic Popover Example
-
-```html
-<button
-  type="button"
-  class="btn btn-default"
-  uib-popover="This is the popover content!"
-  popover-title="Popover Title"
-  popover-trigger="'mouseenter'"
->
-  Hover me
-</button>
-```
+| Option           | Description                              | Default                                    |
+| ---------------- | ---------------------------------------- | ------------------------------------------ |
+| `active=varName` | AngularJS variable to track active slide | `carouselActive1`, `carouselActive2`, etc. |
+| `interval=5000`  | Time in milliseconds between slides      | `5000` (Angular UI Bootstrap default)      |
+| `no-wrap=true`   | Disable continuous cycling               | `false`                                    |
+| `no-pause=true`  | Disable pausing on hover                 | `false`                                    |
 
 ### Live Demo
 
-<p>
-  <button type="button" class="btn btn-info"
-          uib-popover="This popover appears on hover. It's great for providing additional context without cluttering the page."
-          popover-title="More Information"
-          popover-trigger="'mouseenter'"
-          popover-placement="right">
-    <i class="fas fa-info-circle"></i> Hover for more info
-  </button>
-  <button type="button" class="btn btn-warning"
-          uib-popover="Click anywhere outside to close this popover."
-          popover-title="Click Popover"
-          popover-trigger="'outsideClick'"
-          popover-placement="top">
-    <i class="fas fa-hand-pointer"></i> Click me
-  </button>
-</p>
+> [!CAROUSEL]
+> * ![Desktop View: Clean, professional layout](images/general-screenshot.png)
+> * ![Dark Mode: Automatic theme detection](images/dark.png)
+> * ![Built-in Search: No external services needed](images/search-2.png)
 
-### Popover Triggers
+### With Options
 
-| Trigger          | Description                               |
-| ---------------- | ----------------------------------------- |
-| `'mouseenter'`   | Show on hover                             |
-| `'click'`        | Toggle on click                           |
-| `'outsideClick'` | Show on click, hide when clicking outside |
-| `'focus'`        | Show on focus                             |
-
-### Popover Placement
-
-Use `popover-placement`: `top`, `bottom`, `left`, `right`, `auto`.
-
-## Tooltips
-
-For simple text hints, use tooltips:
-
-```html
-<button type="button" class="btn btn-default" uib-tooltip="This is a tooltip!" tooltip-placement="top">
-  Hover for tooltip
-</button>
+```markdown
+> [!CAROUSEL interval=3000, no-wrap=true]
+> * ![First slide](images/slide1.png)
+> * ![Second slide](images/slide2.png)
 ```
-
-### Live Demo
-
-<p>
-  <button type="button" class="btn btn-default" uib-tooltip="Quick hint text!" tooltip-placement="top">
-    Top tooltip
-  </button>
-  <button type="button" class="btn btn-default" uib-tooltip="Another tooltip!" tooltip-placement="bottom">
-    Bottom tooltip
-  </button>
-  <button type="button" class="btn btn-default" uib-tooltip="Left side!" tooltip-placement="left">
-    Left tooltip
-  </button>
-  <button type="button" class="btn btn-default" uib-tooltip="Right side!" tooltip-placement="right">
-    Right tooltip
-  </button>
-</p>
-
-## Styling
-
-The skin automatically adds the `sentry-uib` class to all UI Bootstrap components for consistent styling with the theme. You don't need to add it manually.
 
 ## Best Practices
 
 1. **Keep it simple**: Use components to enhance readability, not add complexity
-2. **Use HTML for all content**: Everything inside components must be HTML (no Markdown blocks)
-3. **Use Bootstrap heading classes**: Use `<p class="h4">Title</p>` instead of `<h4>Title</h4>` for titles
-4. **Inline Markdown works**: Bold (`**text**`), italic (`*text*`), links, and inline code are fine
-5. **Accessibility**: Ensure interactive elements are keyboard-accessible
-6. **Mobile-friendly**: Test components on smaller screens
-7. **Fallback content**: Consider users with JavaScript disabled
+2. **Use meaningful headings**: Panel and tab titles should clearly describe content
+3. **Accessibility**: Ensure interactive elements are keyboard-accessible
+4. **Mobile-friendly**: Test components on smaller screens
 
 ## More Information
 
-See the [Angular UI Bootstrap documentation](https://angular-ui.github.io/bootstrap/) for complete options.
+See the [Angular UI Bootstrap documentation](https://angular-ui.github.io/bootstrap/) for advanced HTML syntax and additional options.

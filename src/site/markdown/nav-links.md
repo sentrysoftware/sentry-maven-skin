@@ -13,22 +13,43 @@ The header navigation bar displays your logo, external links, and social media i
 
 ### `<bannerLeft>`
 
-Display your logo on the left side of the navigation bar:
+Display your logo on the left side of the navigation bar.
 
-```xml
-<bannerLeft>
-  <src>images/logo.png</src>
-  <href>https://example.com</href>
-  <alt>My Organization</alt>
-</bannerLeft>
-```
+> [!TABS]
+> - Maven Site Plugin 4.x
+>
+>   The current syntax uses attributes for `name` and `href`, plus an `<image>` sub-element:
+>
+>   ```xml
+>   <bannerLeft name="My Organization" href="https://example.com">
+>     <image src="images/logo.png" alt="My Organization Logo"/>
+>   </bannerLeft>
+>   ```
+>
+>   See the [Doxia Site Model](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html) for complete reference.
+>
+> - Maven Site Plugin 3.x
+>
+>   The legacy syntax uses direct child elements (still supported for backward compatibility):
+>
+>   ```xml
+>   <bannerLeft>
+>     <name>My Organization</name>
+>     <href>https://example.com</href>
+>     <src>images/logo.png</src>
+>     <alt>My Organization Logo</alt>
+>   </bannerLeft>
+>   ```
+
+> [!NOTE]
+> Both syntaxes are fully supported. Use the 4.x syntax for new projects.
 
 **Logo requirements:**
 - Height: 40-80px (resized to 40px)
 - Format: PNG with transparent background
 - Colors: Light (for contrast with dark bar)
 
-**Text alternative** (if no logo):
+**Text alternative** (if no logo image):
 
 ```xml
 <bannerLeft>

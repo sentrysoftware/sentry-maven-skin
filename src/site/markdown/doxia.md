@@ -94,14 +94,13 @@ You can embed HTML directly in Markdown:
 </div>
 ```
 
-### Bootstrap Alerts
-
-```html
-<div class="alert alert-success">Success message</div>
-<div class="alert alert-info">Info message</div>
-<div class="alert alert-warning">Warning message</div>
-<div class="alert alert-danger">Danger message</div>
-```
+> [!TIP]
+> For notes and warnings, prefer the simpler [callout syntax](ui-components.html#callouts) over raw HTML:
+>
+> ```markdown
+> > [!NOTE]
+> > This is easier to write and read.
+> ```
 
 ## Comments
 

@@ -33,4 +33,5 @@ The indexer runs on [GraalVM's JavaScript engine](https://www.graalvm.org/latest
 
 Search works automatically with no configuration needed.
 
-> **Note**: The `index.json` file size grows with your documentation size.
+> [!NOTE]
+> The `index.json` file size grows with your documentation size.

@@ -7,7 +7,8 @@ description: Reference Maven properties from pom.xml and site.xml in your docume
 
 Reference properties from `pom.xml` and `site.xml` directly in your Markdown files.
 
-> **Note**: This feature extends the default Maven Site behavior through special processing in the skin.
+> [!NOTE]
+> This feature extends the default Maven Site behavior through special processing in the skin.
 
 ## Properties from pom.xml
 

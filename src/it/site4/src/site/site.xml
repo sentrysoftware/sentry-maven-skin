@@ -53,10 +53,14 @@
 		</social>
 	</custom>
 
-	<!-- In site.xml 2.0.0, bannerLeft and bannerRight use attributes for name and href -->
-	<bannerLeft name="Banner Left" href="https://example.org" />
+	<!-- In site.xml 2.0.0, bannerLeft and bannerRight use the <image> sub-element -->
+	<bannerLeft name="Banner Left" href="https://example.org">
+		<image src="images/icon.png" alt="Banner Left Logo" />
+	</bannerLeft>
 
-	<bannerRight name="Banner Right" href="https://maven.apache.org" />
+	<bannerRight name="Banner Right" href="https://maven.apache.org">
+		<image src="images/test-image.png" alt="Banner Right Logo" />
+	</bannerRight>
 
 	<body>
 

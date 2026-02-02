@@ -57,6 +57,9 @@ All images are automatically converted to WebP format during the build for bette
 
 No configuration required - conversion is automatic.
 
+> [!TIP]
+> WebP conversion significantly improves Lighthouse performance scores by reducing image file sizes by 25-35%.
+
 ## Image Validation
 
 The build fails if a referenced image does not exist, catching broken image links early.

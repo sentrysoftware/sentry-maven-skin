@@ -15,7 +15,8 @@ Insert this macro in your Markdown file:
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
 ```
 
-**Important**: The `id=toc` parameter is required for proper styling.
+> [!IMPORTANT]
+> The `id=toc` parameter is required for proper styling.
 
 ## Macro Parameters
 

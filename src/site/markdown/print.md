@@ -21,4 +21,5 @@ Pages render cleanly when printed or saved as PDF.
 
 Use your browser's Print function (Ctrl+P or Cmd+P) and select "Save as PDF" for high-quality documentation exports.
 
-> **Tip**: The print stylesheet produces clean, professional output suitable for formal documentation packages.
+> [!TIP]
+> The print stylesheet produces clean, professional output suitable for formal documentation packages.

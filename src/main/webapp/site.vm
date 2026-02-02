@@ -113,8 +113,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 #if ($site.bannerLeft.href)
 			<div class="navbar-header">
 				<a class="navbar-brand" href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">#*
-*##if ($site.bannerLeft.src)#*
-				*#<img src="$PathTool.calculateLink($site.bannerLeft.src, $relativePath)" #if($site.bannerLeft.alt)alt="$!site.bannerLeft.alt"#end>#*
+*##if ($site.bannerLeft.image && $site.bannerLeft.image.src)#*
+				*#<img src="$PathTool.calculateLink($site.bannerLeft.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
+*##elseif ($site.bannerLeft.src)#*
+				*#<img src="$PathTool.calculateLink($site.bannerLeft.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
 *##elseif ($site.bannerLeft.name)#*
 				*#$site.bannerLeft.name#*
 *##end#*
@@ -134,8 +136,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		#if ($site.bannerRight.href)#*
 *#			<li>
 					<a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">#*
-		*##if ($site.bannerRight.src)#*
-					*#<img src="$PathTool.calculateLink($site.bannerRight.src, $relativePath)" #if($site.bannerRight.alt)alt="$!site.bannerRight.alt"#end>#*
+		*##if ($site.bannerRight.image && $site.bannerRight.image.src)#*
+					*#<img src="$PathTool.calculateLink($site.bannerRight.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
+		*##elseif ($site.bannerRight.src)#*
+					*#<img src="$PathTool.calculateLink($site.bannerRight.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
 		*##elseif ($site.bannerRight.name)#*
 	*#$!site.bannerRight.name#*
 		*##end#*

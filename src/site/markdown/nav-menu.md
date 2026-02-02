@@ -59,8 +59,8 @@ On mobile, sub-items are shown as links within the parent page:
 
 ## Limitations
 
-- Maximum **2 levels** of hierarchy (menu > item > item)
-- Third-level nesting is not supported
+> [!WARNING]
+> Maximum **2 levels** of hierarchy (menu > item > item). Third-level nesting is not supported.
 
 ## Next Steps
 
