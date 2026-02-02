@@ -77,11 +77,11 @@ limitations under the License.
 **
 *##macro(bannerImageAlt $banner)#*
 	*##if ($banner.image && $banner.image.alt)#*
-		*#$banner.image.alt#*
+		*#$esc.html($banner.image.alt)#*
 	*##elseif ($banner.alt)#*
-		*#$banner.alt#*
+		*#$esc.html($banner.alt)#*
 	*##elseif ($banner.name)#*
-		*#$banner.name#*
+		*#$esc.html($banner.name)#*
 	*##end#*
 *##end#*
 
@@ -412,7 +412,10 @@ limitations under the License.
 						*##set($verticalVal = $optionTrimmed.substring(9).trim())#*
 						*##if($verticalVal == "true")#set($verticalAttr = "vertical='true'")#end#*
 					*##elseif($optionTrimmed.startsWith("active="))#*
-						*##set($activeVar = $optionTrimmed.substring(7).trim())#*
+						*##set($activeValCandidate = $optionTrimmed.substring(7).trim())#*
+						*##if($activeValCandidate.matches("^[a-zA-Z_$][a-zA-Z0-9_$]*$"))#*
+							*##set($activeVar = $activeValCandidate)#*
+						*##end#*
 					*##end#*
 				*##end#*
 			*##end#*
@@ -481,9 +484,14 @@ limitations under the License.
 					*##set($optionTrimmed = $option.trim())#*
 					*##if($optionTrimmed.startsWith("close-others="))#*
 						*##set($closeOthersVal = $optionTrimmed.substring(13).trim())#*
-						*##set($closeOthersAttr = "close-others='$closeOthersVal'")#*
+						*##if($closeOthersVal == "true" || $closeOthersVal == "false")#*
+							*##set($closeOthersAttr = "close-others='$closeOthersVal'")#*
+						*##end#*
 					*##elseif($optionTrimmed.startsWith("is-open="))#*
-						*##set($isOpenIndex = $Integer.parseInt($optionTrimmed.substring(8).trim()))#*
+						*##set($isOpenVal = $optionTrimmed.substring(8).trim())#*
+						*##if($isOpenVal.matches("^[0-9]+$"))#*
+							*##set($isOpenIndex = $isOpenVal - 0)#*
+						*##end#*
 					*##end#*
 				*##end#*
 			*##end#*
@@ -554,16 +562,25 @@ limitations under the License.
 				*##foreach($option in $carouselOptionsStr.split(","))#*
 					*##set($optionTrimmed = $option.trim())#*
 					*##if($optionTrimmed.startsWith("interval="))#*
-						*##set($intervalVal = $optionTrimmed.substring(9).trim())#*
-						*##set($intervalAttr = "interval='$intervalVal'")#*
+						*##set($intervalVal = $esc.html($optionTrimmed.substring(9).trim()))#*
+						*##if($intervalVal.matches("^[0-9]+$"))#*
+							*##set($intervalAttr = "interval='$intervalVal'")#*
+						*##end#*
 					*##elseif($optionTrimmed.startsWith("no-wrap="))#*
 						*##set($noWrapVal = $optionTrimmed.substring(8).trim())#*
-						*##set($noWrapAttr = "no-wrap='$noWrapVal'")#*
+						*##if($noWrapVal == "true" || $noWrapVal == "false")#*
+							*##set($noWrapAttr = "no-wrap='$noWrapVal'")#*
+						*##end#*
 					*##elseif($optionTrimmed.startsWith("no-pause="))#*
 						*##set($noPauseVal = $optionTrimmed.substring(9).trim())#*
-						*##set($noPauseAttr = "no-pause='$noPauseVal'")#*
+						*##if($noPauseVal == "true" || $noPauseVal == "false")#*
+							*##set($noPauseAttr = "no-pause='$noPauseVal'")#*
+						*##end#*
 					*##elseif($optionTrimmed.startsWith("active="))#*
-						*##set($activeVar = $optionTrimmed.substring(7).trim())#*
+						*##set($activeValCandidate = $optionTrimmed.substring(7).trim())#*
+						*##if($activeValCandidate.matches("^[a-zA-Z_$][a-zA-Z0-9_$]*$"))#*
+							*##set($activeVar = $activeValCandidate)#*
+						*##end#*
 					*##end#*
 				*##end#*
 			*##end#*
@@ -579,8 +596,8 @@ limitations under the License.
 					// Get the image element
 					*##set($slideImg = $slideItem.selectFirst("img"))#*
 					*##if($slideImg)#*
-						*##set($imgSrc = $slideImg.attr("src"))#*
-						*##set($imgAlt = $slideImg.attr("alt"))#*
+						*##set($imgSrc = $esc.html($slideImg.attr("src")))#*
+						*##set($imgAlt = $esc.html($slideImg.attr("alt")))#*
 						*##set($carouselHtml = "${carouselHtml}<div uib-slide index='$slideIndex'>")#*
 						*##set($carouselHtml = "${carouselHtml}<img src='$imgSrc' alt='$imgAlt'>")#*
 						// Add caption from alt text if available
