@@ -340,7 +340,7 @@ Use a blockquote with the `[!COLLAPSIBLE]` marker, followed by the title on the 
 
 **How it works:**
 
-- Start a blockquote with `> [!COLLAPSIBLE]` followed by optional parameters
+- Start a blockquote with `> [!COLLAPSIBLE]` (no additional parameters are currently supported)
 - Put the title on the next line of the same blockquote
 - Add a blank line (`>` alone) to separate the title from the content
 - All following paragraphs in the blockquote become the collapsible content
