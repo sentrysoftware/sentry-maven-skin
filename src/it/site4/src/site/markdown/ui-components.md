@@ -1,51 +1,42 @@
 # UI Components
 
-This page tests Angular UI Bootstrap components.
+This page tests Angular UI Bootstrap components using the simplified Markdown blockquote syntax.
 
 ## Tabs
 
-<div uib-tabset="">
-<div uib-tab="" heading="Tab 1">
-
-**Tab 1 Content**
-
-This is the content of the first tab.
-
-</div>
-<div uib-tab="" heading="Tab 2">
-
-**Tab 2 Content**
-
-This is the content of the second tab.
-
-</div>
-<div uib-tab="" heading="Tab 3">
-
-**Tab 3 Content**
-
-This is the content of the third tab.
-
-</div>
-</div>
+> [!TABS]
+> - Tab 1
+>
+>   **Tab 1 Content**
+>
+>   This is the content of the first tab.
+>
+> - Tab 2
+>
+>   **Tab 2 Content**
+>
+>   This is the content of the second tab.
+>
+> - Tab 3
+>
+>   **Tab 3 Content**
+>
+>   This is the content of the third tab.
 
 ## Accordion
 
-<div uib-accordion="">
-<div uib-accordion-group="" heading="Section 1">
-
-**Section 1 Details**
-
-Content for the first accordion section.
-
-</div>
-<div uib-accordion-group="" heading="Section 2">
-
-**Section 2 Details**
-
-Content for the second accordion section.
-
-</div>
-</div>
+> [!ACCORDION]
+> - Section 1
+>
+>   **Section 1 Details**
+>
+>   Content for the first accordion section.
+>
+> - Section 2
+>
+>   **Section 2 Details**
+>
+>   Content for the second accordion section.
 
 ## Tooltips and Popovers
 
@@ -55,17 +46,12 @@ Content for the second accordion section.
 
 ## Collapse
 
-<button class="btn btn-default" ng-click="showCollapse = !showCollapse">Toggle Content</button>
+> [!COLLAPSIBLE]
+> Toggle Content
+>
+> This content can be collapsed and expanded.
 
-<div uib-collapse="!showCollapse">
-<div class="well">
-This content can be collapsed and expanded.
-</div>
-</div>
-
-## Collapsible Sections (Markdown Syntax)
-
-The following collapsible sections are created using the simplified Markdown blockquote syntax.
+## More Collapsible Sections
 
 > [!COLLAPSIBLE]
 > Click to expand this FAQ item
@@ -79,9 +65,7 @@ The following collapsible sections are created using the simplified Markdown blo
 > You can have multiple collapsible sections on the same page.
 > Each one gets its own toggle button and animation.
 
-## Tabs (Markdown Syntax)
-
-The following tabs are created using the simplified Markdown blockquote syntax.
+## More Tabs
 
 > [!TABS active=demoTabs]
 > - <span class="fa fa-home"></span> <strong>First</strong> Tab

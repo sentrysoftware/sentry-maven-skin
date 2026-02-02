@@ -1,12 +1,6 @@
 # UI Components Demo
 
-This page demonstrates Angular UI Bootstrap components integrated with the Sentry Maven Skin.
-
-**Important:**
-- Use UIB elements like `<uib-tabset>` and `<uib-accordion>` for Angular UI Bootstrap.
-- Use `<uib-tab-heading>` and `<uib-accordion-heading>` to allow rich HTML in headings.
-- All Angular directive attributes must have a value (use `=""` for boolean directives).
-- **Headings** inside components should use `<p class="h4">Title</p>` (Bootstrap heading classes) instead of Markdown `${esc.h}${esc.h}${esc.h}${esc.h}` syntax.
+This page demonstrates Angular UI Bootstrap components integrated with the Sentry Maven Skin using the simplified Markdown blockquote syntax.
 
 ## Callouts
 
@@ -29,7 +23,7 @@ GitHub-style callouts for notes, tips, warnings, etc.
 
 ## Tabs
 
-Use `<uib-tabset>` with nested `<uib-tab>` elements:
+Use a blockquote with the `[!TABS]` marker:
 
 > [!TABS active=demoTabs]
 > - <span class="fa fa-home"></span> Tab A
@@ -52,64 +46,29 @@ Use `<uib-tabset>` with nested `<uib-tab>` elements:
 
 ## Accordion
 
-### Markdown Syntax
+Use a blockquote with the `[!ACCORDION]` marker:
 
 > [!ACCORDION]
 > - Panel A
+>
+>   <strong>Panel A Details</strong>
 >
 >   Content of **Panel A** using the simple Markdown syntax.
 >
 > - Panel B
 >
+>   <strong>Panel B Details</strong>
+>
 >   Content of **Panel B** with *emphasis*.
-
-### HTML Syntax
-
-Use `<uib-accordion>` with nested `<uib-accordion-group>` elements:
-
-<uib-accordion>
-<uib-accordion-group is-open="true">
-
-<uib-accordion-heading>
-Panel A
-</uib-accordion-heading>
-
-<p class="h4">Panel A Details</p>
-
-Content of **Panel A** using Bootstrap heading classes inside accordion.
-
-</uib-accordion-group>
-<uib-accordion-group>
-
-<uib-accordion-heading>
-Panel B
-</uib-accordion-heading>
-
-<p class="h4">Panel B Details</p>
-
-Content of **Panel B** with *emphasis*.
-
-</uib-accordion-group>
-</uib-accordion>
 
 ## Collapse
 
-Use the `uib-collapse` attribute to toggle content visibility:
+Use a blockquote with the `[!COLLAPSIBLE]` marker:
 
-<p>
-<button type="button" class="btn btn-primary" ng-click="demoCollapse = !demoCollapse">
-Toggle Content
-</button>
-</p>
-<div uib-collapse="demoCollapse">
-<div class="well">
-
-<p class="h4">Collapsible Content</p>
-
-This content can be **toggled** with the button above.
-
-</div>
-</div>
+> [!COLLAPSIBLE]
+> Collapsible Content
+>
+> This content can be **toggled** with the button above.
 
 ## Carousel
 

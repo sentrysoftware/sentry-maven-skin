@@ -133,9 +133,7 @@ assert topicAHtml.contains("Advanced") : "Parent menu 'Advanced' should be in br
 
 // ============================================================================
 // TEST: UI Components
-// Note: In Doxia 2.x (Maven Site Plugin 4.x), unknown HTML attributes like
-// uib-tabset, uib-tab may not be preserved due to stricter parsing.
-// We verify the file is generated but don't check for custom attributes.
+// Now using the simplified Markdown blockquote syntax exclusively.
 // ============================================================================
 def uiComponentsFile = new File(basedir, "target/site/ui-components.html")
 assert uiComponentsFile.isFile() : "ui-components.html must have been generated"
@@ -143,15 +141,6 @@ def uiComponentsHtml = uiComponentsFile.text
 // Basic structure check - div elements should be present
 assert uiComponentsHtml.contains('<div') : "Div elements must be present"
 assert uiComponentsHtml.contains('UI Components') : "Page title must be present"
-
-// ============================================================================
-// TEST: Collapsible sections ([!COLLAPSIBLE] blockquote syntax)
-// ============================================================================
-assert uiComponentsHtml.contains('uib-collapse=') : "UIB collapse directive must be present for collapsible sections"
-assert uiComponentsHtml.contains('Click to expand this FAQ item') : "Collapsible title must be extracted correctly"
-assert uiComponentsHtml.contains('collapsed content') : "Collapsible content must be preserved"
-assert uiComponentsHtml.contains('fa-chevron') : "Chevron icons must be present in toggle button"
-assert !uiComponentsHtml.contains('[!COLLAPSIBLE]') : "Collapsible marker must be removed from output"
 
 // ============================================================================
 // TEST: Tabs ([!TABS] blockquote syntax)
@@ -164,6 +153,23 @@ assert uiComponentsHtml.contains('First') && uiComponentsHtml.contains('Tab') : 
 assert uiComponentsHtml.contains('<uib-tab-heading>') : "Tab headings must use uib-tab-heading"
 assert uiComponentsHtml.contains('fa-home') : "Tab heading HTML must be preserved"
 assert uiComponentsHtml.contains('first tab') : "Tab content must be preserved"
+assert uiComponentsHtml.contains('Tab 1') : "Basic tabs must be generated"
+
+// ============================================================================
+// TEST: Accordion ([!ACCORDION] blockquote syntax)
+// ============================================================================
+assert uiComponentsHtml.contains('<uib-accordion') : "UIB accordion element must be present"
+assert uiComponentsHtml.contains('Section 1') : "Accordion panel title must be extracted"
+assert uiComponentsHtml.contains('Section 2') : "Accordion panel title must be extracted"
+
+// ============================================================================
+// TEST: Collapsible sections ([!COLLAPSIBLE] blockquote syntax)
+// ============================================================================
+assert uiComponentsHtml.contains('uib-collapse=') : "UIB collapse directive must be present for collapsible sections"
+assert uiComponentsHtml.contains('Click to expand this FAQ item') : "Collapsible title must be extracted correctly"
+assert uiComponentsHtml.contains('collapsed content') : "Collapsible content must be preserved"
+assert uiComponentsHtml.contains('fa-chevron') : "Chevron icons must be present in toggle button"
+assert !uiComponentsHtml.contains('[!COLLAPSIBLE]') : "Collapsible marker must be removed from output"
 
 // ============================================================================
 // TEST: Images
