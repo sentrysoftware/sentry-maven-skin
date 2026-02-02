@@ -270,8 +270,8 @@ Use a blockquote with the `[!ACCORDION]` marker and a bullet list:
 
 - Start a blockquote with `> [!ACCORDION]` followed by optional parameters
 - Use a bullet list (`-` or `*`) for each panel
-- The first line of each list item becomes the panel heading (plain text)
-- Add a blank line, then the panel content with full Markdown support
+- The first line of each list item becomes the panel heading; inline Markdown/HTML formatting in this line is preserved
+- Add a blank line, then the panel body content with full Markdown support
 
 **Available options:**
 
