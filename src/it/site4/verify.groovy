@@ -92,6 +92,125 @@ assert featuresHtml.contains('<meta name="description" content="Complete list of
 assert featuresHtml.contains('<meta name="author" content="Test Author"') : "Author from frontmatter must be present"
 
 // ============================================================================
+// TEST: Interpolation (maven mode)
+// ============================================================================
+// site4 uses interpolation mode "maven" (configured in site.xml)
+def interpolationTestFile = new File(basedir, "target/site/interpolation-test.html")
+assert interpolationTestFile.isFile() : "interpolation-test.html must have been generated"
+def interpolationTestHtml = interpolationTestFile.text
+
+// Helper to check table rows: Expected and Actual columns should match
+// Pattern: <td>Expected</td>\s*<td>Actual</td> at end of row
+def checkTableRow = { html, expected, actual, description ->
+    // Look for consecutive <td> cells with expected and actual values
+    def pattern = ~/<td>\s*\Q${expected}\E\s*<\/td>\s*<td>\s*\Q${actual}\E\s*<\/td>/
+    assert pattern.matcher(html).find() : description
+}
+
+// In "maven" mode, ${project.name} should be resolved (Expected=Actual=resolved value)
+checkTableRow(interpolationTestHtml, "Site4 Test Project", "Site4 Test Project",
+    'In maven mode, ${project.name} should resolve: Expected and Actual must both be "Site4 Test Project"')
+checkTableRow(interpolationTestHtml, "1.0-SNAPSHOT", "1.0-SNAPSHOT",
+    'In maven mode, ${project.version} should resolve: Expected and Actual must both be "1.0-SNAPSHOT"')
+checkTableRow(interpolationTestHtml, "Custom Value from site.xml", "Custom Value from site.xml",
+    'In maven mode, ${testProperty} should resolve: Expected and Actual must both be "Custom Value from site.xml"')
+
+// In "maven" mode, escaping should work: $${property} -> ${property} (literal)
+checkTableRow(interpolationTestHtml, '${project.name}', '${project.name}',
+    'In maven mode, $${project.name} should escape: Expected and Actual must both be literal "${project.name}"')
+checkTableRow(interpolationTestHtml, '${project.version}', '${project.version}',
+    'In maven mode, $${project.version} should escape: Expected and Actual must both be literal "${project.version}"')
+
+// In "maven" mode, hash characters should NOT be interpreted as Velocity directives
+checkTableRow(interpolationTestHtml, "#include", "#include",
+    'In maven mode, hash characters must be preserved: Expected and Actual must both be "#include"')
+checkTableRow(interpolationTestHtml, "Fix #123", "Fix #123",
+    'In maven mode, issue references must work: Expected and Actual must both be "Fix #123"')
+
+// In "maven" mode, Velocity escape sequences are NOT processed (remain literal)
+// Check that ${esc.h} appears in both Expected and Actual (with possible suffix like "(literal)")
+assert interpolationTestHtml =~ /<td>\s*\$\{esc\.h\}[^<]*<\/td>\s*<td>\s*\$\{esc\.h\}\s*<\/td>/ :
+    'In maven mode, ${esc.h} must remain literal in both Expected and Actual columns'
+assert interpolationTestHtml =~ /<td>\s*\$\{esc\.d\}[^<]*<\/td>\s*<td>\s*\$\{esc\.d\}\s*<\/td>/ :
+    'In maven mode, ${esc.d} must remain literal in both Expected and Actual columns'
+
+// Unknown properties should remain as-is
+checkTableRow(interpolationTestHtml, '${unknown.property}', '${unknown.property}',
+    'In maven mode, unknown properties must remain literal: Expected and Actual must both be "${unknown.property}"')
+
+// ============================================================================
+// TEST: Interpolation (velocity mode)
+// ============================================================================
+def interpolationVelocityFile = new File(basedir, "target/site/interpolation-velocity.html")
+assert interpolationVelocityFile.isFile() : "interpolation-velocity.html must have been generated"
+def interpolationVelocityHtml = interpolationVelocityFile.text
+
+// In "velocity" mode, ${project.name} should be resolved
+checkTableRow(interpolationVelocityHtml, "Site4 Test Project", "Site4 Test Project",
+    'In velocity mode, ${project.name} should resolve: Expected and Actual must both be "Site4 Test Project"')
+checkTableRow(interpolationVelocityHtml, "1.0-SNAPSHOT", "1.0-SNAPSHOT",
+    'In velocity mode, ${project.version} should resolve: Expected and Actual must both be "1.0-SNAPSHOT"')
+
+// In "velocity" mode, $esc.h and $esc.d are processed
+checkTableRow(interpolationVelocityHtml, "#", "#",
+    'In velocity mode, $esc.h should resolve to "#": Expected and Actual must both be "#"')
+checkTableRow(interpolationVelocityHtml, '$', '$',
+    'In velocity mode, $esc.d should resolve to "$": Expected and Actual must both be "$"')
+
+// NOTE: The following tests verify velocity mode LIMITATIONS
+// ${esc.h}include: Expected column has \#include in markdown, but after markdown processing
+//                  it becomes #include which Velocity interprets as directive (now empty)
+//                  Actual column has ${esc.h}include which correctly resolves to "#include"
+assert interpolationVelocityHtml =~ /<td><code>\$\{esc\.h\}include<\/code><\/td>\s*<td>\s*<\/td>\s*<td>#include<\/td>/ :
+    'In velocity mode, ${esc.h}include row: Expected is empty (Velocity ate #include), Actual is "#include"'
+
+// NOTE: ${esc.d}{project.name} demonstrates a velocity mode limitation
+// Expected column had "${project.name}" which got interpolated to "Site4 Test Project"
+// Actual column has ${esc.d}{project.name} which resolves to literal "${project.name}"
+assert interpolationVelocityHtml =~ /<td><code>\$\{esc\.d\}\{project\.name\}<\/code><\/td>\s*<td>Site4 Test Project<\/td>\s*<td>\$\{project\.name\}<\/td>/ :
+    'In velocity mode, ${esc.d}{project.name} row: Expected is interpolated, Actual is literal'
+
+// Hash character tests: $esc.h produces "#" which works correctly
+checkTableRow(interpolationVelocityHtml, "# include", "# include",
+    'In velocity mode, $esc.h include should resolve to "# include"')
+checkTableRow(interpolationVelocityHtml, "Fix # 123", "Fix # 123",
+    'In velocity mode, Fix $esc.h 123 should resolve to "Fix # 123"')
+
+// ============================================================================
+// TEST: Interpolation (none mode)
+// ============================================================================
+def interpolationNoneFile = new File(basedir, "target/site/interpolation-none.html")
+assert interpolationNoneFile.isFile() : "interpolation-none.html must have been generated"
+def interpolationNoneHtml = interpolationNoneFile.text
+
+// In "none" mode, nothing should be interpolated - all placeholders remain literal
+checkTableRow(interpolationNoneHtml, '${project.name}', '${project.name}',
+    'In none mode, ${project.name} must remain literal: Expected and Actual must both be "${project.name}"')
+checkTableRow(interpolationNoneHtml, '${project.version}', '${project.version}',
+    'In none mode, ${project.version} must remain literal: Expected and Actual must both be "${project.version}"')
+checkTableRow(interpolationNoneHtml, '${testProperty}', '${testProperty}',
+    'In none mode, ${testProperty} must remain literal: Expected and Actual must both be "${testProperty}"')
+
+// In "none" mode, even $${...} is not processed (remains as-is)
+checkTableRow(interpolationNoneHtml, '$${project.name}', '$${project.name}',
+    'In none mode, $${project.name} must remain literal: Expected and Actual must both be "$${project.name}"')
+
+// In "none" mode, Velocity escape sequences remain literal
+checkTableRow(interpolationNoneHtml, '${esc.h}', '${esc.h}',
+    'In none mode, ${esc.h} must remain literal: Expected and Actual must both be "${esc.h}"')
+checkTableRow(interpolationNoneHtml, '${esc.d}', '${esc.d}',
+    'In none mode, ${esc.d} must remain literal: Expected and Actual must both be "${esc.d}"')
+assert interpolationNoneHtml.contains('>${esc.d}<') : 'In none mode, ${esc.d} remains literal'
+
+// Also test that the index page has maven interpolation working
+// Hash characters should NOT be interpreted as Velocity directives in maven mode
+assert indexHtml.contains("#include &lt;stdio.h&gt;") : "Hash characters must be preserved in maven mode (not interpreted as Velocity)"
+assert indexHtml.contains("Fix #123") : "Hash in issue reference must be preserved"
+// Maven properties should be replaced
+assert indexHtml.contains("Maven Property Value") : "Custom Maven properties from pom.xml <properties> must be replaced"
+assert indexHtml.contains("1.0-SNAPSHOT") : "Project version must be replaced via maven interpolation"
+
+// ============================================================================
 // TEST: Code highlighting
 // ============================================================================
 def codeSamplesFile = new File(basedir, "target/site/code-samples.html")

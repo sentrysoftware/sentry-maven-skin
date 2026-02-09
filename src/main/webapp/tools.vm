@@ -264,22 +264,92 @@ limitations under the License.
 // Measure the time to process all of this
 *##set($startTime = $date.systemTime)#*
 
-// Process all ${properties} in the rendered HTML
-*##set($bodyContent = $render.eval($bodyContent))#*
-*##set($headContent = $render.eval($headContent))#*
-*##set($shortTitle = $render.eval($shortTitle))#*
+// Ensure headContent, bodyContent, and shortTitle are defined (Maven Site Plugin 4.x may not define them if not present in the source)
+*##if(!$headContent)#set($headContent = "")#end#*
+*##if(!$bodyContent)#set($bodyContent = "")#end#*
+*##if(!$shortTitle)#set($shortTitle = "")#end#*
+
+// Interpolation mode: controls how ${...} expressions are processed in content
+// Options (configured in site.xml <custom><interpolation> or per-page via front matter):
+//   - "velocity": Full Velocity processing via $render.eval() - use with CAUTION:
+//     * Works for basic variables like ${project.name}
+//     * BREAKS on any string literals with quotes because Doxia converts ASCII
+//       quotes ("...") to Unicode smart quotes ("...") which Velocity doesn't recognize
+//     * BREAKS on Velocity directives (#if, #include, etc.) in content
+//   - "maven": Only Maven properties from pom.xml (default - recommended)
+//   - "none": No additional interpolation
+// Per-page override: add "interpolation: none" (or "maven" or "velocity") as front matter header
+*##set($interpolationMode = $site.getCustomValue("interpolation", "maven"))#*
+// Check for per-page override via meta tag (from front matter "interpolation: xxx")
+*##set($tempHeadElement = $htmlTool.parseContent($headContent))#*
+*##if($tempHeadElement)#*
+	*##set($pageInterpolation = $htmlTool.getAttr($tempHeadElement, "meta[name=interpolation]", "content"))#*
+	*##if($pageInterpolation && !$pageInterpolation.isEmpty())#*
+		*##set($interpolationMode = $pageInterpolation.get(0))#*
+	*##end#*
+*##end#*
+
+// Process content based on interpolation mode
+*##if($interpolationMode == "velocity")#*
+	// Full Velocity processing - use $render.eval to process Velocity syntax
+	*##set($bodyContent = $render.eval($bodyContent))#*
+	*##set($headContent = $render.eval($headContent))#*
+	*##set($shortTitle = $render.eval($shortTitle))#*
+*##elseif($interpolationMode == "maven")#*
+	// Replace Maven project properties and custom properties
+	// Supports escaping with backslash: \${property} will output literal ${property}
+
+	// Step 1: Build a map of all property names and their values
+	*##set($propertyMap = {})#*
+	// Standard project coordinates
+	*##call($propertyMap.put("project.version", $project.version))#*
+	*##call($propertyMap.put("project.name", $project.name))#*
+	*##call($propertyMap.put("project.groupId", $project.groupId))#*
+	*##call($propertyMap.put("project.artifactId", $project.artifactId))#*
+	*##if($project.url)#call($propertyMap.put("project.url", $project.url))#end#*
+	*##if($project.description)#call($propertyMap.put("project.description", $project.description))#end#*
+	*##if($project.organization && $project.organization.name)#call($propertyMap.put("project.organization.name", $project.organization.name))#end#*
+	*##if($project.organization && $project.organization.url)#call($propertyMap.put("project.organization.url", $project.organization.url))#end#*
+	// Custom properties from pom.xml <properties> section
+	*##if($project.properties && !$project.properties.isEmpty())#*
+		*##foreach($propEntry in $project.properties.entrySet())#*
+			*##call($propertyMap.put($propEntry.key, $propEntry.value))#*
+		*##end#*
+	*##end#*
+	// Custom properties from site.xml <custom> section
+	*##if($site.custom)#*
+		*##foreach($customChild in $site.custom.getChildren())#*
+			*##set($customValue = $customChild.getValue())#*
+			*##if($customValue)#*
+				*##call($propertyMap.put($customChild.name, $customValue))#*
+			*##end#*
+		*##end#*
+	*##end#*
+
+	// Step 2: Brutally replace all $${ with a temporary marker
+	*##set($bodyContent = $bodyContent.replace("${esc.d}${esc.d}{", "[!ESCAPED_DOLLAR]{"))#*
+	*##set($headContent = $headContent.replace("${esc.d}${esc.d}{", "[!ESCAPED_DOLLAR]{"))#*
+	*##set($shortTitle = $shortTitle.replace("${esc.d}${esc.d}{", "[!ESCAPED_DOLLAR]{"))#*
+
+	// Step 3: For each property, replace with value
+	*##foreach($propEntry in $propertyMap.entrySet())#*
+		*##set($propPlaceholder = "${esc.d}{${propEntry.key}}")#*
+		*##set($propValue = $propEntry.value)#*
+		*##set($bodyContent = $bodyContent.replace($propPlaceholder, $propValue))#*
+		*##set($headContent = $headContent.replace($propPlaceholder, $propValue))#*
+		*##set($shortTitle = $shortTitle.replace($propPlaceholder, $propValue))#*
+	*##end#*
+
+	// Step 4: Replace temporary marker back to literal ${...}
+	*##set($bodyContent = $bodyContent.replace("[!ESCAPED_DOLLAR]{", "${esc.d}{"))#*
+	*##set($headContent = $headContent.replace("[!ESCAPED_DOLLAR]{", "${esc.d}{"))#*
+	*##set($shortTitle = $shortTitle.replace("[!ESCAPED_DOLLAR]{", "${esc.d}{"))#*
+*##end#*
+// If "none" or any other value: no additional interpolation (standard Maven Site behavior)
 
 // Parse the body and header content (guard against null content in Maven Site Plugin 4.x)
-*##if($bodyContent)#*
-	*##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
-*##else#*
-	*##set($bodyElement = $htmlTool.parseContent(""))#*
-*##end#*
-*##if($headContent)#*
-	*##set($headElement = $htmlTool.parseContent($headContent))#*
-*##else#*
-	*##set($headElement = $htmlTool.parseContent(""))#*
-*##end#*
+*##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
+*##set($headElement = $htmlTool.parseContent($headContent))#*
 
 // Fix all protocol-relative links
 *##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*

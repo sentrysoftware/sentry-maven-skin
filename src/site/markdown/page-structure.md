@@ -82,25 +82,25 @@ Write 1-3 sentences explaining what the reader will learn. This helps readers co
 
 ## Sections
 
-Organize content with `${esc.h}${esc.h}` headings:
+Organize content with `##` headings:
 
 ```markdown
-${esc.h}${esc.h} Installation
+## Installation
 
 Steps to install...
 
-${esc.h}${esc.h} Configuration
+## Configuration
 
 How to configure...
 
-${esc.h}${esc.h} Usage
+## Usage
 
 How to use...
 ```
 
 **Tips:**
 - Keep sections focused on one topic
-- Use consistent heading levels (`${esc.h}${esc.h}` for main sections, `${esc.h}${esc.h}${esc.h}` for subsections)
+- Use consistent heading levels (`##` for main sections, `###` for subsections)
 - Each heading becomes a linkable anchor
 
 ## Code Examples

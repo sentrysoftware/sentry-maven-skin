@@ -23,13 +23,14 @@ Your content here...
 
 ## Supported Headers
 
-| Header        | Description                              |
-| ------------- | ---------------------------------------- |
-| `title`       | Page title (overrides first heading)     |
-| `author`      | Document author (multiple allowed)       |
-| `description` | SEO description for search engines       |
-| `keywords`    | Page-specific keywords (comma-separated) |
-| `date`        | Document date (creation or update)       |
+| Header          | Description                                                 |
+| --------------- | ----------------------------------------------------------- |
+| `title`         | Page title (overrides first heading)                        |
+| `author`        | Document author (multiple allowed)                          |
+| `description`   | SEO description for search engines                          |
+| `keywords`      | Page-specific keywords (comma-separated)                    |
+| `date`          | Document date (creation or update)                          |
+| `interpolation` | Override interpolation mode: `velocity`, `maven`, or `none` |
 
 ## How It Works
 

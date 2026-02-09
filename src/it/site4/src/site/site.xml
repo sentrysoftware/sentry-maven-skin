@@ -33,10 +33,12 @@
 	</skin>
 
 	<custom>
+		<interpolation>maven</interpolation>
 		<projectVersion>${project.version}-site4</projectVersion>
 		<bodyClass>sentry-green</bodyClass>
 		<keywords>site4,maven,test,documentation</keywords>
 		<googleAnalyticsAccountId>SITE4_GOOGLE_ID</googleAnalyticsAccountId>
+		<testProperty>Custom Value from site.xml</testProperty>
 		<additionalLinks>
 			<link>
 				<name>License</name>
@@ -93,6 +95,11 @@
 				<item name="Sub Topic B" href="advanced/topic-b.html" />
 			</item>
 			<item name="UI Components" href="ui-components.html" />
+			<item name="Interpolation Tests">
+				<item name="Maven Mode" href="interpolation-test.html" />
+				<item name="Velocity Mode" href="interpolation-velocity.html" />
+				<item name="None Mode" href="interpolation-none.html" />
+			</item>
 		</menu>
 
 		<menu ref="reports" />
