@@ -14,7 +14,6 @@ body.sentry-site pre {
 	color: var(--main-fgcolor);
 	z-index: 1;
 	white-space: pre-wrap;
-	overflow-x: auto;
 	padding: 1em;
 	margin: .5em 0;
 	overflow: auto;
@@ -48,7 +47,6 @@ body.sentry-site pre {
 	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
 	direction: ltr;
 	text-align: left;
-	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
 	font-size: .9em;
@@ -209,7 +207,7 @@ code[class*="language-css"] {
  **/
 
 /* Tokens */
-body.dark .namespace {
+body.dark .token.namespace {
 	opacity: .7;
 }
 

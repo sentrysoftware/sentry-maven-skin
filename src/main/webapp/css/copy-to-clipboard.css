@@ -33,6 +33,17 @@
 	z-index: 1;
 }
 
+/* Hide focus outline for mouse clicks, show only for keyboard navigation */
+.copy-to-clipboard > button:focus {
+	outline: none;
+}
+
+.copy-to-clipboard > button:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
 .copy-to-clipboard:hover > button {
 	opacity: 1;
 }
+
