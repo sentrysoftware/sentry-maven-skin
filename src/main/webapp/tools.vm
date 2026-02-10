@@ -276,7 +276,8 @@ limitations under the License.
 //     * BREAKS on any string literals with quotes because Doxia converts ASCII
 //       quotes ("...") to Unicode smart quotes ("...") which Velocity doesn't recognize
 //     * BREAKS on Velocity directives (#if, #include, etc.) in content
-//   - "maven": Only Maven properties from pom.xml (default - recommended)
+//   - "maven": Maven project properties (pom.xml), standard project/site metadata,
+//              and custom values from site.xml <custom> (default - recommended)
 //   - "none": No additional interpolation
 // Per-page override: add "interpolation: none" (or "maven" or "velocity") as front matter header
 *##set($interpolationMode = $site.getCustomValue("interpolation", "maven"))#*
