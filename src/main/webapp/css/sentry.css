@@ -860,6 +860,7 @@ a.externalLink:after {
 	right: 0;
 	bottom: 0;
 	border-left: 5px solid var(--main-fgcolor);
+	border-radius: 4px;
 	opacity: 0.1;
 	z-index: -1;
 	pointer-events: none;
@@ -1576,42 +1577,6 @@ zoomable.zoomed img {
 }
 
 /**
- * PrismJS customized theme
- **/
-.language-psl .token.builtin {
-	color: #e8e;
-}
-
-.language-psl .token.symbol {
-	color: #fca;
-}
-
-.language-psl .token.operator {
-	color: deepskyblue;
-}
-
-pre[class*="language-"]::selection,
-code[class*="language-"]::selection,
-pre[class*="language-"] *::selection,
-code[class*="language-"] *::selection {
-	text-shadow: none;
-	background: #666;
-}
-
-body.sentry-site pre > code,
-body.sentry-site pre {
-	white-space: pre-wrap;
-	background-color: #333;
-	color: #d4d4d4;
-	border: none;
-}
-
-body.sentry-site.dark pre > code,
-body.sentry-site.dark pre {
-	background-color: #242424;
-}
-
-/**
  * Adjustments of Bootstrap 3 for dark mode
  **/
 
@@ -1631,30 +1596,6 @@ body.sentry-site .main-content .breadcrumb::after {
 	bottom: 0;
 	background-color: var(--main-fgcolor);
 	opacity: 0.05;
-	z-index: -1;
-	border-radius: 4px;
-	pointer-events: none;
-}
-
-/* code */
-body.sentry-site :not(pre) > code {
-	background: none;
-	position: relative;
-	color: var(--main-fgcolor);
-	z-index: 1;
-	white-space: nowrap !important;
-	overflow-x: auto;
-}
-
-body.sentry-site :not(pre) > code::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: var(--alternate-bgcolor);
-	opacity: 0.25;
 	z-index: -1;
 	border-radius: 4px;
 	pointer-events: none;
@@ -1865,7 +1806,7 @@ body.sentry-site .nav-tabs > li:not(.active) > a::before {
 	right: 0;
 	bottom: 0;
 	background-color: var(--main-fgcolor);
-	opacity: 0.1;
+	opacity: 0.05;
 	pointer-events: none;
 	border-radius: 4px 4px 0 0;
 	transition: opacity 0.2s ease-in-out;

@@ -53,6 +53,7 @@
 						btnEl.removeClass("btn-default");
 						btnEl.addClass("btn-success");
 						btnEl.html("<i class='fa-solid fa-check'></i> Copied!");
+						btnEl[0].blur();
 						$timeout(function () {
 							btnEl.html(btnContent);
 							btnEl.removeClass("btn-success");
