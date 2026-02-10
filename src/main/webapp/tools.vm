@@ -298,7 +298,7 @@ limitations under the License.
 	*##set($shortTitle = $render.eval($shortTitle))#*
 *##elseif($interpolationMode == "maven")#*
 	// Replace Maven project properties and custom properties
-	// Supports escaping with backslash: \${property} will output literal ${property}
+	// Supports escaping with double dollar: $${property} will output literal ${property}
 
 	// Step 1: Build a map of all property names and their values
 	*##set($propertyMap = {})#*
