@@ -54,8 +54,8 @@ $headElement.html()
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
-	<link rel="stylesheet" href="../../../node_modules/prism-themes/themes/prism-vsc-dark-plus.css">
 	<link rel="stylesheet" href="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.css">
+	<link rel="stylesheet" href="css/prism-theme.css">
 	<link rel="stylesheet" href="css/sentry.css">
 	<link rel="stylesheet" href="css/copy-to-clipboard.css">
 	<link rel="stylesheet" href="css/print.css">
