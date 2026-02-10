@@ -40,6 +40,7 @@
 
 	<properties>
 		<skinVersion>@project.version@</skinVersion>
+		<customMavenProperty>Maven Property Value</customMavenProperty>
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->

@@ -59,7 +59,7 @@ All settings are configured in `src/site/site.xml`, the [Maven site descriptor](
 | ------------------- | ----------------------------------------------------------------------------- | ------------------------- |
 | `<bodyClass>`       | Color theme: `sentry-purple`, `sentry-green`, `sentry-orange`, or none (blue) | Blue                      |
 | `<keywords>`        | Global keywords for all pages (comma-separated)                               | None                      |
-| `<projectVersion>`  | Override the displayed version                                                | `${esc.d}project.version` |
+| `<projectVersion>`  | Override the displayed version                                                | `$${project.version}`     |
 | `<publishDate>`     | Documentation publish date (ISO format)                                       | Build timestamp           |
 | `<additionalLinks>` | Footer links (legal, privacy, etc.)                                           | None                      |
 | `<social>`          | Social media links in header                                                  | None                      |

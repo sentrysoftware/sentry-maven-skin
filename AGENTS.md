@@ -104,6 +104,21 @@ http-server target/site                        # Project documentation
 > [!TIP]
 > When changing skin behavior, always check both integration tests (`studio-km` for Maven Site Plugin 3.x, `site4` for 4.x) and the project's own documentation site.
 
+### Quick Iteration for Integration Tests
+
+When debugging integration tests, you can iterate faster:
+
+1. Edit files in `src/it/studio-km/` or `src/it/site4/`
+2. Run `mvn verify` (faster than full `install site`)
+3. Check `target/it/*/build.log` for output
+
+**Debugging Velocity templates:** Use `$log.debug(...)` in `.vm` files to output debug information to `build.log`:
+
+```velocity
+#call($log.debug("Variable value: $myVariable"))
+#call($log.debug($bodyContent))
+```
+
 ## Code Formatting
 
 ### JavaScript, CSS, HTML

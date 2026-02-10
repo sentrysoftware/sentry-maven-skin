@@ -31,6 +31,23 @@ The main purpose of this test is to verify that the skin works correctly with:
 * **Version**: `${project.version}`
 * **Organization**: ${project.organization.name}
 
+## Interpolation Test (Maven Mode)
+
+This project uses `<interpolation>maven</interpolation>` mode.
+
+### Hash Characters Work Directly
+
+With maven mode, # characters are NOT interpreted as Velocity directives:
+
+* Heading with # is fine: # not a directive
+* Code: `#include <stdio.h>` should work
+* Issue reference: Fix #123
+
+### Maven Properties
+
+* Custom Maven property: ${customMavenProperty}
+* Project version: ${project.version}
+
 ## Next Steps
 
 Explore the documentation:

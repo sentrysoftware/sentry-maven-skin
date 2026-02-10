@@ -1,5 +1,6 @@
 keywords: doxia, macro, snippet, toc, include, velocity
 description: Maven Doxia macros and features you can use in your documentation.
+interpolation: none
 
 # Doxia Features
 
@@ -78,9 +79,9 @@ Doxia processes Velocity variables. Common ones:
 
 | Variable | Description |
 |----------|-------------|
-| `${esc.d}{project.name}` | Project name from pom.xml |
-| `${esc.d}{project.version}` | Project version |
-| `${esc.d}{project.url}` | Project URL |
+| `${project.name}` | Project name from pom.xml |
+| `${project.version}` | Project version |
+| `${project.url}` | Project URL |
 
 See [Maven Properties](maven-properties.html) for custom properties.
 

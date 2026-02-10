@@ -98,6 +98,41 @@ assert result.contains('<a href="https://banner.right">Banner Right</a></li>') :
 assert result.contains("images/logo.png") : "bannerRight.src must be included"
 assert result.contains('href="https://banner.right"') : "bannerRight.href must be included"
 
+// ============================================================================
+// TEST: Interpolation (maven mode - default)
+// ============================================================================
+// studio-km uses the default interpolation mode "maven"
+def interpolationTestFile = new File(basedir, "target/site/interpolation-test.html")
+assert interpolationTestFile.isFile() : "interpolation-test.html must have been generated"
+def interpolationTestHtml = interpolationTestFile.text
+
+// In "maven" mode, ${project.name} should be resolved to actual value
+// Verify the full list item to ensure interpolation happened in the right place
+assert interpolationTestHtml =~ /Project name:\s*skin-test/ :
+    'In maven mode, ${project.name} should be resolved to "skin-test" (not remain as literal placeholder)'
+// Verify ${project.name} does NOT appear as literal in the "resolved" section
+assert !(interpolationTestHtml =~ /Project name:\s*\$\{project\.name\}/) :
+    'In maven mode, ${project.name} must NOT remain as literal placeholder in resolved section'
+
+// In "maven" mode, ${project.version} should be resolved
+assert interpolationTestHtml =~ /Project version:\s*1\.0-SNAPSHOT/ :
+    'In maven mode, ${project.version} should be resolved to "1.0-SNAPSHOT"'
+
+// In "maven" mode, custom properties from site.xml <custom> section should be resolved
+assert interpolationTestHtml =~ /Project version \(custom\):\s*1\.0-SNAPSHOT-test/ :
+    'In maven mode, ${projectVersion} from site.xml should be resolved to "1.0-SNAPSHOT-test"'
+
+// In "maven" mode, hash characters should NOT be interpreted as Velocity directives
+assert interpolationTestHtml.contains("Fix #123") :
+    'In maven mode, hash characters must be preserved (Fix #123)'
+assert interpolationTestHtml.contains("#include &lt;stdio.h&gt;") :
+    'In maven mode, C-style includes must work (#include <stdio.h>)'
+
+// In "maven" mode, escaped properties ($${...}) should render as literal ${...}
+// The markdown says: Use $${project.name} in your... which should render as: Use ${project.name} in your...
+assert interpolationTestHtml =~ /Use\s+\$\{project\.name\}\s+in your Markdown source code to display the variable name/ :
+    'In maven mode, $${project.name} should be unescaped and displayed as literal ${project.name}'
+
 // Verify that the corresponding .html.md files are generated (using .html.md extension per llmstxt.org convention)
 def mdFile = new File(basedir, "target/site/extend-summary.html.md")
 assert mdFile.isFile() : "Markdown version of the HTML files must have been generated with .html.md extension"

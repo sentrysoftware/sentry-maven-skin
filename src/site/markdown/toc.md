@@ -31,10 +31,10 @@ Insert this macro in your Markdown file:
 A document with these headings:
 
 ```markdown
-${esc.h} Page Title
-${esc.h}${esc.h} Section One
-${esc.h}${esc.h}${esc.h} Subsection
-${esc.h}${esc.h} Section Two
+# Page Title
+## Section One
+### Subsection
+## Section Two
 ```
 
 With `fromDepth=1` and `toDepth=2`, the ToC includes:
