@@ -314,7 +314,7 @@ limitations under the License.
 
 // showSearchUI: controls whether search UI is rendered (site-wide only, ignores frontmatter)
 // This ensures the search box isn't hidden on individual pages when buildIndex:false is set per-page
-*##set($showSearchUIDefault = $site.getCustomValue("buildIndex", "true"))#*
+*##set($showSearchUIDefault = $site.getCustomValue("buildIndex", "true").toLowerCase())#*
 *##set($showSearchUI = $showSearchUIDefault != "false")#*
 
 // buildAiIndex: generate Markdown files for AI indexing and llms.txt (boolean, default: true)
