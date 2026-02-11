@@ -173,8 +173,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && $matchMedia.size == 'xs'}">#*
 
-					// The Search button (only on xs displays - if search is enabled) *#
-#if($buildIndex)
+					// The Search button (only on xs displays - if search is enabled site-wide) *#
+#if($showSearchUI)
 					<button
 						class="navbar-toggle hidden-lg hidden-md hidden-sm"
 						ng-click="showSearchInput = !showSearchInput; clearSearch()"
@@ -207,8 +207,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 						</div>
 					</div>#*
 
-					// The search field (only on xs displays - if search is enabled) *#
-#if($buildIndex)
+					// The search field (only on xs displays - if search is enabled site-wide) *#
+#if($showSearchUI)
 					<form class="navbar-form site-search site-search-xs visible-xs" ng-show="showSearchInput">
 						<input
 							type="search"
@@ -226,8 +226,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 #end
 				</div>
 #*
-				// Search field on desktop (if search is enabled) *#
-#if($buildIndex)
+				// Search field on desktop (if search is enabled site-wide) *#
+#if($showSearchUI)
 				<form class="navbar-form navbar-right site-search hidden-xs">
 					<div class="form-group has-feedback">
 						<input
@@ -261,8 +261,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			// Main content*#
 			<main class="main-content col-xs-12 col-sm-8 col-md-9">
 #*
-				// Hide content if we're displaying search results (only if search is enabled) *#
-				<div#if($buildIndex) ng-hide="siteSearch"#end>
+				// Hide content if we're displaying search results (only if search is enabled site-wide) *#
+				<div#if($showSearchUI) ng-hide="siteSearch"#end>
 
 					<div class="row">
 #*
@@ -455,7 +455,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					</div>
 				</div>
 
-#if($buildIndex)
+#if($showSearchUI)
 				<!-- Search results -->
 				<div class="search-results" ng-show="siteSearch">
 

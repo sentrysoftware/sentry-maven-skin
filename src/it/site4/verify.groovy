@@ -392,9 +392,21 @@ assert !allDisabledHtml.contains('class="externalLink"') : "With externalLinkCla
 // ============================================================================
 def noSearchFile = new File(basedir, "target/site/config/no-search-index.html")
 assert noSearchFile.isFile() : "no-search-index.html must have been generated"
-// This page should NOT be in the search index (but we can't easily verify partial index content)
-// The page should not have search UI elements if buildIndex is disabled per-page
-// Note: buildIndex typically affects index building, not UI. Per-page it affects this page's inclusion.
+def noSearchHtml = noSearchFile.text
+
+// Verify this page is NOT in the search index (reuse indexJson from earlier)
+assert !indexJson.contains('"config/no-search-index.html"') : "Page with buildIndex:false must not be in index.json"
+
+// Verify AI indexing artifacts are NOT generated when buildAiIndex:false
+def noSearchMdFile = new File(basedir, "target/site/config/no-search-index.html.md")
+assert !noSearchMdFile.exists() : "Page with buildAiIndex:false must not have .html.md file generated"
+
+// Verify llms.txt does not list this page
+def llmsTxtContent = new File(basedir, "target/site/llms.txt").text
+assert !llmsTxtContent.contains("no-search-index.html") : "Page with buildAiIndex:false must not be listed in llms.txt"
+
+// Verify search UI is still present (buildIndex:false per-page should NOT hide search UI)
+assert noSearchHtml.contains('site-search') : "Search UI must still be present even when buildIndex:false per-page"
 
 // ============================================================================
 // TEST: Configuration - No Image Processing

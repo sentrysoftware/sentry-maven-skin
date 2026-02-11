@@ -308,8 +308,14 @@ limitations under the License.
 // tocSelector: JSoup selector for the ToC element (default: "ul#toc")
 *##set($tocSelector = $configTool.getValue($site, $headContent, "tocSelector", "ul#toc"))#*
 
-// buildIndex: build ElasticLunr search index (boolean, default: true)
+// buildIndex: build ElasticLunr search index for this page (boolean, default: true)
+// Per-page setting controls whether THIS page is added to the search index
 *##set($buildIndex = $configTool.getBooleanValue($site, $headContent, "buildIndex", true))#*
+
+// showSearchUI: controls whether search UI is rendered (site-wide only, ignores frontmatter)
+// This ensures the search box isn't hidden on individual pages when buildIndex:false is set per-page
+*##set($showSearchUIDefault = $site.getCustomValue("buildIndex", "true"))#*
+*##set($showSearchUI = $showSearchUIDefault != "false")#*
 
 // buildAiIndex: generate Markdown files for AI indexing and llms.txt (boolean, default: true)
 *##set($buildAiIndex = $configTool.getBooleanValue($site, $headContent, "buildAiIndex", true))#*
