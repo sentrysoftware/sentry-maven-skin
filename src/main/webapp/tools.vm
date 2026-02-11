@@ -124,7 +124,7 @@ limitations under the License.
 			// The <a href="..." class="externalLink?" target="..."> link
 			*#<a #*
 				*##if ($item.href)href="$alignedHref"#end#*
-				*##if($item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="externalLink"#end#*
+				*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "" && $item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="$externalLinkClass"#end#*
 				*##if ($item.target) target="$target"#end#*
 				*#>#*
 				*#$item.name#*
@@ -768,11 +768,19 @@ limitations under the License.
 		// Maven Doxia actually already tries to do that, but it's not perfect
 		// We're "fixing" this here, so remove the externalLink class when the link refers to the project's URL.
 		*##if($href && ($href.startsWith("http://") || $href.startsWith("https://")) && !($project.url && $href.startsWith($project.url)) && !($project.organization.url && $href.startsWith($project.organization.url)))#*
+			// This is an external link - add the configured class if feature is enabled
 			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
 				*##set($_ = $aLinkElement.addClass($externalLinkClass))#*
+			*##else#*
+				// Feature disabled - remove Doxia's default externalLink class
+				*##set($_ = $aLinkElement.removeClass("externalLink"))#*
 			*##end#*
 		*##else#*
+			// This is an internal link - remove any external link classes
 			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
+			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
+				*##set($_ = $aLinkElement.removeClass($externalLinkClass))#*
+			*##end#*
 		*##end#*
 		*##if($href && !$href.startsWith("#") && !$href.startsWith("javascript:"))#*
 			*##if($urlFootnoteMap[$href])#*
@@ -826,7 +834,12 @@ limitations under the License.
 *##end#*
 
 // Extract the TOC and put it in a variable (using configurable selector)
-*##set($tocElementList = $bodyElement.select($tocSelector))#*
+// Guard against "false" value which would be an invalid JSoup selector
+*##if($tocSelector && $tocSelector != "false")#*
+	*##set($tocElementList = $bodyElement.select($tocSelector))#*
+*##else#*
+	*##set($tocElementList = [])#*
+*##end#*
 *##if (!$tocElementList.isEmpty())#*
 	// Extract the TOC content
 	// It will be reinserted in the document (so it will be in the final HTML twice:

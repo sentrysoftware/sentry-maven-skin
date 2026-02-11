@@ -384,6 +384,8 @@ assert !allDisabledHtml.contains("prism.js") : "Must not load prism.js"
 assert !allDisabledHtml.contains('copy-to-clipboard=""') : "Must not have copy-to-clipboard"
 // Check that ${project.version} is NOT interpolated (should appear literally)
 assert allDisabledHtml.contains('${project.version}') : "With interpolation:none, ${project.version} should appear literally"
+// Check that externalLinkClass:false removes the externalLink class from external links
+assert !allDisabledHtml.contains('class="externalLink"') : "With externalLinkClass:false, external links must not have externalLink class"
 
 // ============================================================================
 // TEST: Configuration - No Search Index
