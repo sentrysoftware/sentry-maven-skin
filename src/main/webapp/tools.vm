@@ -774,12 +774,10 @@ limitations under the License.
 		// Maven Doxia actually already tries to do that, but it's not perfect
 		// We're "fixing" this here, so remove the externalLink class when the link refers to the project's URL.
 		*##if($href && ($href.startsWith("http://") || $href.startsWith("https://")) && !($project.url && $href.startsWith($project.url)) && !($project.organization.url && $href.startsWith($project.organization.url)))#*
-			// This is an external link - add the configured class if feature is enabled
+			// This is an external link - remove Doxia's default class first, then add configured class
+			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
 			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
 				*##set($_ = $aLinkElement.addClass($externalLinkClass))#*
-			*##else#*
-				// Feature disabled - remove Doxia's default externalLink class
-				*##set($_ = $aLinkElement.removeClass("externalLink"))#*
 			*##end#*
 		*##else#*
 			// This is an internal link - remove any external link classes

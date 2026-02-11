@@ -216,7 +216,8 @@ assert linksHtml.contains("[2] https://onehome.org") : "External links must be l
 assert linksHtml.contains("[3] https://the.org") : "Organization's URL must be listed as footnote"
 assert !linksHtml.contains("[4]") : "No anchors must be listed as footnote and identical URLs must be listed once"
 assert linksHtml.contains("<a href=\"index.html\">This</a>") : "Internal links don't have the class externalLink"
-assert linksHtml.contains("<a class=\"externalLink\" href=\"https://onehome.org\">") : "External links must have the externalLink class"
+// Check external links have externalLink class (attribute order may vary)
+assert linksHtml =~ /<a [^>]*href="https:\/\/onehome\.org"[^>]*class="externalLink"/ || linksHtml =~ /<a [^>]*class="externalLink"[^>]*href="https:\/\/onehome\.org"/ : "External links must have the externalLink class"
 
 // Rendering time
 def buildLog = new File(basedir, "build.log").text
