@@ -4,22 +4,35 @@ interpolation: none
 
 # Maven Properties
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Reference properties from `pom.xml` and `site.xml` directly in your Markdown files.
 
 ## Interpolation Modes
 
-The skin supports 3 interpolation modes, configured in `site.xml`:
+The skin supports 3 interpolation modes, configured in `site.xml` or via frontmatter:
 
-```xml
-<!-- site.xml for Maven Site Plugin 4.x -->
-<site xmlns="http://maven.apache.org/SITE/2.0.0">
-  <custom>
-    <interpolation>maven</interpolation> <!-- velocity | maven | none -->
-  </custom>
-</site>
-```
+> [!TABS]
+>
+> - site.xml (Global)
+>
+>   ```xml
+>   <site xmlns="http://maven.apache.org/SITE/2.0.0">
+>     <custom>
+>       <interpolation>maven</interpolation>
+>     </custom>
+>   </site>
+>   ```
+>
+> - Frontmatter (Per-Page)
+>
+>   ```markdown
+>   interpolation: none
+>
+>   # Template Documentation
+>
+>   This page shows literal ${...} syntax.
+>   ```
 
 | Mode       | Description                                                                                              |
 | ---------- | -------------------------------------------------------------------------------------------------------- |

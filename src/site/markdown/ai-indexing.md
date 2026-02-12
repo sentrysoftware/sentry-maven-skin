@@ -3,7 +3,7 @@ description: Automatic llms.txt and Markdown generation for AI platform indexing
 
 # AI Indexing
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 ${project.name} automatically generates files to help AI platforms (ChatGPT, GitHub Copilot, Claude, Gemini) understand your documentation.
 
@@ -79,6 +79,66 @@ Also included automatically:
 
 This feature is **enabled by default** with no configuration needed.
 
+| Setting        | Description                                     | Default         |
+| -------------- | ----------------------------------------------- | --------------- |
+| `buildAiIndex` | Generate `.html.md` files and update `llms.txt` | `true`          |
+| `publishDate`  | Publication date for metadata                   | Build timestamp |
+
+### Exclude a Page from AI Index
+
+To exclude specific pages from AI indexing:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <buildAiIndex>false</buildAiIndex>
+>   </custom>
+>   ```
+>
+>   This completely disables AI indexing for all pages.
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   buildAiIndex: false
+>
+>   # Internal API Reference
+>
+>   This page won't be indexed for AI platforms.
+>   ```
+
+When a page is excluded:
+- No `.html.md` file is generated for that page
+- The page is not added to `llms.txt`
+- No `<link rel="alternate">` tag is added to the HTML
+
+### Custom Publish Date
+
+Override the publish date for metadata:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <publishDate>2024-06-15</publishDate>
+>   </custom>
+>   ```
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   publishDate: 2024-06-15
+>
+>   # Release Notes
+>
+>   Content with a specific publication date.
+>   ```
+
 > [!TIP]
 > For best results, define `<url>` in your `pom.xml` to generate absolute URLs in `llms.txt`:
 >
@@ -110,3 +170,9 @@ As AI assistants become more prevalent in developer workflows, ensuring your doc
 - **Future-proofing** your documentation for emerging AI platforms
 
 The combination of `llms.txt`, Markdown files, and structured metadata makes your documentation a first-class citizen in the AI ecosystem.
+
+## See Also
+
+- [Full-Text Search](search.html) - Built-in search functionality
+- [Configuration Reference](settings.html) - All configuration options
+

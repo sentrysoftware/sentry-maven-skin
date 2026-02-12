@@ -3,7 +3,7 @@ description: Get started with ${project.name} in 5 minutes. Step-by-step setup g
 
 # Quick Start
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Get your documentation site up and running in 5 minutes.
 
@@ -41,7 +41,7 @@ Add the Maven Site Plugin with the required dependency:
   <plugins>
     <plugin>
       <artifactId>maven-site-plugin</artifactId>
-      <version>3.12.1</version>
+      <version>4.0.0-M16</version>
       <dependencies>
         <dependency>
           <groupId>org.sentrysoftware.maven</groupId>
@@ -55,34 +55,80 @@ Add the Maven Site Plugin with the required dependency:
 ```
 
 > [!NOTE]
-> This skin supports both `maven-site-plugin` **3.12.x** and **4.x**. The examples in this guide use 3.x syntax, which works with both versions.
+> This skin supports both `maven-site-plugin` **4.x** and **3.x**.
 
 ## Step 3: Configure site.xml
 
 Create `src/site/site.xml`:
 
-```xml
-<project name="\${project.name}">
+> [!TABS]
+>
+> - Maven Site Plugin 4.x
+>
+>   ```xml
+>   <site xmlns="http://maven.apache.org/SITE/2.0.0"
+>       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>       xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
+>       name="$${project.name}">
+>
+>     <skin>
+>       <groupId>${project.groupId}</groupId>
+>       <artifactId>${project.artifactId}</artifactId>
+>       <version>${project.version}</version>
+>     </skin>
+>
+>     <bannerLeft name="$${project.organization.name}" href="$${project.organization.url}">
+>       <image src="images/logo.png" alt="$${project.organization.name}"/>
+>     </bannerLeft>
+>
+>     <custom>
+>       <!-- Skin settings (see https://sentrysoftware.org/sentry-maven-skin/settings.html) -->
+>       <keywords>maven, documentation</keywords>
+>     </custom>
+>
+>     <body>
+>       <menu name="Documentation">
+>         <item name="Overview" href="index.html"/>
+>       </menu>
+>     </body>
+>
+>   </site>
+>   ```
+>
+> - Maven Site Plugin 3.x
+>
+>   ```xml
+>   <project name="$${project.name}">
+>
+>     <skin>
+>       <groupId>${project.groupId}</groupId>
+>       <artifactId>${project.artifactId}</artifactId>
+>       <version>${project.version}</version>
+>     </skin>
+>
+>     <bannerLeft>
+>       <name>$${project.organization.name}</name>
+>       <href>$${project.organization.url}</href>
+>       <src>images/logo.png</src>
+>       <alt>$${project.organization.name}</alt>
+>     </bannerLeft>
+>
+>     <custom>
+>       <!-- Skin settings (see https://sentrysoftware.org/sentry-maven-skin/settings.html) -->
+>       <keywords>maven, documentation</keywords>
+>     </custom>
+>
+>     <body>
+>       <menu name="Documentation">
+>         <item name="Overview" href="index.html"/>
+>       </menu>
+>     </body>
+>
+>   </project>
+>   ```
 
-  <skin>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>${project.artifactId}</artifactId>
-    <version>${project.version}</version>
-  </skin>
-
-  <bannerLeft>
-    <name>\${project.organization.name}</name>
-    <href>\${project.organization.url}</href>
-  </bannerLeft>
-
-  <body>
-    <menu name="Documentation">
-      <item name="Overview" href="index.html"/>
-    </menu>
-  </body>
-
-</project>
-```
+> [!TIP]
+> See [Configuration Reference](settings.html) for all available `<custom>` settings.
 
 ## Step 4: Write Your First Page
 
@@ -141,5 +187,5 @@ Now that your site is running, continue with:
 
 ### Reference
 
-- [Configuration Reference](settings.html) - All site.xml options
+- [Configuration Reference](settings.html) - All site.xml and front matter options
 - [Features Overview](features.html) - Explore all features

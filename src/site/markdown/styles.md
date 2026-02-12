@@ -3,19 +3,43 @@ description: Customize colors and fonts with simple CSS variables or use built-i
 
 # Styling (Colors and Fonts)
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Customize the look and feel of your documentation with built-in themes or custom CSS variables.
 
 ## Built-in Themes
 
-The easiest way to change colors is to use a built-in theme. In `src/site/site.xml`:
+The easiest way to change colors is to use a built-in theme.
 
-```xml
-<custom>
-  <bodyClass>sentry-purple</bodyClass>
-</custom>
-```
+> [!TABS]
+>
+> - site.xml (Global)
+>
+>   ```xml
+>   <custom>
+>     <bodyClass>sentry-purple</bodyClass>
+>   </custom>
+>   ```
+>
+>   You can combine multiple classes:
+>
+>   ```xml
+>   <custom>
+>     <bodyClass>sentry-purple my-custom-class</bodyClass>
+>   </custom>
+>   ```
+>
+> - Frontmatter (Per-Page)
+>
+>   ```markdown
+>   bodyClass: sentry-green
+>
+>   # Special Page
+>
+>   This page uses a different theme.
+>   ```
+
+### Available Themes
 
 | Theme           | Preview                                   |
 | --------------- | ----------------------------------------- |
@@ -96,8 +120,8 @@ Override font families on the `:root` element:
 
 <!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=fonts} -->
 
-## Next Steps
+## See Also
 
+- [Configuration Reference](settings.html) - All configuration options
 - [Navigation Links](nav-links.html) - Configure header and logo
 - [Navigation Menu](nav-menu.html) - Set up sidebar navigation
-- [Writing a Page](page-structure.html) - Start writing documentation

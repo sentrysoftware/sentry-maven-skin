@@ -4,7 +4,7 @@ interpolation: none
 
 # Doxia Features
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Maven Doxia provides powerful macros for dynamic content. This page covers the most useful ones.
 
@@ -13,7 +13,7 @@ Maven Doxia provides powerful macros for dynamic content. This page covers the m
 Generate a ToC from page headings:
 
 ```html
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 ```
 
 | Parameter | Description | Default |
@@ -73,36 +73,6 @@ Display the current date/time:
 
 Useful for showing when documentation was generated.
 
-## Velocity Variables
-
-Doxia processes Velocity variables. Common ones:
-
-| Variable | Description |
-|----------|-------------|
-| `${project.name}` | Project name from pom.xml |
-| `${project.version}` | Project version |
-| `${project.url}` | Project URL |
-
-See [Maven Properties](maven-properties.html) for custom properties.
-
-## HTML in Markdown
-
-You can embed HTML directly in Markdown:
-
-```html
-<div class="alert alert-info">
-  <strong>Note:</strong> This is an info alert using Bootstrap.
-</div>
-```
-
-> [!TIP]
-> For notes and warnings, prefer the simpler [callout syntax](ui-components.html#callouts) over raw HTML:
->
-> ```markdown
-> > [!NOTE]
-> > This is easier to write and read.
-> ```
-
 ## Comments
 
 Add comments that won't appear in output:
@@ -110,68 +80,6 @@ Add comments that won't appear in output:
 ```html
 <!-- This is a comment and won't be rendered -->
 ```
-
-## Special Characters
-
-Escape special Markdown characters:
-
-| Character | Escape |
-|-----------|--------|
-| `*` | `\*` |
-| `_` | `\_` |
-| `#` | `\#` |
-| `[` | `\[` |
-| `]` | `\]` |
-
-## Links
-
-### Internal Links
-
-Link to other pages in your site:
-
-```markdown
-[Configuration](settings.html)
-[Code Section](code.html#syntax-highlighting)
-```
-
-### External Links
-
-```markdown
-[Maven](https://maven.apache.org)
-```
-
-External links automatically open in new tabs.
-
-### Anchor Links
-
-Link within the same page:
-
-```markdown
-[Jump to section](#section-heading)
-```
-
-## Definition Lists
-
-Use HTML for definition lists:
-
-```html
-<dl>
-  <dt>Term 1</dt>
-  <dd>Definition of term 1</dd>
-  <dt>Term 2</dt>
-  <dd>Definition of term 2</dd>
-</dl>
-```
-
-## Keyboard Shortcuts
-
-Display keyboard shortcuts:
-
-```html
-Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy.
-```
-
-Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy.
 
 ## Reference
 
@@ -184,3 +92,4 @@ Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy.
 - [Page Structure](page-structure.html) - How to structure pages
 - [Maven Properties](maven-properties.html) - Use pom.xml values
 - [Code Highlighting](code.html) - Format code blocks
+- [Configuration Reference](settings.html) - All site.xml and front matter options
