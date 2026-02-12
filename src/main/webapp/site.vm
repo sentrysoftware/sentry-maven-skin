@@ -46,11 +46,12 @@ $headElement.html()
 	<link rel="canonical" href="$PathTool.calculateLink($currentFileName, $project.url)">
 #end
 ##
-## AI Indexing: generate Markdown files for AI platforms and inserts a <link rel="alternate" /> in the head
+## AI Indexing: generate Markdown files for AI platforms and inserts a <link rel="alternate" /> in the head (if enabled)
+#if ($buildAiIndex)
 	$aiIndexTool.convertToMarkdown(${project.reporting.outputDirectory}, $currentFileName, $headElement, $bodyElement, $publishDate, $project.url)#*
-*##set($menuSection = "#getMenuSection()")#*
-*##call($aiIndexTool.updateLlmsTxt("${project.reporting.outputDirectory}/llms.txt", $currentFileName, $shortTitle, $site.name, $project.description, $menuSection, $project.url))#*
-*#
+	*##set($menuSection = "#getMenuSection()")#*
+	*##call($aiIndexTool.updateLlmsTxt("${project.reporting.outputDirectory}/llms.txt", $currentFileName, $shortTitle, $site.name, $project.description, $menuSection, $project.url))#*
+*##end
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
@@ -100,7 +101,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 </head>
 
-<body class="sentry-site $!site.getCustomValue('bodyClass')" ng-class="{'dark': $matchMedia.dark }" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
+<body class="sentry-site $!bodyClass" ng-class="{'dark': $matchMedia.dark }" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
 #*
 // Script to initialize dark/light theme on <body> asap *#
 <script>(function (){var d=window.localStorage.getItem('matchMediaLight.userIsDark');return null!=d?d==='true':window.matchMedia('(prefers-color-scheme: dark)').matches})()&&document.body.classList.add('dark')</script>
@@ -172,7 +173,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && $matchMedia.size == 'xs'}">#*
 
-					// The Search button (only on xs displays) *#
+					// The Search button (only on xs displays - if search is enabled site-wide) *#
+#if($showSearchUI)
 					<button
 						class="navbar-toggle hidden-lg hidden-md hidden-sm"
 						ng-click="showSearchInput = !showSearchInput; clearSearch()"
@@ -180,8 +182,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 						type="button"
 					>
 						<i ng-class="showSearchInput ? 'fas fa-times' : 'fa fa-search'"></i>
-					</button>#*
-
+					</button>
+#end
+#*
 					// The documentation title *#
 					<div class="navbar-brand">
 #*				*##if($site.body.breadcrumbs && $site.body.breadcrumbs.size() > 0)#*
@@ -204,7 +207,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 						</div>
 					</div>#*
 
-					// The search field (only on xs displays) *#
+					// The search field (only on xs displays - if search is enabled site-wide) *#
+#if($showSearchUI)
 					<form class="navbar-form site-search site-search-xs visible-xs" ng-show="showSearchInput">
 						<input
 							type="search"
@@ -219,9 +223,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 							focus-me="showSearchInput"
 						/>
 					</form>
+#end
 				</div>
 #*
-				// Search field on desktop *#
+				// Search field on desktop (if search is enabled site-wide) *#
+#if($showSearchUI)
 				<form class="navbar-form navbar-right site-search hidden-xs">
 					<div class="form-group has-feedback">
 						<input
@@ -238,6 +244,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 						<i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
 					</div>
 				</form>
+#end
 
 			</div>
 		</div>
@@ -254,8 +261,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			// Main content*#
 			<main class="main-content col-xs-12 col-sm-8 col-md-9">
 #*
-				// Hide content if we're displaying search results *#
-				<div ng-hide="siteSearch">
+				// Hide content if we're displaying search results (only if search is enabled site-wide) *#
+				<div#if($showSearchUI) ng-hide="siteSearch"#end>
 
 					<div class="row">
 #*
@@ -448,6 +455,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					</div>
 				</div>
 
+#if($showSearchUI)
 				<!-- Search results -->
 				<div class="search-results" ng-show="siteSearch">
 
@@ -511,6 +519,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					</div>
 
 				</div>
+#end
 
 			</main>
 
@@ -610,7 +619,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<script src="js/copy-to-clipboard.js"></script>
 	<!-- endbuild -->
 
-#if (!$bodyElement.select("pre > code[class*=language-]").empty)
+#if ($syntaxHighlighting && $syntaxHighlighting != "false" && !$bodyElement.select($syntaxHighlighting).empty)
 	<!-- build:js js/prism.js -->
 	<script src="../../../node_modules/prismjs/prism.js"></script>
 	<script src="../../../node_modules/prismjs/plugins/autoloader/prism-autoloader.js"></script>

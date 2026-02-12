@@ -3,7 +3,7 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 
 # ${project.name}
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 ## Overview
 
@@ -19,6 +19,7 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 - **Mobile-First**: Responsive design for all devices
 - **Image Optimization**: Automatic WebP conversion
 - **AI-Ready**: Generates `llms.txt` for AI platforms
+- **Fully Configurable**: Enable, disable, or customize every feature
 
 [Get Started](start.html) in 5 minutes.
 
@@ -40,10 +41,11 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 
 ### Advanced Topics
 
-9. [Configuration Reference](settings.html) - All site.xml options
-10. [Full-Text Search](search.html) - Search configuration
-11. [AI Indexing](ai-indexing.html) - Generate llms.txt
-12. [Print Support](print.html) - Optimize for printing
+9. [Configuration Reference](settings.html) - All site.xml and frontmatter options
+10. [Front Matter Headers](headers.html) - Per-page configuration
+11. [Full-Text Search](search.html) - Search configuration
+12. [AI Indexing](ai-indexing.html) - Generate llms.txt
+13. [Print Support](print.html) - Optimize for printing
 
 ## Screenshots
 

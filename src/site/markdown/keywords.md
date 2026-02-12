@@ -3,7 +3,7 @@ description: Configure keywords globally or per-page for SEO and internal search
 
 # Keywords
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Keywords appear in the HTML `<meta name="keywords">` tag and are indexed by the built-in search engine.
 
@@ -49,3 +49,9 @@ Keywords are indexed by the [built-in search](search.html). Use them to:
 - Add synonyms (e.g., `keywords: jpg` for a page about JPEG)
 - Include common misspellings
 - Add related terms users might search for
+
+## See Also
+
+- [Front Matter Headers](headers.html) - All available header options
+- [Full-Text Search](search.html) - How the search index uses keywords
+- [Configuration Reference](settings.html) - All site.xml and front matter options

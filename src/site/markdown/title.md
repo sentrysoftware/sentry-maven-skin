@@ -29,4 +29,7 @@ This page will use "My Custom Title" instead of "First Heading".
 | Browser tab | Project Name - Page Title |
 | Page header | Page Title only           |
 
-See [Front Matter Headers](headers.html) for more header options.
+## See Also
+
+- [Front Matter Headers](headers.html) - All available header options
+- [Configuration Reference](settings.html) - All site.xml and front matter options

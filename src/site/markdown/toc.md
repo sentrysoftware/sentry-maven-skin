@@ -3,7 +3,7 @@ description: Automatically generate a table of contents from your page headings.
 
 # Automatic Table of Contents
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Generate a table of contents automatically from your page headings.
 
@@ -12,7 +12,7 @@ Generate a table of contents automatically from your page headings.
 Insert this macro in your Markdown file:
 
 ```html
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 ```
 
 > [!IMPORTANT]
@@ -20,11 +20,11 @@ Insert this macro in your Markdown file:
 
 ## Macro Parameters
 
-| Parameter   | Description                     | Default  |
-| ----------- | ------------------------------- | -------- |
-| `fromDepth` | Starting heading level (1 = h1) | 1        |
-| `toDepth`   | Ending heading level (2 = h2)   | 2        |
-| `id`        | Must be `toc` for the skin      | Required |
+| Parameter   | Description                             | Default  |
+| ----------- | --------------------------------------- | -------- |
+| `fromDepth` | Starting heading level (1 = h1)         | 1        |
+| `toDepth`   | Ending heading level (2 = h2)           | 2        |
+| `id`        | Must be `toc` to be handled by the skin | Required |
 
 ## Example
 
@@ -49,20 +49,66 @@ With `fromDepth=1` and `toDepth=2`, the ToC includes:
 - **Desktop**: ToC floats on the right side of the page
 - **Mobile**: ToC displays inline at the top
 
+## Configuration
+
+| Setting       | Description                                        | Default  |
+| ------------- | -------------------------------------------------- | -------- |
+| `tocSelector` | CSS selector for the ToC element                   | `ul#toc` |
+| `fixHeadings` | Enhance headings with proper IDs, and anchor links | `true`   |
+
+### Custom ToC Selector
+
+If you use a different ID or structure for your ToC:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <tocSelector>ul#my-custom-toc</tocSelector>
+>   </custom>
+>   ```
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   tocSelector: ul#my-custom-toc
+>
+>   # My Page
+>
+>   <!-- MACRO{toc|fromDepth=2|toDepth=3|id=my-custom-toc} -->
+>   ```
+
+### Disable Enhanced Headings
+
+To disable the enhanced headings and automatic anchor links:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <fixHeadings>false</fixHeadings>
+>   </custom>
+>   ```
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   fixHeadings: false
+>
+>   # Plain Headings
+>
+>   Headings won't have clickable anchor links and their internal ID will use pre-HTML5 syntax.
+>   ```
+
 ## Reference
 
 See [Maven Doxia macros](https://maven.apache.org/doxia/macros/index.html) for more details.
 
-## Advanced ToC Techniques
+## See Also
 
-For more advanced usage, you can consider the following:
-
-- **Custom Styling**: Customize the style of your Table of Contents using CSS or Markdown extensions to match your document's design.
-
-- **Depth Control**: Choose how many heading levels to include in your Table of Contents based on the complexity of your content.
-
-- **Ordered vs. Unordered Lists**: Decide whether you want an ordered (numbered) or unordered (bulleted) list format for your ToC.
-
-## Conclusion
-
-A well-crafted Table of Contents is a valuable tool for presenting your content in a clear and user-friendly manner. Whether you're creating a document, a book, a website, or any content with multiple sections, a ToC simplifies navigation and improves the overall reading experience. So, the next time you embark on a content creation journey, remember the power of a well-structured Table of Contents to guide your readers through your material effortlessly.
+- [Configuration Reference](settings.html) - All configuration options
+- [Page Structure](page-structure.html) - How to structure your pages

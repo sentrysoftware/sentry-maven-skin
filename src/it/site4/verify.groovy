@@ -337,6 +337,87 @@ assert buildLog =~ /Rendering time: [0-9.]+ ms/ : "Rendering time must be logged
 assert !(indexHtml =~ '"//') : "URLs must not be protocol-relative"
 
 // ============================================================================
+// TEST: Configuration - No Thumbnails (convertImagesToThumbnails: false)
+// ============================================================================
+def noThumbnailsFile = new File(basedir, "target/site/config/no-thumbnails.html")
+assert noThumbnailsFile.isFile() : "no-thumbnails.html must have been generated"
+def noThumbnailsHtml = noThumbnailsFile.text
+assert !noThumbnailsHtml.contains("<zoomable") : "Page with convertImagesToThumbnails:false must not have zoomable elements"
+assert noThumbnailsHtml.contains("<img") : "Page must still have img elements"
+
+// ============================================================================
+// TEST: Configuration - No Syntax Highlighting (syntaxHighlighting: false)
+// ============================================================================
+def noSyntaxFile = new File(basedir, "target/site/config/no-syntax-highlighting.html")
+assert noSyntaxFile.isFile() : "no-syntax-highlighting.html must have been generated"
+def noSyntaxHtml = noSyntaxFile.text
+assert !noSyntaxHtml.contains('src="../js/prism.js"') : "Page with syntaxHighlighting:false must not load prism.js script"
+assert !noSyntaxHtml.contains('src="js/prism.js"') : "Page with syntaxHighlighting:false must not load prism.js script"
+assert noSyntaxHtml.contains("<code class=\"language-") : "Page must still have code blocks"
+
+// ============================================================================
+// TEST: Configuration - No Copy Button (copyToClipboard: false)
+// ============================================================================
+def noCopyFile = new File(basedir, "target/site/config/no-copy-button.html")
+assert noCopyFile.isFile() : "no-copy-button.html must have been generated"
+def noCopyHtml = noCopyFile.text
+assert !noCopyHtml.contains('copy-to-clipboard=""') : "Page with copyToClipboard:false must not have copy-to-clipboard attribute"
+assert noCopyHtml.contains("<pre>") : "Page must still have pre elements"
+
+// ============================================================================
+// TEST: Configuration - Custom Body Class
+// ============================================================================
+def customBodyFile = new File(basedir, "target/site/config/custom-body-class.html")
+assert customBodyFile.isFile() : "custom-body-class.html must have been generated"
+def customBodyHtml = customBodyFile.text
+assert customBodyHtml.contains('class="sentry-site custom-page-class my-special-theme"') : "Body must have custom classes from frontmatter"
+
+// ============================================================================
+// TEST: Configuration - All Disabled
+// ============================================================================
+def allDisabledFile = new File(basedir, "target/site/config/all-disabled.html")
+assert allDisabledFile.isFile() : "all-disabled.html must have been generated"
+def allDisabledHtml = allDisabledFile.text
+assert allDisabledHtml.contains('class="sentry-site minimal-page"') : "Body must have minimal-page class"
+assert !allDisabledHtml.contains("<zoomable") : "Must not have zoomable elements"
+assert !allDisabledHtml.contains("prism.js") : "Must not load prism.js"
+assert !allDisabledHtml.contains('copy-to-clipboard=""') : "Must not have copy-to-clipboard"
+// Check that ${project.version} is NOT interpolated (should appear literally)
+assert allDisabledHtml.contains('${project.version}') : "With interpolation:none, ${project.version} should appear literally"
+// Check that externalLinkClass:false removes the externalLink class from external links
+assert !allDisabledHtml.contains('class="externalLink"') : "With externalLinkClass:false, external links must not have externalLink class"
+
+// ============================================================================
+// TEST: Configuration - No Search Index
+// ============================================================================
+def noSearchFile = new File(basedir, "target/site/config/no-search-index.html")
+assert noSearchFile.isFile() : "no-search-index.html must have been generated"
+def noSearchHtml = noSearchFile.text
+
+// Verify this page is NOT in the search index (reuse indexJson from earlier)
+assert !indexJson.contains('"config/no-search-index.html"') : "Page with buildIndex:false must not be in index.json"
+
+// Verify AI indexing artifacts are NOT generated when buildAiIndex:false
+def noSearchMdFile = new File(basedir, "target/site/config/no-search-index.html.md")
+assert !noSearchMdFile.exists() : "Page with buildAiIndex:false must not have .html.md file generated"
+
+// Verify llms.txt does not list this page
+def llmsTxtContent = new File(basedir, "target/site/llms.txt").text
+assert !llmsTxtContent.contains("no-search-index.html") : "Page with buildAiIndex:false must not be listed in llms.txt"
+
+// Verify search UI is still present (buildIndex:false per-page should NOT hide search UI)
+assert noSearchHtml.contains('site-search') : "Search UI must still be present even when buildIndex:false per-page"
+
+// ============================================================================
+// TEST: Configuration - No Image Processing
+// ============================================================================
+def noImageProcFile = new File(basedir, "target/site/config/no-image-processing.html")
+assert noImageProcFile.isFile() : "no-image-processing.html must have been generated"
+def noImageProcHtml = noImageProcFile.text
+assert !noImageProcHtml.contains("<zoomable") : "Must not have zoomable elements when thumbnails disabled"
+// Note: WebP conversion check would require checking actual image files
+
+// ============================================================================
 // All tests passed!
 // ============================================================================
 println "SUCCESS: All Maven Site Plugin 4.x integration tests passed!"

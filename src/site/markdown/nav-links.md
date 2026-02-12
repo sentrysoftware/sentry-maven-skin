@@ -3,7 +3,7 @@ description: Configure the header navigation bar with logo, links, and social me
 
 # Navigation Links
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 The header navigation bar displays your logo, external links, and social media icons.
 

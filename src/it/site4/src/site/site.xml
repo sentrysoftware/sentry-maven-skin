@@ -102,6 +102,16 @@
 			</item>
 		</menu>
 
+		<menu name="Config Tests">
+			<item name="No Thumbnails" href="config/no-thumbnails.html" />
+			<item name="No Syntax Highlight" href="config/no-syntax-highlighting.html" />
+			<item name="No Search Index" href="config/no-search-index.html" />
+			<item name="No Image Processing" href="config/no-image-processing.html" />
+			<item name="No Copy Button" href="config/no-copy-button.html" />
+			<item name="Custom Body Class" href="config/custom-body-class.html" />
+			<item name="All Disabled" href="config/all-disabled.html" />
+		</menu>
+
 		<menu ref="reports" />
 
 	</body>

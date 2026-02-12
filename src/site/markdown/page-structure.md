@@ -3,7 +3,7 @@ description: How to structure a documentation page for clarity and consistency.
 
 # Writing a Documentation Page
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 This guide shows how to structure a typical documentation page.
 
@@ -17,7 +17,7 @@ description: A one-sentence summary for search engines.
 
 # Page Title
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Brief introduction explaining what this page covers.
 
@@ -49,7 +49,7 @@ description: How to configure the API client.
 | `description` | SEO meta description |
 | `title` | Override automatic title |
 
-See [Front Matter Headers](headers.html) for all options.
+See [Front Matter Headers](headers.html) for all options, including [configuration settings](headers.html#configuration-headers) that let you enable or disable features on individual pages.
 
 ## Page Title
 
@@ -71,7 +71,7 @@ For longer pages, add the ToC macro right after the title:
 ```markdown
 # Page Title
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 ```
 
 The ToC floats on the right (desktop) or displays inline (mobile). See [Table of Contents](toc.html).
@@ -82,7 +82,7 @@ Write 1-3 sentences explaining what the reader will learn. This helps readers co
 
 ## Sections
 
-Organize content with `##` headings:
+Organize content with `##` (level 2) headings:
 
 ```markdown
 ## Installation
@@ -138,10 +138,10 @@ Use `![inline](image.png)` for small icons. See [Images](images.html).
 Use Markdown tables for structured data:
 
 ```markdown
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `timeout` | int | Request timeout in ms |
-| `retries` | int | Number of retry attempts |
+| Parameter | Type | Description              |
+| --------- | ---- | ------------------------ |
+| `timeout` | int  | Request timeout in ms    |
+| `retries` | int  | Number of retry attempts |
 ```
 
 ## Callouts (Notes and Warnings)
@@ -201,3 +201,4 @@ Before publishing, verify:
 - [Images](images.html) - Add screenshots
 - [UI Components](ui-components.html) - Add tabs and accordions
 - [Doxia Features](doxia.html) - Advanced macros
+- [Configuration Reference](settings.html) - All customization options

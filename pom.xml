@@ -64,7 +64,7 @@
 		<project.reporting.outputEncoding>${project.build.encoding}</project.reporting.outputEncoding>
 
 		<!-- maven-skin-tools version (used in docs and integration tests) -->
-		<skinToolsVersion>1.6.00</skinToolsVersion>
+		<skinToolsVersion>1.7.00</skinToolsVersion>
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->

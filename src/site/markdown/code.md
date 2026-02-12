@@ -3,7 +3,7 @@ description: Syntax highlighting for 290+ programming languages with copy-to-cli
 
 # Code Syntax Highlighting
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 Code blocks are automatically syntax-highlighted using [PrismJS](https://prismjs.com/). All [290+ PrismJS languages](https://prismjs.com/#supported-languages) are supported — language components load automatically on demand.
 
@@ -170,6 +170,92 @@ if __name__ == "__main__":
 ```
 ````
 
+## Configuration
+
+Code highlighting and copy features can be configured globally or per-page:
+
+| Setting              | Description                                | Default                        |
+| -------------------- | ------------------------------------------ | ------------------------------ |
+| `syntaxHighlighting` | CSS selector for code blocks to highlight  | `pre > code[class*=language-]` |
+| `copyToClipboard`    | CSS selector for elements with copy button | `pre`                          |
+
+### Disable Syntax Highlighting
+
+To disable PrismJS syntax highlighting:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <syntaxHighlighting>false</syntaxHighlighting>
+>   </custom>
+>   ```
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   syntaxHighlighting: false
+>
+>   # Plain Text Page
+>
+>   Code blocks won't be syntax-highlighted.
+>   ```
+
+### Disable Copy Button
+
+To remove the copy-to-clipboard button:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <copyToClipboard>false</copyToClipboard>
+>   </custom>
+>   ```
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   copyToClipboard: false
+>
+>   # No Copy Buttons
+>
+>   Code blocks won't have copy buttons.
+>   ```
+
+### Custom Selectors
+
+Use CSS selectors to control which elements get each feature:
+
+> [!TABS]
+>
+> - Site-Wide (site.xml)
+>
+>   ```xml
+>   <custom>
+>     <!-- Only highlight Java and XML code -->
+>     <syntaxHighlighting>pre > code[class*=language-java], pre > code[class*=language-xml]</syntaxHighlighting>
+>
+>     <!-- Add copy button to code and specific divs -->
+>     <copyToClipboard>pre, .copyable</copyToClipboard>
+>   </custom>
+>   ```
+>
+> - Per-Page (Frontmatter)
+>
+>   ```markdown
+>   syntaxHighlighting: pre > code[class*=language-java]
+>   copyToClipboard: pre, .copyable
+>
+>   # Custom Code Settings
+>
+>   Only Java is highlighted, copy button on pre and .copyable.
+>   ```
+
 ## Language Reference
 
 Common languages and their fence identifiers:
@@ -215,8 +301,8 @@ Common languages and their fence identifiers:
 
 See the full list of [290+ supported languages](https://prismjs.com/#supported-languages) on the PrismJS website.
 
-## Next Steps
+## See Also
 
 - [Images](images.html) - Add screenshots and diagrams
 - [UI Components](ui-components.html) - Tabs, accordions, and more
-- [Doxia Features](doxia.html) - Include code from external files
+- [Configuration Reference](settings.html) - All configuration options

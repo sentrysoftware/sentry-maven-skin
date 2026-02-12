@@ -124,7 +124,7 @@ limitations under the License.
 			// The <a href="..." class="externalLink?" target="..."> link
 			*#<a #*
 				*##if ($item.href)href="$alignedHref"#end#*
-				*##if($item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="externalLink"#end#*
+				*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "" && $item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="$externalLinkClass"#end#*
 				*##if ($item.target) target="$target"#end#*
 				*#>#*
 				*#$item.name#*
@@ -269,26 +269,63 @@ limitations under the License.
 *##if(!$bodyContent)#set($bodyContent = "")#end#*
 *##if(!$shortTitle)#set($shortTitle = "")#end#*
 
-// Interpolation mode: controls how ${...} expressions are processed in content
-// Options (configured in site.xml <custom><interpolation> or per-page via front matter):
-//   - "velocity": Full Velocity processing via $render.eval() - use with CAUTION:
-//     * Works for basic variables like ${project.name}
-//     * BREAKS on any string literals with quotes because Doxia converts ASCII
-//       quotes ("...") to Unicode smart quotes ("...") which Velocity doesn't recognize
-//     * BREAKS on Velocity directives (#if, #include, etc.) in content
-//   - "maven": Maven project properties (pom.xml), standard project/site metadata,
-//              and custom values from site.xml <custom> (default - recommended)
-//   - "none": No additional interpolation
-// Per-page override: add "interpolation: none" (or "maven" or "velocity") as front matter header
-*##set($interpolationMode = $site.getCustomValue("interpolation", "maven"))#*
-// Check for per-page override via meta tag (from front matter "interpolation: xxx")
-*##set($tempHeadElement = $htmlTool.parseContent($headContent))#*
-*##if($tempHeadElement)#*
-	*##set($pageInterpolation = $htmlTool.getAttr($tempHeadElement, "meta[name=interpolation]", "content"))#*
-	*##if($pageInterpolation && !$pageInterpolation.isEmpty())#*
-		*##set($interpolationMode = $pageInterpolation.get(0))#*
-	*##end#*
-*##end#*
+/////////////////////////////////////////////////////
+//
+//   Configuration (using configTool for site.xml + frontmatter precedence)
+//
+/////////////////////////////////////////////////////
+
+// interpolation: controls how ${...} expressions are processed in content
+// Options: "velocity", "maven" (default), "none"
+*##set($interpolationMode = $configTool.getValue($site, $headContent, "interpolation", "maven"))#*
+
+// fixProtocolRelativeUrls: fix // URLs to https:// (boolean, default: true)
+*##set($fixProtocolRelativeUrls = $configTool.getBooleanValue($site, $headContent, "fixProtocolRelativeUrls", true))#*
+
+// checkImageLinks: verify that all image links exist (boolean, default: true)
+*##set($checkImageLinks = $configTool.getBooleanValue($site, $headContent, "checkImageLinks", true))#*
+
+// convertImagesToWebp: convert images to WebP format for efficiency (boolean, default: true)
+*##set($convertImagesToWebp = $configTool.getBooleanValue($site, $headContent, "convertImagesToWebp", true))#*
+
+// setExplicitImageSize: set explicit width/height on images (boolean, default: true)
+*##set($setExplicitImageSize = $configTool.getBooleanValue($site, $headContent, "setExplicitImageSize", true))#*
+
+// convertImagesToThumbnails: JSoup selector for images to convert to zoomable thumbnails
+// Set to "false" to disable, default: "img:not([alt=inline]):not([uib-carousel] img)"
+*##set($convertImagesToThumbnails = $configTool.getValue($site, $headContent, "convertImagesToThumbnails", "img:not([alt=inline]):not([uib-carousel] img)"))#*
+
+// externalLinkClass: CSS class to add to external links (default: "externalLink")
+*##set($externalLinkClass = $configTool.getValue($site, $headContent, "externalLinkClass", "externalLink"))#*
+
+// fixHeadings: enable heading anchor fixes, ID cleanup, etc. (boolean, default: true)
+*##set($fixHeadings = $configTool.getBooleanValue($site, $headContent, "fixHeadings", true))#*
+
+// copyToClipboard: JSoup selector for elements with copy-to-clipboard feature
+// Set to "false" to disable, default: "pre"
+*##set($copyToClipboard = $configTool.getValue($site, $headContent, "copyToClipboard", "pre"))#*
+
+// tocSelector: JSoup selector for the ToC element (default: "ul#toc")
+*##set($tocSelector = $configTool.getValue($site, $headContent, "tocSelector", "ul#toc"))#*
+
+// buildIndex: build ElasticLunr search index for this page (boolean, default: true)
+// Per-page setting controls whether THIS page is added to the search index
+*##set($buildIndex = $configTool.getBooleanValue($site, $headContent, "buildIndex", true))#*
+
+// showSearchUI: controls whether search UI is rendered (site-wide only, ignores frontmatter)
+// This ensures the search box isn't hidden on individual pages when buildIndex:false is set per-page
+*##set($showSearchUIDefault = $site.getCustomValue("buildIndex", "true").toLowerCase())#*
+*##set($showSearchUI = $showSearchUIDefault != "false")#*
+
+// buildAiIndex: generate Markdown files for AI indexing and llms.txt (boolean, default: true)
+*##set($buildAiIndex = $configTool.getBooleanValue($site, $headContent, "buildAiIndex", true))#*
+
+// bodyClass: additional CSS class for <body> element (default: empty)
+*##set($bodyClass = $configTool.getValue($site, $headContent, "bodyClass", ""))#*
+
+// syntaxHighlighting: JSoup selector for code blocks requiring syntax highlighting
+// Set to "false" to disable PrismJS loading, default: "pre > code[class*=language-]"
+*##set($syntaxHighlighting = $configTool.getValue($site, $headContent, "syntaxHighlighting", "pre > code[class*=language-]"))#*
 
 // Process content based on interpolation mode
 *##if($interpolationMode == "velocity")#*
@@ -352,8 +389,10 @@ limitations under the License.
 *##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
 *##set($headElement = $htmlTool.parseContent($headContent))#*
 
-// Fix all protocol-relative links
-*##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
+// Fix all protocol-relative links (if enabled)
+*##if($fixProtocolRelativeUrls)#*
+	*##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
+*##end#*
 
 // Transform blockquotes with GitHub-style callouts into styled callouts
 // Syntax: > [!NOTE]\n> Content...
@@ -696,40 +735,56 @@ limitations under the License.
 *##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_warning_sml.gif]", '<i class="fa-solid fa-triangle-exclamation text-warning"></i>', -1))#*
 *##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=newwindow.gif]", '<i class="fa-solid fa-arrow-up-right-from-square"></i>', -1))#*
 
-// Check all images
-*##set($bodyElement = $imageTool.checkImageLinks($bodyElement, ${project.reporting.outputDirectory}, $currentFileName))#*
+// Check all images (if enabled)
+*##if($checkImageLinks)#*
+	*##set($bodyElement = $imageTool.checkImageLinks($bodyElement, ${project.reporting.outputDirectory}, $currentFileName))#*
+*##end#*
 
-// Convert all <IMG> to WEBP format (more efficient)
-*##set($bodyElement = $imageTool.convertImagesToWebp($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
+// Convert all <IMG> to WEBP format (if enabled)
+*##if($convertImagesToWebp)#*
+	*##set($bodyElement = $imageTool.convertImagesToWebp($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
+*##end#*
 
-// Specify the size of the images (makes the rendering more efficient)
-*##set($bodyElement = $imageTool.explicitImageSize($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
+// Specify the size of the images (if enabled)
+*##if($setExplicitImageSize)#*
+	*##set($bodyElement = $imageTool.explicitImageSize($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
+*##end#*
 
-// Surround all <IMG> not marked as "inline" and not inside a carousel with a thumbnail
-*##set($bodyElement = $imageTool.convertImagesToThumbnails(
-		$bodyElement,
-		"img:not([alt=inline]):not([uib-carousel] img)",
-		${project.reporting.outputDirectory},
-		$currentFileName,
-		200, 0,
-		"<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></zoomable>"
-	)
-)#*
-// Present links as footnotes for printing
+// Surround images with a thumbnail (if enabled - check for "false" to disable)
+*##if($convertImagesToThumbnails && $convertImagesToThumbnails != "false")#*
+	*##set($bodyElement = $imageTool.convertImagesToThumbnails(
+			$bodyElement,
+			$convertImagesToThumbnails,
+			${project.reporting.outputDirectory},
+			$currentFileName,
+			200, 0,
+			"<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></zoomable>"
+		)
+	)#*
+*##end#*
+// Present links as footnotes for printing and handle external link class
 *##set($urlFootnoteMap = {})#*
 *##set($footnoteCounter = 1)#*
 *##set($aLinkList = $bodyElement.select("a[href]"))#*
 *##if($aLinkList && !$aLinkList.isEmpty())#*
 	*##foreach ($aLinkElement in $aLinkList)#*
 		*##set($href = $aLinkElement.attr("href"))#*
-		// For all external links, add the "externalLink" class
+		// For all external links, add the configured externalLinkClass
 		// An external link is a URL starting with http(s)://, but not the URL to the project or organization
 		// Maven Doxia actually already tries to do that, but it's not perfect
 		// We're "fixing" this here, so remove the externalLink class when the link refers to the project's URL.
 		*##if($href && ($href.startsWith("http://") || $href.startsWith("https://")) && !($project.url && $href.startsWith($project.url)) && !($project.organization.url && $href.startsWith($project.organization.url)))#*
-			*##set($_ = $aLinkElement.addClass("externalLink"))#*
-		*##else#*
+			// This is an external link - remove Doxia's default class first, then add configured class
 			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
+			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
+				*##set($_ = $aLinkElement.addClass($externalLinkClass))#*
+			*##end#*
+		*##else#*
+			// This is an internal link - remove any external link classes
+			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
+			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
+				*##set($_ = $aLinkElement.removeClass($externalLinkClass))#*
+			*##end#*
 		*##end#*
 		*##if($href && !$href.startsWith("#") && !$href.startsWith("javascript:"))#*
 			*##if($urlFootnoteMap[$href])#*
@@ -748,35 +803,47 @@ limitations under the License.
 *##set($bodyElement = $htmlTool.addClass($bodyElement, "table.bodyTable", ["table", "table-striped", "table-hover"]))#*
 *##set($bodyElement = $htmlTool.fixTableHeads($bodyElement))#*
 
-// Convert old-style <a name=""> anchors to HTML5 <a id="">
-*##set($bodyElement = $htmlTool.headingAnchorToId($bodyElement))#*
+// Heading fixes (if enabled): anchor conversion, ID cleanup, ensure IDs
+*##if($fixHeadings)#*
+	// Convert old-style <a name=""> anchors to HTML5 <a id="">
+	*##set($bodyElement = $htmlTool.headingAnchorToId($bodyElement))#*
 
-// Clean up IDs and corresponding <a href="#..."> references for unsupported characters
-*##set($bodyElement = $htmlTool.fixIds($bodyElement))#*
+	// Clean up IDs and corresponding <a href="#..."> references for unsupported characters
+	*##set($bodyElement = $htmlTool.fixIds($bodyElement))#*
 
-// Make sure all headings have IDs
-*##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*
+	// Make sure all headings have IDs
+	*##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*
+*##end#*
 
 // Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
 *##set($bodyElement = $htmlTool.setAttr($bodyElement, "a[href^=#]", "du-smooth-scroll", ""))#*
 
-// Surround all headings with <a href="#heading-ig">
-*##set($headingList = $bodyElement.select("h2[id],h3[id],h4[id],h5[id],h6[id]"))#*
-*##if($headingList && !$headingList.isEmpty())#*
-	*##foreach($headingElement in $headingList)#*
-		*##set($headingId = $headingElement.id())#*
-		*##set($headingHtml = $headingElement.html())#*
-		*##if($headingId)#*
+// Surround all headings with <a href="#heading-id"> (if fixHeadings is enabled)
+*##if($fixHeadings)#*
+	*##set($headingList = $bodyElement.select("h2[id],h3[id],h4[id],h5[id],h6[id]"))#*
+	*##if($headingList && !$headingList.isEmpty())#*
+		*##foreach($headingElement in $headingList)#*
+			*##set($headingId = $headingElement.id())#*
+			*##set($headingHtml = $headingElement.html())#*
+			*##if($headingId)#*
 			*##call($headingElement.html("<a href='#$headingId'>$headingHtml</a>"))#*
 		*##end#*
 	*##end#*
 *##end#*
+*##end#*
 
-// Use copy-to-clipboard for all <pre> elements
-*##set($bodyElement = $htmlTool.setAttr($bodyElement, "pre", "copy-to-clipboard", ""))#*
+// Use copy-to-clipboard for elements (if enabled - check for "false" to disable)
+*##if($copyToClipboard && $copyToClipboard != "false")#*
+	*##set($bodyElement = $htmlTool.setAttr($bodyElement, $copyToClipboard, "copy-to-clipboard", ""))#*
+*##end#*
 
-// Extract the TOC and put it in a variable
-*##set($tocElementList = $bodyElement.select("ul#toc"))#*
+// Extract the TOC and put it in a variable (using configurable selector)
+// Guard against "false" value which would be an invalid JSoup selector
+*##if($tocSelector && $tocSelector != "false")#*
+	*##set($tocElementList = $bodyElement.select($tocSelector))#*
+*##else#*
+	*##set($tocElementList = [])#*
+*##end#*
 *##if (!$tocElementList.isEmpty())#*
 	// Extract the TOC content
 	// It will be reinserted in the document (so it will be in the final HTML twice:
@@ -799,16 +866,17 @@ limitations under the License.
 *##end#*
 *##set($headElement = $htmlTool.remove($headElement, "meta[name=keywords]") )#*
 
-// Build ElasticLunr index
-*##set($indexFile = "${project.reporting.outputDirectory}/index.json")#*
-*##set($bodyText = $htmlTool.text($bodyElement, "body").get(0) )#*
-*##call($indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText))#*
+// Build ElasticLunr index (if enabled)
+*##if($buildIndex)#*
+	*##set($indexFile = "${project.reporting.outputDirectory}/index.json")#*
+	*##set($bodyText = $htmlTool.text($bodyElement, "body").get(0) )#*
+	*##call($indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText))#*
+*##end#*
 
-// publishDate: either <custom><publishDate> in site.xml,
-// or project.build.outputTimestamp defind in pom.xml, or current date
-*##set($publishDateString = $site.getCustomValue("publishDate", $context.get("project.build.outputTimestamp")))#*
+// publishDate: from configTool (frontmatter > site.xml > project.build.outputTimestamp > current date)
+*##set($publishDateString = $configTool.getValue($site, $headContent, "publishDate", $context.get("project.build.outputTimestamp")))#*
 *##if($StringUtils.isBlank($publishDateString))#*
-	*#$log.debug("No publishDate defined under <custom> in site.xml, and no project.build.outputTimestamp in pom.xml.")#*
+	*#$log.debug("No publishDate defined in frontmatter, site.xml, or project.build.outputTimestamp in pom.xml.")#*
 	*#$log.debug("Will use current date, so the build is not reproducible.")#*
 	*##set($publishDate = $date.systemDate)#*
 *##else#*

@@ -3,7 +3,7 @@ description: Configure the sidebar navigation menu with up to 2 levels of hierar
 
 # Navigation Menu
 
-<!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 The sidebar menu organizes your documentation into sections and pages.
 
@@ -69,3 +69,4 @@ Your site is now set up! Start writing documentation:
 - [Writing a Page](page-structure.html) - Structure your content
 - [Code Highlighting](code.html) - Format code examples
 - [Images](images.html) - Add screenshots
+- [Configuration Reference](settings.html) - Customize skin features
