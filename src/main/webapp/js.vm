@@ -1,0 +1,92 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+*#
+#***********************************************************************
+*
+*    JavaScript section
+*
+*    Contains:
+*    - Main JavaScript libraries (AngularJS, Bootstrap, etc.)
+*    - Site-specific JavaScript (site.js, site-index.js, etc.)
+*    - PrismJS for syntax highlighting (conditional)
+*    - Site configuration constants (RELATIVE_ROOT, SITE_MENU)
+*    - Rendering time debug output
+*
+***********************************************************************
+*#
+	<!-- build:js js/main-combined.js -->
+	<script src="../../../node_modules/mark.js/dist/mark.min.js" charset="UTF-8"></script>
+	<script src="../../../node_modules/angular/angular.min.js"></script>
+	<script src="../../../node_modules/angular-animate/angular-animate.min.js"></script>
+	<script src="../../../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+	<script src="../../../node_modules/angular-scroll/angular-scroll.min.js"></script>
+	<script src="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.js"></script>
+	<script src="../../../node_modules/angular-match-media-light/dist/match-media-light.min.js"></script>
+	<script src="../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+	<script src="../../../node_modules/elasticlunr/release/elasticlunr.min.js"></script>
+	<script src="js/site.js"></script>
+	<script src="js/site-index.js"></script>
+	<script src="js/zoomable.js"></script>
+	<script src="js/truncate.js"></script>
+	<script src="js/copy-to-clipboard.js"></script>
+	<!-- endbuild -->
+
+#if ($syntaxHighlighting && $syntaxHighlighting != "false" && !$bodyElement.select($syntaxHighlighting).empty)
+	<!-- build:js js/prism.js -->
+	<script src="../../../node_modules/prismjs/prism.js"></script>
+	<script src="../../../node_modules/prismjs/plugins/autoloader/prism-autoloader.js"></script>
+	<!-- endbuild -->
+	<script>Prism.plugins.autoloader.languages_path = "$relativePath/js/prism/";</script>
+#end
+	<script>
+angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.java($relativePath)");
+angular.module("sentry.site").constant("SITE_MENU", [
+#foreach ($menu in $site.menus)#*
+*##foreach ($item in $menu.items)
+{
+	path: "$esc.java($item.href)",
+	title: "$esc.java($item.name)",
+	parents: [{ title: "$esc.java($menu.name)" }]
+},
+#**##if (!$item.items.empty)#*
+		*##foreach ($subItem in $item.items)
+{
+	path: "$esc.java($subItem.href)",
+	title: "$esc.java($subItem.name)",
+	parents: [
+		{
+			title: "$esc.java($menu.name)"
+		},
+		{
+			path: "$esc.java($PathTool.calculateLink($item.href, $relativePath))",
+			title: "$esc.java($item.name)"
+		}
+	]
+},
+#*	*##end#*
+	*##end#*
+*##end
+#end
+]);
+
+	</script>
+#set($renderingTime = $date.systemTime - $startTime)#*
+*#$log.debug("Rendering time: $renderingTime ms")

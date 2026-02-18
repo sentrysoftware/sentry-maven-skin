@@ -1,0 +1,177 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+*#
+#***********************************************************************
+*
+*    Banner / Header section
+*
+*    Contains:
+*    - Dark desktop header with bannerLeft, links, and bannerRight
+*    - Mobile banner with site logo and breadcrumbs
+*    - Site banner with search field and documentation title
+*
+***********************************************************************
+*#
+##
+## Dark desktop header with the bannerLeft, links, and bannerRight
+##
+	<header role="banner">
+##
+## Links
+		<div class="hidden-xs navbar navbar-inverse site-logo">
+#if ($site.bannerLeft.href)
+			<div class="navbar-header">
+				<a class="navbar-brand" href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">#*
+*##if ($site.bannerLeft.image && $site.bannerLeft.image.src)#*
+				*#<img src="$PathTool.calculateLink($site.bannerLeft.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
+*##elseif ($site.bannerLeft.src)#*
+				*#<img src="$PathTool.calculateLink($site.bannerLeft.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
+*##elseif ($site.bannerLeft.name)#*
+				*#$site.bannerLeft.name#*
+*##end#*
+			*#</a>
+			</div>
+#end
+			<ul class="nav navbar-nav">
+#links($site.body.links)
+			</ul>
+#if ($site.bannerRight.href || $socialLinks)#*
+*#		<ul class="nav navbar-nav navbar-right">
+#foreach($socialLink in $socialLinks)#*
+*#			<li><a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a></li>
+#end#*
+			## Toggle light/dark
+			*#<li class="dark-toggle"><toggle ng-model="$matchMedia.dark" ng-change="switchColors()" size="btn-xs" width="34px" height="22px" off-class="day" on-class="night" toggle-class="navbar-btn dark-toggle" on="<i class='fa-solid fa-moon'></i>" off="<i class='sun-icon'></i>" title="Switch between dark and light color schemes" tabindex="0"></toggle></li>
+		#if ($site.bannerRight.href)#*
+*#			<li>
+					<a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">#*
+		*##if ($site.bannerRight.image && $site.bannerRight.image.src)#*
+					*#<img src="$PathTool.calculateLink($site.bannerRight.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
+		*##elseif ($site.bannerRight.src)#*
+					*#<img src="$PathTool.calculateLink($site.bannerRight.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
+		*##elseif ($site.bannerRight.name)#*
+	*#$!site.bannerRight.name#*
+		*##end#*
+				*#</a>
+				</li>
+		#end#*
+*#		</ul>
+#end#*
+*#	</div>
+
+## On mobile, display the bannerLeft name (if any), and the breadcrumbs at the very top
+#if ($site.bannerLeft.href && $site.bannerLeft.name)#*
+*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+			<ul class="nav navbar-nav">
+				<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">$!site.bannerLeft.name</a></li>
+			</ul>
+		</div>
+#end#*
+*##if ($site.body.breadcrumbs)#*
+*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs breadcrumb-xs">
+			<ul class="nav navbar-nav">
+#links($site.body.breadcrumbs)
+			</ul>
+		</div>
+#end#*
+		## Banner *#
+		<div class="navbar site-banner">
+
+			<div class="container-fluid">
+
+				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && $matchMedia.size == 'xs'}">#*
+
+					## The Search button (only on xs displays - if search is enabled site-wide) *#
+#if($showSearchUI)
+					<button
+						class="navbar-toggle hidden-lg hidden-md hidden-sm"
+						ng-click="showSearchInput = !showSearchInput; clearSearch()"
+						title="{{ showSearchInput ? 'Close the search' : 'Search' }}"
+						type="button"
+					>
+						<i ng-class="showSearchInput ? 'fas fa-times' : 'fa fa-search'"></i>
+					</button>
+#end
+##
+## The documentation title
+					<div class="navbar-brand">
+#*				*##if($site.body.breadcrumbs && $site.body.breadcrumbs.size() > 0)#*
+*#					<ol class="breadcrumb hidden-xs">
+#links($site.body.breadcrumbs)
+						</ol>
+#*				*##end#*
+*#					<div class="header-title">$site.name</div>
+						<div class="header-subtitle">
+							<span class="version-prefix">Version</span>
+							<span class="version">$site.getCustomValue("projectVersion", $project.version)</span>
+						</div>
+					</div>#*
+
+					## The documentation title minimized (when search is on, on mobile) *#
+					<div class="navbar-brand header-xxs visible-xs">
+						<div class="header-title">$site.name</div>
+						<div class="header-subtitle">
+							Version <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
+						</div>
+					</div>#*
+
+					## The search field (only on xs displays - if search is enabled site-wide) *#
+#if($showSearchUI)
+					<form class="navbar-form site-search site-search-xs visible-xs" ng-show="showSearchInput">
+						<input
+							type="search"
+							class="form-control"
+							placeholder="Search..."
+							aria-label="Search"
+							ng-model="siteSearch"
+							ng-change="search(siteSearch)"
+							ng-model-options="{ debounce: 500 }"
+							ng-keydown="handleKeyboard($event)"
+							ng-focus="prefetchSearchIndex()"
+							focus-me="showSearchInput"
+						/>
+					</form>
+#end
+				</div>
+##
+## Search field on desktop (if search is enabled site-wide)
+#if($showSearchUI)
+				<form class="navbar-form navbar-right site-search hidden-xs">
+					<div class="form-group has-feedback">
+						<input
+							type="text"
+							class="form-control"
+							placeholder="Search..."
+							aria-label="Search"
+							ng-model="siteSearch"
+							ng-change="search(siteSearch)"
+							ng-model-options="{ debounce: 500 }"
+							ng-keydown="handleKeyboard($event)"
+							ng-focus="prefetchSearchIndex()"
+						/>
+						<i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+					</div>
+				</form>
+#end
+
+			</div>
+		</div>
+	</header>

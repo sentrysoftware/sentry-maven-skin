@@ -1,0 +1,227 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+*#
+#***********************************************************************
+*
+*    Common Velocity macros for the Sentry Maven Skin
+*
+***********************************************************************
+*#
+##
+#**
+* Convenience directive to invoke a method and ignore the return value.
+*
+* Usage:
+*	  #call ( $hashtable.put("foo", "bar") )
+**
+*##macro ( call $foo )#*
+	## Do nothing - the 'if' is for ignoring the return value
+	*##if ($foo)#*
+	*##end#*
+*##end#*
+
+
+**
+* Banner helper macro - returns the alt text for a banner image
+*
+* Supports both Maven Site Plugin 3.x and 4.x syntax for banner configuration.
+*
+* 3.x syntax: <bannerLeft><alt>Logo</alt></bannerLeft>
+* 4.x syntax: <bannerLeft><image alt="Logo"/></bannerLeft>
+**
+*##macro(bannerImageAlt $banner)#*
+	*##if ($banner.image && $banner.image.alt)#*
+		*#$esc.html($banner.image.alt)#*
+	*##elseif ($banner.alt)#*
+		*#$esc.html($banner.alt)#*
+	*##elseif ($banner.name)#*
+		*#$esc.html($banner.name)#*
+	*##end#*
+*##end#*
+
+
+**
+* links
+*
+* Outputs a list of links
+*
+* $links must be a list of link objects with the below properties:
+* - href: the URL to link to
+* - name: the text to be displayed
+* - target: the "frame" target of the URL (typically "_blank" for a new tab)
+*
+* The "active" class is automatically put on the <li> element that contains
+* the URL linking to the current page.
+*
+* Output example:
+*
+* <li><a href="other.html">Other Path</a></li>
+* <li class="active"><a href="current.html">Current Path</a></li>
+* <li><a href="pretty.html"><i class="fa fa-plus-sign"></i> Pretty</a></li>
+**
+*##macro(links $links)#*
+
+	*##foreach($item in $links)#*
+
+		## Calculate how to reach the menu item's link from where we are
+		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+
+		## Check whether this menu item should be set as "active", i.e.
+		## the current page we're rendering matches with this menu item
+		*##set($activeLink = false)#*
+		*##if ($alignedHref == $alignedFileName)#*
+			*##set($activeLink = true)#*
+		*##end#*
+
+		## <li> or <li class="active">
+		*##if ($activeLink)<li class="active">#{else}<li>#end#*
+			## The <a href="..." class="externalLink?" target="..."> link
+			*#<a #*
+				*##if ($item.href)href="$alignedHref"#end#*
+				*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "" && $item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="$externalLinkClass"#end#*
+				*##if ($item.target) target="$target"#end#*
+				*#>#*
+				*#$item.name#*
+			*#</a>#*
+		*#</li>
+#*
+	*##end#*
+
+*##end#*
+
+**
+* leftMenu
+*
+* Macro that builds the left menu from $site.body.menus
+*
+**
+*##macro(leftMenu)#*
+	*##set($hrefList = [])#*
+	*##foreach ($menu in $site.body.menus)
+		<h5 class="text-uppercase">$menu.name</h5>
+#*	*##leftMenuRecursive($menu.items, false)#*
+	*##end#*
+*##end#*
+
+**
+* leftMenuRecursive
+*
+* Recursive macro that creates the left menu with all the specified links
+*
+* The "active" class is automatically put on the <li> element that contains
+* the URL linking to the current page.
+*
+**
+*##macro(leftMenuRecursive $links $closeable)#*
+*#
+<ul class="nav nav-pills nav-stacked animate"#if ($closeable) ng-hide="hideSubItems"#end>
+#*
+*##foreach($item in $links)#*
+
+		## Calculate how to reach the menu item's link from where we are
+		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+
+		## Check whether this menu item should be set as "active", i.e.
+		## the current page we're rendering matches with this menu item...
+		## or matches with any sub menu item
+		*##set($activeLink = false)#*
+		*##set($openLink = false)#*
+		*##if ($alignedHref == $alignedFileName)#*
+			*##set($activeLink = true)#*
+		*##else#*
+			*##foreach($subItem in $item.items)#*
+				*##if ($alignedFileName == $PathTool.calculateLink($subItem.href, $relativePath)) #set($openLink = true)#end#*
+			*##end#*
+		*##end#*
+
+		## Check if this link was already displayed, in which case we dismiss it
+		*##if($hrefList.contains($item.href))#*
+			*##set($skipItem = true)#*
+		*##else#*
+			*##set($skipItem = false)#*
+			*##call($hrefList.add($item.href))#*
+		*##end#*
+
+		## <li> or <li class="active">
+		*##if(!$skipItem || $openLink)#*
+			*##if ($activeLink)<li class="active">#{else}<li>#end#*
+				## The <a href="..." target="..."> link
+				*#<a #*
+					*##if ($item.href)href="$alignedHref"#end#*
+					*##if ($item.target) target="$target"#end#*
+					*##if ($activeLink) ng-click="hideSubItems = !hideSubItems"#end#*
+					*#>#*
+					## Icon (different for topics with subtopics)
+					*##if ($item.items.empty)#*
+						*##if ($item.href == "/" || $item.href == "index.html")#*
+							*#<i class="fas fa-home"></i>#*
+						*##else#*
+							*#<i class="fas fa-file-alt"></i>#*
+						*##end#*
+					*##else#*
+						*##if ($openLink || $activeLink)#*
+							*#<i ng-class="hideSubItems ? 'fas fa-folder' : 'fas fa-folder-open'"></i>#*
+						*##else#*
+							*#<i class="fas fa-folder"></i>#*
+						*##end#*
+					*##end#*
+					*# $item.name#*
+					*##if (!$item.items.empty) <span class="badge">$item.items.size()</span>#end#*
+				*#</a>#*
+			*#</li>
+#*
+			## If link is active and has subitems, show them
+			*##if (($openLink || $activeLink) && !$item.items.empty)#leftMenuRecursive($item.items, $activeLink)#end
+#*	*##end#*
+	*##end#*
+
+*#</ul>
+#*
+*##end#*
+
+
+**
+* getMenuSection
+*
+* Returns the menu name (section) that the current file belongs to.
+* Returns empty string if the file is not found in any menu.
+*
+* This is used by AIIndexTool.updateLlmsTxt() to categorize pages in llms.txt
+**
+*##macro(getMenuSection)#*
+	*##foreach($menu in $site.body.menus)#*
+		*##foreach($item in $menu.items)#*
+			*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
+			*##if ($alignedHref == $alignedFileName)#*
+				*#$menu.name#*
+				*##break($foreach.parent)#*
+			*##else#*
+				*##foreach($subItem in $item.items)#*
+					*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
+					*##if ($alignedSubHref == $alignedFileName)#*
+						*#$menu.name#*
+						*##break($foreach.parent)#*
+					*##end#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end

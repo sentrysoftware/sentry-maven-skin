@@ -1,24 +1,34 @@
 // Verify that the Maven Site Plugin 4.x integration test works correctly
 // This script runs after the site is generated to verify all features work
 
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
+
+// Helper to parse HTML file with JSoup
+def parseHtml = { File file ->
+    Jsoup.parse(file, "UTF-8")
+}
+
 // Verify that the files have been created properly
 def indexFile = new File(basedir, "target/site/index.html")
 assert indexFile.isFile() : "index.html must have been generated"
 
-// Read the index.html content
-def indexHtml = indexFile.text
+// Parse the index.html content
+Document indexDoc = parseHtml(indexFile)
+def indexHtml = indexFile.text // Keep raw text for some specific tests
 
 // ============================================================================
 // TEST: Site name and title from site.xml
 // ============================================================================
-assert indexHtml.contains("Site4 Test Project") : "Site name from site.xml must be present"
-assert indexHtml.contains("<title>") : "HTML title must be present"
+assert indexDoc.text().contains("Site4 Test Project") : "Site name from site.xml must be present"
+assert indexDoc.select("title").size() > 0 : "HTML title must be present"
 
 // ============================================================================
 // TEST: Custom properties
 // ============================================================================
-assert indexHtml.contains("1.0-SNAPSHOT-site4") : "Custom projectVersion from site.xml must be present"
-assert indexHtml.contains('class="sentry-site sentry-green"') : "Custom bodyClass must be applied"
+assert indexDoc.text().contains("1.0-SNAPSHOT-site4") : "Custom projectVersion from site.xml must be present"
+assert indexDoc.select('body.sentry-site.sentry-green').size() > 0 : "Custom bodyClass must be applied"
 
 // ============================================================================
 // TEST: Google Analytics
@@ -26,49 +36,48 @@ assert indexHtml.contains('class="sentry-site sentry-green"') : "Custom bodyClas
 assert indexHtml.contains("SITE4_GOOGLE_ID") : "Google Analytics ID must be inserted"
 
 // ============================================================================
-// TEST: Banner left and right
-// ============================================================================
 // TEST: Banner left and right (with new <image> sub-element syntax)
 // ============================================================================
-assert indexHtml.contains('href="https://example.org"') : "bannerLeft.href must be included"
-assert indexHtml.contains("Banner Left") : "bannerLeft.name must be included"
-assert indexHtml.contains('src="images/icon.png"') : "bannerLeft.image.src must be included (new 4.x syntax)"
-assert indexHtml.contains('alt="Banner Left Logo"') : "bannerLeft.image.alt must be included (new 4.x syntax)"
-assert indexHtml.contains('href="https://maven.apache.org"') : "bannerRight.href must be included"
-assert indexHtml.contains("Banner Right") : "bannerRight.name must be included"
-assert indexHtml.contains('src="images/test-image.png"') : "bannerRight.image.src must be included (new 4.x syntax)"
-assert indexHtml.contains('alt="Banner Right Logo"') : "bannerRight.image.alt must be included (new 4.x syntax)"
+assert indexDoc.select('a[href=https://example.org]').size() > 0 : "bannerLeft.href must be included"
+assert indexDoc.select(':contains(Banner Left)').size() > 0 : "bannerLeft.name must be included"
+assert indexDoc.select('img[src=images/icon.png]').size() > 0 : "bannerLeft.image.src must be included (new 4.x syntax)"
+assert indexDoc.select('img[alt=Banner Left Logo]').size() > 0 : "bannerLeft.image.alt must be included (new 4.x syntax)"
+assert indexDoc.select('a[href=https://maven.apache.org]').size() > 0 : "bannerRight.href must be included"
+assert indexDoc.select(':contains(Banner Right)').size() > 0 : "bannerRight.name must be included"
+assert indexDoc.select('img[src=images/test-image.png]').size() > 0 : "bannerRight.image.src must be included (new 4.x syntax)"
+assert indexDoc.select('img[alt=Banner Right Logo]').size() > 0 : "bannerRight.image.alt must be included (new 4.x syntax)"
 
 // ============================================================================
 // TEST: Navigation menus
 // ============================================================================
-assert indexHtml.contains("Getting Started") : "Menu 'Getting Started' must be present"
-assert indexHtml.contains("Content Examples") : "Menu 'Content Examples' must be present"
-assert indexHtml.contains("Advanced") : "Menu 'Advanced' must be present"
-assert indexHtml.contains('href="features.html"') : "Menu item link to features.html must be present"
+assert indexDoc.select(':contains(Getting Started)').size() > 0 : "Menu 'Getting Started' must be present"
+assert indexDoc.select(':contains(Content Examples)').size() > 0 : "Menu 'Content Examples' must be present"
+assert indexDoc.select(':contains(Advanced)').size() > 0 : "Menu 'Advanced' must be present"
+assert indexDoc.select('a[href=features.html]').size() > 0 : "Menu item link to features.html must be present"
 
 // ============================================================================
 // TEST: Breadcrumbs
 // ============================================================================
-assert indexHtml.contains("Docs Home") : "Breadcrumb 'Docs Home' must be present"
+assert indexDoc.select(':contains(Docs Home)').size() > 0 : "Breadcrumb 'Docs Home' must be present"
 
 // ============================================================================
 // TEST: Social links
 // ============================================================================
-assert indexHtml.contains("twitter.com/MavenProject") : "Twitter link must be present"
-assert indexHtml.contains("linkedin.com") : "LinkedIn link must be present"
+assert indexDoc.select('a[href*=twitter.com/MavenProject]').size() > 0 : "Twitter link must be present"
+assert indexDoc.select('a[href*=linkedin.com]').size() > 0 : "LinkedIn link must be present"
 
 // ============================================================================
 // TEST: Additional links
 // ============================================================================
-assert indexHtml.contains("License") : "Additional link 'License' must be present"
-assert indexHtml.contains("Contact") : "Additional link 'Contact' must be present"
+assert indexDoc.select(':contains(License)').size() > 0 : "Additional link 'License' must be present"
+assert indexDoc.select(':contains(Contact)').size() > 0 : "Additional link 'Contact' must be present"
 
 // ============================================================================
 // TEST: Footer
 // ============================================================================
-assert indexHtml.contains("Test Organization") : "Organization name must be in footer"
-assert indexHtml.contains("2024") : "Inception year must be in footer"
+def footer = indexDoc.select('footer.footer')
+assert footer.text().contains("Test Organization") : "Organization name must be in footer"
+assert footer.text().contains("2024") : "Inception year must be in footer"
 
 // ============================================================================
 // TEST: schema.org JSON-LD metadata
@@ -79,17 +88,17 @@ assert indexHtml.contains('"@type": "TechArticle"') : "schema.org type must be T
 // ============================================================================
 // TEST: Generator meta tag shows skin info
 // ============================================================================
-assert indexHtml =~ /<meta name="generator" content="Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin/ : "Generator meta must mention the skin"
+assert indexDoc.select('meta[name=generator]').attr('content') =~ /Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin/ : "Generator meta must mention the skin"
 
 // ============================================================================
 // TEST: Features page with metadata
 // ============================================================================
 def featuresFile = new File(basedir, "target/site/features.html")
 assert featuresFile.isFile() : "features.html must have been generated"
-def featuresHtml = featuresFile.text
-assert featuresHtml.contains('<meta name="keywords" content="features,site4,maven,documentation') : "Keywords from frontmatter must be present"
-assert featuresHtml.contains('<meta name="description" content="Complete list of features') : "Description from frontmatter must be present"
-assert featuresHtml.contains('<meta name="author" content="Test Author"') : "Author from frontmatter must be present"
+Document featuresDoc = parseHtml(featuresFile)
+assert featuresDoc.select('meta[name=keywords]').attr('content').startsWith('features,site4,maven,documentation') : "Keywords from frontmatter must be present"
+assert featuresDoc.select('meta[name=description]').attr('content').startsWith('Complete list of features') : "Description from frontmatter must be present"
+assert featuresDoc.select('meta[name=author]').attr('content') == 'Test Author' : "Author from frontmatter must be present"
 
 // ============================================================================
 // TEST: Interpolation (maven mode)
@@ -215,40 +224,41 @@ assert indexHtml.contains("1.0-SNAPSHOT") : "Project version must be replaced vi
 // ============================================================================
 def codeSamplesFile = new File(basedir, "target/site/code-samples.html")
 assert codeSamplesFile.isFile() : "code-samples.html must have been generated"
+Document codeSamplesDoc = parseHtml(codeSamplesFile)
 def codeSamplesHtml = codeSamplesFile.text
 assert codeSamplesHtml.contains("prism.js") : "Page with code must load prism.js"
-assert codeSamplesHtml.contains("language-java") : "Java code block must have language class"
-assert codeSamplesHtml.contains("<pre copy-to-clipboard") : "<pre> blocks must have copy-to-clipboard attribute"
+assert codeSamplesDoc.select('code.language-java').size() > 0 : "Java code block must have language class"
+assert codeSamplesDoc.select('pre[copy-to-clipboard]').size() > 0 : "<pre> blocks must have copy-to-clipboard attribute"
 
 // ============================================================================
 // TEST: TOC macro works with Maven Site Plugin 4.x / Doxia 2.x
 // ============================================================================
-assert indexHtml =~ /(?s)toc-inline-container.*Table of Contents.*ul id="toc"/ : "TOC must be inserted inline"
-assert indexHtml.indexOf('id="right-toc"') > -1 : "A copy of the TOC has been inserted in the sidebar"
-assert indexHtml.indexOf('id="toc"') == indexHtml.lastIndexOf('id="toc"') : "The ID of the 2nd TOC must be changed (no duplicate)"
+assert indexDoc.select('.toc-inline-container').size() > 0 : "TOC inline container must exist"
+assert indexDoc.select('#toc').size() == 1 : "Only one element with id=toc (no duplicates)"
+assert indexDoc.select('#right-toc').size() > 0 : "A copy of the TOC has been inserted in the sidebar"
 
 // ============================================================================
 // TEST: Tables
 // ============================================================================
 def tablesFile = new File(basedir, "target/site/tables.html")
 assert tablesFile.isFile() : "tables.html must have been generated"
-def tablesHtml = tablesFile.text
-assert tablesHtml.contains('class="bodyTable table table-striped table-hover"') : "Tables must have Bootstrap classes"
+Document tablesDoc = parseHtml(tablesFile)
+assert tablesDoc.select('table.bodyTable.table.table-striped.table-hover').size() > 0 : "Tables must have Bootstrap classes"
 
 // ============================================================================
 // TEST: Nested navigation (subdirectory)
 // ============================================================================
 def advancedIndexFile = new File(basedir, "target/site/advanced/index.html")
 assert advancedIndexFile.isFile() : "advanced/index.html must have been generated"
-def advancedIndexHtml = advancedIndexFile.text
-assert advancedIndexHtml.contains("../css/") : "Page in subdir must refer to ../css/"
-assert advancedIndexHtml.contains("../js/") : "Page in subdir must refer to ../js/"
+Document advancedIndexDoc = parseHtml(advancedIndexFile)
+assert advancedIndexDoc.select('link[href^=../css/]').size() > 0 : "Page in subdir must refer to ../css/"
+assert advancedIndexDoc.select('script[src^=../js/]').size() > 0 : "Page in subdir must refer to ../js/"
 
 def topicAFile = new File(basedir, "target/site/advanced/topic-a.html")
 assert topicAFile.isFile() : "advanced/topic-a.html must have been generated"
-def topicAHtml = topicAFile.text
+Document topicADoc = parseHtml(topicAFile)
 // Verify breadcrumb parents are shown
-assert topicAHtml.contains("Advanced") : "Parent menu 'Advanced' should be in breadcrumb"
+assert topicADoc.select(':contains(Advanced)').size() > 0 : "Parent menu 'Advanced' should be in breadcrumb"
 
 // ============================================================================
 // TEST: UI Components
@@ -256,38 +266,39 @@ assert topicAHtml.contains("Advanced") : "Parent menu 'Advanced' should be in br
 // ============================================================================
 def uiComponentsFile = new File(basedir, "target/site/ui-components.html")
 assert uiComponentsFile.isFile() : "ui-components.html must have been generated"
+Document uiComponentsDoc = parseHtml(uiComponentsFile)
 def uiComponentsHtml = uiComponentsFile.text
 // Basic structure check - div elements should be present
-assert uiComponentsHtml.contains('<div') : "Div elements must be present"
-assert uiComponentsHtml.contains('UI Components') : "Page title must be present"
+assert uiComponentsDoc.select('div').size() > 0 : "Div elements must be present"
+assert uiComponentsDoc.text().contains('UI Components') : "Page title must be present"
 
 // ============================================================================
 // TEST: Tabs ([!TABS] blockquote syntax)
 // ============================================================================
-assert uiComponentsHtml.contains('<uib-tabset') : "UIB tabset element must be present"
-assert uiComponentsHtml.contains('<uib-tab') : "UIB tab element must be present"
-assert uiComponentsHtml.contains('active="demoTabs"') : "Custom active variable must be set"
-assert uiComponentsHtml.contains('justified="true"') : "Justified attribute must be parsed"
-assert uiComponentsHtml.contains('First') && uiComponentsHtml.contains('Tab') : "Tab heading must be extracted"
-assert uiComponentsHtml.contains('<uib-tab-heading>') : "Tab headings must use uib-tab-heading"
-assert uiComponentsHtml.contains('fa-home') : "Tab heading HTML must be preserved"
-assert uiComponentsHtml.contains('first tab') : "Tab content must be preserved"
-assert uiComponentsHtml.contains('Tab 1') : "Basic tabs must be generated"
+assert uiComponentsDoc.select('uib-tabset').size() > 0 : "UIB tabset element must be present"
+assert uiComponentsDoc.select('uib-tab').size() > 0 : "UIB tab element must be present"
+assert uiComponentsDoc.select('uib-tabset[active=demoTabs]').size() > 0 : "Custom active variable must be set"
+assert uiComponentsDoc.select('uib-tabset[justified=true]').size() > 0 : "Justified attribute must be parsed"
+assert uiComponentsDoc.select('uib-tab-heading').text().contains('First') : "Tab heading must be extracted"
+assert uiComponentsDoc.select('uib-tab-heading').size() > 0 : "Tab headings must use uib-tab-heading"
+assert uiComponentsDoc.select('i.fa-home').size() > 0 : "Tab heading HTML must be preserved"
+assert uiComponentsDoc.text().contains('first tab') : "Tab content must be preserved"
+assert uiComponentsDoc.text().contains('Tab 1') : "Basic tabs must be generated"
 
 // ============================================================================
 // TEST: Accordion ([!ACCORDION] blockquote syntax)
 // ============================================================================
-assert uiComponentsHtml.contains('<uib-accordion') : "UIB accordion element must be present"
-assert uiComponentsHtml.contains('Section 1') : "Accordion panel title must be extracted"
-assert uiComponentsHtml.contains('Section 2') : "Accordion panel title must be extracted"
+assert uiComponentsDoc.select('uib-accordion').size() > 0 : "UIB accordion element must be present"
+assert uiComponentsDoc.text().contains('Section 1') : "Accordion panel title must be extracted"
+assert uiComponentsDoc.text().contains('Section 2') : "Accordion panel title must be extracted"
 
 // ============================================================================
 // TEST: Collapsible sections ([!COLLAPSIBLE] blockquote syntax)
 // ============================================================================
-assert uiComponentsHtml.contains('uib-collapse=') : "UIB collapse directive must be present for collapsible sections"
-assert uiComponentsHtml.contains('Click to expand this FAQ item') : "Collapsible title must be extracted correctly"
-assert uiComponentsHtml.contains('collapsed content') : "Collapsible content must be preserved"
-assert uiComponentsHtml.contains('fa-chevron') : "Chevron icons must be present in toggle button"
+assert uiComponentsDoc.select('[uib-collapse]').size() > 0 : "UIB collapse directive must be present for collapsible sections"
+assert uiComponentsDoc.text().contains('Click to expand this FAQ item') : "Collapsible title must be extracted correctly"
+assert uiComponentsDoc.text().contains('collapsed content') : "Collapsible content must be preserved"
+assert uiComponentsDoc.select('i[class*=fa-chevron]').size() > 0 : "Chevron icons must be present in toggle button"
 assert !uiComponentsHtml.contains('[!COLLAPSIBLE]') : "Collapsible marker must be removed from output"
 
 // ============================================================================
@@ -341,58 +352,59 @@ assert !(indexHtml =~ '"//') : "URLs must not be protocol-relative"
 // ============================================================================
 def noThumbnailsFile = new File(basedir, "target/site/config/no-thumbnails.html")
 assert noThumbnailsFile.isFile() : "no-thumbnails.html must have been generated"
-def noThumbnailsHtml = noThumbnailsFile.text
-assert !noThumbnailsHtml.contains("<zoomable") : "Page with convertImagesToThumbnails:false must not have zoomable elements"
-assert noThumbnailsHtml.contains("<img") : "Page must still have img elements"
+Document noThumbnailsDoc = parseHtml(noThumbnailsFile)
+assert noThumbnailsDoc.select('zoomable').size() == 0 : "Page with convertImagesToThumbnails:false must not have zoomable elements"
+assert noThumbnailsDoc.select('img').size() > 0 : "Page must still have img elements"
 
 // ============================================================================
 // TEST: Configuration - No Syntax Highlighting (syntaxHighlighting: false)
 // ============================================================================
 def noSyntaxFile = new File(basedir, "target/site/config/no-syntax-highlighting.html")
 assert noSyntaxFile.isFile() : "no-syntax-highlighting.html must have been generated"
+Document noSyntaxDoc = parseHtml(noSyntaxFile)
 def noSyntaxHtml = noSyntaxFile.text
-assert !noSyntaxHtml.contains('src="../js/prism.js"') : "Page with syntaxHighlighting:false must not load prism.js script"
-assert !noSyntaxHtml.contains('src="js/prism.js"') : "Page with syntaxHighlighting:false must not load prism.js script"
-assert noSyntaxHtml.contains("<code class=\"language-") : "Page must still have code blocks"
+assert noSyntaxDoc.select('script[src*=prism.js]').size() == 0 : "Page with syntaxHighlighting:false must not load prism.js script"
+assert noSyntaxDoc.select('code[class^=language-]').size() > 0 : "Page must still have code blocks"
 
 // ============================================================================
 // TEST: Configuration - No Copy Button (copyToClipboard: false)
 // ============================================================================
 def noCopyFile = new File(basedir, "target/site/config/no-copy-button.html")
 assert noCopyFile.isFile() : "no-copy-button.html must have been generated"
-def noCopyHtml = noCopyFile.text
-assert !noCopyHtml.contains('copy-to-clipboard=""') : "Page with copyToClipboard:false must not have copy-to-clipboard attribute"
-assert noCopyHtml.contains("<pre>") : "Page must still have pre elements"
+Document noCopyDoc = parseHtml(noCopyFile)
+assert noCopyDoc.select('pre[copy-to-clipboard]').size() == 0 : "Page with copyToClipboard:false must not have copy-to-clipboard attribute"
+assert noCopyDoc.select('pre').size() > 0 : "Page must still have pre elements"
 
 // ============================================================================
 // TEST: Configuration - Custom Body Class
 // ============================================================================
 def customBodyFile = new File(basedir, "target/site/config/custom-body-class.html")
 assert customBodyFile.isFile() : "custom-body-class.html must have been generated"
-def customBodyHtml = customBodyFile.text
-assert customBodyHtml.contains('class="sentry-site custom-page-class my-special-theme"') : "Body must have custom classes from frontmatter"
+Document customBodyDoc = parseHtml(customBodyFile)
+assert customBodyDoc.select('body.sentry-site.custom-page-class.my-special-theme').size() > 0 : "Body must have custom classes from frontmatter"
 
 // ============================================================================
 // TEST: Configuration - All Disabled
 // ============================================================================
 def allDisabledFile = new File(basedir, "target/site/config/all-disabled.html")
 assert allDisabledFile.isFile() : "all-disabled.html must have been generated"
+Document allDisabledDoc = parseHtml(allDisabledFile)
 def allDisabledHtml = allDisabledFile.text
-assert allDisabledHtml.contains('class="sentry-site minimal-page"') : "Body must have minimal-page class"
-assert !allDisabledHtml.contains("<zoomable") : "Must not have zoomable elements"
+assert allDisabledDoc.select('body.sentry-site.minimal-page').size() > 0 : "Body must have minimal-page class"
+assert allDisabledDoc.select('zoomable').size() == 0 : "Must not have zoomable elements"
 assert !allDisabledHtml.contains("prism.js") : "Must not load prism.js"
-assert !allDisabledHtml.contains('copy-to-clipboard=""') : "Must not have copy-to-clipboard"
+assert allDisabledDoc.select('pre[copy-to-clipboard]').size() == 0 : "Must not have copy-to-clipboard"
 // Check that ${project.version} is NOT interpolated (should appear literally)
 assert allDisabledHtml.contains('${project.version}') : "With interpolation:none, ${project.version} should appear literally"
 // Check that externalLinkClass:false removes the externalLink class from external links
-assert !allDisabledHtml.contains('class="externalLink"') : "With externalLinkClass:false, external links must not have externalLink class"
+assert allDisabledDoc.select('a.externalLink').size() == 0 : "With externalLinkClass:false, external links must not have externalLink class"
 
 // ============================================================================
 // TEST: Configuration - No Search Index
 // ============================================================================
 def noSearchFile = new File(basedir, "target/site/config/no-search-index.html")
 assert noSearchFile.isFile() : "no-search-index.html must have been generated"
-def noSearchHtml = noSearchFile.text
+Document noSearchDoc = parseHtml(noSearchFile)
 
 // Verify this page is NOT in the search index (reuse indexJson from earlier)
 assert !indexJson.contains('"config/no-search-index.html"') : "Page with buildIndex:false must not be in index.json"
@@ -406,15 +418,15 @@ def llmsTxtContent = new File(basedir, "target/site/llms.txt").text
 assert !llmsTxtContent.contains("no-search-index.html") : "Page with buildAiIndex:false must not be listed in llms.txt"
 
 // Verify search UI is still present (buildIndex:false per-page should NOT hide search UI)
-assert noSearchHtml.contains('site-search') : "Search UI must still be present even when buildIndex:false per-page"
+assert noSearchDoc.select('[site-search]').size() > 0 || noSearchDoc.html().contains('site-search') : "Search UI must still be present even when buildIndex:false per-page"
 
 // ============================================================================
 // TEST: Configuration - No Image Processing
 // ============================================================================
 def noImageProcFile = new File(basedir, "target/site/config/no-image-processing.html")
 assert noImageProcFile.isFile() : "no-image-processing.html must have been generated"
-def noImageProcHtml = noImageProcFile.text
-assert !noImageProcHtml.contains("<zoomable") : "Must not have zoomable elements when thumbnails disabled"
+Document noImageProcDoc = parseHtml(noImageProcFile)
+assert noImageProcDoc.select('zoomable').size() == 0 : "Must not have zoomable elements when thumbnails disabled"
 // Note: WebP conversion check would require checking actual image files
 
 // ============================================================================

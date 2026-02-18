@@ -23,11 +23,13 @@ Beware that this project is a baroc mix of languages, frameworks and libraries:
 
 The _Sentry Maven Skin_ project is made of several main components:
 
-- `./src/webapp/**`: the front-end web app, including CSS, JS, HTML templates, etc.
-- `./src/webapp/site.vm`: the _Velocity_ template that will generate each HTML page, this is the one referencing the JS and CSS
-- `./src/package.json`: for NPM
-- `./src/gulpfile.js`: to build and minify the web app
-- `./src/it/studio-km`: an integration test using a slightly customized version of Monitoring Studio's documentation
+- `./src/main/webapp/**`: the front-end web app, including CSS, JS, HTML templates, etc.
+- `./src/main/webapp/site.vm`: the main _Velocity_ template entry point
+- `./src/main/webapp/*.vm`: modular Velocity templates (head, banner, menu, content, footer, etc.)
+- `./package.json`: for NPM
+- `./gulpfile.js`: to build and minify the web app
+- `./src/it/studio-km`: integration test for Maven Site Plugin 3.x
+- `./src/it/site4`: integration test for Maven Site Plugin 4.x
 
 ## Build
 

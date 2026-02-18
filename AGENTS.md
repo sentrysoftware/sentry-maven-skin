@@ -37,8 +37,18 @@ The skin requires **[maven-skin-tools](https://github.com/sentrysoftware/maven-s
 sentry-maven-skin/
 ├── src/
 │   ├── main/webapp/          # Frontend source code
-│   │   ├── site.vm           # Main Velocity template (generates each HTML page)
-│   │   ├── tools.vm          # Velocity macros and utilities
+│   │   ├── site.vm           # Main Velocity template entry point
+│   │   ├── init.vm           # Initialization and variable setup
+│   │   ├── macros.vm         # Reusable Velocity macros
+│   │   ├── head.vm           # HTML <head> section
+│   │   ├── metadata.vm       # Meta tags and JSON-LD
+│   │   ├── banner.vm         # Header banner and navigation
+│   │   ├── left-menu.vm      # Left sidebar menu
+│   │   ├── main.vm           # Main content area
+│   │   ├── content.vm        # Body content processing
+│   │   ├── blockquotes.vm    # UI components (tabs, accordions, etc.)
+│   │   ├── footer.vm         # Page footer
+│   │   ├── js.vm             # JavaScript includes
 │   │   ├── css/              # Stylesheets (sentry.css, print.css)
 │   │   ├── js/               # JavaScript files (site.js, site-index.js)
 │   │   └── fonts/            # Custom fonts
@@ -102,7 +112,12 @@ http-server target/site                        # Project documentation
 3. Preview results in `target/it/studio-km/target/site/` or `target/site/`
 
 > [!TIP]
-> When changing skin behavior, always check both integration tests (`studio-km` for Maven Site Plugin 3.x, `site4` for 4.x) and the project's own documentation site.
+> When changing skin behavior, always run `mvn clean install site` and check both integration tests (`studio-km` for Maven Site Plugin 3.x, `site4` for 4.x) and the project's own documentation site.
+>
+> When the behavior of the skin is not changed (for example when you're updating the documentation or the integration tests), you must not run a full build cycle:
+>
+> - For documentation only changes, simply run `mvn site`.
+> - For tests changes, run `mvn verify`.
 
 ### Quick Iteration for Integration Tests
 
@@ -154,7 +169,17 @@ No automated formatting. Follow these conventions:
 Integration tests run automatically during `mvn install`. Each test:
 
 1. Builds a documentation site using the skin
-2. Verifies output with `verify.groovy` (checks HTML structure, assets, links)
+2. Verifies output with `verify.groovy` using [JSoup](https://jsoup.org/) for HTML parsing
+
+The tests use JSoup CSS selectors to verify HTML structure, making assertions more readable and robust:
+
+```groovy
+// Example: Check meta tag content
+assert doc.select('meta[name=description]').attr('content').startsWith('Expected...') : "Description must be set"
+
+// Example: Verify element structure
+assert doc.select('main.main-content .search-results').size() > 0 : "Search results must be inside main"
+```
 
 | Test Project | Maven Site Plugin | Source Location     |
 | ------------ | ----------------- | ------------------- |
@@ -178,14 +203,24 @@ Integration tests run automatically during `mvn install`. Each test:
 
 ## Key Files
 
-| File                             | Purpose                                   |
-| -------------------------------- | ----------------------------------------- |
-| `src/main/webapp/site.vm`        | Main HTML template - generates every page |
-| `src/main/webapp/tools.vm`       | Velocity macros used by site.vm           |
-| `src/main/webapp/js/site.js`     | Main AngularJS application                |
-| `src/main/webapp/css/sentry.css` | Main stylesheet                           |
-| `src/main/webapp/css/print.css`  | Print-specific styles                     |
-| `src/site/markdown/*.md`         | Project documentation (dogfooding)        |
+| File                             | Purpose                                        |
+| -------------------------------- | ---------------------------------------------- |
+| `src/main/webapp/site.vm`        | Main template entry point                      |
+| `src/main/webapp/init.vm`        | Variable initialization and setup              |
+| `src/main/webapp/macros.vm`      | Reusable Velocity macros                       |
+| `src/main/webapp/head.vm`        | HTML head section (CSS, meta tags)             |
+| `src/main/webapp/metadata.vm`    | Meta tags and schema.org JSON-LD               |
+| `src/main/webapp/banner.vm`      | Header banner and top navigation               |
+| `src/main/webapp/left-menu.vm`   | Left sidebar navigation menu                   |
+| `src/main/webapp/main.vm`        | Main content wrapper and search results        |
+| `src/main/webapp/content.vm`     | Body content processing (TOC, images, etc.)    |
+| `src/main/webapp/blockquotes.vm` | UI components (tabs, accordions, collapsibles) |
+| `src/main/webapp/footer.vm`      | Page footer with copyright and links           |
+| `src/main/webapp/js.vm`          | JavaScript includes                            |
+| `src/main/webapp/js/site.js`     | Main AngularJS application                     |
+| `src/main/webapp/css/sentry.css` | Main stylesheet                                |
+| `src/main/webapp/css/print.css`  | Print-specific styles                          |
+| `src/site/markdown/*.md`         | Project documentation (dogfooding)             |
 
 ## Getting Help
 
