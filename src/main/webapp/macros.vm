@@ -97,7 +97,7 @@ limitations under the License.
 			*#<a #*
 				*##if ($item.href)href="$alignedHref"#end#*
 				*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "" && $item.href && ($item.href.startsWith("http://") || $item.href.startsWith("https://")) && !($project.url && $item.href.startsWith($project.url)) && !($project.organization.url && $item.href.startsWith($project.organization.url))) class="$externalLinkClass"#end#*
-				*##if ($item.target) target="$target"#end#*
+				*##if ($item.target) target="$item.target"#end#*
 				*#>#*
 				*#$item.name#*
 			*#</a>#*
@@ -166,7 +166,7 @@ limitations under the License.
 				## The <a href="..." target="..."> link
 				*#<a #*
 					*##if ($item.href)href="$alignedHref"#end#*
-					*##if ($item.target) target="$target"#end#*
+					*##if ($item.target) target="$item.target"#end#*
 					*##if ($activeLink) ng-click="hideSubItems = !hideSubItems"#end#*
 					*#>#*
 					## Icon (different for topics with subtopics)
