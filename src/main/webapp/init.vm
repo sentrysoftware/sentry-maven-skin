@@ -1,0 +1,184 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+**
+* Initialization and Configuration
+*
+* - Compatibility between Maven Site Plugin 3.x and 4.x
+* - Configuration from site.xml and frontmatter
+* - Property interpolation
+* - HTML parsing
+*
+**
+
+* Compatibility between Maven Site Plugin 3.x and 4.x
+* In 3.x, the site model is available as $decoration
+* In 4.x, it's available as $site (and $decoration is deprecated)
+* This ensures both variables are always available:
+* - $site is used throughout our templates (modern)
+* - $decoration remains available for backward compatibility with existing user docs
+*
+* Note: Custom configuration access works the same in both versions:
+* - $site.getCustomValue("key") - convenience method for simple values
+* - $site.getCustomValue("key", "default") - with default value
+* - $site.getCustomChild("key") - returns DOM element for complex structures
+* These are equivalent to $site.custom.getChild("key").getValue() but cleaner.
+*
+*##if (!$site && $decoration)#*
+	*##set ($site = $decoration)#*
+*##end#*
+*##if (!$decoration && $site)#*
+	*##set ($decoration = $site)#*
+*##end#*
+
+** Initialization **
+
+* Measure the time to process all of this
+*##set($startTime = $date.systemTime)#*
+
+* Ensure headContent, bodyContent, and shortTitle are defined (Maven Site Plugin 4.x may not define them if not present in the source)
+*##if(!$headContent)#set($headContent = "")#end#*
+*##if(!$bodyContent)#set($bodyContent = "")#end#*
+*##if(!$shortTitle)#set($shortTitle = "")#end#*
+
+** Configuration (using configTool for site.xml + frontmatter precedence) **
+
+* interpolation: controls how ${...} expressions are processed in content
+* Options: "velocity", "maven" (default), "none"
+*##set($interpolationMode = $configTool.getValue($site, $headContent, "interpolation", "maven"))#*
+
+* fixProtocolRelativeUrls: fix // URLs to https:// (boolean, default: true)
+*##set($fixProtocolRelativeUrls = $configTool.getBooleanValue($site, $headContent, "fixProtocolRelativeUrls", true))#*
+
+* checkImageLinks: verify that all image links exist (boolean, default: true)
+*##set($checkImageLinks = $configTool.getBooleanValue($site, $headContent, "checkImageLinks", true))#*
+
+* convertImagesToWebp: convert images to WebP format for efficiency (boolean, default: true)
+*##set($convertImagesToWebp = $configTool.getBooleanValue($site, $headContent, "convertImagesToWebp", true))#*
+
+* setExplicitImageSize: set explicit width/height on images (boolean, default: true)
+*##set($setExplicitImageSize = $configTool.getBooleanValue($site, $headContent, "setExplicitImageSize", true))#*
+
+* convertImagesToThumbnails: JSoup selector for images to convert to zoomable thumbnails
+* Set to "false" to disable, default: "img:not([alt=inline]):not([uib-carousel] img)"
+*##set($convertImagesToThumbnails = $configTool.getValue($site, $headContent, "convertImagesToThumbnails", "img:not([alt=inline]):not([uib-carousel] img)"))#*
+
+* externalLinkClass: CSS class to add to external links (default: "externalLink")
+*##set($externalLinkClass = $configTool.getValue($site, $headContent, "externalLinkClass", "externalLink"))#*
+
+* fixHeadings: enable heading anchor fixes, ID cleanup, etc. (boolean, default: true)
+*##set($fixHeadings = $configTool.getBooleanValue($site, $headContent, "fixHeadings", true))#*
+
+* copyToClipboard: JSoup selector for elements with copy-to-clipboard feature
+* Set to "false" to disable, default: "pre"
+*##set($copyToClipboard = $configTool.getValue($site, $headContent, "copyToClipboard", "pre"))#*
+
+* tocSelector: JSoup selector for the ToC element (default: "ul#toc")
+*##set($tocSelector = $configTool.getValue($site, $headContent, "tocSelector", "ul#toc"))#*
+
+* buildIndex: build ElasticLunr search index for this page (boolean, default: true)
+* Per-page setting controls whether THIS page is added to the search index
+*##set($buildIndex = $configTool.getBooleanValue($site, $headContent, "buildIndex", true))#*
+
+* showSearchUI: controls whether search UI is rendered (site-wide only, ignores frontmatter)
+* This ensures the search box isn't hidden on individual pages when buildIndex:false is set per-page
+*##set($showSearchUIDefault = $site.getCustomValue("buildIndex", "true").toLowerCase())#*
+*##set($showSearchUI = $showSearchUIDefault != "false")#*
+
+* buildAiIndex: generate Markdown files for AI indexing and llms.txt (boolean, default: true)
+*##set($buildAiIndex = $configTool.getBooleanValue($site, $headContent, "buildAiIndex", true))#*
+
+* bodyClass: additional CSS class for <body> element (default: empty)
+*##set($bodyClass = $configTool.getValue($site, $headContent, "bodyClass", ""))#*
+
+* syntaxHighlighting: JSoup selector for code blocks requiring syntax highlighting
+* Set to "false" to disable PrismJS loading, default: "pre > code[class*=language-]"
+*##set($syntaxHighlighting = $configTool.getValue($site, $headContent, "syntaxHighlighting", "pre > code[class*=language-]"))#*
+
+** Property interpolation (Maven or Velocity) **
+
+* Process content based on interpolation mode
+*##if($interpolationMode == "velocity")#*
+	* Full Velocity processing - use $render.eval to process Velocity syntax
+	*##set($bodyContent = $render.eval($bodyContent))#*
+	*##set($headContent = $render.eval($headContent))#*
+	*##set($shortTitle = $render.eval($shortTitle))#*
+*##elseif($interpolationMode == "maven")#*
+	* Replace Maven project properties and custom properties
+	* Supports escaping with double dollar: $${property} will output literal ${property}
+
+	* Step 1: Build a map of all property names and their values
+	*##set($propertyMap = {})#*
+	* Standard project coordinates
+	*##call($propertyMap.put("project.version", $project.version))#*
+	*##call($propertyMap.put("project.name", $project.name))#*
+	*##call($propertyMap.put("project.groupId", $project.groupId))#*
+	*##call($propertyMap.put("project.artifactId", $project.artifactId))#*
+	*##if($project.url)#call($propertyMap.put("project.url", $project.url))#end#*
+	*##if($project.description)#call($propertyMap.put("project.description", $project.description))#end#*
+	*##if($project.organization && $project.organization.name)#call($propertyMap.put("project.organization.name", $project.organization.name))#end#*
+	*##if($project.organization && $project.organization.url)#call($propertyMap.put("project.organization.url", $project.organization.url))#end#*
+	* Custom properties from pom.xml <properties> section
+	*##if($project.properties && !$project.properties.isEmpty())#*
+		*##foreach($propEntry in $project.properties.entrySet())#*
+			*##call($propertyMap.put($propEntry.key, $propEntry.value))#*
+		*##end#*
+	*##end#*
+	* Custom properties from site.xml <custom> section
+	*##if($site.custom)#*
+		*##foreach($customChild in $site.custom.getChildren())#*
+			*##set($customValue = $customChild.getValue())#*
+			*##if($customValue)#*
+				*##call($propertyMap.put($customChild.name, $customValue))#*
+			*##end#*
+		*##end#*
+	*##end#*
+
+	* Step 2: Brutally replace all $${ with a temporary marker
+	*##set($bodyContent = $bodyContent.replace("${esc.d}${esc.d}{", "[!ESCAPED_DOLLAR]{"))#*
+	*##set($headContent = $headContent.replace("${esc.d}${esc.d}{", "[!ESCAPED_DOLLAR]{"))#*
+	*##set($shortTitle = $shortTitle.replace("${esc.d}${esc.d}{", "[!ESCAPED_DOLLAR]{"))#*
+
+	* Step 3: For each property, replace with value
+	*##foreach($propEntry in $propertyMap.entrySet())#*
+		*##set($propPlaceholder = "${esc.d}{${propEntry.key}}")#*
+		*##set($propValue = $propEntry.value)#*
+		*##set($bodyContent = $bodyContent.replace($propPlaceholder, $propValue))#*
+		*##set($headContent = $headContent.replace($propPlaceholder, $propValue))#*
+		*##set($shortTitle = $shortTitle.replace($propPlaceholder, $propValue))#*
+	*##end#*
+
+	* Step 4: Replace temporary marker back to literal ${...}
+	*##set($bodyContent = $bodyContent.replace("[!ESCAPED_DOLLAR]{", "${esc.d}{"))#*
+	*##set($headContent = $headContent.replace("[!ESCAPED_DOLLAR]{", "${esc.d}{"))#*
+	*##set($shortTitle = $shortTitle.replace("[!ESCAPED_DOLLAR]{", "${esc.d}{"))#*
+*##end#*
+* If "none" or any other value: no additional interpolation (standard Maven Site behavior)
+
+** Parse body and head content **
+
+* Parse the body and header content (guard against null content in Maven Site Plugin 4.x)
+*##set($bodyElement = $htmlTool.parseContent($bodyContent))#*
+*##set($headElement = $htmlTool.parseContent($headContent))#*
+
+* Fix all protocol-relative links (if enabled)
+*##if($fixProtocolRelativeUrls)#*
+	*##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
+*##end

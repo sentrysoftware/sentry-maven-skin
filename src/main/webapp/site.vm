@@ -18,647 +18,90 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
 
-*#<!DOCTYPE html><html lang="$locale.language">
-#parse("tools.vm")
-
-<head>
-	<meta charset="$outputEncoding">
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-	<title>$shortTitle &ndash; $site.name</title>
-
-#if ($keywords)
-	<meta name="keywords" content="$keywords" />
-#end
-	<meta name="generator" content="$esc.html($generator)" />
-#foreach ($author in $authors)
-	<meta name="author" content="$author" />
-#end
-	<meta property="article:published_time" content="$date.format('iso', $publishDate)" />
-	<meta property="article:modified_time" content="$date.format('iso', $publishDate)" />
-#*
-
-// Header from the document *#
-$headElement.html()
+*#
+#***********************************************************************
+*
+*    Sentry Maven Skin - Main Site Template
+*
+*    This is the main entry point for the Maven Site skin.
+*    It orchestrates all the Velocity template files and provides
+*    the main HTML structure.
+*
+*    Template files (in order of inclusion):
+*    - macros.vm      : Common Velocity macros (#call, #links, #leftMenu, etc.)
+*    - init.vm        : Initialization, configuration, property interpolation
+*    - blockquotes.vm : Blockquote transformations (callouts, tabs, accordion, etc.)
+*    - content.vm     : Content transformations (images, links, tables, TOC, etc.)
+*    - metadata.vm    : Publish date, generator, social links
+*    - head.vm        : HTML <head> section (meta, CSS, analytics, schema.org)
+*    - banner.vm      : Header/banner section (navigation, search)
+*    - left-menu.vm   : Left navigation menu
+*    - main.vm        : Main content area (breadcrumbs, TOC, body, search results)
+*    - footer.vm      : Footer section (links, copyright)
+*    - js.vm          : JavaScript includes and configuration
+*
+***********************************************************************
+*#
+<!DOCTYPE html><html lang="$locale.language">
 ##
-## Canonical link
-#if ($project.url)
-	<link rel="canonical" href="$PathTool.calculateLink($currentFileName, $project.url)">
-#end
+## ========================================================================
+## PHASE 1: Load macros and initialize variables
+## ========================================================================
 ##
-## AI Indexing: generate Markdown files for AI platforms and inserts a <link rel="alternate" /> in the head (if enabled)
-#if ($buildAiIndex)
-	$aiIndexTool.convertToMarkdown(${project.reporting.outputDirectory}, $currentFileName, $headElement, $bodyElement, $publishDate, $project.url)#*
-	*##set($menuSection = "#getMenuSection()")#*
-	*##call($aiIndexTool.updateLlmsTxt("${project.reporting.outputDirectory}/llms.txt", $currentFileName, $shortTitle, $site.name, $project.description, $menuSection, $project.url))#*
-*##end
-	<!-- build:css css/main-combined.css -->
-	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
-	<link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css">
-	<link rel="stylesheet" href="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.css">
-	<link rel="stylesheet" href="css/prism-theme.css">
-	<link rel="stylesheet" href="css/sentry.css">
-	<link rel="stylesheet" href="css/copy-to-clipboard.css">
-	<link rel="stylesheet" href="css/print.css">
-	<!-- endbuild -->
-	<link rel="stylesheet" href="$relativePath/css/site.css">
-#*
-	// Google Tag Manager
-	// Support both old location ($site.googleAnalyticsAccountId for Site 3.x) and new location in <custom> for Site 4.x *#
-#set($googleAnalyticsId = $site.googleAnalyticsAccountId)#*
-*##if (!$googleAnalyticsId)#set($googleAnalyticsId = $site.getCustomValue("googleAnalyticsAccountId"))#end#*
-*##if ($googleAnalyticsId)
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','$googleAnalyticsId');</script>
-#end
+## 1. Common macros (must be first as they define #call and other utilities)
+#parse("macros.vm")
 ##
-## schema.org metadata
-<script type="application/ld+json">
-{
-	"@context": "https://schema.org",
-	"@type": "TechArticle",
-	"headline": "$esc.java($shortTitle)",
-	"datePublished": "$date.format('iso', $publishDate)",
-	"dateModified": "$date.format('iso', $publishDate)",
-#if ($project.url)
-	"mainEntityOfPage": "$esc.java($PathTool.calculateLink($currentFileName, $project.url))",
-#end
-#if (!$authors.isEmpty())
-	"author": [
-#foreach ($author in $authors)
-		{
-			"@type": "Person",
-			"name": "$esc.java($author)"
-		}#if ($foreach.hasNext),#end
-
-#end
-	]
-#end
-}
-</script>
-</head>
+## 2. Initialization and configuration (sets up $site, config vars, parses content)
+#parse("init.vm")
+##
+## ========================================================================
+## PHASE 2: Transform content
+## ========================================================================
+##
+## 3. Blockquote transformations (callouts, collapsibles, tabs, accordion, carousel)
+#parse("blockquotes.vm")
+##
+## 4. Content transformations (icons, images, links, tables, headings, TOC, search index)
+#parse("content.vm")
+##
+## 5. Metadata (publish date, generator, additional links, social links)
+#parse("metadata.vm")
+##
+## ========================================================================
+## PHASE 3: Render HTML
+## ========================================================================
+##
+## 6. HTML <head> section
+#parse("head.vm")
 
 <body class="sentry-site $!bodyClass" ng-class="{'dark': $matchMedia.dark }" ng-app="sentry.site" ng-strict-di ng-controller="siteController" ng-keydown="handleKeyboard($event)">
-#*
-// Script to initialize dark/light theme on <body> asap *#
+##
+## Script to initialize dark/light theme on <body> asap
 <script>(function (){var d=window.localStorage.getItem('matchMediaLight.userIsDark');return null!=d?d==='true':window.matchMedia('(prefers-color-scheme: dark)').matches})()&&document.body.classList.add('dark')</script>
-#*
-	// Dark desktop header with the bannerLeft, links, and bannerRight *#
-	<header role="banner">
-#*
-		// Links *#
-		<div class="hidden-xs navbar navbar-inverse site-logo">
-#if ($site.bannerLeft.href)
-			<div class="navbar-header">
-				<a class="navbar-brand" href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">#*
-*##if ($site.bannerLeft.image && $site.bannerLeft.image.src)#*
-				*#<img src="$PathTool.calculateLink($site.bannerLeft.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
-*##elseif ($site.bannerLeft.src)#*
-				*#<img src="$PathTool.calculateLink($site.bannerLeft.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
-*##elseif ($site.bannerLeft.name)#*
-				*#$site.bannerLeft.name#*
-*##end#*
-			*#</a>
-			</div>
-#end
-			<ul class="nav navbar-nav">
-#links($site.body.links)
-			</ul>
-#if ($site.bannerRight.href || $socialLinks)#*
-*#		<ul class="nav navbar-nav navbar-right">
-#foreach($socialLink in $socialLinks)#*
-*#			<li><a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a></li>
-#end#*
-			// Toggle light/dark
-			*#<li class="dark-toggle"><toggle ng-model="$matchMedia.dark" ng-change="switchColors()" size="btn-xs" width="34px" height="22px" off-class="day" on-class="night" toggle-class="navbar-btn dark-toggle" on="<i class='fa-solid fa-moon'></i>" off="<i class='sun-icon'></i>" title="Switch between dark and light color schemes" tabindex="0"></toggle></li>
-		#if ($site.bannerRight.href)#*
-*#			<li>
-					<a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">#*
-		*##if ($site.bannerRight.image && $site.bannerRight.image.src)#*
-					*#<img src="$PathTool.calculateLink($site.bannerRight.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
-		*##elseif ($site.bannerRight.src)#*
-					*#<img src="$PathTool.calculateLink($site.bannerRight.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
-		*##elseif ($site.bannerRight.name)#*
-	*#$!site.bannerRight.name#*
-		*##end#*
-				*#</a>
-				</li>
-		#end#*
-*#		</ul>
-#end#*
-*#	</div>
-
-## On mobile, display the bannerLeft name (if any), and the breadcrumbs at the very top
-#if ($site.bannerLeft.href && $site.bannerLeft.name)#*
-*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
-			<ul class="nav navbar-nav">
-				<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">$!site.bannerLeft.name</a></li>
-			</ul>
-		</div>
-#end#*
-*##if ($site.body.breadcrumbs)#*
-*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs breadcrumb-xs">
-			<ul class="nav navbar-nav">
-#links($site.body.breadcrumbs)
-			</ul>
-		</div>
-#end#*
-		// Banner *#
-		<div class="navbar site-banner">
-
-			<div class="container-fluid">
-
-				<div class="navbar-header" ng-class="{'show-search-xs': showSearchInput && $matchMedia.size == 'xs'}">#*
-
-					// The Search button (only on xs displays - if search is enabled site-wide) *#
-#if($showSearchUI)
-					<button
-						class="navbar-toggle hidden-lg hidden-md hidden-sm"
-						ng-click="showSearchInput = !showSearchInput; clearSearch()"
-						title="{{ showSearchInput ? 'Close the search' : 'Search' }}"
-						type="button"
-					>
-						<i ng-class="showSearchInput ? 'fas fa-times' : 'fa fa-search'"></i>
-					</button>
-#end
-#*
-					// The documentation title *#
-					<div class="navbar-brand">
-#*				*##if($site.body.breadcrumbs && $site.body.breadcrumbs.size() > 0)#*
-*#					<ol class="breadcrumb hidden-xs">
-#links($site.body.breadcrumbs)
-						</ol>
-#*				*##end#*
-*#					<div class="header-title">$site.name</div>
-						<div class="header-subtitle">
-							<span class="version-prefix">Version</span>
-							<span class="version">$site.getCustomValue("projectVersion", $project.version)</span>
-						</div>
-					</div>#*
-
-					// The documentation title minimized (when search is on, on mobile) *#
-					<div class="navbar-brand header-xxs visible-xs">
-						<div class="header-title">$site.name</div>
-						<div class="header-subtitle">
-							Version <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
-						</div>
-					</div>#*
-
-					// The search field (only on xs displays - if search is enabled site-wide) *#
-#if($showSearchUI)
-					<form class="navbar-form site-search site-search-xs visible-xs" ng-show="showSearchInput">
-						<input
-							type="search"
-							class="form-control"
-							placeholder="Search..."
-							aria-label="Search"
-							ng-model="siteSearch"
-							ng-change="search(siteSearch)"
-							ng-model-options="{ debounce: 500 }"
-							ng-keydown="handleKeyboard($event)"
-							ng-focus="prefetchSearchIndex()"
-							focus-me="showSearchInput"
-						/>
-					</form>
-#end
-				</div>
-#*
-				// Search field on desktop (if search is enabled site-wide) *#
-#if($showSearchUI)
-				<form class="navbar-form navbar-right site-search hidden-xs">
-					<div class="form-group has-feedback">
-						<input
-							type="text"
-							class="form-control"
-							placeholder="Search..."
-							aria-label="Search"
-							ng-model="siteSearch"
-							ng-change="search(siteSearch)"
-							ng-model-options="{ debounce: 500 }"
-							ng-keydown="handleKeyboard($event)"
-							ng-focus="prefetchSearchIndex()"
-						/>
-						<i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
-					</div>
-				</form>
-#end
-
-			</div>
-		</div>
-	</header>
+##
+## 7. Header/banner section
+#parse("banner.vm")
 
 	<div class="container-fluid main-container">
 		<div class="row display-flex">
-#*
-			// Left menu*#
+##
+## 8. Left navigation menu
 			<nav class="left-menu hidden-xs col-sm-4 col-md-3" role="navigation">
-#*			*##leftMenu()
+#parse("left-menu.vm")
 			</nav>
-#*
-			// Main content*#
+##
+## 9. Main content area
 			<main class="main-content col-xs-12 col-sm-8 col-md-9">
-#*
-				// Hide content if we're displaying search results (only if search is enabled site-wide) *#
-				<div#if($showSearchUI) ng-hide="siteSearch"#end>
-
-					<div class="row">
-#*
-						// We'll show the TOC on the right, on large display *#
-#if ($StringUtils.isNotBlank($tocContent))
-#* We have a TOC *#
-						<div class="col-lg-4 col-lg-push-9 visible-lg toc-side-container">
-							<div class="toc">
-								<div class="toc-heading">Table of Contents</div>
-#*							*#$tocContent
-							</div>
-						</div>
-#end#*
-						// Main content
-*#					<div class="col-md-12#if ($StringUtils.isNotBlank($tocContent)) col-lg-8 col-lg-pull-4#end">
-#*
-						// Site title as a header (for print only)
-*#					<div class="page-header visible-print-block">
-							<h3>#*
-*##if ($site.bannerLeft.name)#*
-							*#<small>$site.bannerLeft.name</small><br/>#*
-*##end#*
-*#							$project.name $project.version
-							</h3>
-						</div>#*
-*#
-#if ($alignedFileName != "index.html")#*
-							// Breadcrumb to parents (full desktop)
-*#						<div class="parents hidden-xs">
-								<ol class="breadcrumb">
-									<!-- Home -->
-									<li>
-										<a href="$PathTool.calculateLink('index.html', $relativePath)">
-											<i class="fas fa-home"></i>Home
-										</a>
-									</li>
-								<!-- menus and items -->
-	#foreach($menu in $site.body.menus)#*
-	*##foreach($item in $menu.items)#*
-		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
-		*##if ($alignedHref == $alignedFileName)
-									<li>$menu.name</li>
-				#break($foreach.parent)#*
-		*##else#*
-			*##foreach($subItem in $item.items)#*
-				*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
-				*##if ($alignedSubHref == $alignedFileName)
-									<li>$menu.name</li>
-									<li><a href="$alignedHref">$item.name</a></li>
-						#break($foreach.parent)#*
-				*##end#*
-			*##end#*
-		*##end#*
-	*##end#*
-*##end
-								</ol>
-							</div>
-#*
-							// Breadcrumb to parents (mobile)
-*#						<div class="parents-xs visible-xs">
-								<ul class="list-group">
-									<!-- Home -->
-									<a class="list-group-item" href="$PathTool.calculateLink('index.html', $relativePath)">
-										<i class="fas fa-home"></i>Home
-									</a>
-									<!-- menus and items -->
-	#foreach($menu in $site.body.menus)#*
-	*##foreach($item in $menu.items)#*
-		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
-		*##if ($alignedHref == $alignedFileName)
-									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>$menu.name</li>
-				#break($foreach.parent)#*
-		*##else#*
-			*##foreach($subItem in $item.items)#*
-				*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
-				*##if ($alignedSubHref == $alignedFileName)
-									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>$menu.name</li>
-									<a class="list-group-item" href="$alignedHref">
-										<i class="fas fa-level-up-alt fa-flip-horizontal"></i>$item.name
-										<span class="badge">$item.items.size()</span>
-									</a>
-						#break($foreach.parent)#*
-				*##end#*
-			*##end#*
-		*##end#*
-	*##end#*
-*##end
-							</ul>
-						</div>
-#end#*
-
-							// For index.html, we will show all 1st-level content from site.xml
-							*##if ($alignedFileName == "index.html")
-								<div class="home-xs visible-xs">
-									<h1 title="Documentation Home"><i class="fas fa-home"></i></h1>
-									<ul class="list-group">
-#*								*##foreach ($menu in $site.body.menus)
-										<li class="list-group-item"><i class="fas fa-folder-open"></i>$menu.name</li>
-#*									*##foreach ($item in $menu.items)#*
-											*##if ($item.href == "index.html")
-												<a class="list-group-item" href="#$bodyElement.select('h1').get(0).attr('id')" du-smooth-scroll>
-													<i class="fas fa-home"></i>$item.name
-													<i class="fas fa-angle-double-down pull-right"></i>
-												</a>
-#*										*##else
-												<a class="list-group-item" href="$PathTool.calculateLink($item.href, $relativePath)">
-													<i class="fas fa-file-alt"></i>$item.name
-#*												*##if (!$item.items.empty)<span class="badge">$item.items.size()</span>#end
-												</a>
-#*										*##end#*
-										*##end#*
-									*##end
-									</ul>
-								</div>
-#*						*##end#*
-							//
-							// The actual document body (finally!)
-							//
-							*#$bodyElement.html()
-#*
-							// Subtopics (if any)
-									*##foreach ($menu in $site.body.menus)#*
-								*##foreach ($item in $menu.items)#*
-									*##if ($alignedFileName == $PathTool.calculateLink($item.href, $relativePath))#*
-										*##if (!$item.items.empty)
-											<div class="subtopics hidden-xs">
-												<h2>More Information</h2>
-												<ul>
-#*											*##foreach ($subItem in $item.items)
-													<li>
-														<a href="$PathTool.calculateLink($subItem.href, $relativePath)">
-															<i class="fas fa-file-alt"></i>$subItem.name
-														</a>
-													</li>
-#*											*##end
-												</ul>
-											</div>
-											<div class="subtopics-xs visible-xs">
-												<ul class="list-group">
-													<li class="list-group-item"><i class="fas fa-folder-open"></i>$item.name</li>
-#*												*##foreach ($subItem in $item.items)
-													<a class="list-group-item" href="$PathTool.calculateLink($subItem.href, $relativePath)">
-														<i class="fas fa-file-alt"></i>$subItem.name
-													</a>
-#*												*##end
-												</ul>
-											</div>
-#*									*##end#*
-									*##end#*
-								*##end#*
-							*##end#*
-
-							//
-							// The footer
-							//*#
-							<div class="document-footer">
-#*
-							// Keywords
-							*##if (!$keywordsArray.empty)#*
-								*#<div class="keywords">
-#*							*##foreach ($keyword in $keywordsArray)#*
-									*#<span class="label label-default">$keyword</span>
-#*							*##end#*
-								*#</div>
-#*						*##end#*
-
-							// List of links, for print only
-							*##if (!$urlFootnoteMap.isEmpty())#*
-								*#<div class="footnotes visible-print-block">
-								Links:
-								<ul class="list-unstyled">
-								#foreach ($url in $urlFootnoteMap.keySet())#*
-									*#<li>[$urlFootnoteMap[$url]] $url</li>
-								#end#*
-							*#</ul>
-							</div>
-#*						*##end#*
-
-							// Author
-							*##if (!$authors.isEmpty())#*
-								*#<div class="authors">Author: <strong>$StringUtils.join($authors.toArray(), ", ")</strong></div>
-#*						*##end#*
-
-							// Date
-							*##if ($StringUtils.isNotBlank($documentDate))#*
-								*#<div class="date">Date: <strong>$documentDate</strong></div>
-#*						*##end#*
-*#						</div>
-						</div>
-					</div>
-				</div>
-
-#if($showSearchUI)
-				<!-- Search results -->
-				<div class="search-results" ng-show="siteSearch">
-
-					<h2 class="hidden-xs">
-						Search Results for <em>{{siteSearch | truncate:'50'}}</em>
-					</h2>
-
-					<div ng-show="resultArray.length">
-
-						<!-- Result count -->
-						<div class="hidden-xs">
-							{{resultArray.length}}
-							<span ng-pluralize count="resultArray.length" when="{'1': 'result', 'other': 'results'}"></span>
-						</div>
-
-						<!-- List of results (Desktop) -->
-						<div ng-if="$matchMedia.size != 'xs'" class="search-results-content hidden-xs">
-							<div class="search-results-entry" ng-repeat="result in resultArray track by result.href">
-								<div class="search-results-parents small text-muted">
-									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title">
-										<a ng-if="parent.path" ng-href="{{parent.path}}" ng-bind-html="parent.title"></a>
-										<span ng-if="!parent.path" ng-bind-html="parent.title"></span>
-									</span>
-								</div>
-								<p class="search-results-title"><a ng-href="{{result.href}}"><i class="fas fa-file-alt"></i>{{result.title}}</a></p>
-								<div class="progressbar" aria-hidden="true">
-									<div class="bar-bg"></div>
-									<div class="bar-fg" ng-style="{width: result.score * 100 + '%'}"></div>
-								</div>
-								<div class="small extract">{{result.body | truncate:'400'}}</div>
-							</div>
-						</div>
-
-						<!-- List of results (mobile) -->
-						<ul ng-if="$matchMedia.size == 'xs'" class="list-group search-results-content search-results-content-xs visible-xs">
-							<a
-								ng-repeat="result in resultArray track by result.href"
-								ng-href="{{result.href}}"
-								class="list-group-item"
-							>
-								<div class="search-results-parents small" aria-hidden="true">
-									<span class="search-results-parents-entry" ng-repeat="parent in result.parents track by parent.title" ng-bind-html="parent.title"></span>
-								</div>
-								<div class="search-results-title"><i class="fas fa-file-alt"></i>{{result.title}}</div>
-								<div class="progressbar" aria-hidden="true">
-									<div class="bar-bg"></div>
-									<div class="bar-fg" ng-style="{width: result.score * 100 + '%'}"></div>
-								</div>
-								<div class="small extract">{{result.body | truncate:'100'}}</div>
-							</a>
-						</ul>
-
-					</div>
-
-					<div ng-hide="resultArray.length">
-						<div ng-show="searchLoading" class="search-loading">
-							<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-							<em>Searching...</em>
-						</div>
-						<em ng-hide="searchLoading">No results.</em>
-					</div>
-
-				</div>
-#end
-
+#parse("main.vm")
 			</main>
 
 		</div>
 	</div>
-
-	<!--Footer in mobile and desktop-->
-	<footer class="footer">
-#*
-		// Footer*#
-		<p class="footer-title" ng-class="{'text-center': $matchMedia.size == 'xs'}">
-			<strong>$site.name $site.getCustomValue("projectVersion", $project.version)</strong>
-			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
-			Documentation as of <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">$date.format($site.publishDate.format, $publishDate)</time></strong>
-		</p>
-#*
-		// Additional links
-*##if($additionalLinks)#* *#
-<div class="hidden-xs navbar navbar-inverse site-logo additional-links">
-		<ul class="nav navbar-nav">
-			#links($additionalLinks)
-		</ul>
-</div>
-#end#*
-
-		// Mobile only: links
-*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
-			<ul class="nav navbar-nav">
-#if ($site.bannerLeft.href && $site.bannerLeft.name)#*
-*#			<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">$!site.bannerLeft.name</a></li>
-#end#*
-*##links($site.body.links)
-#links($additionalLinks)
-#if($socialLinks)#*
-*#<li class="icons">#*
-*##foreach($socialLink in $socialLinks)#*
-	*#<a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a>
-#end#*
-*#</li>
-#end#*
-	// Toggle night/day in XS mode
-*#<li class="dark-toggle dark-toggle-xs">
-    <toggle
-        ng-model="$matchMedia.dark"
-        ng-change="switchColors()"
-        size="btn-md"
-        width="55px"
-        height="32px"
-        off-class="day"
-        on-class="night"
-        toggle-class="navbar-btn dark-toggle"
-        on="<i class='fa-solid fa-moon'></i>"
-        off="<i class='sun-icon'></i>"
-        title="Switch between dark and light color schemes"
-        tabindex="0"></toggle>
-		</li>
-#*
-*##if ($site.bannerRight.href && $site.bannerRight.name)#*
-*#			<li><a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">$!site.bannerRight.name</a></li>
-#end#*
-*#		</ul>
-		</div>
-
-		<div class="footer-copyright" ng-class="{'text-center': $matchMedia.size == 'xs'}">
-			<span class="copyright">Copyright &copy;#*
-		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
-		*#$date.getYear($publishDate)</span>#*
-		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
-#if($socialLinks)#*
-	*#<span class="pull-right hidden-xs icons">
-			#*
-			*##foreach($socialLink in $socialLinks)#* *#<a href="$socialLink.href" target="_blank" title="$socialLink.title">
-					<i class="$socialLink.icon"></i>
-			</a>
-	#end#*
-	*#</span>
-#end#*
-*#	</div>
-	</footer>
-
-	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
-
-	<!-- build:js js/main-combined.js -->
-	<script src="../../../node_modules/mark.js/dist/mark.min.js" charset="UTF-8"></script>
-	<script src="../../../node_modules/angular/angular.min.js"></script>
-	<script src="../../../node_modules/angular-animate/angular-animate.min.js"></script>
-	<script src="../../../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
-	<script src="../../../node_modules/angular-scroll/angular-scroll.min.js"></script>
-	<script src="../../../node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.min.js"></script>
-	<script src="../../../node_modules/angular-match-media-light/dist/match-media-light.min.js"></script>
-	<script src="../../../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
-	<script src="../../../node_modules/elasticlunr/release/elasticlunr.min.js"></script>
-	<script src="js/site.js"></script>
-	<script src="js/site-index.js"></script>
-	<script src="js/zoomable.js"></script>
-	<script src="js/truncate.js"></script>
-	<script src="js/copy-to-clipboard.js"></script>
-	<!-- endbuild -->
-
-#if ($syntaxHighlighting && $syntaxHighlighting != "false" && !$bodyElement.select($syntaxHighlighting).empty)
-	<!-- build:js js/prism.js -->
-	<script src="../../../node_modules/prismjs/prism.js"></script>
-	<script src="../../../node_modules/prismjs/plugins/autoloader/prism-autoloader.js"></script>
-	<!-- endbuild -->
-	<script>Prism.plugins.autoloader.languages_path = "$relativePath/js/prism/";</script>
-#end
-	<script>
-angular.module("sentry.site").constant("RELATIVE_ROOT", "$esc.java($relativePath)");
-angular.module("sentry.site").constant("SITE_MENU", [
-#foreach ($menu in $site.menus)#*
-*##foreach ($item in $menu.items)
-{
-	path: "$esc.java($item.href)",
-	title: "$esc.java($item.name)",
-	parents: [{ title: "$esc.java($menu.name)" }]
-},
-#**##if (!$item.items.empty)#*
-		*##foreach ($subItem in $item.items)
-{
-	path: "$esc.java($subItem.href)",
-	title: "$esc.java($subItem.name)",
-	parents: [
-		{
-			title: "$esc.java($menu.name)"
-		},
-		{
-			path: "$esc.java($PathTool.calculateLink($item.href, $relativePath))",
-			title: "$esc.java($item.name)"
-		}
-	]
-},
-#*	*##end#*
-	*##end#*
-*##end
-#end
-]);
-
-	</script>
-#set($renderingTime = $date.systemTime - $startTime)#*
-*#$log.debug("Rendering time: $renderingTime ms")#*
-*#</body>
+##
+## 10. Footer section
+#parse("footer.vm")
+##
+## 11. JavaScript includes
+#parse("js.vm")
+</body>
 </html>

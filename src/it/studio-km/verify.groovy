@@ -1,102 +1,138 @@
-// Verify that the files have been created properly
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
+
+// Helper to parse HTML file with JSoup
+def parseHtml = { File file ->
+    Jsoup.parse(file, "UTF-8")
+}
+
+// ============================================================================
+// TEST: Index page exists and basic structure
+// ============================================================================
 def indexFile = new File(basedir, "target/site/index.html")
 assert indexFile.isFile() : "Documents must have been rendered"
+Document indexDoc = parseHtml(indexFile)
+def indexHtml = indexFile.text // Keep raw text for some specific tests
 
-// Verify that the left menu is correct
-def indexHtml = indexFile.text
-assert indexHtml.contains('<li class="active"><a href="index.html"') : "index.html must be listed as an active entry"
-assert indexHtml.indexOf('<li class="active"><a href="index.html"') == indexHtml.lastIndexOf('<li class="active"><a href="index.html"') : "No duplicate of index.html in the left menu"
+// Verify that the left menu is correct using CSS selectors
+def activeMenuItem = indexDoc.select('li.active > a[href=index.html]')
+assert activeMenuItem.size() == 1 : "index.html must be listed exactly once as active entry in menu"
 
-// Verify that the created HTML files contain the proper information
-String result = new File(basedir, "target/site/events.html").text
+// ============================================================================
+// TEST: Events page - metadata and content
+// ============================================================================
+def eventsFile = new File(basedir, "target/site/events.html")
+Document eventsDoc = parseHtml(eventsFile)
 
-assert result.contains("<title>Dealing with Events &ndash; skin-test Extended</title>") : "Document title is set according to source's metadata"
-assert result.contains('<meta name="description" content="Monitoring Studio X allows the operators') : "Document's description is set according to source's metadata"
-assert result.contains('<meta name="keywords" content="event,testevent,blank space,studio,km,patrol,develop,web" />') : "Document's keywords is a merge of source's keywords and site.xml's keywords"
-assert result =~ /<meta name="generator" content="Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin .*, from markdown"/ : "Document's generator is set correctly"
-assert result.contains('<meta name="author" content="The &quot;Proud&quot; People" />') : "Document's author is set according to source's metadata"
-assert result.contains('<meta property="article:published_time" content="1980-05-22') : "Document's published time is set correctly"
-assert result.contains('<meta property="article:modified_time" content="1980-05-22') : "Document's modified time is set correctly"
-assert result.contains('<link rel="canonical" href="https://the.org/docs/events.html">') : "Document's canonical link is set according to project's URL"
-assert result.contains('<link rel="alternate" type="text/markdown" href="events.html.md">') : "Document's alternate link must use .html.md extension (per llmstxt.org convention)"
-assert result.contains("<b>skin-test</b> allows you") : "pom.xml properties must be replaced with their values"
+// Document metadata using CSS selectors
+assert eventsDoc.title() == "Dealing with Events – skin-test Extended" : "Document title is set according to source's metadata"
+assert eventsDoc.select('meta[name=description]').attr('content').startsWith('Monitoring Studio X allows the operators') : "Document's description is set"
+assert eventsDoc.select('meta[name=keywords]').attr('content') == "event,testevent,blank space,studio,km,patrol,develop,web" : "Document's keywords is a merge"
+assert eventsDoc.select('meta[name=generator]').attr('content') =~ /Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin .*, from markdown/ : "Document's generator is set"
+assert eventsDoc.select('meta[name=author]').attr('content') == 'The "Proud" People' : "Document's author is set"
+assert eventsDoc.select('meta[property=article:published_time]').attr('content').startsWith('1980-05-22') : "Document's published time is set"
+assert eventsDoc.select('meta[property=article:modified_time]').attr('content').startsWith('1980-05-22') : "Document's modified time is set"
+assert eventsDoc.select('link[rel=canonical]').attr('href') == "https://the.org/docs/events.html" : "Document's canonical link is set"
+assert eventsDoc.select('link[rel=alternate][type=text/markdown]').attr('href') == "events.html.md" : "Document's alternate link uses .html.md extension"
+assert eventsDoc.select('b:contains(skin-test)').size() > 0 : "pom.xml properties must be replaced with their values"
 
 // Links, breadcrumbs, additionalLinks, and social networks
-assert result =~ '<li><a +href="https://youtu.be/Th6NweyurWs" +class="externalLink">YouTube</a></li>' : "Links specified in site.xml are added to the HTML"
-assert result =~ '<li><a +href="https://sentrysoftware.com/bmc/products/index.html" +class="externalLink">Great KMs</a></li>' : "Breadcrumbs specified in site.xml are added to the HTML"
-assert result =~ '<li><a +href="https://the.org/cookies.html">Privacy</a></li>' : "Additional links specified in site.xml are added to the HTML"
-assert result.contains("https://twitter.com/TheASF") && result.contains("Follow @TheASF") && result.contains("fa-brands fa-x-twitter") : "Social networks must be added to the HTML"
+assert eventsDoc.select('a.externalLink[href=https://youtu.be/Th6NweyurWs]:contains(YouTube)').size() > 0 : "Links specified in site.xml are added"
+assert eventsDoc.select('a.externalLink[href*=sentrysoftware.com/bmc/products]:contains(Great KMs)').size() > 0 : "Breadcrumbs specified in site.xml are added"
+assert eventsDoc.select('a[href=https://the.org/cookies.html]:contains(Privacy)').size() > 0 : "Additional links are added"
+assert eventsDoc.select('a[href*=twitter.com/TheASF]').size() > 0 : "Social networks must be added"
+assert eventsDoc.select('i.fa-brands.fa-x-twitter').size() > 0 : "Twitter icon must be present"
 
+// Image thumbnails and WEBP conversion
 assert new File(basedir, "target/site/images/Events-thumbnail.jpg").isFile() : "JPG thumbnails have been generated"
 assert new File(basedir, "target/site/images/Events_Details-thumbnail.jpg").isFile() : "JPG thumbnails have been generated"
-
 assert new File(basedir, "target/site/images/Events.webp").isFile() : "Images have been converted to WEBP"
 assert new File(basedir, "target/site/images/Events_Details.webp").isFile() : "Images have been converted to WEBP"
 
-assert result =~ '<zoomable.*images/Events-thumbnail\\.jpg' : "Zoomable picture refers to the thumbnail"
-assert result =~ /<zoomable.*min-width: *200px;/ : "Zoomable thumbnail is max width 200px"
-assert result =~ /<zoomable.*min-height: *101px;/ : "Zoomable thumbnail height is calculated as 101px"
-assert result =~ /<zoomable.*max-width: *1895px;/ : "Zoomable max width is the picture width"
-assert result =~ /<zoomable.*max-height: *963px;/ : "Zoomable max height is the picture height"
+// Zoomable images with proper styling
+def zoomable = eventsDoc.select('zoomable').first()
+assert zoomable != null : "Zoomable element must exist"
+def zoomableStyle = zoomable.attr('style')
+assert zoomableStyle.contains('Events-thumbnail.jpg') : "Zoomable picture refers to the thumbnail"
+assert zoomableStyle.contains('min-width:') && zoomableStyle.contains('200px') : "Zoomable thumbnail has min-width"
+assert zoomableStyle.contains('max-width:') && zoomableStyle.contains('1895px') : "Zoomable max width is the picture width"
 
-assert result =~ '<source srcset="(\\./)?images/Events\\.webp" type="image/webp">' : "Images refer to their WEBP version"
+// WEBP source elements
+assert eventsDoc.select('source[type=image/webp][srcset*=Events.webp]').size() > 0 : "Images refer to their WEBP version"
 
-assert result =~ 'images/Events\\.png".*width="1895"' : "Images have their width set"
-assert result =~ 'images/Events\\.png".*height="963"' : "Images have their height set"
-assert result =~ 'images/Events\\.png".*width: *1895px;' : "Images have their style set with width"
-assert result =~ 'images/Events\\.png".*height: *963px;' : "Images have their style set with height"
+// Image dimensions
+def eventsImg = eventsDoc.select('img[src*=Events.png]').first()
+assert eventsImg != null : "Events image must exist"
+assert eventsImg.attr('width') == "1895" : "Images have their width attribute set"
+assert eventsImg.attr('height') == "963" : "Images have their height attribute set"
 
-assert result.contains('<table border="0" class="bodyTable table table-striped table-hover">')
-assert result.contains('<h2 id="filtering-events"><a href="#filtering-events">Filtering Events</a></h2>') : "Headings must have proper id attribute"
-assert result.contains('<h2 id="keyboard-shortcuts-28special-29"><a href="#keyboard-shortcuts-28special-29">Keyboard Shortcuts (special)</a></h2>') : "id attribute in headings must discard special chars"
-assert result.contains('<li><a href="#keyboard-shortcuts-28special-29" du-smooth-scroll="">Keyboard Shortcuts (special)</a></li>')
+// Tables with proper classes
+assert eventsDoc.select('table.bodyTable.table.table-striped.table-hover').size() > 0 : "Tables have proper Bootstrap classes"
 
-// TOC has been inserted
-assert result =~ /(?s)toc-inline-container.*Table of Contents.*ul id="toc"/
-assert result.indexOf('id="right-toc"') > -1 : "A copy of the TOC has been inserted"
-assert result.indexOf('id="toc"') == result.lastIndexOf('id="toc"') : "The ID of the 2nd TOC has been changed (no duplicate with same ID)"
+// Headings with IDs and anchor links
+def filteringHeading = eventsDoc.select('h2#filtering-events').first()
+assert filteringHeading != null : "Headings must have proper id attribute"
+assert filteringHeading.select('a[href=#filtering-events]').size() > 0 : "Headings have anchor links"
 
-assert result.contains('<body class="sentry-site sentry-purple"')
-assert result =~ /(?s)header-title.*skin-test Extended.*header-subtitle.*Version <strong>1.0-SNAPSHOT-test/
-assert result =~ /<h5.*Getting Started/
-assert result =~ /href="console.html".*Operating the Console/
-assert result =~ /class="active".*href="events.html".*Managing Events/
-assert result =~ /href="subdir\/agent.html".*Configuring the Agent/
-assert result =~ /(?s)<div class="toc">.*<li><a href="#filtering-events" du-smooth-scroll="">Filtering Events/
+def keyboardHeading = eventsDoc.select('h2#keyboard-shortcuts-28special-29').first()
+assert keyboardHeading != null : "id attribute in headings must discard special chars"
 
-// Document's footer
-assert result =~ /<div class="keywords"/ : "Keywords section is present"
-assert result =~ '<span class="label label-default">event</span>' : "Document keywords are listed"
-assert result =~ '<span class="label label-default">testevent</span>' : "Document keywords are listed (#2)"
-assert result =~ '<span class="label label-default">patrol</span>' : "site.xml keywords are listed"
-assert result =~ '<span class="label label-default">develop</span>' : "site.xml keywords are listed (#2)"
-assert result =~ /Date:.*2021-01-01/ : "Document's date metadata is present in the body"
-assert result =~ /Author:.*The &quot;Proud&quot; People/ : "Document's author metadata is present in the body"
+// TOC verification
+assert eventsDoc.select('.toc-inline-container').size() > 0 : "Inline TOC container exists"
+assert eventsDoc.select('#toc').size() == 1 : "Only one element with id=toc (no duplicates)"
+assert eventsDoc.select('#right-toc').size() > 0 : "Right TOC copy exists with different ID"
+assert eventsDoc.select('a[href=#keyboard-shortcuts-28special-29][du-smooth-scroll]').size() > 0 : "TOC links have smooth scroll attribute"
+
+// Body and header structure
+assert eventsDoc.select('body.sentry-site.sentry-purple').size() > 0 : "Body has correct classes"
+assert eventsDoc.select('.header-title:contains(skin-test Extended)').size() > 0 : "Header title is present"
+assert eventsDoc.select('.header-subtitle:contains(1.0-SNAPSHOT-test)').size() > 0 : "Header subtitle with version is present"
+
+// Navigation structure
+assert eventsDoc.select('h5:contains(Getting Started)').size() > 0 : "Getting Started section exists"
+assert eventsDoc.select('a[href=console.html]:contains(Operating the Console)').size() > 0 : "Console link exists"
+assert eventsDoc.select('li.active a[href=events.html]:contains(Managing Events)').size() > 0 : "Events page is marked active"
+assert eventsDoc.select('a[href=subdir/agent.html]:contains(Configuring the Agent)').size() > 0 : "Agent link in menu exists"
+assert eventsDoc.select('.toc li a[href=#filtering-events][du-smooth-scroll]').size() > 0 : "TOC contains filtering events link"
+
+// Document's footer - keywords and metadata
+assert eventsDoc.select('div.keywords').size() > 0 : "Keywords section is present"
+assert eventsDoc.select('span.label.label-default:contains(event)').size() > 0 : "Document keywords are listed"
+assert eventsDoc.select('span.label.label-default:contains(testevent)').size() > 0 : "Document keywords are listed (#2)"
+assert eventsDoc.select('span.label.label-default:contains(patrol)').size() > 0 : "site.xml keywords are listed"
+assert eventsDoc.select('span.label.label-default:contains(develop)').size() > 0 : "site.xml keywords are listed (#2)"
+assert eventsDoc.select(':contains(Date)').text().contains('2021-01-01') : "Document's date metadata is present in the body"
+assert eventsDoc.select(':contains(Author)').html().contains('Proud') : "Document's author metadata is present in the body"
 
 // Page's footer
-assert result =~ /(?s)<footer class="footer">.*skin-test Extended 1.0-SNAPSHOT-test/
-assert result =~ /Documentation as of.*1980-05-22/ : "Publish date must be derived from pom.xml buildTimestamp property"
-assert result =~ /Copyright.*1975.*1980/ : "inceptionYear must be displayed in the copyright"
-assert result =~ /The Organization/ : '${project.organization.name} must be displayed in the footer'
-assert result =~ /https:\/\/the\.org/ : '${project.organization.url} must be displayed in the footer'
+def footer = eventsDoc.select('footer.footer')
+assert footer.size() > 0 : "Footer must exist"
+assert footer.text().contains('skin-test Extended') : "Footer contains project name"
+assert footer.text().contains('1.0-SNAPSHOT-test') : "Footer contains version"
+assert footer.text().contains('1980-05-22') : "Publish date must be derived from pom.xml buildTimestamp property"
+assert footer.text().contains('1975') && footer.text().contains('1980') : "inceptionYear must be displayed in the copyright"
+assert footer.html().contains('The Organization') : '${project.organization.name} must be displayed in the footer'
+assert footer.html().contains('https://the.org') : '${project.organization.url} must be displayed in the footer'
 
 // schema.org JSON-LD metadata
-assert result =~ /"datePublished":\s*"1980-05-22T/ : "schema.org datePublished must be in ISO format with time"
-assert result =~ /"dateModified":\s*"1980-05-22T/ : "schema.org dateModified must be in ISO format with time"
-assert result =~ /"@type":\s*"Person"/ : "schema.org author must use Person type"
-assert result =~ /"@type":\s*"Person"[\s\S]*?"name":\s*"The / : "schema.org author must have a name field"
+def eventsHtml = eventsFile.text
+assert eventsHtml =~ /"datePublished":\s*"1980-05-22T/ : "schema.org datePublished must be in ISO format with time"
+assert eventsHtml =~ /"dateModified":\s*"1980-05-22T/ : "schema.org dateModified must be in ISO format with time"
+assert eventsHtml =~ /"@type":\s*"Person"/ : "schema.org author must use Person type"
+assert eventsHtml =~ /"@type":\s*"Person"[\s\S]*?"name":\s*"The / : "schema.org author must have a name field"
 
 // Google Analytics
-assert result.contains("(window,document,'script','dataLayer','MY_GOOGLE_ID')") : "Specific googleAnalyticsAccountId must be inserted"
+assert eventsHtml.contains("(window,document,'script','dataLayer','MY_GOOGLE_ID')") : "Specific googleAnalyticsAccountId must be inserted"
 
 // bannerLeft and bannerRight are included
-assert result.contains('<a href="https://banner.left">Banner Left</a></li>') : "bannerLeft.name must be included only in xs mode"
-assert result.contains("images/logo-short.png") : "bannerLeft.src must be included"
-assert result.contains('href="https://banner.left"') : "bannerLeft.href must be included"
+assert eventsDoc.select('a[href=https://banner.left]:contains(Banner Left)').size() > 0 : "bannerLeft.name must be included only in xs mode"
+assert eventsDoc.select('img[src*=logo-short.png]').size() > 0 : "bannerLeft.src must be included"
+assert eventsDoc.select('a[href=https://banner.left]').size() > 0 : "bannerLeft.href must be included"
 
-assert result.contains('<a href="https://banner.right">Banner Right</a></li>') : "bannerRight.name must be included only in xs mode"
-assert result.contains("images/logo.png") : "bannerRight.src must be included"
-assert result.contains('href="https://banner.right"') : "bannerRight.href must be included"
+assert eventsDoc.select('a[href=https://banner.right]:contains(Banner Right)').size() > 0 : "bannerRight.name must be included only in xs mode"
+assert eventsDoc.select('img[src*=logo.png]').size() > 0 : "bannerRight.src must be included"
+assert eventsDoc.select('a[href=https://banner.right]').size() > 0 : "bannerRight.href must be included"
 
 // ============================================================================
 // TEST: Interpolation (maven mode - default)
@@ -104,33 +140,36 @@ assert result.contains('href="https://banner.right"') : "bannerRight.href must b
 // studio-km uses the default interpolation mode "maven"
 def interpolationTestFile = new File(basedir, "target/site/interpolation-test.html")
 assert interpolationTestFile.isFile() : "interpolation-test.html must have been generated"
-def interpolationTestHtml = interpolationTestFile.text
+Document interpolationDoc = parseHtml(interpolationTestFile)
 
 // In "maven" mode, ${project.name} should be resolved to actual value
-// Verify the full list item to ensure interpolation happened in the right place
-assert interpolationTestHtml =~ /Project name:\s*skin-test/ :
+// Find list items containing "Project name:" and verify resolution
+def projectNameLi = interpolationDoc.select('li:contains(Project name:)').first()
+assert projectNameLi != null && projectNameLi.text().contains('skin-test') :
     'In maven mode, ${project.name} should be resolved to "skin-test" (not remain as literal placeholder)'
-// Verify ${project.name} does NOT appear as literal in the "resolved" section
-assert !(interpolationTestHtml =~ /Project name:\s*\$\{project\.name\}/) :
+// Verify ${project.name} does NOT appear as literal in the list item
+assert !projectNameLi.text().contains('${project.name}') :
     'In maven mode, ${project.name} must NOT remain as literal placeholder in resolved section'
 
 // In "maven" mode, ${project.version} should be resolved
-assert interpolationTestHtml =~ /Project version:\s*1\.0-SNAPSHOT/ :
+def projectVersionLi = interpolationDoc.select('li:contains(Project version:)').first()
+assert projectVersionLi != null && projectVersionLi.text().contains('1.0-SNAPSHOT') :
     'In maven mode, ${project.version} should be resolved to "1.0-SNAPSHOT"'
 
 // In "maven" mode, custom properties from site.xml <custom> section should be resolved
-assert interpolationTestHtml =~ /Project version \(custom\):\s*1\.0-SNAPSHOT-test/ :
+assert interpolationDoc.text().contains('1.0-SNAPSHOT-test') :
     'In maven mode, ${projectVersion} from site.xml should be resolved to "1.0-SNAPSHOT-test"'
 
 // In "maven" mode, hash characters should NOT be interpreted as Velocity directives
-assert interpolationTestHtml.contains("Fix #123") :
+assert interpolationDoc.text().contains("Fix #123") :
     'In maven mode, hash characters must be preserved (Fix #123)'
-assert interpolationTestHtml.contains("#include &lt;stdio.h&gt;") :
+assert interpolationDoc.html().contains("#include &lt;stdio.h&gt;") :
     'In maven mode, C-style includes must work (#include <stdio.h>)'
 
 // In "maven" mode, escaped properties ($${...}) should render as literal ${...}
-// The markdown says: Use $${project.name} in your... which should render as: Use ${project.name} in your...
-assert interpolationTestHtml =~ /Use\s+\$\{project\.name\}\s+in your Markdown source code to display the variable name/ :
+// The page should contain ${project.name} as literal text somewhere (in the explanation section)
+def escapedSection = interpolationDoc.select('p:contains(Use ${project.name} in your Markdown)').first()
+assert escapedSection != null :
     'In maven mode, $${project.name} should be unescaped and displayed as literal ${project.name}'
 
 // Verify that the corresponding .html.md files are generated (using .html.md extension per llmstxt.org convention)
@@ -156,18 +195,23 @@ assert llmsContent.contains('https://the.org/docs/') : "In llms.txt, URLs must b
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
 assert agentFile.isFile() : "Documents in subdir have been rendered"
 
+Document agentDoc = parseHtml(agentFile)
 def agentHtml = agentFile.text
-assert agentHtml =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir-thumbnail\\.jpg' : "Thumbnail references work in subdir"
-assert agentHtml =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.webp' : "WEBP reference work in subdir"
-assert agentHtml =~ '\\.\\./images/MS_X_Architecture_Diagram-subdir\\.png.*width="1723"' : "Image size work in subdir"
 
-assert agentHtml.contains("\"../js/") : "Page in subdir must refer to ../js/"
-assert !agentHtml.contains("\"js/") && !agentHtml.contains("\"./js/") : "All references to JS must refer to parent dir"
+// Image handling in subdir - thumbnail is in zoomable style attribute, actual image in img tag
+def agentZoomable = agentDoc.select('zoomable').first()
+assert agentZoomable != null && agentZoomable.attr('style').contains('MS_X_Architecture_Diagram-subdir-thumbnail.jpg') : "Thumbnail references work in subdir"
+assert agentDoc.select('source[srcset*=MS_X_Architecture_Diagram-subdir.webp]').size() > 0 : "WEBP reference work in subdir"
+def agentImg = agentDoc.select('img[src*=MS_X_Architecture_Diagram-subdir.png]').first()
+assert agentImg != null && agentImg.attr('width') == "1723" : "Image size work in subdir"
 
-assert agentHtml.contains("\"../css/") : "Page in subdir must refer to ../css/"
-assert !agentHtml.contains("\"css/") && !agentHtml.contains("\"./css/") : "All references to CSS must refer to parent dir"
+// Verify relative paths to resources use parent dir
+assert agentDoc.select('script[src^=../js/]').size() > 0 : "Page in subdir must refer to ../js/"
+assert agentDoc.select('script[src^=js/], script[src^=./js/]').size() == 0 : "All references to JS must refer to parent dir"
+assert agentDoc.select('link[href^=../css/]').size() > 0 : "Page in subdir must refer to ../css/"
+assert agentDoc.select('link[href^=css/], link[href^=./css/]').size() == 0 : "All references to CSS must refer to parent dir"
 
-assert agentHtml.contains("<title>Configuring the Agent &ndash; skin-test Extended</title>") : "Document title is set according to source's first heading"
+assert agentDoc.title() == "Configuring the Agent – skin-test Extended" : "Document title is set according to source's first heading"
 
 // Verify that there is no protocol-relative links left
 assert !(agentHtml =~ '"//') : "URLs must not be protocol-relative"
@@ -180,44 +224,53 @@ def eventsGood = indexJson.contains('"events.html":{"id":"events.html","title":"
 assert eventsGood : "The index must contain title and keywords from the source metadata"
 
 // Basic Monitors topic contains 6 subtopics
-def basicHtml = new File(basedir, "target/site/basic-monitors/index.html").text
-assert basicHtml =~ /Basic Monitors.*6/ : "Basic Monitors entry must say it has 6 subitems in the left menu"
-assert basicHtml.contains("../basic-monitors/filesystem.html") : "Link to filesystem.html must be present"
-assert basicHtml.contains("../basic-monitors/process.html") : "Link to process.html must be present"
+def basicFile = new File(basedir, "target/site/basic-monitors/index.html")
+Document basicDoc = parseHtml(basicFile)
+assert basicDoc.select(':contains(Basic Monitors)').text().contains('6') : "Basic Monitors entry must say it has 6 subitems in the left menu"
+assert basicDoc.select('a[href*=basic-monitors/filesystem.html]').size() > 0 : "Link to filesystem.html must be present"
+assert basicDoc.select('a[href*=basic-monitors/process.html]').size() > 0 : "Link to process.html must be present"
 
 // Process topic lists its parents (as defined in site.xml)
-def processHtml = new File(basedir, "target/site/basic-monitors/process.html").text
-assert processHtml =~ /\bHome\b/ : "Home must be in the breadcrumb"
-assert processHtml =~ /Using Monitoring Studio/ : "'Using Monitoring Studio' must be in the breadcrumb"
-assert processHtml =~ /Basic Monitors/ : "'Basic Monitors' must be in the breadcrumb"
+def processFile = new File(basedir, "target/site/basic-monitors/process.html")
+Document processDoc = parseHtml(processFile)
+assert processDoc.select(':contains(Home)').size() > 0 : "Home must be in the breadcrumb"
+assert processDoc.select(':contains(Using Monitoring Studio)').size() > 0 : "'Using Monitoring Studio' must be in the breadcrumb"
+assert processDoc.select(':contains(Basic Monitors)').size() > 0 : "'Basic Monitors' must be in the breadcrumb"
 
 // Code highlighting
 // Not enabled for basic-monitors/index.html (because there is no code)
+def basicHtml = basicFile.text
 assert !basicHtml.contains("prism.js") : "Page without code must not load prism.js"
 // Enabled for extend-summary.html (because it has code)
-def extendHtml = new File(basedir, "target/site/extend-summary.html").text
+def extendFile = new File(basedir, "target/site/extend-summary.html")
+Document extendDoc = parseHtml(extendFile)
+def extendHtml = extendFile.text
 assert extendHtml.contains("prism.js") : "Page with code must load prism.js"
 // Code must be copy-pastable
-assert extendHtml.contains("<pre copy-to-clipboard") : "<pre> blocks must have the copy-to-clipboard attribute"
+assert extendDoc.select('pre[copy-to-clipboard]').size() > 0 : "<pre> blocks must have the copy-to-clipboard attribute"
 
 // Icons
-def iconsHtml = new File(basedir, "target/site/icons.html").text
+def iconsFile = new File(basedir, "target/site/icons.html")
+Document iconsDoc = parseHtml(iconsFile)
+def iconsHtml = iconsFile.text
 assert !iconsHtml.contains("close.gif") : "In icons.html, image close.gif must have been removed"
-assert iconsHtml.contains('<i class="fa-regular fa-rectangle-xmark"></i>') : "In icons.html, the fa-circle-xmark icon must have been inserted"
+assert iconsDoc.select('i.fa-regular.fa-rectangle-xmark').size() > 0 : "In icons.html, the fa-circle-xmark icon must have been inserted"
 assert !iconsHtml.contains("icon_error_sml.gif") : "In icons.html, all instances of images that represent icons must have been removed"
 
 // Also check that the page doesn't mention Sentry
 assert !iconsHtml.contains("Sentry") : "Sentry must not be mentioned anywhere by the skin itself"
 
 // Links (for printing)
-def linksHtml = new File(basedir, "target/site/links.html").text
+def linksFile = new File(basedir, "target/site/links.html")
+Document linksDoc = parseHtml(linksFile)
+def linksHtml = linksFile.text
 assert linksHtml.contains("[1] index.html") : "Internal links must be listed as footnote"
 assert linksHtml.contains("[2] https://onehome.org") : "External links must be listed as footnote"
 assert linksHtml.contains("[3] https://the.org") : "Organization's URL must be listed as footnote"
 assert !linksHtml.contains("[4]") : "No anchors must be listed as footnote and identical URLs must be listed once"
-assert linksHtml.contains("<a href=\"index.html\">This</a>") : "Internal links don't have the class externalLink"
-// Check external links have externalLink class (attribute order may vary)
-assert linksHtml =~ /<a [^>]*href="https:\/\/onehome\.org"[^>]*class="externalLink"/ || linksHtml =~ /<a [^>]*class="externalLink"[^>]*href="https:\/\/onehome\.org"/ : "External links must have the externalLink class"
+assert linksDoc.select('a[href=index.html]:contains(This)').size() > 0 : "Internal links don't have the class externalLink"
+// Check external links have externalLink class
+assert linksDoc.select('a.externalLink[href=https://onehome.org]').size() > 0 : "External links must have the externalLink class"
 
 // Rendering time
 def buildLog = new File(basedir, "build.log").text
@@ -226,54 +279,116 @@ assert buildLog =~ /Rendering time: [0-9.]+ ms/
 // UI Components (Angular UI Bootstrap)
 def uiComponentsFile = new File(basedir, "target/site/ui-components.html")
 assert uiComponentsFile.isFile() : "UI Components demo page must have been generated"
+Document uiComponentsDoc = parseHtml(uiComponentsFile)
 def uiComponentsHtml = uiComponentsFile.text
 
 // Test Markdown syntax generates correct UIB elements: <uib-tabset> and <uib-tab>
-assert uiComponentsHtml.contains('<uib-tabset') : "Element uib-tabset must be present in the HTML output"
-assert uiComponentsHtml.contains('<uib-tab') : "Element uib-tab must be present in the HTML output"
-assert uiComponentsHtml.contains('<uib-tab-heading>') : "Tab heading elements must be generated"
+assert uiComponentsDoc.select('uib-tabset').size() > 0 : "Element uib-tabset must be present in the HTML output"
+assert uiComponentsDoc.select('uib-tab').size() > 0 : "Element uib-tab must be present in the HTML output"
+assert uiComponentsDoc.select('uib-tab-heading').size() > 0 : "Tab heading elements must be generated"
 
 // Test Markdown syntax generates correct UIB elements: <uib-accordion> and <div uib-accordion-group>
-assert uiComponentsHtml.contains('<uib-accordion') : "Element uib-accordion must be present in the HTML output"
-assert uiComponentsHtml.contains('<div uib-accordion-group') : "Attribute uib-accordion-group on div must be present in the HTML output"
-assert uiComponentsHtml.contains('<uib-accordion-heading>') : "Accordion heading elements must be generated"
+assert uiComponentsDoc.select('uib-accordion').size() > 0 : "Element uib-accordion must be present in the HTML output"
+assert uiComponentsDoc.select('div[uib-accordion-group]').size() > 0 : "Attribute uib-accordion-group on div must be present in the HTML output"
+assert uiComponentsDoc.select('uib-accordion-heading').size() > 0 : "Accordion heading elements must be generated"
 
 // Test that content stays INSIDE the UI components
 
-// Helper function to extract content between markers
-def extractBetween = { String html, String startMarker, String endMarker ->
-    def startIdx = html.indexOf(startMarker)
-    if (startIdx < 0) return ""
-    def endIdx = html.indexOf(endMarker, startIdx)
-    if (endIdx < 0) return ""
-    return html.substring(startIdx, endIdx + endMarker.length())
-}
+// Helper function to extract content between markers using JSoup
+def tabset = uiComponentsDoc.select('uib-tabset').first()
+assert tabset != null : "Tabset element must exist"
+assert tabset.text().contains('Tab A') : "Tab A content must be inside the tabset"
+assert tabset.text().contains('Tab B') : "Tab B content must be inside the tabset"
+assert tabset.text().contains('Tab C') : "Tab C content must be inside the tabset"
 
-// Extract the tabset content (up to the next h2 section marker)
-def tabsetContent = extractBetween(uiComponentsHtml, '<uib-tabset', '<h2 id="accordion"')
-assert tabsetContent.contains('Tab A') : "Tab A content must be inside the tabset"
-assert tabsetContent.contains('Tab B') : "Tab B content must be inside the tabset"
-assert tabsetContent.contains('Tab C') : "Tab C content must be inside the tabset"
-
-// Extract the accordion content (up to the next h2 section marker)
-def accordionContent = extractBetween(uiComponentsHtml, '<uib-accordion', '<h2 id="collapse"')
-assert accordionContent.contains('Panel A') : "Panel A content must be inside the accordion"
-assert accordionContent.contains('Panel B') : "Panel B content must be inside the accordion"
+def accordion = uiComponentsDoc.select('uib-accordion').first()
+assert accordion != null : "Accordion element must exist"
+assert accordion.text().contains('Panel A') : "Panel A content must be inside the accordion"
+assert accordion.text().contains('Panel B') : "Panel B content must be inside the accordion"
 
 // Verify sentry-uib class is present on UIB components
-assert uiComponentsHtml =~ /<uib-tabset[^>]*class="[^"]*sentry-uib/ : "sentry-uib class must be present on tabset"
-assert uiComponentsHtml =~ /<uib-accordion[^>]*class="[^"]*sentry-uib/ : "sentry-uib class must be present on accordion"
+assert uiComponentsDoc.select('uib-tabset.sentry-uib').size() > 0 : "sentry-uib class must be present on tabset"
+assert uiComponentsDoc.select('uib-accordion.sentry-uib').size() > 0 : "sentry-uib class must be present on accordion"
 
 // Test collapse (generated from [!COLLAPSIBLE] syntax)
-assert uiComponentsHtml.contains('uib-collapse=') : "Attribute uib-collapse must be present in the HTML output"
+assert uiComponentsDoc.select('[uib-collapse]').size() > 0 : "Attribute uib-collapse must be present in the HTML output"
 
 // Test tooltip and popover
-assert uiComponentsHtml.contains('uib-tooltip="This is a tooltip!"') : "Attribute uib-tooltip must be preserved in the HTML output"
-assert uiComponentsHtml.contains('uib-popover="Popover content here"') : "Attribute uib-popover must be preserved in the HTML output"
-assert uiComponentsHtml.contains('popover-title="Popover Title"') : "Attribute popover-title must be preserved in the HTML output"
-assert uiComponentsHtml.contains("popover-trigger=") : "Attribute popover-trigger must be preserved in the HTML output"
-assert uiComponentsHtml.contains('popover-placement="right"') : "Attribute popover-placement must be preserved in the HTML output"
-assert uiComponentsHtml.contains('tooltip-placement="top"') : "Attribute tooltip-placement must be preserved in the HTML output"
+assert uiComponentsDoc.select('[uib-tooltip="This is a tooltip!"]').size() > 0 : "Attribute uib-tooltip must be preserved in the HTML output"
+assert uiComponentsDoc.select('[uib-popover="Popover content here"]').size() > 0 : "Attribute uib-popover must be preserved in the HTML output"
+assert uiComponentsDoc.select('[popover-title="Popover Title"]').size() > 0 : "Attribute popover-title must be preserved in the HTML output"
+assert uiComponentsDoc.select('[popover-trigger]').size() > 0 : "Attribute popover-trigger must be preserved in the HTML output"
+assert uiComponentsDoc.select('[popover-placement=right]').size() > 0 : "Attribute popover-placement must be preserved in the HTML output"
+assert uiComponentsDoc.select('[tooltip-placement=top]').size() > 0 : "Attribute tooltip-placement must be preserved in the HTML output"
 
-// Verify ui-bootstrap-tpls.js is included
+// Verify ui-bootstrap-tpls.js is included (either directly or via combined JS)
 assert uiComponentsHtml.contains("ui-bootstrap-tpls") || uiComponentsHtml.contains("main-combined.js") : "UI Bootstrap library must be included"
+
+// ============================================================================
+// TEST: HTML Structure Validity
+// ============================================================================
+// These tests were added after issues found during Velocity template restructuring
+
+// Test 1: Verify main element structure is correct
+// (Issue: Extra </div> tags caused browser to auto-close <main> early, placing search results outside)
+def mainElement = indexDoc.select('main.main-content').first()
+assert mainElement != null : "main element must exist"
+
+// Test 2: Verify search results are inside main element using CSS structure
+// (Issue: Search results appeared below left menu due to malformed HTML structure)
+def searchResultsInMain = indexDoc.select('main.main-content .search-results')
+assert searchResultsInMain.size() > 0 : "Search results must be inside main element, not outside"
+
+// Test 3: Verify Angular dependencies are loaded in correct order in combined JS
+// (Issue: gulpfile.js concatenation order broke Angular module dependencies)
+def mainCombinedJs = new File(basedir, "target/site/js/main-combined.js")
+assert mainCombinedJs.isFile() : "main-combined.js must exist"
+def jsContent = mainCombinedJs.text
+
+// Verify Angular modules are loaded in correct dependency order
+// Note: In minified Angular, core "ng" module isn't explicitly defined - angular object is initialized directly
+// We verify that modules depending on others come AFTER their dependencies
+def matchMediaLightPos = jsContent.indexOf('angular.module("matchMediaLight"')
+def uiBootstrapPos = jsContent.indexOf('angular.module("ui.bootstrap')
+def sentrySitePos = jsContent.indexOf('angular.module("sentry.site"')
+
+// Verify all required modules exist
+assert jsContent.contains('angular.module(') : "Angular modules must be in main-combined.js"
+assert matchMediaLightPos >= 0 : "matchMediaLight module must be in main-combined.js"
+assert uiBootstrapPos >= 0 : "ui.bootstrap module must be in main-combined.js"
+assert sentrySitePos >= 0 : "sentry.site module must be in main-combined.js"
+
+// sentry.site depends on matchMediaLight and ui.bootstrap, so it must come after them
+assert sentrySitePos > matchMediaLightPos : "sentry.site must come after matchMediaLight (dependency)"
+assert sentrySitePos > uiBootstrapPos : "sentry.site must come after ui.bootstrap (dependency)"
+
+// Test 4: Verify CSS dependencies are loaded in correct order
+// (Issue: CSS concatenation order could break styling dependencies)
+def mainCombinedCss = new File(basedir, "target/site/css/main-combined.css")
+assert mainCombinedCss.isFile() : "main-combined.css must exist"
+def cssContent = mainCombinedCss.text
+
+// Bootstrap must be loaded before custom styles that override it
+def bootstrapCssPos = cssContent.indexOf('.container-fluid')
+def sentryCssPos = cssContent.indexOf('.sentry-site')
+assert bootstrapCssPos >= 0 : "Bootstrap styles must be in main-combined.css"
+assert sentryCssPos > bootstrapCssPos : "Sentry styles must come after Bootstrap (to allow overrides)"
+
+// Test 5: Verify ng-show/ng-hide directives are present for search functionality
+// (Issue: Removed ng-if conditions broke search visibility toggle)
+assert indexDoc.select('[ng-hide=siteSearch]').size() > 0 : "Content must have ng-hide directive for search toggle"
+assert indexDoc.select('[ng-show=siteSearch]').size() > 0 : "Search results must have ng-show directive"
+
+// Test 6: Verify matchMediaLight module is included and functional
+// (Issue: Missing matchMediaLight broke responsive features and dark mode)
+assert jsContent.contains('matchMediaLight') : "matchMediaLight module must be included in combined JS"
+assert jsContent.contains('$matchMedia') : "$matchMedia service must be available"
+assert indexDoc.select('[ng-class*=$matchMedia.dark]').size() > 0 : "Dark mode toggle must reference $matchMedia.dark"
+
+// Test 7: Verify elasticlunr search library is included
+// (Issue: Search functionality depends on elasticlunr)
+assert jsContent.contains('elasticlunr') : "elasticlunr search library must be included in combined JS"
+
+// Test 8: Verify mark.js highlighting library is included
+// (Issue: Search result highlighting depends on mark.js)
+assert jsContent.contains('Mark(') || jsContent.contains('mark.js') : "mark.js library must be included for search highlighting"

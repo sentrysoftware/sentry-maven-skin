@@ -1,0 +1,194 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+**
+* Content transformations
+*
+* - Legacy icon replacements
+* - Image processing (check links, WebP, thumbnails, sizing)
+* - Link processing (footnotes for print, external link classes)
+* - Table styling (Bootstrap classes)
+* - Heading fixes (anchors, IDs)
+* - Copy-to-clipboard
+* - Table of Contents extraction
+* - Keywords extraction
+* - Search index building
+*
+**
+
+** Legacy icon replacements **
+
+* Replace old-style icon images (which don't exist in our skin) with corresponding Fontawesome icons
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=close.gif]", '<i class="fa-regular fa-rectangle-xmark"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=collapsed.gif]", '<i class="fa-solid fa-circle-chevron-up"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=expanded.gif]", '<i class="fa-solid fa-circle-chevron-down"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=external.png]", '<i class="fa-solid fa-globe"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_error_sml.gif]", '<i class="fa-solid fa-circle-exclamation text-danger"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_info_sml.gif]", '<i class="fa-solid fa-circle-info text-info"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_success_sml.gif]", '<i class="fa-solid fa-circle-check text-success"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=icon_warning_sml.gif]", '<i class="fa-solid fa-triangle-exclamation text-warning"></i>', -1))#*
+*##set($bodyElement = $htmlTool.replace($bodyElement, "img[src$=newwindow.gif]", '<i class="fa-solid fa-arrow-up-right-from-square"></i>', -1))#*
+
+** Image processing **
+
+* Check all images (if enabled)
+*##if($checkImageLinks)#*
+	*##set($bodyElement = $imageTool.checkImageLinks($bodyElement, ${project.reporting.outputDirectory}, $currentFileName))#*
+*##end#*
+
+* Convert all <IMG> to WEBP format (if enabled)
+*##if($convertImagesToWebp)#*
+	*##set($bodyElement = $imageTool.convertImagesToWebp($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
+*##end#*
+
+* Specify the size of the images (if enabled)
+*##if($setExplicitImageSize)#*
+	*##set($bodyElement = $imageTool.explicitImageSize($bodyElement, "img", ${project.reporting.outputDirectory}, $currentFileName))#*
+*##end#*
+
+* Surround images with a thumbnail (if enabled - check for "false" to disable)
+*##if($convertImagesToThumbnails && $convertImagesToThumbnails != "false")#*
+	*##set($bodyElement = $imageTool.convertImagesToThumbnails($bodyElement, $convertImagesToThumbnails, ${project.reporting.outputDirectory}, $currentFileName, 200, 0, "<zoomable style='background-image: url(%thumbSrc%); min-width: %thumbWidth%px; min-height: %thumbHeight%px; max-width: %imgWidth%px; max-height: %imgHeight%px;'></zoomable>"))#*
+*##end#*
+
+** Link processing (footnotes for print, external link classes) **
+
+* Present links as footnotes for printing and handle external link class
+*##set($urlFootnoteMap = {})#*
+*##set($footnoteCounter = 1)#*
+*##set($aLinkList = $bodyElement.select("a[href]"))#*
+*##if($aLinkList && !$aLinkList.isEmpty())#*
+	*##foreach ($aLinkElement in $aLinkList)#*
+		*##set($href = $aLinkElement.attr("href"))#*
+		* For all external links, add the configured externalLinkClass
+		* An external link is a URL starting with http(s)://, but not the URL to the project or organization
+		* Maven Doxia actually already tries to do that, but it's not perfect
+		* We're "fixing" this here, so remove the externalLink class when the link refers to the project's URL.
+		*##if($href && ($href.startsWith("http://") || $href.startsWith("https://")) && !($project.url && $href.startsWith($project.url)) && !($project.organization.url && $href.startsWith($project.organization.url)))#*
+			* This is an external link - remove Doxia's default class first, then add configured class
+			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
+			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
+				*##set($_ = $aLinkElement.addClass($externalLinkClass))#*
+			*##end#*
+		*##else#*
+			* This is an internal link - remove any external link classes
+			*##set($_ = $aLinkElement.removeClass("externalLink"))#*
+			*##if($externalLinkClass && $externalLinkClass != "false" && $externalLinkClass != "")#*
+				*##set($_ = $aLinkElement.removeClass($externalLinkClass))#*
+			*##end#*
+		*##end#*
+		*##if($href && !$href.startsWith("#") && !$href.startsWith("javascript:"))#*
+			*##if($urlFootnoteMap[$href])#*
+				*##set($footnoteIndex = $urlFootnoteMap[$href])#*
+			*##else#*
+				*##set($footnoteIndex = $footnoteCounter)#*
+				*##set($urlFootnoteMap[$href] = $footnoteIndex)#*
+				*##set($footnoteCounter = $footnoteCounter + 1)#*
+			*##end#*
+			*##set($_ = $aLinkElement.after("<sup class='visible-print-inline'>[$footnoteIndex]</sup>"))#*
+		*##end#*
+	*##end#*
+*##end#*
+
+** Table styling **
+
+* Bootstrap CSS class for tables
+*##set($bodyElement = $htmlTool.addClass($bodyElement, "table.bodyTable", ["table", "table-striped", "table-hover"]))#*
+*##set($bodyElement = $htmlTool.fixTableHeads($bodyElement))#*
+
+** Heading fixes **
+
+* Heading fixes (if enabled): anchor conversion, ID cleanup, ensure IDs
+*##if($fixHeadings)#*
+	* Convert old-style <a name=""> anchors to HTML5 <a id="">
+	*##set($bodyElement = $htmlTool.headingAnchorToId($bodyElement))#*
+
+	* Clean up IDs and corresponding <a href="#..."> references for unsupported characters
+	*##set($bodyElement = $htmlTool.fixIds($bodyElement))#*
+
+	* Make sure all headings have IDs
+	*##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*
+*##end#*
+
+* Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
+*##set($bodyElement = $htmlTool.setAttr($bodyElement, "a[href^=#]", "du-smooth-scroll", ""))#*
+
+* Surround all headings with <a href="#heading-id"> (if fixHeadings is enabled)
+*##if($fixHeadings)#*
+	*##set($headingList = $bodyElement.select("h2[id],h3[id],h4[id],h5[id],h6[id]"))#*
+	*##if($headingList && !$headingList.isEmpty())#*
+		*##foreach($headingElement in $headingList)#*
+			*##set($headingId = $headingElement.id())#*
+			*##set($headingHtml = $headingElement.html())#*
+			*##if($headingId)#*
+			*##call($headingElement.html("<a href='#$headingId'>$headingHtml</a>"))#*
+		*##end#*
+	*##end#*
+*##end#*
+*##end#*
+
+** Copy-to-clipboard **
+
+* Use copy-to-clipboard for elements (if enabled - check for "false" to disable)
+*##if($copyToClipboard && $copyToClipboard != "false")#*
+	*##set($bodyElement = $htmlTool.setAttr($bodyElement, $copyToClipboard, "copy-to-clipboard", ""))#*
+*##end#*
+
+** Table of Contents extraction **
+
+* Extract the TOC and put it in a variable (using configurable selector)
+* Guard against "false" value which would be an invalid JSoup selector
+*##if($tocSelector && $tocSelector != "false")#*
+	*##set($tocElementList = $bodyElement.select($tocSelector))#*
+*##else#*
+	*##set($tocElementList = [])#*
+*##end#*
+*##if (!$tocElementList.isEmpty())#*
+	* Extract the TOC content
+	* It will be reinserted in the document (so it will be in the final HTML twice:
+	* once inline, just below the <h1>, and once to the right, as a sticky <div>)
+	*##set($tocElement = $tocElementList.get(0))#*
+	*##set($tocContent = $tocElement.clone().attr("id", "right-toc").outerHtml())#*
+	* Wrap the inline TOC with the necessary HTML
+	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg hidden-xs'>"))#*
+	*##call($tocElement.parent().prepend("<div class='toc-heading'>Table of Contents</div>"))#*
+*##else#*
+	*##set($tocContent = "")#*
+*##end#*
+
+** Keywords extraction **
+
+* Extract the keywords
+*##set($keywordsArray = $htmlTool.getAttr($headElement, "meta[name=keywords]", "content"))#*
+*##call($keywordsArray.add($site.getCustomValue("keywords")))#*
+*##if (!$keywordsArray.isEmpty())#*
+	*##set($keywords = $display.list($display.list($keywordsArray, ",").trim().split("\s*,\s*"), ","))#*
+	*##set($keywordsArray = $keywords.split("\s*,\s*"))#*
+*##end#*
+*##set($headElement = $htmlTool.remove($headElement, "meta[name=keywords]") )#*
+
+** Search index **
+
+* Build ElasticLunr index (if enabled)
+*##if($buildIndex)#*
+	*##set($indexFile = "${project.reporting.outputDirectory}/index.json")#*
+	*##set($bodyText = $htmlTool.text($bodyElement, "body").get(0) )#*
+	*##call($indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText))#*
+*##end

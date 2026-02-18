@@ -1,0 +1,99 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+**
+* Metadata and social links
+*
+* - Publish date
+* - Generator metadata
+* - Additional links
+* - Social network links
+*
+**
+
+** Publish date **
+
+* publishDate: from configTool (frontmatter > site.xml > project.build.outputTimestamp > current date)
+*##set($publishDateString = $configTool.getValue($site, $headContent, "publishDate", $context.get("project.build.outputTimestamp")))#*
+*##if($StringUtils.isBlank($publishDateString))#*
+	*##call($log.debug("No publishDate defined in frontmatter, site.xml, or project.build.outputTimestamp in pom.xml."))#*
+	*##call($log.debug("Will use current date, so the build is not reproducible."))#*
+	*##set($publishDate = $date.systemDate)#*
+*##else#*
+	*##set($publishDate = $date.toDate($publishDateString))#*
+*##end#*
+
+** Generator metadata **
+
+* generator: who we are and where we come from
+*##set($generator = "Maven Site Plugin, Doxia Site Renderer $doxiaSiteRendererVersion, Skin $site.skin.artifactId $site.skin.version")#*
+*##if ($docRenderingContext.doxiaSource)#*
+	*##set($generator = "$generator, from $docRenderingContext.parserId")#*
+*##end#*
+*##if($docRenderingContext.generator && $docRenderingContext.generator != "")#*
+	*##set($generator = "$generator, with $docRenderingContext.generator")#*
+*##end#*
+*##set($headElement = $htmlTool.remove($headElement, "meta[name=generator]"))#*
+
+** Additional links **
+*##set($additionalLinks = [])#*
+*##if($site.getCustomChild("additionalLinks"))#*
+	*##foreach($itemXml in $site.getCustomChild("additionalLinks").getChildren())#*
+		*##set($item = {})#*
+		*##foreach($itemChild in $itemXml.getChildren())#*
+			*##call($item.put($itemChild.name, $itemChild.value))#*
+		*##end#*
+		*##call($additionalLinks.add($item))#*
+	*##end#*
+*##end#*
+
+** Social network links **
+
+* Build the links to social networks
+*##set($socialLinks = [])#*
+*##if($site.getCustomChild("social"))#*
+	*##foreach($itemXml in $site.getCustomChild("social").getChildren())#*
+		*##set($item = {})#*
+		*##if($itemXml.name == "facebook")#*
+			*##call($socialLinks.add({"href": "https://www.facebook.com/$itemXml.value", "icon": "fa-brands fa-facebook-f", "title": "Follow $itemXml.value on Facebook"}))#*
+		*##elseif($itemXml.name == "linkedin")#*
+			*##if($itemXml.value.startsWith("in/"))#*
+				*##set($linkedInAccount = $itemXml.value)#*
+				*##set($linkedInTitle = "Connect with $linkedInAccount.substring(3)")#*
+			*##elseif($itemXml.value.startsWith("company/"))#*
+				*##set($linkedInAccount = $itemXml.value)#*
+				*##set($linkedInTitle = "Follow $linkedInAccount.substring(8)")#*
+			*##else#*
+				*##set($linkedInAccount = "company/$itemXml.value")#*
+				*##set($linkedInTitle = "Follow $itemXml.value")#*
+			*##end#*
+			*##call($socialLinks.add({"href": "https://www.linkedin.com/$linkedInAccount", "icon": "fa-brands fa-linkedin", "title": "$linkedInTitle on LinkedIn"}))#*
+		*##elseif($itemXml.name == "twitter")#*
+			*##call($socialLinks.add({"href": "https://twitter.com/$itemXml.value", "icon": "fa-brands fa-x-twitter", "title": "Follow @$itemXml.value on X (Twitter)"}))#*
+		*##elseif($itemXml.name == "custom")#*
+			*##if($itemXml.getChild("href")) #set($socialCustomHref = $itemXml.getChild("href").value)#else#set($socialCustomHref = "")#end#*
+			*##if($itemXml.getChild("icon")) #set($socialCustomIcon = $itemXml.getChild("icon").value)#else#set($socialCustomIcon = "")#end#*
+			*##if($itemXml.getChild("title")) #set($socialCustomTitle = $itemXml.getChild("title").value)#else#set($socialCustomTitle = "")#end#*
+			*##call($socialLinks.add({"href": $socialCustomHref, "icon": $socialCustomIcon, "title": $socialCustomTitle}))#*
+		*##else#*
+			*##call($log.debug("Unknown social network <$itemXml.name> under <custom><social> in site descriptor"))#*
+		*##end#*
+	*##end#*
+*##end

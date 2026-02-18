@@ -1,0 +1,111 @@
+#*
+
+╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+Sentry Maven Skin
+჻჻჻჻჻჻
+Copyright (C) 2017 - 2023 Sentry Software
+჻჻჻჻჻჻
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+
+*#
+#***********************************************************************
+*
+*    Footer section
+*
+*    Contains:
+*    - Footer title with site name and version
+*    - Publish date
+*    - Additional links (desktop)
+*    - Mobile links and social icons
+*    - Dark/light toggle (mobile)
+*    - Copyright information
+*    - Back to top button
+*
+***********************************************************************
+*#
+	<!--Footer in mobile and desktop-->
+	<footer class="footer">
+##
+## Footer
+		<p class="footer-title" ng-class="{'text-center': $matchMedia.size == 'xs'}">
+			<strong>$site.name $site.getCustomValue("projectVersion", $project.version)</strong>
+			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
+			Documentation as of <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">$date.format($site.publishDate.format, $publishDate)</time></strong>
+		</p>
+##
+## Additional links
+#if($additionalLinks)#* *#
+<div class="hidden-xs navbar navbar-inverse site-logo additional-links">
+		<ul class="nav navbar-nav">
+			#links($additionalLinks)
+		</ul>
+</div>
+#end#*
+
+		## Mobile only: links
+*#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
+			<ul class="nav navbar-nav">
+#if ($site.bannerLeft.href && $site.bannerLeft.name)#*
+*#			<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">$!site.bannerLeft.name</a></li>
+#end#*
+*##links($site.body.links)
+#links($additionalLinks)
+#if($socialLinks)#*
+*#<li class="icons">#*
+*##foreach($socialLink in $socialLinks)#*
+	*#<a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a>
+#end#*
+*#</li>
+#end#*
+	## Toggle night/day in XS mode
+*#<li class="dark-toggle dark-toggle-xs">
+    <toggle
+        ng-model="$matchMedia.dark"
+        ng-change="switchColors()"
+        size="btn-md"
+        width="55px"
+        height="32px"
+        off-class="day"
+        on-class="night"
+        toggle-class="navbar-btn dark-toggle"
+        on="<i class='fa-solid fa-moon'></i>"
+        off="<i class='sun-icon'></i>"
+        title="Switch between dark and light color schemes"
+        tabindex="0"></toggle>
+		</li>
+#*
+*##if ($site.bannerRight.href && $site.bannerRight.name)#*
+*#			<li><a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">$!site.bannerRight.name</a></li>
+#end#*
+*#		</ul>
+		</div>
+
+		<div class="footer-copyright" ng-class="{'text-center': $matchMedia.size == 'xs'}">
+			<span class="copyright">Copyright &copy;#*
+		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
+		*#$date.getYear($publishDate)</span>#*
+		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
+#if($socialLinks)#*
+	*#<span class="pull-right hidden-xs icons">
+			#*
+			*##foreach($socialLink in $socialLinks)#* *#<a href="$socialLink.href" target="_blank" title="$socialLink.title">
+					<i class="$socialLink.icon"></i>
+			</a>
+	#end#*
+	*#</span>
+#end#*
+*#	</div>
+	</footer>
+
+	<div ng-show="showBackToTop" class="back-to-top" ng-click="backToTop()"><i class="fa fa-angle-up" aria-hidden="true"></i></div>

@@ -52,31 +52,45 @@ function templates() {
 		)
 		.pipe(dest(TMP + "/js"));
 }
-function htmlTmp() {
+function vmTmp() {
+	// Copy all .vm files to temp directory for processing
 	return src([SRC_MAIN + "/*.vm"]).pipe(dest(TMP));
 }
 function cssTmp() {
 	return src(SRC_MAIN + "/css/*.css").pipe(dest(TMP + "/css"));
 }
 function mini() {
-	return src([TMP + "/*.vm"])
-		.pipe(useref({}, lazypipe().pipe(sourcemaps.init, { loadMaps: true })))
+	// Process head.vm and js.vm which contain the CSS/JS build markers
+	// searchPath tells useref where to look for files:
+	// - "." resolves paths starting with "./" (like ./css/sentry.css) relative to the .vm file location
+	// - SRC_MAIN resolves local CSS files (css/sentry.css becomes src/main/webapp/css/sentry.css)
+	// - The paths in .vm files use "../../../node_modules/" which from TMP would be "../node_modules"
+	//   but we add "." (project root) to find node_modules directly
+	return src([TMP + "/head.vm", TMP + "/js.vm"])
+		.pipe(useref({ searchPath: [".", TMP, SRC_MAIN] }, lazypipe().pipe(sourcemaps.init, { loadMaps: true })))
 		.pipe(gulpif("*.js", uglify()))
 		.pipe(gulpif("*.css", minifyCss()))
 		.pipe(sourcemaps.write("maps"))
 		.pipe(dest(DIST));
 }
-function siteVm() {
-	return src(DIST + "/*.vm")
+function siteVmProcessed() {
+	// Copy useref-processed .vm files (head.vm and js.vm) from DIST to META-INF/maven
+	// Apply $relativePath replacement for CSS/JS paths
+	return src([DIST + "/head.vm", DIST + "/js.vm"])
 		.pipe(replace(/script src="js/g, 'script src="$relativePath/js'))
 		.pipe(replace(/link rel="stylesheet" href="css/g, 'link rel="stylesheet" href="$relativePath/css'))
 		.pipe(dest(DIST + "/META-INF/maven"));
 }
-function removeSiteVm() {
+function siteVmOther() {
+	// Copy other .vm files from TMP to META-INF/maven (no useref needed)
+	return src([TMP + "/*.vm", "!" + TMP + "/head.vm", "!" + TMP + "/js.vm"]).pipe(dest(DIST + "/META-INF/maven"));
+}
+function removeRootVm() {
+	// Remove .vm files from dist root (they should only be in META-INF/maven)
 	return del(DIST + "/*.vm");
 }
 
-webProd = series(jsLint, templates, htmlTmp, cssTmp, mini, siteVm, removeSiteVm);
+webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, removeRootVm);
 exports.webProd = webProd;
 
 /**
