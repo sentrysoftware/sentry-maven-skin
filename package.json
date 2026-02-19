@@ -23,7 +23,7 @@
 		"angular-smart-table": "^2.1.11",
 		"bootstrap": "^3.4.0",
 		"elasticlunr": "^0.9.5",
-		"jquery": "^3.7.1",
+		"jquery": "^4.0.0",
 		"mark.js": "^8.11.1",
 		"prism-themes": "^1.5.0",
 		"prismjs": "^1.30.0"
