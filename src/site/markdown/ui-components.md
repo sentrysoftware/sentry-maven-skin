@@ -118,6 +118,16 @@ Use a blockquote with the `[!TABS]` marker and a bullet list:
 - The first line of each list item becomes the tab heading (supports inline Markdown/HTML)
 - Add a blank line, then the tab content with full Markdown support
 
+> [!WARNING]
+> Do **not** use Markdown headings (`#`, `##`, `###`, etc.) inside tab content.
+> Headings define document sections in Doxia/Flexmark, so they can break out of the tab and appear outside the component.
+>
+> If you need a visual heading inside a tab, use HTML text styling instead, for example:
+>
+> ```html
+> <div class="h3">My heading inside a UI component</div>
+> ```
+
 **Available options:**
 
 | Option           | Description                            | Default                            |
@@ -273,6 +283,16 @@ Use a blockquote with the `[!ACCORDION]` marker and a bullet list:
 - The first line of each list item becomes the panel heading; inline Markdown/HTML formatting in this line is preserved
 - Add a blank line, then the panel body content with full Markdown support
 
+> [!WARNING]
+> Do **not** use Markdown headings (`#`, `##`, `###`, etc.) inside accordion panel content.
+> In Doxia/Flexmark, headings create document sections and may escape the accordion block.
+>
+> Use a heading-like HTML element instead:
+>
+> ```html
+> <div class="h3">My heading inside a UI component</div>
+> ```
+
 **Available options:**
 
 | Option               | Description                                     | Default           |
@@ -345,6 +365,16 @@ Use a blockquote with the `[!COLLAPSIBLE]` marker, followed by the title on the 
 - Add a blank line (`>` alone) to separate the title from the content
 - All following paragraphs in the blockquote become the collapsible content
 - Standard Markdown formatting is fully supported inside
+
+> [!WARNING]
+> Do **not** use Markdown headings (`#`, `##`, `###`, etc.) inside collapsible content.
+> Because headings define sections for Doxia/Flexmark, they can break out of the collapsible block.
+>
+> Prefer this alternative when you need a section title inside:
+>
+> ```html
+> <div class="h3">My heading inside a UI component</div>
+> ```
 
 ### Live Demo
 
