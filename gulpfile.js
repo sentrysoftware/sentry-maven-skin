@@ -65,6 +65,7 @@ function mini() {
 	// - SRC_MAIN resolves local CSS files (css/sentry.css becomes src/main/webapp/css/sentry.css)
 	// - The paths in .vm files use "../../../node_modules/" which from TMP would be "../node_modules"
 	//   but we add "." (project root) to find node_modules directly
+	// Sourcemaps are intentionally disabled in packaged assets to keep build output small and faster.
 	return src([TMP + "/head.vm", TMP + "/js.vm"])
 		.pipe(useref({ searchPath: [".", TMP, SRC_MAIN] }))
 		.pipe(gulpif("*.js", uglify()))
@@ -93,12 +94,23 @@ function copyDirectoryFiles(sourceDir, destinationDir) {
 		return;
 	}
 	mkdirSync(destinationDir, { recursive: true });
-	readdirSync(sourceDir).forEach((fileName) => {
-		copyFileSync(join(sourceDir, fileName), join(destinationDir, fileName));
+	readdirSync(sourceDir, { withFileTypes: true }).forEach((entry) => {
+		const sourcePath = join(sourceDir, entry.name);
+		const destinationPath = join(destinationDir, entry.name);
+
+		if (entry.isDirectory()) {
+			copyDirectoryFiles(sourcePath, destinationPath);
+			return;
+		}
+
+		if (entry.isFile()) {
+			copyFileSync(sourcePath, destinationPath);
+		}
+		// Other types (symlinks, sockets, etc.) are intentionally skipped.
 	});
 }
 
-webProd = series(parallel(jsLint, series(templates, vmTmp, cssTmp, mini)), siteVmProcessed, siteVmOther, removeRootVm);
+webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, removeRootVm);
 exports.webProd = webProd;
 
 /**
