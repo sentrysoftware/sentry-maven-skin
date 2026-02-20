@@ -73,6 +73,10 @@
 		<!-- On local dev PC, we will use the frontend-maven-plugin -->
 		<skipFrontendPlugin>false</skipFrontendPlugin>
 		<skipExecPlugin>true</skipExecPlugin>
+		<npmCiCommand>ci</npmCiCommand>
+		<npmCiAuditFlag>--no-audit</npmCiAuditFlag>
+		<npmCiFundFlag>--no-fund</npmCiFundFlag>
+		<npmCiLoglevelFlag>--loglevel=error</npmCiLoglevelFlag>
 
 		<!-- Disable code analysis plugins (not useful for this project) -->
 		<checkstyle.skip>true</checkstyle.skip>
@@ -134,7 +138,8 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>ci</arguments>
+							<arguments>${npmCiCommand} ${npmCiAuditFlag} ${npmCiFundFlag}
+								${npmCiLoglevelFlag}</arguments>
 						</configuration>
 					</execution>
 
@@ -173,7 +178,10 @@
 						<configuration>
 							<executable>npm</executable>
 							<arguments>
-								<argument>ci</argument>
+								<argument>${npmCiCommand}</argument>
+								<argument>${npmCiAuditFlag}</argument>
+								<argument>${npmCiFundFlag}</argument>
+								<argument>${npmCiLoglevelFlag}</argument>
 							</arguments>
 						</configuration>
 					</execution>
