@@ -3,22 +3,21 @@ const SRC_MAIN = "src/main/webapp";
 const DIST = "target/dist";
 const LIB = "node_modules";
 const TMP = "target/tmp/webapp";
+const BINARY_SRC_OPTIONS = { encoding: false };
 
 // Gulp
-const { src, dest, series, parallel, watch } = require("gulp");
+const { src, dest, series, parallel } = require("gulp");
+const { existsSync, mkdirSync, readdirSync, copyFileSync } = require("fs");
+const { join } = require("path");
 
 // Plugins
 const useref = require("gulp-useref");
 const gulpif = require("gulp-if");
 const uglify = require("gulp-uglify");
 const minifyCss = require("gulp-clean-css");
-const sourcemaps = require("gulp-sourcemaps");
-const lazypipe = require("lazypipe");
 const del = require("del");
 const embedTemplates = require("gulp-angular-embed-templates");
 const replace = require("gulp-string-replace");
-const rename = require("gulp-rename");
-const filter = require("gulp-filter");
 const eslint = require("gulp-eslint");
 
 /***
@@ -67,10 +66,9 @@ function mini() {
 	// - The paths in .vm files use "../../../node_modules/" which from TMP would be "../node_modules"
 	//   but we add "." (project root) to find node_modules directly
 	return src([TMP + "/head.vm", TMP + "/js.vm"])
-		.pipe(useref({ searchPath: [".", TMP, SRC_MAIN] }, lazypipe().pipe(sourcemaps.init, { loadMaps: true })))
+		.pipe(useref({ searchPath: [".", TMP, SRC_MAIN] }))
 		.pipe(gulpif("*.js", uglify()))
 		.pipe(gulpif("*.css", minifyCss()))
-		.pipe(sourcemaps.write("maps"))
 		.pipe(dest(DIST));
 }
 function siteVmProcessed() {
@@ -90,57 +88,81 @@ function removeRootVm() {
 	return del(DIST + "/*.vm");
 }
 
-webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, removeRootVm);
+function copyDirectoryFiles(sourceDir, destinationDir) {
+	if (!existsSync(sourceDir)) {
+		return;
+	}
+	mkdirSync(destinationDir, { recursive: true });
+	readdirSync(sourceDir).forEach((fileName) => {
+		copyFileSync(join(sourceDir, fileName), join(destinationDir, fileName));
+	});
+}
+
+webProd = series(parallel(jsLint, series(templates, vmTmp, cssTmp, mini)), siteVmProcessed, siteVmOther, removeRootVm);
 exports.webProd = webProd;
 
 /**
  * Fonts
  **/
 function fa() {
-	return src(LIB + "/@fortawesome/fontawesome-free/webfonts/*").pipe(dest(DIST + "/webfonts/"));
+	copyDirectoryFiles(LIB + "/@fortawesome/fontawesome-free/webfonts", DIST + "/webfonts");
+	return Promise.resolve();
 }
 function glyphicons() {
-	return src(LIB + "/bootstrap/fonts/*").pipe(dest(DIST + "/fonts/"));
+	copyDirectoryFiles(LIB + "/bootstrap/fonts", DIST + "/fonts");
+	return Promise.resolve();
 }
 function srcFonts() {
-	return src(SRC_MAIN + "/fonts/*").pipe(dest(DIST + "/fonts"));
+	copyDirectoryFiles(SRC_MAIN + "/fonts", DIST + "/fonts");
+	return Promise.resolve();
 }
-fonts = series(fa, glyphicons, srcFonts);
+fonts = parallel(fa, glyphicons, srcFonts);
 exports.fonts = fonts;
 
 /**
  * Images
  **/
 function imagesSrc() {
-	return src(SRC_MAIN + "/images/*").pipe(dest(DIST + "/images/"));
-}
-function imagesJstree() {
-	return src(LIB + "/bootstrap-jstree-theme/dist/themes/bootstrap/*.+(gif|png)").pipe(dest(DIST + "/css/"));
+	if (!existsSync(SRC_MAIN + "/images")) {
+		return Promise.resolve();
+	}
+	return src(SRC_MAIN + "/images/*", BINARY_SRC_OPTIONS).pipe(dest(DIST + "/images/"));
 }
 function favicon() {
-	return src(SRC_MAIN + "/favicon*").pipe(dest(DIST + "/"));
+	return src(SRC_MAIN + "/favicon*", { allowEmpty: true, ...BINARY_SRC_OPTIONS }).pipe(dest(DIST + "/"));
 }
-images = series(imagesSrc, imagesJstree, favicon);
+images = parallel(imagesSrc, favicon);
 exports.images = images;
 
 /**
  * PrismJS components (for autoloader)
  **/
 function prismComponents() {
-	return src(LIB + "/prismjs/components/*.min.js").pipe(dest(DIST + "/js/prism/"));
+	const sourceDir = LIB + "/prismjs/components";
+	if (!existsSync(sourceDir)) {
+		return Promise.resolve();
+	}
+	const destinationDir = DIST + "/js/prism";
+	mkdirSync(destinationDir, { recursive: true });
+	readdirSync(sourceDir)
+		.filter((fileName) => fileName.endsWith(".min.js"))
+		.forEach((fileName) => {
+			copyFileSync(join(sourceDir, fileName), join(destinationDir, fileName));
+		});
+	return Promise.resolve();
 }
 exports.prismComponents = prismComponents;
 
 /**
  * Resources
  **/
-resources = series(fonts, images, prismComponents);
+resources = parallel(fonts, images, prismComponents);
 exports.resources = resources;
 
 /**
  * All
  **/
-all = series(clean, resources, webProd);
+all = series(clean, parallel(resources, webProd));
 exports.all = all;
 
 // Exports
