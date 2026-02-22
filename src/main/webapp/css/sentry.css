@@ -1225,6 +1225,7 @@ nav.left-menu .ng-hide-animate {
 	margin-bottom: -5px;
 	border-left-style: solid;
 	border-left-width: 2px;
+	border-left-color: var(--main-fgcolor);
 }
 
 .toc-side-container .toc ul li.active > a::after,
