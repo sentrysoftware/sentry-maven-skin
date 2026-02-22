@@ -243,7 +243,7 @@ limitations under the License.
 						<!-- Result count -->
 						<div class="hidden-xs">
 							{{resultArray.length}}
-							<span ng-pluralize count="resultArray.length" when="{'1': '$esc.java($searchResultSingleText)', 'other': '$esc.java($searchResultCountText)'}"></span>
+							<span ng-pluralize count="resultArray.length" when="{'1': '$searchResultSingleTextEscaped', 'other': '$searchResultCountTextEscaped'}"></span>
 						</div>
 
 						<!-- List of results (Desktop) -->

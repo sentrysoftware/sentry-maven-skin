@@ -131,9 +131,13 @@ limitations under the License.
 
 * searchResultSingleText: text displayed for a single search result
 *##set($searchResultSingleText = $configTool.getValue($site, $headContent, "searchResultSingleText", "result"))#*
+* Escape for Angular JS-string literal inside an HTML attribute
+*##set($searchResultSingleTextEscaped = $esc.html($esc.java($searchResultSingleText)))#*
 
 * searchResultCountText: text displayed for multiple search results
 *##set($searchResultCountText = $configTool.getValue($site, $headContent, "searchResultCountText", "results"))#*
+* Escape for Angular JS-string literal inside an HTML attribute
+*##set($searchResultCountTextEscaped = $esc.html($esc.java($searchResultCountText)))#*
 
 * projectVersionText: label displayed before project version in header
 *##set($projectVersionText = $configTool.getValue($site, $headContent, "projectVersionText", "Version"))#*
