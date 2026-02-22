@@ -1201,10 +1201,45 @@ nav.left-menu .ng-hide-animate {
 .toc-side-container .toc ul li a {
 	color: var(--link-color);
 	text-decoration: none;
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	z-index: 0;
+	line-height: normal;
 }
 
 .toc-side-container .toc ul li a:hover {
 	text-decoration: underline;
+}
+
+.toc-side-container .toc ul li.active > a,
+.toc-side-container .toc ul li a.active {
+	color: var(--main-fgcolor);
+	text-decoration: none;
+	width: 100%;
+	padding-left: 10px;
+	margin-left: -12px;
+	padding-top: 5px;
+	margin-top: -5px;
+	padding-bottom: 5px;
+	margin-bottom: -5px;
+	border-left-style: solid;
+	border-left-width: 2px;
+	border-left-color: var(--main-fgcolor);
+}
+
+.toc-side-container .toc ul li.active > a::after,
+.toc-side-container .toc ul li a.active::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--main-fgcolor);
+	opacity: 0.05;
+	pointer-events: none;
+	z-index: -1;
 }
 
 /**

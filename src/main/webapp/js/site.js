@@ -21,6 +21,7 @@
  * The site AngularJS application
  **/
 angular.module("sentry.site", ["ngAnimate", "ngSanitize", "matchMediaLight", "duScroll", "ui.toggle", "ui.bootstrap"]);
+angular.module("sentry.site").value("duScrollGreedy", true);
 
 /**
  * Prevent animations for anything not marked with the class "animate"

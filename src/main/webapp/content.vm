@@ -125,6 +125,27 @@ limitations under the License.
 
 	* Make sure all headings have IDs
 	*##set($bodyElement = $htmlTool.ensureHeadingIds($bodyElement))#*
+
+*##end#*
+
+* Build a map of legacy empty anchors followed by heading IDs (<a id="x"></a><hN id="...">...)
+* Reuse this map for TOC scrollspy targeting and duplicate-anchor cleanup.
+*##set($legacyAnchorToHeadingMap = {})#*
+*##set($anchorIdList = $bodyElement.select("a[id]"))#*
+*##if($anchorIdList && !$anchorIdList.isEmpty())#*
+	*##foreach($anchorWithId in $anchorIdList)#*
+		*##set($anchorId = $anchorWithId.id())#*
+		*##set($nextSibling = $anchorWithId.nextElementSibling())#*
+		*##set($isLegacyEmptyAnchor = $anchorId && $StringUtils.isBlank($anchorWithId.text()) && !$anchorWithId.hasAttr("href") && $anchorWithId.children().isEmpty() && $nextSibling && ($nextSibling.tagName() == "h2" || $nextSibling.tagName() == "h3" || $nextSibling.tagName() == "h4" || $nextSibling.tagName() == "h5" || $nextSibling.tagName() == "h6") && $StringUtils.isNotBlank($nextSibling.id()))#*
+		*##if($isLegacyEmptyAnchor)#*
+			*##set($legacyAnchorToHeadingMap[$anchorId] = $nextSibling.id())#*
+			* Remove empty legacy anchors that duplicate heading IDs (<a id="x"></a><hN id="x">...)
+			* These duplicates can break scrollspy because getElementById() may resolve to the zero-height anchor.
+			*##if($fixHeadings && $nextSibling.id() == $anchorId)#*
+				*##call($anchorWithId.remove())#*
+			*##end#*
+		*##end#*
+	*##end#*
 *##end#*
 
 * Use angular-scroll for all internal (hash) links (notably for the automatic TOC)
@@ -161,6 +182,28 @@ limitations under the License.
 	*##set($tocElementList = [])#*
 *##end#*
 *##if (!$tocElementList.isEmpty())#*
+	* Configure angular-scroll spy on each ToC <li>, using the target anchor name
+	*##set($tocLinkList = $tocElementList.get(0).select("a[href^=#]"))#*
+	*##if($tocLinkList && !$tocLinkList.isEmpty())#*
+		*##foreach($tocLinkElement in $tocLinkList)#*
+			*##set($tocHref = $tocLinkElement.attr("href"))#*
+			*##if($tocHref && $tocHref.startsWith("#") && $tocHref.length() > 1)#*
+				*##set($tocAnchorName = $tocHref.substring(1))#*
+				*##set($tocSpyTarget = $tocAnchorName)#*
+
+				* If the TOC link targets a legacy empty anchor, spy on the next heading instead
+				*##if($legacyAnchorToHeadingMap[$tocAnchorName])#*
+					*##set($tocSpyTarget = $legacyAnchorToHeadingMap[$tocAnchorName])#*
+				*##end#*
+
+				*##set($tocLiElement = $tocLinkElement.parent())#*
+				*##if($tocLiElement)#*
+					*##call($tocLiElement.attr("du-scrollspy", $tocSpyTarget))#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+
 	* Extract the TOC content
 	* It will be reinserted in the document (so it will be in the final HTML twice:
 	* once inline, just below the <h1>, and once to the right, as a sticky <div>)
