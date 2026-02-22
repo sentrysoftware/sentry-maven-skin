@@ -3,8 +3,18 @@ keywords: features, site4, maven, documentation
 description: Complete list of features supported by Sentry Maven Skin with Maven Site Plugin 4.x
 author: Test Author
 date: 2024-06-15
+projectVersionText: Build
+tocHeadingText: In this Page
+publishDateText: Documentation as of (frontmatter)
+copyrightText: Protected by copyright
+searchFieldText: Search this documentation...
+searchResultsText: Results in this page for
+searchResultSingleText: match in this page
+searchResultCountText: matches in this page
 
 # Features
+
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
 This page documents all the features that work with Maven Site Plugin 4.x.
 

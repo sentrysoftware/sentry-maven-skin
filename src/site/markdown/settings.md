@@ -76,6 +76,19 @@ When a setting is defined in multiple places, the precedence order is:
 | `publishDate`    | Date   | Publication date for metadata                                                          | Build timestamp       |
 | `projectVersion` | String | Version displayed in the header                                                        | `\${project.version}` |
 
+### UI Text Labels
+
+| Setting                 | Type   | Description                                         | Default               |
+| ----------------------- | ------ | --------------------------------------------------- | --------------------- |
+| `tocHeadingText`        | String | Heading displayed above generated table of contents | `Table of Contents`   |
+| `publishDateText`       | String | Label displayed before publish date in footer       | `Documentation as of` |
+| `copyrightText`         | String | Prefix displayed in footer copyright line           | `Copyright`           |
+| `searchFieldText`       | String | Search input placeholder and aria-label text        | `Search...`           |
+| `searchResultsText`     | String | Heading displayed above search results              | `Search Results for`  |
+| `searchResultSingleText`| String | Text displayed for a single search result           | `result`              |
+| `searchResultCountText` | String | Text displayed after the number of search results   | `results`             |
+| `projectVersionText`    | String | Label displayed before version in header            | `Version`             |
+
 ### Images
 
 | Setting                     | Type     | Description                                                  | Default                                         |

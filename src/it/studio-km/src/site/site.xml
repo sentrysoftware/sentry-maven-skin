@@ -27,6 +27,14 @@
 
 	<custom>
 		<projectVersion>${project.version}-test</projectVersion>
+		<projectVersionText>Release</projectVersionText>
+		<tocHeadingText>On This Page (site.xml)</tocHeadingText>
+		<publishDateText>Published on</publishDateText>
+		<copyrightText>All rights reserved</copyrightText>
+		<searchFieldText>Search this documentation (site.xml)...</searchFieldText>
+		<searchResultsText>Search results in this documentation for</searchResultsText>
+		<searchResultSingleText>result in this doc</searchResultSingleText>
+		<searchResultCountText>results in this doc</searchResultCountText>
 		<bodyClass>sentry-purple</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
 		<additionalLinks>

@@ -47,7 +47,7 @@ limitations under the License.
 ## We have a TOC
 						<div class="col-lg-4 col-lg-push-9 visible-lg toc-side-container">
 							<div class="toc">
-								<div class="toc-heading">Table of Contents</div>
+								<div class="toc-heading">$esc.html($tocHeadingText)</div>
 #*							*#$tocContent
 							</div>
 						</div>
@@ -235,7 +235,7 @@ limitations under the License.
 				<div class="search-results" ng-show="siteSearch">
 
 					<h2 class="hidden-xs">
-						Search Results for <em>{{siteSearch | truncate:'50'}}</em>
+						$esc.html($searchResultsText) <em>{{siteSearch | truncate:'50'}}</em>
 					</h2>
 
 					<div ng-show="resultArray.length">
@@ -243,7 +243,7 @@ limitations under the License.
 						<!-- Result count -->
 						<div class="hidden-xs">
 							{{resultArray.length}}
-							<span ng-pluralize count="resultArray.length" when="{'1': 'result', 'other': 'results'}"></span>
+							<span ng-pluralize count="resultArray.length" when="{'1': '$esc.java($searchResultSingleText)', 'other': '$esc.java($searchResultCountText)'}"></span>
 						</div>
 
 						<!-- List of results (Desktop) -->

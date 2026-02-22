@@ -3,6 +3,14 @@ keywords: event, testevent, blank space
 description: Monitoring Studio X allows the operators and administrators to manage the events in the PATROL Agent.
 author: The "Proud" People
 date: 2021-01-01
+projectVersionText: Build
+tocHeadingText: In this Page
+publishDateText: Documentation as of (frontmatter)
+copyrightText: Protected by copyright
+searchFieldText: Search this documentation...
+searchResultsText: Results in this page for
+searchResultSingleText: match in this page
+searchResultCountText: matches in this page
 
 # Managing Events
 

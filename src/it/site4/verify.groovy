@@ -29,6 +29,14 @@ assert indexDoc.select("title").size() > 0 : "HTML title must be present"
 // ============================================================================
 assert indexDoc.text().contains("1.0-SNAPSHOT-site4") : "Custom projectVersion from site.xml must be present"
 assert indexDoc.select('body.sentry-site.sentry-green').size() > 0 : "Custom bodyClass must be applied"
+assert indexDoc.select('.version-prefix:contains(Release)').size() > 0 : "projectVersionText from site.xml must be used in header"
+assert indexDoc.select('.toc-heading:contains(On This Page (site.xml))').size() > 0 : "tocHeadingText from site.xml must be used"
+assert indexDoc.select('input[placeholder="Search this documentation (site.xml)..."]').size() > 0 : "searchFieldText from site.xml must be used"
+assert indexDoc.select('.search-results h2:contains(Search results in this documentation for)').size() > 0 : "searchResultsText from site.xml must be used"
+assert indexDoc.html().contains("'1': 'result in this doc'") : "searchResultSingleText from site.xml must be used"
+assert indexDoc.html().contains("'other': 'results in this doc'") : "searchResultCountText from site.xml must be used"
+assert indexDoc.select('footer.footer :contains(Published on)').size() > 0 : "publishDateText from site.xml must be used"
+assert indexDoc.select('footer.footer .copyright:contains(All rights reserved)').size() > 0 : "copyrightText from site.xml must be used"
 
 // ============================================================================
 // TEST: Google Analytics
@@ -99,6 +107,14 @@ Document featuresDoc = parseHtml(featuresFile)
 assert featuresDoc.select('meta[name=keywords]').attr('content').startsWith('features,site4,maven,documentation') : "Keywords from frontmatter must be present"
 assert featuresDoc.select('meta[name=description]').attr('content').startsWith('Complete list of features') : "Description from frontmatter must be present"
 assert featuresDoc.select('meta[name=author]').attr('content') == 'Test Author' : "Author from frontmatter must be present"
+assert featuresDoc.select('.version-prefix:contains(Build)').size() > 0 : "projectVersionText from frontmatter must override site.xml"
+assert featuresDoc.select('.toc-heading:contains(In this Page)').size() > 0 : "tocHeadingText from frontmatter must override site.xml"
+assert featuresDoc.select('input[placeholder="Search this documentation..."]').size() > 0 : "searchFieldText from frontmatter must override site.xml"
+assert featuresDoc.select('.search-results h2:contains(Results in this page for)').size() > 0 : "searchResultsText from frontmatter must override site.xml"
+assert featuresDoc.html().contains("'1': 'match in this page'") : "searchResultSingleText from frontmatter must override site.xml"
+assert featuresDoc.html().contains("'other': 'matches in this page'") : "searchResultCountText from frontmatter must override site.xml"
+assert featuresDoc.select('footer.footer :contains(Documentation as of (frontmatter))').size() > 0 : "publishDateText from frontmatter must override site.xml"
+assert featuresDoc.select('footer.footer .copyright:contains(Protected by copyright)').size() > 0 : "copyrightText from frontmatter must override site.xml"
 
 // ============================================================================
 // TEST: Interpolation (maven mode)
