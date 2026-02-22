@@ -18,6 +18,14 @@ def indexHtml = indexFile.text // Keep raw text for some specific tests
 // Verify that the left menu is correct using CSS selectors
 def activeMenuItem = indexDoc.select('li.active > a[href=index.html]')
 assert activeMenuItem.size() == 1 : "index.html must be listed exactly once as active entry in menu"
+assert indexDoc.select('.version-prefix:contains(Release)').size() > 0 : "projectVersionText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.select('.toc-heading:contains(On This Page (site.xml))').size() > 0 : "tocHeadingText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.select('input[placeholder=\"Search this documentation (site.xml)...\"]').size() > 0 : "searchFieldText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.select('.search-results h2:contains(Search results in this documentation for)').size() > 0 : "searchResultsText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.html().contains("'1': 'result in this doc'") : "searchResultSingleText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.html().contains("'other': 'results in this doc'") : "searchResultCountText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.select('footer.footer :contains(Published on)').size() > 0 : "publishDateText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.select('footer.footer .copyright:contains(All rights reserved)').size() > 0 : "copyrightText from site.xml must be used on pages without frontmatter override"
 
 // ============================================================================
 // TEST: Events page - metadata and content
@@ -88,6 +96,12 @@ assert eventsDoc.select('a[href=#keyboard-shortcuts-28special-29][du-smooth-scro
 assert eventsDoc.select('body.sentry-site.sentry-purple').size() > 0 : "Body has correct classes"
 assert eventsDoc.select('.header-title:contains(skin-test Extended)').size() > 0 : "Header title is present"
 assert eventsDoc.select('.header-subtitle:contains(1.0-SNAPSHOT-test)').size() > 0 : "Header subtitle with version is present"
+assert eventsDoc.select('.version-prefix:contains(Build)').size() > 0 : "projectVersionText from frontmatter must override site.xml"
+assert eventsDoc.select('.toc-heading:contains(In this Page)').size() > 0 : "tocHeadingText from frontmatter must override site.xml"
+assert eventsDoc.select('input[placeholder=\"Search this documentation...\"]').size() > 0 : "searchFieldText from frontmatter must override site.xml"
+assert eventsDoc.select('.search-results h2:contains(Results in this page for)').size() > 0 : "searchResultsText from frontmatter must override site.xml"
+assert eventsDoc.html().contains("'1': 'match in this page'") : "searchResultSingleText from frontmatter must override site.xml"
+assert eventsDoc.html().contains("'other': 'matches in this page'") : "searchResultCountText from frontmatter must override site.xml"
 
 // Navigation structure
 assert eventsDoc.select('h5:contains(Getting Started)').size() > 0 : "Getting Started section exists"
@@ -112,6 +126,8 @@ assert footer.text().contains('skin-test Extended') : "Footer contains project n
 assert footer.text().contains('1.0-SNAPSHOT-test') : "Footer contains version"
 assert footer.text().contains('1980-05-22') : "Publish date must be derived from pom.xml buildTimestamp property"
 assert footer.text().contains('1975') && footer.text().contains('1980') : "inceptionYear must be displayed in the copyright"
+assert footer.text().contains('Documentation as of (frontmatter)') : "publishDateText from frontmatter must override site.xml"
+assert footer.select('.copyright:contains(Protected by copyright)').size() > 0 : "copyrightText from frontmatter must override site.xml"
 assert footer.html().contains('The Organization') : '${project.organization.name} must be displayed in the footer'
 assert footer.html().contains('https://the.org') : '${project.organization.url} must be displayed in the footer'
 

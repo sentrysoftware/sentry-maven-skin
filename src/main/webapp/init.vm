@@ -112,6 +112,32 @@ limitations under the License.
 * Set to "false" to disable PrismJS loading, default: "pre > code[class*=language-]"
 *##set($syntaxHighlighting = $configTool.getValue($site, $headContent, "syntaxHighlighting", "pre > code[class*=language-]"))#*
 
+** UI text customization (site.xml <custom> + frontmatter) **
+
+* tocHeadingText: heading displayed above generated table of contents
+*##set($tocHeadingText = $configTool.getValue($site, $headContent, "tocHeadingText", "Table of Contents"))#*
+
+* copyrightText: prefix displayed in footer copyright line
+*##set($copyrightText = $configTool.getValue($site, $headContent, "copyrightText", "Copyright"))#*
+
+* publishDateText: label displayed before publish date in footer
+*##set($publishDateText = $configTool.getValue($site, $headContent, "publishDateText", "Documentation as of"))#*
+
+* searchFieldText: placeholder/label for the search input fields
+*##set($searchFieldText = $configTool.getValue($site, $headContent, "searchFieldText", "Search..."))#*
+
+* searchResultsText: heading displayed above search results
+*##set($searchResultsText = $configTool.getValue($site, $headContent, "searchResultsText", "Search Results for"))#*
+
+* searchResultSingleText: text displayed for a single search result
+*##set($searchResultSingleText = $configTool.getValue($site, $headContent, "searchResultSingleText", "result"))#*
+
+* searchResultCountText: text displayed for multiple search results
+*##set($searchResultCountText = $configTool.getValue($site, $headContent, "searchResultCountText", "results"))#*
+
+* projectVersionText: label displayed before project version in header
+*##set($projectVersionText = $configTool.getValue($site, $headContent, "projectVersionText", "Version"))#*
+
 ** Property interpolation (Maven or Velocity) **
 
 * Process content based on interpolation mode

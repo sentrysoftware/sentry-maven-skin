@@ -120,7 +120,7 @@ limitations under the License.
 #*				*##end#*
 *#					<div class="header-title">$site.name</div>
 						<div class="header-subtitle">
-							<span class="version-prefix">Version</span>
+							<span class="version-prefix">$esc.html($projectVersionText)</span>
 							<span class="version">$site.getCustomValue("projectVersion", $project.version)</span>
 						</div>
 					</div>#*
@@ -129,7 +129,7 @@ limitations under the License.
 					<div class="navbar-brand header-xxs visible-xs">
 						<div class="header-title">$site.name</div>
 						<div class="header-subtitle">
-							Version <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
+							$esc.html($projectVersionText) <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
 						</div>
 					</div>#*
 
@@ -139,8 +139,8 @@ limitations under the License.
 						<input
 							type="search"
 							class="form-control"
-							placeholder="Search..."
-							aria-label="Search"
+							placeholder="$esc.html($searchFieldText)"
+							aria-label="$esc.html($searchFieldText)"
 							ng-model="siteSearch"
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"
@@ -159,8 +159,8 @@ limitations under the License.
 						<input
 							type="text"
 							class="form-control"
-							placeholder="Search..."
-							aria-label="Search"
+							placeholder="$esc.html($searchFieldText)"
+							aria-label="$esc.html($searchFieldText)"
 							ng-model="siteSearch"
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"

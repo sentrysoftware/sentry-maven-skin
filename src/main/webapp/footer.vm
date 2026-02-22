@@ -41,7 +41,7 @@ limitations under the License.
 		<p class="footer-title" ng-class="{'text-center': $matchMedia.size == 'xs'}">
 			<strong>$site.name $site.getCustomValue("projectVersion", $project.version)</strong>
 			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
-			Documentation as of <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">$date.format($site.publishDate.format, $publishDate)</time></strong>
+			$esc.html($publishDateText) <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">$date.format($site.publishDate.format, $publishDate)</time></strong>
 		</p>
 ##
 ## Additional links
@@ -92,7 +92,7 @@ limitations under the License.
 		</div>
 
 		<div class="footer-copyright" ng-class="{'text-center': $matchMedia.size == 'xs'}">
-			<span class="copyright">Copyright &copy;#*
+			<span class="copyright">$esc.html($copyrightText) &copy;#*
 		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
 		*#$date.getYear($publishDate)</span>#*
 		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end

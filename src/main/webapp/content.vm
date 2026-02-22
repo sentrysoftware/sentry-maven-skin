@@ -211,7 +211,7 @@ limitations under the License.
 	*##set($tocContent = $tocElement.clone().attr("id", "right-toc").outerHtml())#*
 	* Wrap the inline TOC with the necessary HTML
 	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg hidden-xs'>"))#*
-	*##call($tocElement.parent().prepend("<div class='toc-heading'>Table of Contents</div>"))#*
+	*##call($tocElement.parent().prepend("<div class='toc-heading'>$esc.html($tocHeadingText)</div>"))#*
 *##else#*
 	*##set($tocContent = "")#*
 *##end#*
