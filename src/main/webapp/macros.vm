@@ -224,10 +224,8 @@ limitations under the License.
 #set($candidateLocaleId = $candidateLocale.toString())
 #set($candidateLocaleLabel = $candidateLocale.toLanguageTag().toUpperCase())
 #set($candidateLocaleHasDedicatedDirectory = false)
-#set($candidateLocaleSourceDirPath = $pathsClass.get("${project.basedir}/src/site/${candidateLocaleId}"))
-#set($candidateLocaleDescriptorFilePath = $pathsClass.get("${project.basedir}/src/site/site_${candidateLocaleId}.xml"))
-#if($filesClass.exists($candidateLocaleSourceDirPath) || $filesClass.exists($candidateLocaleDescriptorFilePath))
-#set($candidateLocaleHasDedicatedDirectory = true)
+#if($localeHasDedicatedDirectoryById && $localeHasDedicatedDirectoryById.containsKey($candidateLocaleId))
+#set($candidateLocaleHasDedicatedDirectory = $localeHasDedicatedDirectoryById.get($candidateLocaleId))
 #end
 #set($localeSwitchHref = "index.html")
 #if($candidateLocaleHasDedicatedDirectory)

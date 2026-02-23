@@ -155,11 +155,13 @@ limitations under the License.
 			*##set($localeTokenTrimmed = $localeToken.trim())#*
 			*##if($StringUtils.isNotBlank($localeTokenTrimmed))#*
 				*##set($localeTokenNormalized = $localeTokenTrimmed.replace('_', '-'))#*
-				*##if($localeTokenNormalized != "default")#*
+				*##if($localeTokenNormalized == "default")#*
+					*##set($candidateLocale = $localeClass.getDefault())#*
+				*##else#*
 					*##set($candidateLocale = $localeClass.forLanguageTag($localeTokenNormalized))#*
-					*##if(!$availableLocales.contains($candidateLocale))#*
-						*##call($availableLocales.add($candidateLocale))#*
-					*##end#*
+				*##end#*
+				*##if(!$availableLocales.contains($candidateLocale))#*
+					*##call($availableLocales.add($candidateLocale))#*
 				*##end#*
 			*##end#*
 		*##end#*
@@ -167,6 +169,20 @@ limitations under the License.
 *##end#*
 *##if(!$availableLocales.contains($locale))#*
 	*##call($availableLocales.add($locale))#*
+*##end#*
+
+* localeHasDedicatedDirectoryById: precomputed lookup used by localeSwitcher
+* to avoid repeated Files.exists() checks in macros.
+*##set($localeHasDedicatedDirectoryById = {})#*
+*##foreach($candidateLocale in $availableLocales)#*
+	*##set($candidateLocaleId = $candidateLocale.toString())#*
+	*##set($candidateLocaleHasDedicatedDirectory = false)#*
+	*##set($candidateLocaleSourceDirPath = $pathsClass.get("${project.basedir}/src/site/${candidateLocaleId}"))#*
+	*##set($candidateLocaleDescriptorFilePath = $pathsClass.get("${project.basedir}/src/site/site_${candidateLocaleId}.xml"))#*
+	*##if($filesClass.exists($candidateLocaleSourceDirPath) || $filesClass.exists($candidateLocaleDescriptorFilePath))#*
+		*##set($candidateLocaleHasDedicatedDirectory = true)#*
+	*##end#*
+	*##call($localeHasDedicatedDirectoryById.put($candidateLocaleId, $candidateLocaleHasDedicatedDirectory))#*
 *##end#*
 
 * Load i18n ResourceBundle from the skin classloader.
