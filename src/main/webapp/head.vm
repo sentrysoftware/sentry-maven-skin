@@ -61,9 +61,9 @@ $headElement.html()
 ##
 ## AI Indexing: generate Markdown files for AI platforms and inserts a <link rel="alternate" /> in the head (if enabled)
 #if ($buildAiIndex)
-	$aiIndexTool.convertToMarkdown(${project.reporting.outputDirectory}, $currentFileName, $headElement, $bodyElement, $publishDate, $project.url)#*
+	$aiIndexTool.convertToMarkdown($localeOutputDirectory, $currentFileName, $headElement, $bodyElement, $publishDate, $project.url)#*
 	*##set($menuSection = "#getMenuSection()")#*
-	*##call($aiIndexTool.updateLlmsTxt("${project.reporting.outputDirectory}/llms.txt", $currentFileName, $shortTitle, $site.name, $project.description, $menuSection, $project.url))#*
+	*##call($aiIndexTool.updateLlmsTxt("$localeOutputDirectory/llms.txt", $currentFileName, $shortTitle, $site.name, $project.description, $menuSection, $project.url))#*
 *##end
 	<!-- build:css css/main-combined.css -->
 	<link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">

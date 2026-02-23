@@ -231,7 +231,7 @@ limitations under the License.
 
 * Build ElasticLunr index (if enabled)
 *##if($buildIndex)#*
-	*##set($indexFile = "${project.reporting.outputDirectory}/index.json")#*
+	*##set($indexFile = "$localeOutputDirectory/index.json")#*
 	*##set($bodyText = $htmlTool.text($bodyElement, "body").get(0) )#*
 	*##call($indexTool.buildElasticLunrIndex($indexFile, $currentFileName, $shortTitle, $keywords, $bodyText))#*
 *##end

@@ -197,6 +197,70 @@ limitations under the License.
 #*
 *##end#*
 
+	*#
+	##
+## localeSwitcher
+##
+## Renders the locale selector dropdown.
+##
+## $liClass: extra CSS class added to the <li> element
+## $alignRight: true to align dropdown to the right (desktop header)
+##
+#macro(localeSwitcher $liClass $alignRight)
+#if($availableLocales && $availableLocales.size() > 0)
+#set($currentLocaleLabel = $locale.toLanguageTag().toUpperCase())
+#set($dropdownMenuClass = "dropdown-menu")
+#if($alignRight)
+#set($dropdownMenuClass = "dropdown-menu dropdown-menu-right")
+#end
+<li class="dropdown locale-switcher $liClass" uib-dropdown>
+	<a href="" class="dropdown-toggle" uib-dropdown-toggle aria-haspopup="true" aria-expanded="false">
+		<i class="fa-solid fa-globe" aria-hidden="true"></i>
+		<span class="locale-label">$esc.html($currentLocaleLabel)</span>
+		<i class="fa fa-caret-down" aria-hidden="true"></i>
+	</a>
+	<ul class="$dropdownMenuClass" uib-dropdown-menu role="menu">
+	#foreach($candidateLocale in $availableLocales)
+#set($candidateLocaleId = $candidateLocale.toString())
+#set($candidateLocaleLabel = $candidateLocale.toLanguageTag().toUpperCase())
+#set($candidateLocaleHasDedicatedDirectory = false)
+#set($candidateLocaleSourceDirPath = $pathsClass.get("${project.basedir}/src/site/${candidateLocaleId}"))
+#set($candidateLocaleDescriptorFilePath = $pathsClass.get("${project.basedir}/src/site/site_${candidateLocaleId}.xml"))
+#if($filesClass.exists($candidateLocaleSourceDirPath) || $filesClass.exists($candidateLocaleDescriptorFilePath))
+#set($candidateLocaleHasDedicatedDirectory = true)
+#end
+#set($localeSwitchHref = "index.html")
+#if($candidateLocaleHasDedicatedDirectory)
+#set($localeSwitchHref = "${candidateLocaleId}/index.html")
+#end
+#if($currentLocaleHasDedicatedDirectory)
+#if($candidateLocaleHasDedicatedDirectory)
+#if($candidateLocaleId == $localeId)
+#set($localeSwitchHref = "index.html")
+#else
+#set($localeSwitchHref = "../${candidateLocaleId}/index.html")
+#end
+#else
+#set($localeSwitchHref = "../index.html")
+#end
+#end
+#if($relativePath != ".")
+#set($localeSwitchHref = "${relativePath}/${localeSwitchHref}")
+#end
+#if($candidateLocaleId == $localeId)
+		<li class="active">
+#else
+		<li>
+#end
+			<a href="$esc.html($localeSwitchHref)">$esc.html($candidateLocaleLabel)</a>
+		</li>
+#end
+	</ul>
+</li>
+#end
+#end
+	#*
+
 
 **
 * getMenuSection

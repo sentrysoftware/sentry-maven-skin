@@ -16,16 +16,53 @@ Document indexDoc = parseHtml(indexFile)
 def indexHtml = indexFile.text // Keep raw text for some specific tests
 
 // Verify that the left menu is correct using CSS selectors
-def activeMenuItem = indexDoc.select('li.active > a[href=index.html]')
+def activeMenuItem = indexDoc.select('nav.left-menu li.active > a[href=index.html]')
 assert activeMenuItem.size() == 1 : "index.html must be listed exactly once as active entry in menu"
-assert indexDoc.select('.version-prefix:contains(Release)').size() > 0 : "projectVersionText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.select('.toc-heading:contains(On This Page (site.xml))').size() > 0 : "tocHeadingText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.select('input[placeholder=\"Search this documentation (site.xml)...\"]').size() > 0 : "searchFieldText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.select('.search-results h2:contains(Search results in this documentation for)').size() > 0 : "searchResultsText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.html().contains("'1': 'result in this doc'") : "searchResultSingleText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.html().contains("'other': 'results in this doc'") : "searchResultCountText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.select('footer.footer :contains(Published on)').size() > 0 : "publishDateText from site.xml must be used on pages without frontmatter override"
-assert indexDoc.select('footer.footer .copyright:contains(All rights reserved)').size() > 0 : "copyrightText from site.xml must be used on pages without frontmatter override"
+assert indexDoc.select('.version-prefix:contains(Version)').size() > 0 : "Default projectVersionText must come from ResourceBundle"
+assert indexDoc.select('.toc-heading:contains(On this Page)').size() > 0 : "Default tocHeadingText must come from ResourceBundle"
+assert indexDoc.select('input[placeholder=\"Search...\"]').size() > 0 : "Default searchFieldText must come from ResourceBundle"
+assert indexDoc.select('.search-results h2:contains(Search Results for)').size() > 0 : "Default searchResultsText must come from ResourceBundle"
+assert indexDoc.html().contains("'1': 'result'") : "Default searchResultSingleText must come from ResourceBundle"
+assert indexDoc.html().contains("'other': 'results'") : "Default searchResultCountText must come from ResourceBundle"
+assert indexDoc.select('footer.footer :contains(Documentation as of)').size() > 0 : "Default publishDateText must come from ResourceBundle"
+assert indexDoc.select('footer.footer .copyright:contains(Copyright)').size() > 0 : "Default copyrightText must come from ResourceBundle"
+assert indexDoc.select('header .navbar-right li.locale-switcher > a .locale-label:contains(EN)').size() > 0 : "Desktop locale switcher must display current locale"
+assert indexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(EN)').size() > 0 : "Locale switcher must include default locale root"
+assert indexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=fr/index.html]:contains(FR)').size() > 0 : "Locale switcher must include French locale root"
+assert indexDoc.select('footer .navbar.site-logo.site-logo-xs > ul.nav.navbar-nav > li.icons + li.locale-switcher + li.dark-toggle').size() == 1 : "In mobile footer, locale switcher must be between social icons and dark toggle"
+assert indexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(EN)').size() > 0 : "Mobile locale switcher must include default locale root"
+assert indexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=fr/index.html]:contains(FR)').size() > 0 : "Mobile locale switcher must include French locale root"
+
+// French localized page (single source page: src/site/fr/markdown/index.md)
+def frIndexFile = new File(basedir, "target/site/fr/index.html")
+assert frIndexFile.isFile() : "French index page must be generated"
+Document frIndexDoc = parseHtml(frIndexFile)
+assert frIndexDoc.select('html[lang=fr]').size() > 0 : "French page must have lang=fr"
+assert frIndexDoc.select('nav.left-menu li.active > a[href=index.html]:contains(Aperçu)').size() == 1 : "French site menu must use site_fr.xml with localized index entry"
+assert frIndexDoc.select('a[href=events.html]').size() == 0 : "French site menu must reference only index.html"
+assert frIndexDoc.select('.breadcrumb:contains(Supervision des applications)').size() > 0 : "French breadcrumbs must come from site_fr.xml"
+assert frIndexDoc.select('.toc-heading:contains(Sur cette page)').size() > 0 : "French tocHeadingText must come from ResourceBundle"
+assert frIndexDoc.select('input[placeholder=\"Rechercher...\"]').size() > 0 : "French searchFieldText must come from ResourceBundle"
+assert frIndexDoc.select('.search-results h2:contains(Résultats de recherche pour)').size() > 0 : "French searchResultsText must come from ResourceBundle"
+assert frIndexDoc.html().contains("'1': 'r\\u00E9sultat'") : "French singular search label must come from ResourceBundle"
+assert frIndexDoc.html().contains("'other': 'r\\u00E9sultats'") : "French plural search label must come from ResourceBundle"
+assert frIndexDoc.select('footer.footer :contains(Documentation du)').size() > 0 : "French publishDateText must come from ResourceBundle"
+assert frIndexDoc.select('footer.footer .copyright').text().contains("Droits d'auteur") : "French copyrightText must come from ResourceBundle"
+assert frIndexDoc.select('header .navbar-right li.locale-switcher > a .locale-label:contains(FR)').size() > 0 : "Desktop locale switcher must display current French locale"
+assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() > 0 : "French locale switcher must include default locale root"
+assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French locale switcher must include French locale root"
+assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() > 0 : "French mobile locale switcher must include default locale root"
+assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French mobile locale switcher must include French locale root"
+
+// Resource bundles must remain internal and must not be published in generated sites
+assert !new File(basedir, "target/site/resources.properties").exists() : "resources.properties must not be published in site output"
+assert !new File(basedir, "target/site/resources_fr.properties").exists() : "resources_fr.properties must not be published in site output"
+assert !new File(basedir, "target/site/resources_es.properties").exists() : "resources_es.properties must not be published in site output"
+assert !new File(basedir, "target/site/resources_zh_CN.properties").exists() : "resources_zh_CN.properties must not be published in site output"
+assert !new File(basedir, "target/site/fr/resources.properties").exists() : "Localized site output must not include resources.properties"
+assert !new File(basedir, "target/site/fr/resources_fr.properties").exists() : "Localized site output must not include resources_fr.properties"
+assert !new File(basedir, "target/site/fr/resources_es.properties").exists() : "Localized site output must not include resources_es.properties"
+assert !new File(basedir, "target/site/fr/resources_zh_CN.properties").exists() : "Localized site output must not include resources_zh_CN.properties"
 
 // ============================================================================
 // TEST: Events page - metadata and content
@@ -96,17 +133,17 @@ assert eventsDoc.select('a[href=#keyboard-shortcuts-28special-29][du-smooth-scro
 assert eventsDoc.select('body.sentry-site.sentry-purple').size() > 0 : "Body has correct classes"
 assert eventsDoc.select('.header-title:contains(skin-test Extended)').size() > 0 : "Header title is present"
 assert eventsDoc.select('.header-subtitle:contains(1.0-SNAPSHOT-test)').size() > 0 : "Header subtitle with version is present"
-assert eventsDoc.select('.version-prefix:contains(Build)').size() > 0 : "projectVersionText from frontmatter must override site.xml"
-assert eventsDoc.select('.toc-heading:contains(In this Page)').size() > 0 : "tocHeadingText from frontmatter must override site.xml"
-assert eventsDoc.select('input[placeholder=\"Search this documentation...\"]').size() > 0 : "searchFieldText from frontmatter must override site.xml"
-assert eventsDoc.select('.search-results h2:contains(Results in this page for)').size() > 0 : "searchResultsText from frontmatter must override site.xml"
-assert eventsDoc.html().contains("'1': 'match in this page'") : "searchResultSingleText from frontmatter must override site.xml"
-assert eventsDoc.html().contains("'other': 'matches in this page'") : "searchResultCountText from frontmatter must override site.xml"
+assert eventsDoc.select('.version-prefix:contains(Version)').size() > 0 : "Default projectVersionText must be used when no override is set"
+assert eventsDoc.select('.toc-heading:contains(On this Page)').size() > 0 : "Default tocHeadingText must be used when no override is set"
+assert eventsDoc.select('input[placeholder=\"Search...\"]').size() > 0 : "Default searchFieldText must be used when no override is set"
+assert eventsDoc.select('.search-results h2:contains(Search Results for)').size() > 0 : "Default searchResultsText must be used when no override is set"
+assert eventsDoc.html().contains("'1': 'result'") : "Default searchResultSingleText must be used when no override is set"
+assert eventsDoc.html().contains("'other': 'results'") : "Default searchResultCountText must be used when no override is set"
 
 // Navigation structure
 assert eventsDoc.select('h5:contains(Getting Started)').size() > 0 : "Getting Started section exists"
 assert eventsDoc.select('a[href=console.html]:contains(Operating the Console)').size() > 0 : "Console link exists"
-assert eventsDoc.select('li.active a[href=events.html]:contains(Managing Events)').size() > 0 : "Events page is marked active"
+assert eventsDoc.select('nav.left-menu li.active a[href=events.html]:contains(Managing Events)').size() > 0 : "Events page is marked active"
 assert eventsDoc.select('a[href=subdir/agent.html]:contains(Configuring the Agent)').size() > 0 : "Agent link in menu exists"
 assert eventsDoc.select('.toc li a[href=#filtering-events][du-smooth-scroll]').size() > 0 : "TOC contains filtering events link"
 
@@ -126,8 +163,8 @@ assert footer.text().contains('skin-test Extended') : "Footer contains project n
 assert footer.text().contains('1.0-SNAPSHOT-test') : "Footer contains version"
 assert footer.text().contains('1980-05-22') : "Publish date must be derived from pom.xml buildTimestamp property"
 assert footer.text().contains('1975') && footer.text().contains('1980') : "inceptionYear must be displayed in the copyright"
-assert footer.text().contains('Documentation as of (frontmatter)') : "publishDateText from frontmatter must override site.xml"
-assert footer.select('.copyright:contains(Protected by copyright)').size() > 0 : "copyrightText from frontmatter must override site.xml"
+assert footer.text().contains('Documentation as of') : "Default publishDateText must be used when no override is set"
+assert footer.select('.copyright:contains(Copyright)').size() > 0 : "Default copyrightText must be used when no override is set"
 assert footer.html().contains('The Organization') : '${project.organization.name} must be displayed in the footer'
 assert footer.html().contains('https://the.org') : '${project.organization.url} must be displayed in the footer'
 
@@ -201,11 +238,18 @@ assert mdContent.contains('# Extending skin-test') : "In generated Markdown, con
 def llmsFile = new File(basedir, "target/site/llms.txt")
 assert llmsFile.isFile() : "llms.txt file must have been generated"
 def llmsContent = llmsFile.text
-assert llmsContent.contains('# skin-test Extended') : "In llms.txt, title must be present"
+assert llmsContent.contains('# skin-test Extended') : "In default-locale llms.txt, title must be the default-locale title"
 assert llmsContent.contains('> A full documentation project (copied from Monitoring Studio)') : "In llms.txt, description must be present (multi-line blockquote format)"
 assert llmsContent.contains('## Getting Started') : "In llms.txt, menu section must be present"
 assert llmsContent.contains('- [Operating the Console](https://the.org/docs/console.html.md)') : "In llms.txt, menu items must use absolute URLs with .html.md extension"
 assert llmsContent.contains('https://the.org/docs/') : "In llms.txt, URLs must be absolute when project URL is configured"
+
+def frLlmsFile = new File(basedir, "target/site/fr/llms.txt")
+assert frLlmsFile.isFile() : "French llms.txt file must be generated under target/site/fr/"
+def frLlmsContent = frLlmsFile.text
+assert frLlmsContent.contains('# skin-test \\u00C9tendu') || frLlmsContent.contains('# skin-test Étendu') : "In localized llms.txt, title must use the localized site name"
+assert frLlmsContent.contains('## Prise en main') : "In localized llms.txt, localized menu section must be present"
+assert frLlmsContent.contains('- [Aper\\u00E7u](https://the.org/docs/index.html.md)') || frLlmsContent.contains('- [Aperçu](https://the.org/docs/index.html.md)') : "In localized llms.txt, localized page title must be present"
 
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
@@ -236,8 +280,15 @@ assert !(agentHtml =~ '"//') : "URLs must not be protocol-relative"
 indexJsonFile = new File(basedir, "target/site/index.json")
 assert indexJsonFile.isFile()
 String indexJson = indexJsonFile.text
+assert indexJson.contains('"index.html":{"id":"index.html","title":"Overview"') : "Default-locale index.json must index default-locale page titles"
 def eventsGood = indexJson.contains('"events.html":{"id":"events.html","title":"Dealing with Events","keywords":"event,testevent,blank space,studio,km,patrol,develop,web"')
 assert eventsGood : "The index must contain title and keywords from the source metadata"
+
+def frIndexJsonFile = new File(basedir, "target/site/fr/index.json")
+assert frIndexJsonFile.isFile() : "French index.json must be generated under target/site/fr/"
+String frIndexJson = frIndexJsonFile.text
+assert frIndexJson.contains('"index.html":{"id":"index.html","title":"Aper\\u00E7u"') || frIndexJson.contains('"index.html":{"id":"index.html","title":"Aperçu"') : "Localized index.json must contain localized page titles"
+assert !frIndexJson.contains('"events.html"') : "French index.json must only include French locale content"
 
 // Basic Monitors topic contains 6 subtopics
 def basicFile = new File(basedir, "target/site/basic-monitors/index.html")

@@ -58,6 +58,10 @@ limitations under the License.
 #foreach($socialLink in $socialLinks)#*
 *#			<li><a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a></li>
 #end#*
+			## Locale selector
+*#
+#localeSwitcher("locale-switcher-desktop" true)
+#*
 			## Toggle light/dark
 			*#<li class="dark-toggle"><toggle ng-model="$matchMedia.dark" ng-change="switchColors()" size="btn-xs" width="34px" height="22px" off-class="day" on-class="night" toggle-class="navbar-btn dark-toggle" on="<i class='fa-solid fa-moon'></i>" off="<i class='sun-icon'></i>" title="Switch between dark and light color schemes" tabindex="0"></toggle></li>
 		#if ($site.bannerRight.href)#*

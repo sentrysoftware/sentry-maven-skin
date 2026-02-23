@@ -1,11 +1,11 @@
 keywords: navigation, header, banner, links, social
-description: Configure the header navigation bar with logo, links, and social media icons.
+description: Configure the header navigation bar with logo, links, social media icons, and locale switcher.
 
 # Navigation Links
 
 <!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
 
-The header navigation bar displays your logo, external links, and social media icons.
+The header navigation bar displays your logo, external links, social media icons, and locale switcher.
 
 ![Navigation bar elements](images/nav-links.png)
 
@@ -112,6 +112,15 @@ Add social media icons to the header:
   </custom>
 </social>
 ```
+
+## Locale Switcher
+
+When multiple locales are configured in `maven-site-plugin` (for example `<locales>en,fr</locales>`), the skin automatically shows a locale switcher:
+
+- In desktop view: in the top banner, after social icons and before the light/dark toggle
+- In mobile view: in the footer, between social icons and the light/dark toggle
+
+The dropdown entries come from Maven Site supported locales and each entry links to the selected locale root page.
 
 ## Footer Links
 

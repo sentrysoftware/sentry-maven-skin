@@ -114,33 +114,95 @@ limitations under the License.
 
 ** UI text customization (site.xml <custom> + frontmatter) **
 
+* localeOutputDirectory: where locale-specific generated artifacts are written
+* currentLocaleHasDedicatedDirectory: true when this locale renders under /<localeId>/
+*##set($pathsClass = $class.inspect("java.nio.file.Paths").type)#*
+*##set($filesClass = $class.inspect("java.nio.file.Files").type)#*
+*##set($localeOutputDirectory = ${project.reporting.outputDirectory})#*
+*##set($localeId = $locale.toString())#*
+*##set($currentLocaleHasDedicatedDirectory = false)#*
+*##set($localeSourceDirPath = $pathsClass.get("${project.basedir}/src/site/${localeId}"))#*
+*##set($localeDescriptorFilePath = $pathsClass.get("${project.basedir}/src/site/site_${localeId}.xml"))#*
+*##if($filesClass.exists($localeSourceDirPath) || $filesClass.exists($localeDescriptorFilePath))#*
+	*##set($currentLocaleHasDedicatedDirectory = true)#*
+	*##set($localeOutputDirectory = "${project.reporting.outputDirectory}/${localeId}")#*
+	*##set($localeOutputDirPath = $pathsClass.get($localeOutputDirectory))#*
+	*##call($filesClass.createDirectories($localeOutputDirPath))#*
+*##end#*
+
+* availableLocales: locales displayed in the locale switcher
+* Maven Site Plugin 3.x provides an empty $supportedLocales, so we fallback to
+* the maven-site-plugin <locales> configuration when needed.
+*##set($localeClass = $class.inspect("java.util.Locale").type)#*
+*##set($availableLocales = [])#*
+*##if($supportedLocales && $supportedLocales.size() > 0)#*
+	*##foreach($supportedLocale in $supportedLocales)#*
+		*##call($availableLocales.add($supportedLocale))#*
+	*##end#*
+*##else#*
+	*##set($sitePluginLocales = "")#*
+	*##foreach($buildPlugin in $project.build.plugins)#*
+		*##if($buildPlugin.artifactId == "maven-site-plugin" && $buildPlugin.configuration)#*
+			*##set($localesNode = $buildPlugin.configuration.getChild("locales"))#*
+			*##if($localesNode && $StringUtils.isNotBlank($localesNode.value))#*
+				*##set($sitePluginLocales = $localesNode.value)#*
+				*##break#*
+			*##end#*
+		*##end#*
+	*##end#*
+	*##if($StringUtils.isNotBlank($sitePluginLocales))#*
+		*##foreach($localeToken in $sitePluginLocales.split(","))#*
+			*##set($localeTokenTrimmed = $localeToken.trim())#*
+			*##if($StringUtils.isNotBlank($localeTokenTrimmed))#*
+				*##set($localeTokenNormalized = $localeTokenTrimmed.replace('_', '-'))#*
+				*##if($localeTokenNormalized != "default")#*
+					*##set($candidateLocale = $localeClass.forLanguageTag($localeTokenNormalized))#*
+					*##if(!$availableLocales.contains($candidateLocale))#*
+						*##call($availableLocales.add($candidateLocale))#*
+					*##end#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end#*
+*##if(!$availableLocales.contains($locale))#*
+	*##call($availableLocales.add($locale))#*
+*##end#*
+
+* Load i18n ResourceBundle from the skin classloader.
+*##set($resourceBundleBaseName = "META-INF.maven.resources")#*
+*##set($threadClass = $class.inspect("java.lang.Thread").type)#*
+*##set($resourceBundleClass = $class.inspect("java.util.ResourceBundle").type)#*
+*##set($skinClassLoader = $threadClass.currentThread().getContextClassLoader())#*
+*##set($resourceBundle = $resourceBundleClass.getBundle($resourceBundleBaseName, $locale, $skinClassLoader))#*
+
 * tocHeadingText: heading displayed above generated table of contents
-*##set($tocHeadingText = $configTool.getValue($site, $headContent, "tocHeadingText", "Table of Contents"))#*
+*##set($tocHeadingText = $configTool.getValue($site, $headContent, "tocHeadingText", $resourceBundle.getString("sentry.tocHeadingText")) )#*
 
 * copyrightText: prefix displayed in footer copyright line
-*##set($copyrightText = $configTool.getValue($site, $headContent, "copyrightText", "Copyright"))#*
+*##set($copyrightText = $configTool.getValue($site, $headContent, "copyrightText", $resourceBundle.getString("sentry.copyrightText")) )#*
 
 * publishDateText: label displayed before publish date in footer
-*##set($publishDateText = $configTool.getValue($site, $headContent, "publishDateText", "Documentation as of"))#*
+*##set($publishDateText = $configTool.getValue($site, $headContent, "publishDateText", $resourceBundle.getString("sentry.publishDateText")) )#*
 
 * searchFieldText: placeholder/label for the search input fields
-*##set($searchFieldText = $configTool.getValue($site, $headContent, "searchFieldText", "Search..."))#*
+*##set($searchFieldText = $configTool.getValue($site, $headContent, "searchFieldText", $resourceBundle.getString("sentry.searchFieldText")) )#*
 
 * searchResultsText: heading displayed above search results
-*##set($searchResultsText = $configTool.getValue($site, $headContent, "searchResultsText", "Search Results for"))#*
+*##set($searchResultsText = $configTool.getValue($site, $headContent, "searchResultsText", $resourceBundle.getString("sentry.searchResultsText")) )#*
 
 * searchResultSingleText: text displayed for a single search result
-*##set($searchResultSingleText = $configTool.getValue($site, $headContent, "searchResultSingleText", "result"))#*
+*##set($searchResultSingleText = $configTool.getValue($site, $headContent, "searchResultSingleText", $resourceBundle.getString("sentry.searchResultSingleText")) )#*
 * Escape for Angular JS-string literal inside an HTML attribute
 *##set($searchResultSingleTextEscaped = $esc.html($esc.java($searchResultSingleText)))#*
 
 * searchResultCountText: text displayed for multiple search results
-*##set($searchResultCountText = $configTool.getValue($site, $headContent, "searchResultCountText", "results"))#*
+*##set($searchResultCountText = $configTool.getValue($site, $headContent, "searchResultCountText", $resourceBundle.getString("sentry.searchResultCountText")) )#*
 * Escape for Angular JS-string literal inside an HTML attribute
 *##set($searchResultCountTextEscaped = $esc.html($esc.java($searchResultCountText)))#*
 
 * projectVersionText: label displayed before project version in header
-*##set($projectVersionText = $configTool.getValue($site, $headContent, "projectVersionText", "Version"))#*
+*##set($projectVersionText = $configTool.getValue($site, $headContent, "projectVersionText", $resourceBundle.getString("sentry.projectVersionText")) )#*
 
 ** Property interpolation (Maven or Velocity) **
 

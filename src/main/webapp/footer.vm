@@ -68,6 +68,10 @@ limitations under the License.
 #end#*
 *#</li>
 #end#*
+	## Locale selector in XS mode
+*#
+#localeSwitcher("locale-switcher-xs" false)
+#*
 	## Toggle night/day in XS mode
 *#<li class="dark-toggle dark-toggle-xs">
     <toggle

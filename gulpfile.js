@@ -55,6 +55,10 @@ function vmTmp() {
 	// Copy all .vm files to temp directory for processing
 	return src([SRC_MAIN + "/*.vm"]).pipe(dest(TMP));
 }
+function i18nBundles() {
+	// Keep i18n bundles inside META-INF/maven so they stay classpath-only and are not published as site assets.
+	return src(SRC_MAIN + "/resources*.properties", { allowEmpty: true }).pipe(dest(DIST + "/META-INF/maven"));
+}
 function cssTmp() {
 	return src(SRC_MAIN + "/css/*.css").pipe(dest(TMP + "/css"));
 }
@@ -110,7 +114,7 @@ function copyDirectoryFiles(sourceDir, destinationDir) {
 	});
 }
 
-webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, removeRootVm);
+webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, i18nBundles, removeRootVm);
 exports.webProd = webProd;
 
 /**

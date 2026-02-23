@@ -18,6 +18,12 @@ assert indexFile.isFile() : "index.html must have been generated"
 Document indexDoc = parseHtml(indexFile)
 def indexHtml = indexFile.text // Keep raw text for some specific tests
 
+// Resource bundles must remain internal and must not be published in generated site output
+assert !new File(basedir, "target/site/resources.properties").exists() : "resources.properties must not be published in site output"
+assert !new File(basedir, "target/site/resources_fr.properties").exists() : "resources_fr.properties must not be published in site output"
+assert !new File(basedir, "target/site/resources_es.properties").exists() : "resources_es.properties must not be published in site output"
+assert !new File(basedir, "target/site/resources_zh_CN.properties").exists() : "resources_zh_CN.properties must not be published in site output"
+
 // ============================================================================
 // TEST: Site name and title from site.xml
 // ============================================================================
