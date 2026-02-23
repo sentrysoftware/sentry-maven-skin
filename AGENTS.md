@@ -75,7 +75,7 @@ This command:
 
 1. Cleans previous build artifacts
 2. Installs Node.js locally and runs `npm ci`
-3. Runs Gulp to build, lint, and minify frontend assets
+3. Runs Gulp to build, lint, and minify frontend assets (including conversion of UTF-8 `resources*.properties` files into Java 8-safe `\uXXXX` escaped bundles in `META-INF/maven`)
 4. Packages the Maven skin JAR
 5. Runs integration tests (`studio-km` and `site4`)
 6. Generates this project's own documentation site
