@@ -207,7 +207,7 @@ limitations under the License.
 ## $alignRight: true to align dropdown to the right (desktop header)
 ##
 #macro(localeSwitcher $liClass $alignRight)
-#if($availableLocales && $availableLocales.size() > 0)
+#if($availableLocales && $availableLocales.size() > 1)
 #set($currentLocaleLabel = $locale.toLanguageTag().toUpperCase())
 #set($dropdownMenuClass = "dropdown-menu")
 #if($alignRight)

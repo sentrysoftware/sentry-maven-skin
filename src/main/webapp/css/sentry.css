@@ -475,11 +475,31 @@ li.locale-switcher {
 	transition: 0.2s ease-in-out;
 }
 
-.site-logo .locale-switcher > ul.dropdown-menu > li > a:hover,
-.site-logo .locale-switcher > ul.dropdown-menu > li.active > a {
+.site-logo .locale-switcher > ul.dropdown-menu > li > a:hover {
 	background-color: #505050;
 	color: #fff;
 	opacity: 1;
+}
+
+.site-logo .locale-switcher > ul.dropdown-menu > li.active > a,
+.site-logo .locale-switcher > ul.dropdown-menu > li.active > a:hover,
+.site-logo .locale-switcher > ul.dropdown-menu > li.active > a:focus {
+	background-color: var(--alternate-bgcolor);
+	color: var(--alternate-fgcolor);
+	opacity: 1;
+}
+
+body.sentry-site .dropdown-menu > li > a:hover,
+body.sentry-site .dropdown-menu > li > a:focus {
+	background-color: #505050;
+	color: #fff;
+}
+
+body.sentry-site .dropdown-menu > li.active > a,
+body.sentry-site .dropdown-menu > li.active > a:hover,
+body.sentry-site .dropdown-menu > li.active > a:focus {
+	background-color: var(--alternate-bgcolor);
+	color: var(--alternate-fgcolor);
 }
 
 .toggle.dark-toggle,
@@ -1503,10 +1523,17 @@ nav.left-menu .ng-hide-animate {
 		white-space: nowrap;
 	}
 
-	.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open > ul.dropdown-menu > li > a:hover,
-	.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open > ul.dropdown-menu > li.active > a {
+	.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open > ul.dropdown-menu > li > a:hover {
 		background-color: #505050;
 		color: #fff !important;
+		opacity: 1;
+	}
+
+	.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open > ul.dropdown-menu > li.active > a,
+	.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open > ul.dropdown-menu > li.active > a:hover,
+	.footer .navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open > ul.dropdown-menu > li.active > a:focus {
+		background-color: var(--alternate-bgcolor);
+		color: var(--alternate-fgcolor) !important;
 		opacity: 1;
 	}
 }
