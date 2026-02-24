@@ -91,6 +91,7 @@ When a setting is defined in multiple places, the precedence order is:
 
 By default, these labels are loaded from the skin ResourceBundle (`resources*.properties`) using the current `$locale`.
 English, French, Spanish and Simplified Chinese bundles are provided out of the box.
+See [Multilingual Documentation](multilingual.html) for end-to-end locale setup.
 
 ### Images
 
@@ -326,4 +327,5 @@ These settings are only available in `site.xml` (not frontmatter):
 - [Styling](styles.html) - Color themes and CSS
 - [Navigation Links](nav-links.html) - Header and footer links
 - [Navigation Menu](nav-menu.html) - Sidebar menu configuration
+- [Multilingual Documentation](multilingual.html) - Locale-specific pages and labels
 

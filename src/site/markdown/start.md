@@ -144,6 +144,7 @@ This is my documentation built with **${project.name}**.
 - Easy to write in Markdown
 - Beautiful output
 - Full-text search included
+- Multilingual-ready with per-locale pages and labels
 ```
 
 ## Step 5: Build and Preview

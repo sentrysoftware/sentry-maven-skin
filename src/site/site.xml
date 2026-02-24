@@ -104,6 +104,7 @@
 
 		<menu name="Writing Documentation">
 			<item name="Writing a Page" href="page-structure.html" />
+			<item name="Multilingual Documentation" href="multilingual.html" />
 			<item name="Automatic Title" href="title.html" />
 			<item name="Automatic ToC" href="toc.html" />
 			<item name="Images" href="images.html" />
