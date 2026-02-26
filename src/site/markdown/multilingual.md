@@ -20,7 +20,7 @@ The skin ships built-in UI label bundles for:
 | ------ | -------------- | ------- |
 | English (default) | `en` | `On this Page`, `Search...` |
 | French | `fr` | `Sur cette page`, `Rechercher...` |
-| Spanish | `es` | `En esta pagina`, `Buscar...` |
+| Spanish | `es` | `En esta página`, `Buscar...` |
 | Simplified Chinese | `zh_CN` | Chinese UI labels |
 
 ## Configure Locales in Maven
