@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	name="${project.name} Étendu"
+	xmlns="http://maven.apache.org/DECORATION/1.8.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
+>
+	<skin>
+		<groupId>org.sentrysoftware.maven</groupId>
+		<artifactId>sentry-maven-skin</artifactId>
+		<version>${skinVersion}</version>
+	</skin>
+
+	<custom>
+		<projectVersion>${project.version}-test</projectVersion>
+		<bodyClass>sentry-purple</bodyClass>
+		<keywords>studio,km,patrol,develop,web</keywords>
+		<additionalLinks>
+			<link>
+				<name>Code d'éthique</name>
+				<href>https://the.org/ethics.html</href>
+			</link>
+			<link>
+				<name>Confidentialité</name>
+				<href>https://the.org/cookies.html</href>
+			</link>
+		</additionalLinks>
+		<social>
+			<twitter>TheASF</twitter>
+			<facebook>ApacheSoftwareFoundation</facebook>
+			<linkedin>the-apache-software-foundation</linkedin>
+			<custom>
+				<title>Rejoignez-nous sur Slack !</title>
+				<href>https://infra.apache.org/slack.html</href>
+				<icon>fa-brands fa-slack</icon>
+			</custom>
+		</social>
+	</custom>
+
+	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
+
+	<bannerLeft>
+		<name>Bannière gauche</name>
+		<src>../images/logo-short.png</src>
+		<href>https://banner.left</href>
+	</bannerLeft>
+
+	<bannerRight>
+		<name>Bannière droite</name>
+		<src>../images/logo.png</src>
+		<href>https://banner.right</href>
+	</bannerRight>
+
+	<body>
+		<links>
+			<item name="Conditions d'utilisation" href="https://the.org/legal" />
+			<item name="YouTube" href="https://youtu.be/Th6NweyurWs" />
+		</links>
+
+		<breadcrumbs>
+			<item name="Super KMs" href="https://sentrysoftware.com/bmc/products/index.html" />
+			<item name="Supervision des applications" />
+		</breadcrumbs>
+
+		<menu name="Prise en main">
+			<item name="Aperçu" href="index.html" />
+		</menu>
+	</body>
+</project>

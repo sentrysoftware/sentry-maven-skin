@@ -1,5 +1,5 @@
-keywords: maven, skin, documentation, site, doxia
-description: ${project.name} is a modern Apache Maven site skin for generating beautiful technical documentation.
+keywords: maven, skin, documentation, site, doxia, multilingual, i18n
+description: ${project.name} is a modern Apache Maven site skin for generating beautiful multilingual technical documentation.
 
 # ${project.name}
 
@@ -14,6 +14,7 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 - **Modern Design**: Clean HTML5/Bootstrap 3 responsive layout
 - **Dark Mode**: Automatic detection with manual toggle
 - **Full-Text Search**: Built-in search index (no external services)
+- **Multilingual Support**: Localized UI labels and per-locale site generation
 - **Code Highlighting**: 290+ languages with copy-to-clipboard
 - **Print-Ready**: Optimized CSS for printing
 - **Mobile-First**: Responsive design for all devices
@@ -34,18 +35,19 @@ description: ${project.name} is a modern Apache Maven site skin for generating b
 ### Writing Documentation
 
 4. [Writing a Page](page-structure.html) - Structure your content
-5. [Code Highlighting](code.html) - Format code blocks
-6. [Images](images.html) - Add screenshots with auto-zoom
-7. [UI Components](ui-components.html) - Tabs, accordions, and more
-8. [Doxia Features](doxia.html) - Macros, snippets, and more
+5. [Multilingual Documentation](multilingual.html) - Build and maintain multiple locales
+6. [Code Highlighting](code.html) - Format code blocks
+7. [Images](images.html) - Add screenshots with auto-zoom
+8. [UI Components](ui-components.html) - Tabs, accordions, and more
+9. [Doxia Features](doxia.html) - Macros, snippets, and more
 
 ### Advanced Topics
 
-9. [Configuration Reference](settings.html) - All site.xml and frontmatter options
-10. [Front Matter Headers](headers.html) - Per-page configuration
-11. [Full-Text Search](search.html) - Search configuration
-12. [AI Indexing](ai-indexing.html) - Generate llms.txt
-13. [Print Support](print.html) - Optimize for printing
+10. [Configuration Reference](settings.html) - All site.xml and frontmatter options
+11. [Front Matter Headers](headers.html) - Per-page configuration
+12. [Full-Text Search](search.html) - Search configuration
+13. [AI Indexing](ai-indexing.html) - Generate llms.txt
+14. [Print Support](print.html) - Optimize for printing
 
 ## Screenshots
 

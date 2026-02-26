@@ -61,6 +61,7 @@
 					<generateProjectInfo>true</generateProjectInfo>
 					<inputEncoding>UTF-8</inputEncoding>
 					<outputEncoding>UTF-8</outputEncoding>
+					<locales>en,fr</locales>
 				</configuration>
 				<dependencies>
 					<dependency>

@@ -123,5 +123,5 @@ Override font families on the `:root` element:
 ## See Also
 
 - [Configuration Reference](settings.html) - All configuration options
-- [Navigation Links](nav-links.html) - Configure header and logo
+- [Top Links](top-links.html) - Configure header and logo
 - [Navigation Menu](nav-menu.html) - Set up sidebar navigation

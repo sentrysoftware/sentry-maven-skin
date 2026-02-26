@@ -35,6 +35,14 @@
 	<custom>
 		<interpolation>maven</interpolation>
 		<projectVersion>${project.version}-site4</projectVersion>
+		<projectVersionText>Release</projectVersionText>
+		<tocHeadingText>On This Page (site.xml)</tocHeadingText>
+		<publishDateText>Published on</publishDateText>
+		<copyrightText>All rights reserved</copyrightText>
+		<searchFieldText>Search this documentation (site.xml)...</searchFieldText>
+		<searchResultsText>Search results in this documentation for</searchResultsText>
+		<searchResultSingleText>result in this doc</searchResultSingleText>
+		<searchResultCountText>results in this doc</searchResultCountText>
 		<bodyClass>sentry-green</bodyClass>
 		<keywords>site4,maven,test,documentation</keywords>
 		<googleAnalyticsAccountId>SITE4_GOOGLE_ID</googleAnalyticsAccountId>

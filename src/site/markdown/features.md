@@ -15,8 +15,9 @@ A quick reference to all ${project.name} features. For a guided tour, see the [D
 | Feature                            | Description                                             | Configurable |
 | ---------------------------------- | ------------------------------------------------------- | ------------ |
 | [Styling](styles.html)             | Customize colors and fonts with CSS variables           | `bodyClass`  |
-| [Navigation Links](nav-links.html) | Configure header bar with logo, links, and social media | site.xml     |
+| [Top Links](top-links.html) | Configure header bar with logo, links, and social media | site.xml     |
 | [Navigation Menu](nav-menu.html)   | Collapsible sidebar menu (supports 2 levels)            | site.xml     |
+| [Multilingual Documentation](multilingual.html) | Per-locale pages, labels, and automatic locale switcher | `maven-site-plugin` locales + UI labels |
 
 ## Writing Features
 

@@ -44,6 +44,7 @@ Build steps:
 - NodeJS is installed in `./node` (and is ignored by Git)
 - `npm install` is run to get all dependencies listed in `package.json`, which are installed in the `./node_modules` (also ignored by Git)
 - `gulp` is run with `./gulpfile.js` to build the front-end web app (lint, minification, template embedding, etc.), and the result is stored in `./target/dist`
+- i18n bundles (`resources*.properties`) are authored in UTF-8 under `src/main/webapp` and converted by Gulp to Java 8-safe `\uXXXX` escaped bundles in `target/dist/META-INF/maven`
 - The Maven skin JAR is assembled in `./target`
 - A temporary local Maven repository is set up with both JAR artifacts (the skin and the Velocity tools)
 - A test project is set up in `./target/it` and `mvn site` is run on this test project

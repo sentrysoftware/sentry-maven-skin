@@ -9,6 +9,7 @@ const BINARY_SRC_OPTIONS = { encoding: false };
 const { src, dest, series, parallel } = require("gulp");
 const { existsSync, mkdirSync, readdirSync, copyFileSync } = require("fs");
 const { join } = require("path");
+const { Transform } = require("stream");
 
 // Plugins
 const useref = require("gulp-useref");
@@ -54,6 +55,60 @@ function templates() {
 function vmTmp() {
 	// Copy all .vm files to temp directory for processing
 	return src([SRC_MAIN + "/*.vm"]).pipe(dest(TMP));
+}
+
+function escapeUnicodeForJavaProperties(text) {
+	let escaped = "";
+
+	for (const character of text) {
+		const codePoint = character.codePointAt(0);
+
+		if (codePoint <= 0x7f) {
+			escaped += character;
+			continue;
+		}
+
+		if (codePoint <= 0xffff) {
+			escaped += "\\u" + codePoint.toString(16).padStart(4, "0");
+			continue;
+		}
+
+		const surrogateCodePoint = codePoint - 0x10000;
+		const highSurrogate = 0xd800 + (surrogateCodePoint >> 10);
+		const lowSurrogate = 0xdc00 + (surrogateCodePoint & 0x3ff);
+		escaped += "\\u" + highSurrogate.toString(16).padStart(4, "0");
+		escaped += "\\u" + lowSurrogate.toString(16).padStart(4, "0");
+	}
+
+	return escaped;
+}
+
+function java8PropertiesTransform() {
+	return new Transform({
+		objectMode: true,
+		transform(file, _, callback) {
+			if (file.isNull()) {
+				callback(null, file);
+				return;
+			}
+
+			if (file.isStream()) {
+				callback(new Error("Streaming is not supported for i18n bundle conversion."));
+				return;
+			}
+
+			const utf8Text = file.contents.toString("utf8");
+			const java8SafeText = escapeUnicodeForJavaProperties(utf8Text);
+			file.contents = Buffer.from(java8SafeText, "ascii");
+			callback(null, file);
+		}
+	});
+}
+
+function i18nBundles() {
+	// Keep i18n bundles inside META-INF/maven so they stay classpath-only and are not published as site assets.
+	// Source bundles are UTF-8 for readability and converted at build time to Java 8-compatible escaped properties.
+	return src(SRC_MAIN + "/resources*.properties", { allowEmpty: true }).pipe(java8PropertiesTransform()).pipe(dest(DIST + "/META-INF/maven"));
 }
 function cssTmp() {
 	return src(SRC_MAIN + "/css/*.css").pipe(dest(TMP + "/css"));
@@ -110,7 +165,7 @@ function copyDirectoryFiles(sourceDir, destinationDir) {
 	});
 }
 
-webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, removeRootVm);
+webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, i18nBundles, removeRootVm);
 exports.webProd = webProd;
 
 /**

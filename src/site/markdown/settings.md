@@ -76,6 +76,23 @@ When a setting is defined in multiple places, the precedence order is:
 | `publishDate`    | Date   | Publication date for metadata                                                          | Build timestamp       |
 | `projectVersion` | String | Version displayed in the header                                                        | `\${project.version}` |
 
+### UI Text Labels
+
+| Setting                 | Type   | Description                                         | Default               |
+| ----------------------- | ------ | --------------------------------------------------- | --------------------- |
+| `tocHeadingText`         | String | Heading displayed above generated table of contents | Localized by `$locale` |
+| `publishDateText`        | String | Label displayed before publish date in footer       | Localized by `$locale` |
+| `copyrightText`          | String | Prefix displayed in footer copyright line           | Localized by `$locale` |
+| `searchFieldText`        | String | Search input placeholder and aria-label text        | Localized by `$locale` |
+| `searchResultsText`      | String | Heading displayed above search results              | Localized by `$locale` |
+| `searchResultSingleText` | String | Text displayed for a single search result           | Localized by `$locale` |
+| `searchResultCountText`  | String | Text displayed after the number of search results   | Localized by `$locale` |
+| `projectVersionText`     | String | Label displayed before version in header            | Localized by `$locale` |
+
+By default, these labels are loaded from the skin ResourceBundle (`resources*.properties`) using the current `$locale`.
+English, French, Spanish and Simplified Chinese bundles are provided out of the box.
+See [Multilingual Documentation](multilingual.html) for end-to-end locale setup.
+
 ### Images
 
 | Setting                     | Type     | Description                                                  | Default                                         |
@@ -308,6 +325,7 @@ These settings are only available in `site.xml` (not frontmatter):
 - [Front Matter Headers](headers.html) - Per-page metadata
 - [Maven Properties](maven-properties.html) - Property interpolation
 - [Styling](styles.html) - Color themes and CSS
-- [Navigation Links](nav-links.html) - Header and footer links
+- [Top Links](top-links.html) - Header and footer links
 - [Navigation Menu](nav-menu.html) - Sidebar menu configuration
+- [Multilingual Documentation](multilingual.html) - Locale-specific pages and labels
 

@@ -144,6 +144,7 @@ This is my documentation built with **${project.name}**.
 - Easy to write in Markdown
 - Beautiful output
 - Full-text search included
+- Multilingual-ready with per-locale pages and labels
 ```
 
 ## Step 5: Build and Preview
@@ -177,7 +178,7 @@ Now that your site is running, continue with:
 
 - [Styling](styles.html) - Customize colors and fonts
 - [Navigation Menu](nav-menu.html) - Add sidebar navigation
-- [Navigation Links](nav-links.html) - Configure header and logo
+- [Top Links](top-links.html) - Configure header and logo
 
 ### Writing
 

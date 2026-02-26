@@ -58,6 +58,10 @@ limitations under the License.
 #foreach($socialLink in $socialLinks)#*
 *#			<li><a href="$socialLink.href" target="_blank" title="$socialLink.title"><i class="$socialLink.icon"></i></a></li>
 #end#*
+			## Locale selector
+*#
+#localeSwitcher("locale-switcher-desktop" true)
+#*
 			## Toggle light/dark
 			*#<li class="dark-toggle"><toggle ng-model="$matchMedia.dark" ng-change="switchColors()" size="btn-xs" width="34px" height="22px" off-class="day" on-class="night" toggle-class="navbar-btn dark-toggle" on="<i class='fa-solid fa-moon'></i>" off="<i class='sun-icon'></i>" title="Switch between dark and light color schemes" tabindex="0"></toggle></li>
 		#if ($site.bannerRight.href)#*
@@ -120,7 +124,7 @@ limitations under the License.
 #*				*##end#*
 *#					<div class="header-title">$site.name</div>
 						<div class="header-subtitle">
-							<span class="version-prefix">Version</span>
+							<span class="version-prefix">$esc.html($projectVersionText)</span>
 							<span class="version">$site.getCustomValue("projectVersion", $project.version)</span>
 						</div>
 					</div>#*
@@ -129,7 +133,7 @@ limitations under the License.
 					<div class="navbar-brand header-xxs visible-xs">
 						<div class="header-title">$site.name</div>
 						<div class="header-subtitle">
-							Version <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
+							$esc.html($projectVersionText) <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
 						</div>
 					</div>#*
 
@@ -139,8 +143,8 @@ limitations under the License.
 						<input
 							type="search"
 							class="form-control"
-							placeholder="Search..."
-							aria-label="Search"
+							placeholder="$esc.html($searchFieldText)"
+							aria-label="$esc.html($searchFieldText)"
 							ng-model="siteSearch"
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"
@@ -159,8 +163,8 @@ limitations under the License.
 						<input
 							type="text"
 							class="form-control"
-							placeholder="Search..."
-							aria-label="Search"
+							placeholder="$esc.html($searchFieldText)"
+							aria-label="$esc.html($searchFieldText)"
 							ng-model="siteSearch"
 							ng-change="search(siteSearch)"
 							ng-model-options="{ debounce: 500 }"
