@@ -325,7 +325,7 @@ These settings are only available in `site.xml` (not frontmatter):
 - [Front Matter Headers](headers.html) - Per-page metadata
 - [Maven Properties](maven-properties.html) - Property interpolation
 - [Styling](styles.html) - Color themes and CSS
-- [Navigation Links](nav-links.html) - Header and footer links
+- [Top Links](top-links.html) - Header and footer links
 - [Navigation Menu](nav-menu.html) - Sidebar menu configuration
 - [Multilingual Documentation](multilingual.html) - Locale-specific pages and labels
 

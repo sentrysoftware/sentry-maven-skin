@@ -23,12 +23,9 @@ The skin ships built-in UI label bundles for:
 | Spanish | `es` | `En esta pagina`, `Buscar...` |
 | Simplified Chinese | `zh_CN` | Chinese UI labels |
 
-> [!NOTE]
-> Source bundles are maintained in UTF-8 and converted at build time into Java 8-safe escaped properties.
-
 ## Configure Locales in Maven
 
-Enable locales in `maven-site-plugin`:
+In your project's `pom.xml`, enable locales in the configuration of `maven-site-plugin`:
 
 ```xml
 <build>
@@ -51,17 +48,17 @@ Typical structure:
 
 ```text
 src/site/
-|-- site.xml                 # default locale descriptor
-|-- site_fr.xml              # French descriptor
-|-- site_es.xml              # Spanish descriptor
-|-- markdown/
-|   `-- index.md             # default locale pages
-|-- fr/
-|   `-- markdown/
-|       `-- index.md         # French pages
-`-- es/
-    `-- markdown/
-        `-- index.md         # Spanish pages
+├── site.xml                 # default locale descriptor
+├── site_fr.xml              # French descriptor
+├── site_es.xml              # Spanish descriptor
+├── markdown/
+│   └── index.md             # default locale pages
+├── fr/
+│   └── markdown/
+│       └── index.md         # French pages
+└── es/
+    └── markdown/
+        └── index.md         # Spanish pages
 ```
 
 ## Add a New Locale (Not Built In)
@@ -101,12 +98,10 @@ When multiple locales are configured, the selector appears automatically:
 - Desktop: header (next to social links/theme toggle)
 - Mobile: footer
 
-![Locale selector in header](images/nav-links.png)
-
-![Locale selector in mobile view](images/nav-links-mobile.png)
+![inline](images/locale-switcher.png)
 
 ## See Also
 
-- [Navigation Links](nav-links.html) - Header/footer links and locale selector placement
+- [Top Links](top-links.html) - Header/footer links and locale selector placement
 - [Configuration Reference](settings.html) - All label keys and precedence
 - [Front Matter Headers](headers.html) - Per-page overrides

@@ -98,24 +98,24 @@
 			<item name="Overview" href="index.html" />
 			<item name="Quick Start" href="start.html" />
 			<item name="Styling (Colors, Fonts)" href="styles.html" />
-			<item name="Navigation Links" href="nav-links.html" />
+			<item name="Top Links" href="top-links.html" />
 			<item name="Navigation Menu" href="nav-menu.html" />
 		</menu>
 
 		<menu name="Writing Documentation">
 			<item name="Writing a Page" href="page-structure.html" />
-			<item name="Multilingual Documentation" href="multilingual.html" />
-			<item name="Automatic Title" href="title.html" />
 			<item name="Automatic ToC" href="toc.html" />
 			<item name="Images" href="images.html" />
 			<item name="Code Highlighting" href="code.html" />
 			<item name="UI Components (Tabs, ...)" href="ui-components.html" />
 			<item name="Doxia Features" href="doxia.html" />
+			<item name="Multilingual Documentation" href="multilingual.html" />
 		</menu>
 
 		<menu name="Advanced">
 			<item name="Configuration Reference" href="settings.html" />
 			<item name="Front Matter Headers" href="headers.html" />
+			<item name="Automatic Title" href="title.html" />
 			<item name="Keywords (SEO)" href="keywords.html" />
 			<item name="Full-Text Search" href="search.html" />
 			<item name="AI Indexing (llms.txt)" href="ai-indexing.html" />

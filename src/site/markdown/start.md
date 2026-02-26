@@ -178,7 +178,7 @@ Now that your site is running, continue with:
 
 - [Styling](styles.html) - Customize colors and fonts
 - [Navigation Menu](nav-menu.html) - Add sidebar navigation
-- [Navigation Links](nav-links.html) - Configure header and logo
+- [Top Links](top-links.html) - Configure header and logo
 
 ### Writing
 

@@ -442,18 +442,10 @@ li.dark-toggle.dark-toggle-xs {
 }
 
 /* Locale switcher (desktop and mobile) */
-li.locale-switcher {
-	margin-right: 15px;
-}
-
 .site-logo ul.nav.navbar-nav.navbar-right > li.locale-switcher > a {
 	display: inline-flex;
 	align-items: center;
 	column-gap: 6px;
-}
-
-.site-logo ul.nav.navbar-nav.navbar-right > li.locale-switcher > a > .locale-label {
-	letter-spacing: 0.5px;
 }
 
 .site-logo ul.nav.navbar-nav.navbar-right > li.locale-switcher > a > .fa-caret-down {
