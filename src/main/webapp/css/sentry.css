@@ -1799,7 +1799,6 @@ body.sentry-site .table th > code {
 	max-width: 100%;
 	white-space: pre-wrap !important;
 	overflow-wrap: anywhere;
-	word-break: break-word;
 	overflow-x: visible;
 }
 
