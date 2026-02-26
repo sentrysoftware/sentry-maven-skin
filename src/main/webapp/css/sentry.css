@@ -1792,6 +1792,17 @@ body.sentry-site .table > tbody > tr {
 	z-index: 1;
 }
 
+/* Allow inline code to wrap in tables to avoid layout overflow */
+body.sentry-site .table td > code,
+body.sentry-site .table th > code {
+	display: inline-block;
+	max-width: 100%;
+	white-space: pre-wrap !important;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+	overflow-x: visible;
+}
+
 /* ::after for handling cells' background */
 /* (stripes, colors) */
 body.sentry-site .table > tbody > tr::after {

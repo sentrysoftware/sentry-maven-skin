@@ -52,6 +52,7 @@ To disable heading processing:
 ## Bootstrap Tables
 
 All tables are automatically styled with Bootstrap classes for consistent appearance.
+Inline `code` elements inside table cells can wrap and break long tokens when needed to prevent table overflow.
 
 ## External Links
 
