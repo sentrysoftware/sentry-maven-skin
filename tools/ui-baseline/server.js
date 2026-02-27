@@ -5,8 +5,8 @@ const path = require("path");
 const HOST = "127.0.0.1";
 const PORT = 4173;
 const repositoryRoot = process.cwd();
-const site4Root = path.join(repositoryRoot, "target", "it", "site4", "target", "site");
-const harnessRoot = path.join(repositoryRoot, "tools", "ui-harness");
+const site4Root = path.resolve(repositoryRoot, "target", "it", "site4", "target", "site");
+const harnessRoot = path.resolve(repositoryRoot, "tools", "ui-harness");
 
 function failIfMissingSite4() {
 	if (!fs.existsSync(site4Root)) {
@@ -18,8 +18,28 @@ function failIfMissingSite4() {
 
 function normalizeRequestPath(requestUrl) {
 	const withoutQuery = (requestUrl || "/").split("?")[0].split("#")[0];
-	const normalized = path.posix.normalize(withoutQuery);
+	let decodedPath = withoutQuery;
+	try {
+		decodedPath = decodeURIComponent(withoutQuery);
+	} catch (_error) {
+		decodedPath = withoutQuery;
+	}
+	const normalized = path.posix.normalize(decodedPath);
 	return normalized.startsWith("/") ? normalized : `/${normalized}`;
+}
+
+function resolveUnderRoot(rootDirectory, relativePath) {
+	if (!relativePath || relativePath.includes("\\") || path.isAbsolute(relativePath)) {
+		return null;
+	}
+
+	const resolvedPath = path.resolve(rootDirectory, relativePath);
+	const rootPrefix = rootDirectory.endsWith(path.sep) ? rootDirectory : `${rootDirectory}${path.sep}`;
+	if (resolvedPath === rootDirectory || resolvedPath.startsWith(rootPrefix)) {
+		return resolvedPath;
+	}
+
+	return null;
 }
 
 function resolveStaticPath(requestPath) {
@@ -29,12 +49,12 @@ function resolveStaticPath(requestPath) {
 
 	if (requestPath.startsWith("/site4/")) {
 		const relativePath = requestPath.slice("/site4/".length);
-		return path.join(site4Root, relativePath);
+		return resolveUnderRoot(site4Root, relativePath);
 	}
 
 	if (requestPath.startsWith("/harness/")) {
 		const relativePath = requestPath.slice("/harness/".length);
-		return path.join(harnessRoot, relativePath);
+		return resolveUnderRoot(harnessRoot, relativePath);
 	}
 
 	return null;

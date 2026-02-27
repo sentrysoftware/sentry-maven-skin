@@ -122,7 +122,7 @@ function scssCompile() {
 	if (entrypoints.length === 0) {
 		return Promise.resolve();
 	}
-	return src(entrypoints).pipe(gulpSass().on("error", gulpSass.logError)).pipe(dest(TMP + "/css"));
+	return src(entrypoints).pipe(gulpSass()).pipe(dest(TMP + "/css"));
 }
 exports.scssCompile = scssCompile;
 function cssTmp() {
