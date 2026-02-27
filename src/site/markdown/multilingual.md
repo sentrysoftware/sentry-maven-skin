@@ -109,6 +109,8 @@ For locales rendered in dedicated subdirectories (for example `fr`), the skin al
 
 This keeps SEO canonical links aligned with the language-specific page path.
 
+This locale root is also used for AI indexing absolute links (`llms.txt` entries), keeping machine-readable URLs consistent with canonical metadata.
+
 ## See Also
 
 - [Top Links](top-links.html) - Header/footer links and locale selector placement

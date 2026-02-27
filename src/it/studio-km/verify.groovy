@@ -54,6 +54,8 @@ assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-me
 assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() > 0 : "French mobile locale switcher must include default locale root"
 assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French mobile locale switcher must include French locale root"
 assert frIndexDoc.select('link[rel=canonical]').attr('href') == "https://the.org/docs/fr/index.html" : "French canonical link must use locale root URL"
+def frIndexHtml = frIndexFile.text
+assert frIndexHtml.contains('"mainEntityOfPage": "https://the.org/docs/fr/index.html"') : "French JSON-LD mainEntityOfPage must match locale canonical URL"
 
 // Resource bundles must remain internal and must not be published in generated sites
 assert !new File(basedir, "target/site/resources.properties").exists() : "resources.properties must not be published in site output"
@@ -250,7 +252,7 @@ assert frLlmsFile.isFile() : "French llms.txt file must be generated under targe
 def frLlmsContent = frLlmsFile.text
 assert frLlmsContent.contains('# skin-test \\u00C9tendu') || frLlmsContent.contains('# skin-test Étendu') : "In localized llms.txt, title must use the localized site name"
 assert frLlmsContent.contains('## Prise en main') : "In localized llms.txt, localized menu section must be present"
-assert frLlmsContent.contains('- [Aper\\u00E7u](https://the.org/docs/index.html.md)') || frLlmsContent.contains('- [Aperçu](https://the.org/docs/index.html.md)') : "In localized llms.txt, localized page title must be present"
+assert frLlmsContent.contains('- [Aper\\u00E7u](https://the.org/docs/fr/index.html.md)') || frLlmsContent.contains('- [Aperçu](https://the.org/docs/fr/index.html.md)') : "In localized llms.txt, localized page title must be present with locale-scoped URL"
 
 // Verify documents in a subdir
 def agentFile = new File(basedir, "target/site/subdir/agent.html")
