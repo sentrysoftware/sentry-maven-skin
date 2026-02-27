@@ -1,0 +1,354 @@
+@use "../mixins";
+
+/**
+ * Left menu
+ **/
+
+@include mixins.site-scope {
+	nav.left-menu {
+		font-family: var(--left-font);
+		font-size: var(--left-font-size);
+		font-weight: var(--left-font-weight);
+		font-style: var(--left-font-style);
+		background-color: #383838;
+		border: none;
+		padding: 0;
+
+		code {
+			color: white;
+		}
+	}
+}
+
+nav.left-menu {
+	h5 {
+		font-family: var(--left-title-font);
+		font-size: var(--left-title-font-size);
+		font-weight: var(--left-title-font-weight);
+		font-style: var(--left-title-font-style);
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		color: #fff;
+		opacity: 0.9;
+		margin-top: 20px;
+		margin-left: 15px;
+		margin-bottom: 2px;
+		margin-right: 0;
+		padding: 0;
+	}
+
+	a {
+		transition: 0.2s ease-in-out;
+	}
+
+	> ul > li:first-child {
+		border-top: 1px solid #464646;
+	}
+
+	ul > li {
+		margin-top: 0;
+
+		> a {
+			padding-top: 6px;
+			padding-bottom: 6px;
+			border-bottom: 1px solid #464646;
+			border-radius: 0px;
+			background-color: #343434;
+			color: #bbbbbb;
+
+			&:focus {
+				background-color: #bbb;
+				color: #343434;
+			}
+		}
+
+		&:not(.active) > a:hover {
+			background-color: #404040;
+			color: #ffffff;
+			padding-left: 17px;
+		}
+
+		&.active > a,
+		&.active > a:hover {
+			background-color: var(--alternate-bgcolor);
+			color: var(--alternate-fgcolor);
+		}
+
+		&.active > a::after {
+			content: "";
+			position: absolute;
+			right: 0;
+			top: 50%;
+			border-style: solid;
+			border-width: 1em 1em 1em 0;
+			border-color: transparent var(--main-bgcolor) transparent transparent;
+			transform: translateY(-50%);
+			transition: border-color 1s ease-in-out;
+		}
+	}
+
+	ul ul > li > a {
+		padding-left: 30px;
+	}
+
+	ul ul > li:not(.active) > a:hover {
+		padding-left: 32px;
+	}
+
+	ul li a i {
+		margin-right: 5px;
+	}
+
+	ul li a .badge {
+		font-size: 70%;
+		background-color: var(--alternate-bgcolor);
+		color: var(--alternate-fgcolor);
+	}
+
+	/* Left menu collapse animation */
+	.ng-hide-animate:not(.ng-hide) {
+		transform: scaleY(1);
+	}
+
+	.ng-hide-animate.ng-hide {
+		transform: scaleY(0);
+	}
+
+	.ng-hide-animate {
+		transition: all linear 0.25s;
+		transform-origin: top;
+	}
+}
+
+/**
+ * Make Bootstrap 3 columns full height using flex
+ **/
+
+.row.display-flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.row.display-flex > [class*="col-"] {
+	display: flex;
+	flex-direction: column;
+}
+
+/**
+ * Breadcrumbs
+ **/
+
+.parents ol.breadcrumb > li > a {
+	color: var(--link-color);
+	text-decoration: none;
+}
+
+.parents ol.breadcrumb > li > a:hover {
+	text-decoration: underline;
+}
+
+.parents ol.breadcrumb > li > a > i {
+	margin-right: 5px;
+}
+
+.parents-xs ul > a {
+	text-decoration: none;
+}
+
+.parents-xs ul > a > i,
+.parents-xs ul > li > i {
+	margin-right: 5px;
+}
+
+.parents-xs ul > a:hover {
+	color: var(--link-color);
+}
+
+.parents-xs ul > a:nth-child(2),
+.parents-xs ul > li:nth-child(2) {
+	padding-left: 30px;
+}
+
+.parents-xs ul > a:nth-child(3),
+.parents-xs ul > li:nth-child(3) {
+	padding-left: 45px;
+}
+
+.parents-xs ul > a > .badge,
+.parents-xs ul > li > .badge {
+	color: var(--alternate-fgcolor);
+	background-color: var(--alternate-bgcolor);
+}
+
+/**
+ * Table of content, on the right side (for large screens)
+ **/
+
+.toc-side-container {
+	position: sticky;
+	top: 0px;
+
+	.toc {
+		position: relative;
+		padding: 10px 20px;
+		margin-top: 20px;
+		font-size: var(--content-font-size);
+		border-radius: 2px;
+		box-shadow:
+			0 1px 3px rgba(0, 0, 0, 0.12),
+			0 1px 2px rgba(0, 0, 0, 0.24);
+		transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+		z-index: 1;
+
+		/* Add a light background to the ToC */
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--main-fgcolor);
+			opacity: 0.05;
+			z-index: -1;
+			border-radius: 2px;
+			pointer-events: none;
+		}
+
+		&:hover {
+			box-shadow:
+				0 10px 20px rgba(0, 0, 0, 0.19),
+				0 6px 6px rgba(0, 0, 0, 0.23);
+		}
+
+		> .toc-heading {
+			font-family: var(--main-title-font);
+			font-weight: var(--main-title-font-weight);
+			font-style: var(--main-title-font-style);
+			text-transform: uppercase;
+			font-size: larger;
+			display: block;
+			opacity: 0.6;
+			margin: 5px 0 5px 0;
+
+			&::after {
+				content: "";
+				display: block;
+				margin: 20px 0;
+				width: 30px;
+				border-top: 2px solid var(--main-fgcolor);
+			}
+		}
+
+		ul {
+			list-style: none;
+			padding-left: 0px;
+			font-weight: bold;
+
+			li {
+				margin: 15px 0;
+
+				a {
+					color: var(--link-color);
+					text-decoration: none;
+					display: inline-block;
+					position: relative;
+					overflow: hidden;
+					z-index: 0;
+					line-height: normal;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+
+				&.active > a,
+				a.active {
+					color: var(--main-fgcolor);
+					text-decoration: none;
+					width: 100%;
+					padding-left: 10px;
+					margin-left: -12px;
+					padding-top: 5px;
+					margin-top: -5px;
+					padding-bottom: 5px;
+					margin-bottom: -5px;
+					border-left-style: solid;
+					border-left-width: 2px;
+					border-left-color: var(--main-fgcolor);
+
+					&::after {
+						content: "";
+						position: absolute;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						background-color: var(--main-fgcolor);
+						opacity: 0.05;
+						pointer-events: none;
+						z-index: -1;
+					}
+				}
+			}
+
+			ul {
+				list-style: none;
+				padding-left: 20px;
+				font-weight: normal;
+
+				li {
+					margin: 2px 0;
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Table of content, inline (for non-large screens)
+ **/
+
+.toc-inline-container {
+	margin-bottom: 15px;
+
+	#toc {
+		position: relative;
+		padding-left: 15px;
+
+		/* Add a light background to the ToC */
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-left-color: var(--main-fgcolor);
+			border-left-style: solid;
+			border-left-width: 5px;
+			opacity: 0.05;
+			pointer-events: none;
+		}
+	}
+
+	ul {
+		list-style: none;
+		padding-left: 0px;
+		font-weight: bold;
+
+		li {
+			margin: 5px 0;
+		}
+
+		ul {
+			list-style: none;
+			padding-left: 20px;
+			font-weight: normal;
+
+			li {
+				margin: 2px 0;
+			}
+		}
+	}
+}

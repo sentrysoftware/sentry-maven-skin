@@ -1,0 +1,470 @@
+@use "../mixins";
+
+@mixin table-status-row($state, $bg-var, $fg-var) {
+	&.#{$state}::after {
+		background-color: var(#{$bg-var});
+		opacity: 1;
+	}
+
+	&.#{$state} {
+		color: var(#{$fg-var});
+	}
+}
+
+@mixin contextual-colors($name, $fg-var, $bg-var) {
+	.text-#{$name},
+	.alert-#{$name} {
+		color: var(#{$fg-var});
+	}
+
+	.bg-#{$name},
+	.alert-#{$name} {
+		background-color: var(#{$bg-var});
+	}
+}
+
+@mixin button-variant($name, $bg-var, $fg-var, $hover-bg-var, $hover-fg-var) {
+	.btn-#{$name} {
+		background-color: var(#{$bg-var});
+		border-color: var(#{$bg-var});
+		color: var(#{$fg-var});
+	}
+
+	.btn-#{$name}:hover,
+	.btn-#{$name}:focus,
+	.btn-#{$name}:active,
+	.btn-#{$name}.active {
+		background-color: var(#{$hover-bg-var});
+		border-color: var(#{$hover-bg-var});
+		color: var(#{$hover-fg-var});
+	}
+}
+
+@include mixins.site-scope {
+	/**
+	 * Adjustments of Bootstrap 3 for dark mode
+	 **/
+
+	/* Breadcrumbs */
+	.main-content .breadcrumb {
+		background: none;
+		position: relative;
+		z-index: 1;
+
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--main-fgcolor);
+			opacity: 0.05;
+			z-index: -1;
+			border-radius: 4px;
+			pointer-events: none;
+		}
+	}
+
+	/* kbd */
+	kbd {
+		background: none;
+		position: relative;
+		z-index: 1;
+		color: var(--main-bgcolor);
+		white-space: nowrap;
+
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--main-fgcolor);
+			opacity: 0.6;
+			z-index: -1;
+			border-radius: 3px;
+			pointer-events: none;
+		}
+	}
+
+	/* Tables */
+	.table {
+		/* Allow inline code to wrap in tables to avoid layout overflow */
+		td > code,
+		th > code {
+			display: inline-block;
+			max-width: 100%;
+			white-space: pre-wrap !important;
+			overflow-wrap: anywhere;
+			overflow-x: visible;
+		}
+
+		> tbody > tr {
+			background: none;
+			position: relative;
+			z-index: 1;
+
+			/* ::after for handling cells' background (stripes, colors) */
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: var(--main-fgcolor);
+				opacity: 0;
+				pointer-events: none;
+				z-index: -2;
+			}
+
+			/* success, info, warning and danger colors in light and dark mode */
+			@include table-status-row(success, "--success-bg", "--success-fg");
+			@include table-status-row(info, "--info-bg", "--info-fg");
+			@include table-status-row(warning, "--warning-bg", "--warning-fg");
+			@include table-status-row(danger, "--danger-bg", "--danger-fg");
+
+			> td,
+			> th {
+				/* Prevent Bootstrap from setting colors on cells directly */
+				background-color: inherit;
+				color: inherit;
+			}
+		}
+
+		&.table-hover tr::before {
+			/* ::before for handling .hover */
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--main-fgcolor);
+			opacity: 0;
+			pointer-events: none;
+			z-index: -1;
+		}
+	}
+
+	/* Stripes */
+	.table-striped > tbody > tr:nth-of-type(odd)::after {
+		opacity: 0.05;
+	}
+
+	.table-hover > tbody > tr:hover::before,
+	.table-hover > tbody > tr.active::before {
+		opacity: 0.1;
+	}
+
+	.table-hover > tbody > tr:hover > td,
+	.table-hover > tbody > tr:hover > th {
+		background: none;
+	}
+
+	.text-primary {
+		color: var(--banner-bgcolor);
+	}
+
+	.bg-primary {
+		background-color: var(--banner-bgcolor);
+		color: var(--banner-fgcolor);
+	}
+
+	@include contextual-colors(success, "--success-fg", "--success-bg");
+	@include contextual-colors(info, "--info-fg", "--info-bg");
+	@include contextual-colors(warning, "--warning-fg", "--warning-bg");
+	@include contextual-colors(danger, "--danger-fg", "--danger-bg");
+
+	/* Navigation bars with list items */
+	.parents-xs .list-group-item,
+	.home-xs .list-group-item,
+	.subtopics-xs .list-group-item,
+	.search-results-content-xs .list-group-item {
+		background-color: var(--main-bgcolor);
+		transition: background-color 1s ease-in-out;
+	}
+
+	/**
+	 * Angular UI Bootstrap Components
+	 **/
+
+	.nav-tabs {
+		/* Tabs: proper colors for light and dark mode */
+		border-bottom: 1px solid var(--main-fgcolor);
+
+		> li > a {
+			/* Tabs: remove underline from tab titles */
+			text-decoration: none;
+			color: var(--main-fgcolor);
+			background-color: transparent;
+			border-color: transparent;
+			transition: background-color 0.2s ease-in-out;
+
+			&:hover,
+			&:focus {
+				/* Hovered tab: no border, alternate background */
+				text-decoration: none;
+				color: var(--alternate-fgcolor);
+				background-color: var(--alternate-bgcolor);
+				border-color: transparent;
+			}
+		}
+
+		> li:not(.active) > a {
+			/* Inactive tab: subtle background shade using pseudo-element */
+			position: relative;
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: var(--main-fgcolor);
+				opacity: 0.05;
+				pointer-events: none;
+				border-radius: 4px 4px 0 0;
+				transition: opacity 0.2s ease-in-out;
+			}
+
+			&:hover::before,
+			&:focus::before {
+				opacity: 0;
+			}
+		}
+
+		/* Active tab: border, background matches content */
+		> li.active > a,
+		> li.active > a:hover,
+		> li.active > a:focus {
+			color: var(--main-fgcolor);
+			background-color: var(--main-bgcolor);
+			border-color: var(--main-fgcolor);
+			border-bottom-color: var(--main-bgcolor);
+			opacity: 1;
+		}
+
+		&.nav-justified {
+			/* Justified tabs: border comes from each anchor, not from the ul */
+			border-bottom: none;
+
+			> li > a {
+				border-bottom: 1px solid var(--main-fgcolor);
+			}
+
+			> li.active > a,
+			> li.active > a:hover,
+			> li.active > a:focus {
+				border-bottom-color: var(--main-bgcolor);
+			}
+		}
+	}
+
+	/* Tabs: add spacing below tab headers */
+	.sentry-uib .nav-tabs {
+		margin-bottom: 10px;
+	}
+
+	/* Tab content area */
+	.tab-content {
+		background-color: var(--main-bgcolor);
+		color: var(--main-fgcolor);
+	}
+
+	/* Hide print-only tab headings on screen */
+	.sentry-print-tab-heading {
+		display: none;
+	}
+
+	/* Accordion panels: proper colors for light and dark mode */
+	.panel {
+		background-color: var(--main-bgcolor);
+		color: var(--main-fgcolor);
+		border-color: var(--main-fgcolor);
+	}
+
+	.panel-default {
+		border-color: var(--main-fgcolor);
+	}
+
+	/* Panel heading with subtle background using pseudo-element */
+	.panel > .panel-heading,
+	.panel-default > .panel-heading {
+		background-color: var(--main-bgcolor);
+		color: var(--main-fgcolor);
+		border-color: var(--main-fgcolor);
+		position: relative;
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--main-fgcolor);
+			opacity: 0.1;
+			pointer-events: none;
+		}
+	}
+
+	.panel > .panel-heading + .panel-collapse > .panel-body,
+	.panel-default > .panel-heading + .panel-collapse > .panel-body {
+		border-top-color: var(--main-fgcolor);
+	}
+
+	.panel-body {
+		background-color: var(--main-bgcolor);
+		color: var(--main-fgcolor);
+	}
+
+	.panel-title > a {
+		color: var(--main-fgcolor);
+		text-decoration: none;
+		position: relative;
+		z-index: 1;
+
+		&:hover,
+		&:focus {
+			text-decoration: none;
+			color: var(--main-fgcolor);
+		}
+	}
+
+	/* Panel title margins fix */
+	.panel-heading h4.panel-title {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+	/* Tooltip and Popover: proper colors for light and dark mode */
+	.tooltip {
+		.tooltip-inner {
+			background-color: var(--main-fgcolor);
+			color: var(--main-bgcolor);
+		}
+
+		&.top .tooltip-arrow,
+		&.top-left .tooltip-arrow,
+		&.top-right .tooltip-arrow {
+			border-top-color: var(--main-fgcolor);
+		}
+
+		&.bottom .tooltip-arrow,
+		&.bottom-left .tooltip-arrow,
+		&.bottom-right .tooltip-arrow {
+			border-bottom-color: var(--main-fgcolor);
+		}
+
+		&.left .tooltip-arrow {
+			border-left-color: var(--main-fgcolor);
+		}
+
+		&.right .tooltip-arrow {
+			border-right-color: var(--main-fgcolor);
+		}
+	}
+
+	.popover {
+		background-color: var(--main-bgcolor);
+		border-color: var(--main-fgcolor);
+
+		&-title {
+			background-color: var(--main-bgcolor);
+			color: var(--main-fgcolor);
+			border-bottom-color: var(--main-fgcolor);
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+
+		&-content {
+			background-color: var(--main-bgcolor);
+			color: var(--main-fgcolor);
+		}
+
+		&.top > .arrow {
+			border-top-color: var(--main-fgcolor);
+
+			&::after {
+				border-top-color: var(--main-bgcolor);
+			}
+		}
+
+		&.bottom > .arrow {
+			border-bottom-color: var(--main-fgcolor);
+
+			&::after {
+				border-bottom-color: var(--main-bgcolor);
+			}
+		}
+
+		&.left > .arrow {
+			border-left-color: var(--main-fgcolor);
+
+			&::after {
+				border-left-color: var(--main-bgcolor);
+			}
+		}
+
+		&.right > .arrow {
+			border-right-color: var(--main-fgcolor);
+
+			&::after {
+				border-right-color: var(--main-bgcolor);
+			}
+		}
+	}
+
+	/* Collapse / Well: subtle background using pseudo-element */
+	.well {
+		background-color: var(--main-bgcolor);
+		border-color: var(--main-fgcolor);
+		color: var(--main-fgcolor);
+		position: relative;
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--main-fgcolor);
+			opacity: 0.05;
+			pointer-events: none;
+			border-radius: inherit;
+		}
+	}
+
+	.collapse,
+	.collapsing {
+		background-color: var(--main-bgcolor);
+		color: var(--main-fgcolor);
+	}
+
+	/* Buttons: use theme colors instead of Bootstrap defaults */
+	@include button-variant(primary, "--banner-bgcolor", "--banner-fgcolor", "--alternate-bgcolor", "--alternate-fgcolor");
+	@include button-variant(success, "--success-bg", "--success-fg", "--success-fg", "--success-bg");
+	@include button-variant(info, "--info-bg", "--info-fg", "--info-fg", "--info-bg");
+	@include button-variant(warning, "--warning-bg", "--warning-fg", "--warning-fg", "--warning-bg");
+	@include button-variant(danger, "--danger-bg", "--danger-fg", "--danger-fg", "--danger-bg");
+
+	.btn-default {
+		background-color: var(--main-bgcolor);
+		border-color: var(--main-fgcolor);
+		color: var(--main-fgcolor);
+	}
+
+	.btn-default:hover,
+	.btn-default:focus,
+	.btn-default:active,
+	.btn-default.active {
+		background-color: var(--main-fgcolor);
+		border-color: var(--main-fgcolor);
+		color: var(--main-bgcolor);
+	}
+}

@@ -46,3 +46,6 @@ buildNumber.properties
 # Node.js stuff
 node_modules/
 node/
+
+# UI baseline transient outputs
+tests/results/

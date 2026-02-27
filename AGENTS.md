@@ -21,7 +21,7 @@ The **Sentry Maven Skin** is an Apache Maven site skin that transforms Markdown 
 | -------------- | ----------------------------- | --------------------------- |
 | **Velocity**   | HTML templating               | `src/main/webapp/*.vm`      |
 | **JavaScript** | Frontend logic (AngularJS)    | `src/main/webapp/js/*.js`   |
-| **CSS**        | Styling                       | `src/main/webapp/css/*.css` |
+| **CSS/SCSS**   | Styling                       | `src/main/webapp/css/`       |
 | **HTML**       | Angular templates             | `src/main/webapp/*.html`    |
 | **Gulp.js**    | Build system for frontend     | `gulpfile.js`               |
 | **Maven**      | Build orchestration           | `pom.xml`                   |
@@ -49,7 +49,7 @@ sentry-maven-skin/
 │   │   ├── blockquotes.vm    # UI components (tabs, accordions, etc.)
 │   │   ├── footer.vm         # Page footer
 │   │   ├── js.vm             # JavaScript includes
-│   │   ├── css/              # Stylesheets (sentry.css, print.css)
+│   │   ├── css/              # Compiled stylesheet outputs (sentry.css, prism-theme.css, copy-to-clipboard.css, print.css)
 │   │   ├── js/               # JavaScript files (site.js, site-index.js)
 │   │   └── fonts/            # Custom fonts
 │   ├── it/                   # Integration tests
@@ -63,6 +63,9 @@ sentry-maven-skin/
 └── target/                   # Build output (gitignored)
 ```
 
+> [!NOTE]
+> `src/main/webapp/css/scss/` contains the modular SCSS sources. Gulp compiles `scss/sentry.scss`, `scss/prism-theme.scss`, `scss/copy-to-clipboard.scss`, and `scss/print.scss` into `target/tmp/webapp/css/` before `useref`.
+
 ## Building the Project
 
 ### Standard Build Command
@@ -75,7 +78,7 @@ This command:
 
 1. Cleans previous build artifacts
 2. Installs Node.js locally and runs `npm ci`
-3. Runs Gulp to build, lint, and minify frontend assets (including conversion of UTF-8 `resources*.properties` files into Java 8-safe `\uXXXX` escaped bundles in `META-INF/maven`)
+3. Runs Gulp to build, lint, and minify frontend assets (including SCSS compilation of `css/scss/*.scss` entrypoints into temp CSS before useref, and conversion of UTF-8 `resources*.properties` files into Java 8-safe `\uXXXX` escaped bundles in `META-INF/maven`)
 4. Packages the Maven skin JAR
 5. Runs integration tests (`studio-km` and `site4`)
 6. Generates this project's own documentation site
@@ -144,6 +147,11 @@ npm run format:check  # Check only (CI mode)
 npm run lint          # Check for linting issues (ESLint)
 npm run lint:fix      # Auto-fix linting issues
 ```
+
+Formatting policy:
+
+- Text files must be UTF-8 without BOM and use CRLF line endings.
+- `.editorconfig`, `.gitattributes`, and Prettier (`endOfLine: "crlf"`) are the primary enforcement mechanisms.
 
 ### Velocity Templates
 
@@ -218,11 +226,14 @@ assert doc.select('main.main-content .search-results').size() > 0 : "Search resu
 | `src/main/webapp/footer.vm`      | Page footer with copyright and links           |
 | `src/main/webapp/js.vm`          | JavaScript includes                            |
 | `src/main/webapp/js/site.js`     | Main AngularJS application                     |
-| `src/main/webapp/css/sentry.css` | Main stylesheet                                |
-| `src/main/webapp/css/print.css`  | Print-specific styles                          |
+| `src/main/webapp/css/scss/sentry.scss` | Main SCSS entrypoint                           |
+| `src/main/webapp/css/scss/prism-theme.scss` | Prism theme SCSS source                        |
+| `src/main/webapp/css/scss/copy-to-clipboard.scss` | Copy-to-clipboard SCSS source                  |
+| `src/main/webapp/css/scss/print.scss` | Print stylesheet SCSS source                    |
 | `src/site/markdown/*.md`         | Project documentation (dogfooding)             |
 
 ## Getting Help
 
 - **Documentation**: https://sentrysoftware.github.io/sentry-maven-skin
 - **Issues**: https://github.com/sentrysoftware/sentry-maven-skin/issues
+

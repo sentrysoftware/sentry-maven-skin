@@ -8,7 +8,7 @@ const BINARY_SRC_OPTIONS = { encoding: false };
 // Gulp
 const { src, dest, series, parallel } = require("gulp");
 const { existsSync, mkdirSync, readdirSync, copyFileSync } = require("fs");
-const { join } = require("path");
+const { join, basename } = require("path");
 const { Transform } = require("stream");
 
 // Plugins
@@ -16,6 +16,8 @@ const useref = require("gulp-useref");
 const gulpif = require("gulp-if");
 const uglify = require("gulp-uglify");
 const minifyCss = require("gulp-clean-css");
+const sassCompiler = require("sass");
+const gulpSass = require("gulp-sass")(sassCompiler);
 const del = require("del");
 const embedTemplates = require("gulp-angular-embed-templates");
 const replace = require("gulp-string-replace");
@@ -110,8 +112,24 @@ function i18nBundles() {
 	// Source bundles are UTF-8 for readability and converted at build time to Java 8-compatible escaped properties.
 	return src(SRC_MAIN + "/resources*.properties", { allowEmpty: true }).pipe(java8PropertiesTransform()).pipe(dest(DIST + "/META-INF/maven"));
 }
+function getScssEntrypoints() {
+	const scssDir = SRC_MAIN + "/css/scss";
+	const candidates = ["sentry.scss", "prism-theme.scss", "copy-to-clipboard.scss", "print.scss"];
+	return candidates.map((fileName) => join(scssDir, fileName)).filter((entryPath) => existsSync(entryPath));
+}
+function scssCompile() {
+	const entrypoints = getScssEntrypoints();
+	if (entrypoints.length === 0) {
+		return Promise.resolve();
+	}
+	return src(entrypoints).pipe(gulpSass().on("error", gulpSass.logError)).pipe(dest(TMP + "/css"));
+}
+exports.scssCompile = scssCompile;
 function cssTmp() {
-	return src(SRC_MAIN + "/css/*.css").pipe(dest(TMP + "/css"));
+	const entrypoints = getScssEntrypoints();
+	const excludes = entrypoints.map((entryPath) => "!" + SRC_MAIN + "/css/" + basename(entryPath, ".scss") + ".css");
+	const patterns = [SRC_MAIN + "/css/*.css"].concat(excludes);
+	return src(patterns).pipe(dest(TMP + "/css"));
 }
 function mini() {
 	// Process head.vm and js.vm which contain the CSS/JS build markers
@@ -165,7 +183,7 @@ function copyDirectoryFiles(sourceDir, destinationDir) {
 	});
 }
 
-webProd = series(jsLint, templates, vmTmp, cssTmp, mini, siteVmProcessed, siteVmOther, i18nBundles, removeRootVm);
+webProd = series(jsLint, templates, vmTmp, scssCompile, cssTmp, mini, siteVmProcessed, siteVmOther, i18nBundles, removeRootVm);
 exports.webProd = webProd;
 
 /**
