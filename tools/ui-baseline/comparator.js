@@ -160,10 +160,15 @@ function compareScreenshot(baselinePath, currentPath, diffPath, config) {
 
 	const maxDiffPixels = Number(config.maxImageDiffPixels || 0);
 	const maxDiffRatio = Number(config.maxImageDiffRatio || 0);
+	const passed = mismatchPixels <= maxDiffPixels && mismatchRatio <= maxDiffRatio;
+	let reason = "ok";
+	if (mismatchPixels > 0) {
+		reason = passed ? "pixel-diff-within-threshold" : "pixel-diff";
+	}
 
 	return {
-		passed: mismatchPixels <= maxDiffPixels && mismatchRatio <= maxDiffRatio,
-		reason: mismatchPixels > 0 ? "pixel-diff" : "ok",
+		passed,
+		reason,
 		mismatchPixels,
 		mismatchRatio
 	};

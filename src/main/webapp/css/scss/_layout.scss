@@ -240,7 +240,6 @@
 			font-style: normal;
 			text-transform: none;
 
-			> li:not(:has(a)),
 			> li > a:not([href]),
 			> li > a:hover:not([href]) {
 				cursor: default;
