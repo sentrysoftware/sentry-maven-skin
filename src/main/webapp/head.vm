@@ -55,8 +55,12 @@ limitations under the License.
 $headElement.html()
 ##
 ## Canonical link
-#if ($project.url)
-	<link rel="canonical" href="$PathTool.calculateLink($currentFileName, $project.url)">
+#set($canonicalBaseUrl = $project.url)
+#if($currentLocaleHasDedicatedDirectory && $canonicalBaseUrl)
+	#**##set($canonicalBaseUrl = $PathTool.calculateLink("${localeId}/", $project.url))
+#end
+#if ($canonicalBaseUrl)
+	<link rel="canonical" href="$PathTool.calculateLink($currentFileName, $canonicalBaseUrl)">
 #end
 ##
 ## AI Indexing: generate Markdown files for AI platforms and inserts a <link rel="alternate" /> in the head (if enabled)
@@ -96,8 +100,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	"headline": "$esc.java($shortTitle)",
 	"datePublished": "$date.format('iso', $publishDate)",
 	"dateModified": "$date.format('iso', $publishDate)",
-#if ($project.url)
-	"mainEntityOfPage": "$esc.java($PathTool.calculateLink($currentFileName, $project.url))",
+#if ($canonicalBaseUrl)
+	"mainEntityOfPage": "$esc.java($PathTool.calculateLink($currentFileName, $canonicalBaseUrl))",
 #end
 #if (!$authors.isEmpty())
 	"author": [

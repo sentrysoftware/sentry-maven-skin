@@ -53,6 +53,7 @@ assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-me
 assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French locale switcher must include French locale root"
 assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() > 0 : "French mobile locale switcher must include default locale root"
 assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French mobile locale switcher must include French locale root"
+assert frIndexDoc.select('link[rel=canonical]').attr('href') == "https://the.org/docs/fr/index.html" : "French canonical link must use locale root URL"
 
 // Resource bundles must remain internal and must not be published in generated sites
 assert !new File(basedir, "target/site/resources.properties").exists() : "resources.properties must not be published in site output"

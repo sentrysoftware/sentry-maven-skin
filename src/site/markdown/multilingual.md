@@ -100,6 +100,15 @@ When multiple locales are configured, the selector appears automatically:
 
 ![inline](images/locale-switcher.png)
 
+## Canonical URLs Per Locale
+
+For locales rendered in dedicated subdirectories (for example `fr`), the skin also scopes canonical URLs to that locale root:
+
+- Default locale page: `https://example.org/docs/index.html`
+- French locale page: `https://example.org/docs/fr/index.html`
+
+This keeps SEO canonical links aligned with the language-specific page path.
+
 ## See Also
 
 - [Top Links](top-links.html) - Header/footer links and locale selector placement
