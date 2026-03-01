@@ -74,7 +74,7 @@ When a setting is defined in multiple places, the precedence order is:
 | ---------------- | ------ | -------------------------------------------------------------------------------------- | --------------------- |
 | `interpolation`  | String | How `${...}` expressions are processed. See [Maven Properties](maven-properties.html). | `maven`               |
 | `publishDate`    | Date   | Publication date for metadata                                                          | Build timestamp       |
-| `projectVersion` | String | Version displayed in the header                                                        | `\${project.version}` |
+| `projectVersion` | String | Version displayed in the header                                                        | `$${project.version}` |
 
 ### UI Text Labels
 
