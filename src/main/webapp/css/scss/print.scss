@@ -93,6 +93,18 @@
 		page-break-inside: avoid;
 	}
 
+	/* Callouts/Admonitions: use grey colors for printing */
+	.callout {
+		border-left: 4px solid #666 !important;
+		border-top: 1px solid #ddd !important;
+		border-right: 1px solid #ddd !important;
+		border-bottom: 1px solid #ddd !important;
+	}
+
+	.callout .callout-title {
+		color: #000 !important;
+	}
+
 	thead {
 		display: table-header-group; /* h5bp.com/t */
 	}
