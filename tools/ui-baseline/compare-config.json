@@ -1,0 +1,6 @@
+{
+	"ignoreProperties": ["width", "height"],
+	"ignoreSelectors": [],
+	"maxImageDiffPixels": 0,
+	"maxImageDiffRatio": 0
+}

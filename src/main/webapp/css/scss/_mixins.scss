@@ -1,0 +1,14 @@
+$site-scope: "body.sentry-site";
+$dark-scope: "body.dark";
+
+@mixin site-scope {
+	#{$site-scope} {
+		@content;
+	}
+}
+
+@mixin dark-scope {
+	#{$dark-scope} {
+		@content;
+	}
+}

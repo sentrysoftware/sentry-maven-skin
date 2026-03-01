@@ -24,6 +24,7 @@ Beware that this project is a baroc mix of languages, frameworks and libraries:
 The _Sentry Maven Skin_ project is made of several main components:
 
 - `./src/main/webapp/**`: the front-end web app, including CSS, JS, HTML templates, etc.
+- `./src/main/webapp/css/scss/**`: modular SCSS sources compiled into `sentry.css`, `prism-theme.css`, `copy-to-clipboard.css`, and `print.css` during Gulp build
 - `./src/main/webapp/site.vm`: the main _Velocity_ template entry point
 - `./src/main/webapp/*.vm`: modular Velocity templates (head, banner, menu, content, footer, etc.)
 - `./package.json`: for NPM
@@ -43,7 +44,7 @@ Build steps:
 
 - NodeJS is installed in `./node` (and is ignored by Git)
 - `npm install` is run to get all dependencies listed in `package.json`, which are installed in the `./node_modules` (also ignored by Git)
-- `gulp` is run with `./gulpfile.js` to build the front-end web app (lint, minification, template embedding, etc.), and the result is stored in `./target/dist`
+- `gulp` is run with `./gulpfile.js` to build the front-end web app (lint, template embedding, SCSS compilation to temp CSS before useref concatenation/minification, etc.), and the result is stored in `./target/dist`
 - i18n bundles (`resources*.properties`) are authored in UTF-8 under `src/main/webapp` and converted by Gulp to Java 8-safe `\uXXXX` escaped bundles in `target/dist/META-INF/maven`
 - The Maven skin JAR is assembled in `./target`
 - A temporary local Maven repository is set up with both JAR artifacts (the skin and the Velocity tools)
@@ -86,3 +87,27 @@ http-server sentry-maven-skin/target/it/studio-km/target/site
 ```
 
 In case of a build failure, the output of the build is stored in `./sentry-maven-skin/target/it/studio-km/build.log`.
+
+## UI Baseline Regression Suite
+
+The repository includes a Playwright-based UI baseline suite (Chromium) with visual snapshots and computed-style dumps:
+
+```bash
+npm run ui:baseline:install
+npm run ui:baseline:capture
+npm run ui:baseline:verify
+```
+
+- Baselines are stored under `tests/baseline/`
+- Comparison reports are generated under `tests/results/diff-report.*`
+
+## Formatting and EOL Policy
+
+- Text files are expected to be UTF-8 (no BOM) with CRLF line endings.
+- `.editorconfig` and `.gitattributes` enforce the policy in editors and Git checkouts.
+- Prettier is configured with `endOfLine: "crlf"` and can be run with:
+
+```bash
+npm run format
+npm run format:check
+```

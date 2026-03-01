@@ -29,6 +29,7 @@
 		"prismjs": "^1.30.0"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.58.2",
 		"del": "^3.0.0",
 		"gulp": "^5.0.1",
 		"gulp-angular-embed-templates": "^2.3.0",
@@ -36,18 +37,26 @@
 		"gulp-cli": "^3.1.0",
 		"gulp-eslint": "^6.0.0",
 		"gulp-if": "^3.0.0",
+		"gulp-sass": "^6.0.1",
 		"gulp-string-replace": "^1.1.2",
 		"gulp-uglify": "^3.0.1",
 		"gulp-useref": "^5.0.0",
-		"prettier": "^3.4.2"
+		"pixelmatch": "^7.1.0",
+		"pngjs": "^7.0.0",
+		"prettier": "^3.4.2",
+		"sass": "^1.97.3"
 	},
 	"scripts": {
-		"format": "prettier --write \"src/main/webapp/**/*.{js,css,html}\" \"gulpfile.js\" \"*.md\" \"src/site/markdown/**/*.md\"",
-		"format:check": "prettier --check \"src/main/webapp/**/*.{js,css,html}\" \"gulpfile.js\" \"*.md\" \"src/site/markdown/**/*.md\"",
+		"format": "prettier --write \"src/**/*.{js,cjs,mjs,css,scss,html,xml,yml,yaml,json,md}\" \"tests/**/*.js\" \"tools/**/*.js\" \"*.{js,cjs,md,yaml,yml,json}\"",
+		"format:check": "prettier --check \"src/**/*.{js,cjs,mjs,css,scss,html,xml,yml,yaml,json,md}\" \"tests/**/*.js\" \"tools/**/*.js\" \"*.{js,cjs,md,yaml,yml,json}\"",
 		"lint": "eslint src/main/webapp/js/*.js",
-		"lint:fix": "eslint --fix src/main/webapp/js/*.js"
+		"lint:fix": "eslint --fix src/main/webapp/js/*.js",
+		"ui:baseline:install": "playwright install chromium",
+		"ui:baseline:capture": "node tools/ui-baseline/run.js capture",
+		"ui:baseline:verify": "node tools/ui-baseline/run.js verify",
+		"ui:baseline:compare": "node tools/ui-baseline/run.js compare"
 	},
 	"engines": {
-		"node": ">=0.8.0"
+		"node": ">=18.0.0"
 	}
 }

@@ -3,6 +3,8 @@ description: Interactive UI components including tabs, accordion, carousel, coll
 
 # UI Components (Tabs, Accordion, etc.)
 
+<!-- MACRO{toc|fromDepth=2|toDepth=3|id=toc} -->
+
 The skin includes [Angular UI Bootstrap](https://angular-ui.github.io/bootstrap/) components for interactive documentation, with a simple Markdown syntax.
 
 ## Available Components

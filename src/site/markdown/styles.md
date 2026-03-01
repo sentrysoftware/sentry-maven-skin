@@ -74,7 +74,7 @@ body {
 
 ### Default Values
 
-<!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=colors} -->
+<!-- MACRO{snippet|file=src/main/webapp/css/scss/_variables.scss|id=colors} -->
 
 ### Dark Mode Colors
 
@@ -92,7 +92,7 @@ body.dark {
 
 Default dark mode values:
 
-<!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=dark-colors} -->
+<!-- MACRO{snippet|file=src/main/webapp/css/scss/_variables.scss|id=dark-colors} -->
 
 ## Custom Fonts
 
@@ -118,7 +118,7 @@ Override font families on the `:root` element:
 
 ### All Font Properties
 
-<!-- MACRO{snippet|file=src/main/webapp/css/sentry.css|id=fonts} -->
+<!-- MACRO{snippet|file=src/main/webapp/css/scss/_variables.scss|id=fonts} -->
 
 ## See Also
 

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Harness - Table Status Rows</title>
+		<link rel="stylesheet" href="/site4/css/main-combined.css">
+		<style>
+			main {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: 2rem 1rem;
+			}
+		</style>
+	</head>
+	<body class="sentry-site sentry-green">
+		<main class="main-content">
+			<h1 id="table-status-harness"><a href="#table-status-harness">Table Status Harness</a></h1>
+			<p>Baseline harness for <code>tr.success</code>, <code>tr.info</code>, <code>tr.warning</code>, and <code>tr.danger</code>.</p>
+			<table class="bodyTable table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Status</th>
+						<th>Label</th>
+						<th>Details</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="success">
+						<td>success</td>
+						<td>Healthy</td>
+						<td>Everything is operating normally.</td>
+					</tr>
+					<tr class="info">
+						<td>info</td>
+						<td>Informational</td>
+						<td>Informational state for UI regression checks.</td>
+					</tr>
+					<tr class="warning">
+						<td>warning</td>
+						<td>Warning</td>
+						<td>Potential issue that needs attention.</td>
+					</tr>
+					<tr class="danger">
+						<td>danger</td>
+						<td>Critical</td>
+						<td>Critical problem used to verify danger styling.</td>
+					</tr>
+				</tbody>
+			</table>
+		</main>
+	</body>
+</html>

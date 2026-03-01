@@ -1,0 +1,208 @@
+/**
+ * Subtopics (and home on XS displays)
+ **/
+
+@mixin section-divider {
+	content: "";
+	display: block;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width: 40px;
+	border-top: 2px solid var(--main-fgcolor);
+	opacity: 0.75;
+}
+
+.subtopics::before,
+.subtopics-xs::before {
+	@include section-divider;
+}
+
+.subtopics {
+	ul {
+		list-style-type: none;
+		padding-inline-start: 0px;
+
+		> li > a > i {
+			margin-right: 7px;
+		}
+	}
+}
+
+.subtopics-xs,
+.home-xs {
+	ul {
+		> a {
+			text-decoration: none;
+			padding-left: 30px;
+
+			&:hover {
+				color: var(--link-color);
+			}
+		}
+
+		> a > i,
+		> li > i {
+			margin-right: 5px;
+		}
+
+		> a > i.pull-right,
+		> li > i.pull-right {
+			margin-right: 0;
+			margin-top: 5px;
+		}
+
+		> a > .badge,
+		> li > .badge {
+			color: var(--alternate-fgcolor);
+			background-color: var(--alternate-bgcolor);
+		}
+	}
+}
+
+.home-xs::after {
+	@include section-divider;
+}
+
+/**
+ * Footer
+ **/
+
+.footer {
+	background-color: #343434;
+	color: #fff;
+	padding-top: 50px;
+	padding-bottom: 30px;
+	padding-left: 100px;
+	padding-right: 30px;
+	font-family: var(--bottom-font);
+	font-size: var(--bottom-font-size);
+	font-weight: var(--bottom-font-weight);
+	font-style: var(--bottom-font-style);
+	letter-spacing: 1px;
+	text-transform: uppercase;
+
+	> .footer-title {
+		margin: 0;
+		opacity: 0.8;
+	}
+
+	.navbar.site-logo.site-logo-xs > .nav.navbar-nav > li {
+		&.icons,
+		&.locale-switcher,
+		&.dark-toggle {
+			text-align: center;
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+
+		&.icons {
+			> a {
+				display: inline;
+				font-size: 16px;
+			}
+		}
+
+		&.locale-switcher {
+			margin-right: 0;
+
+			> a {
+				display: inline-flex;
+				align-items: center;
+				column-gap: 6px;
+			}
+
+			> ul.dropdown-menu {
+				left: 50%;
+				right: auto;
+				transform: translateX(-50%);
+			}
+		}
+	}
+
+	> .footer-copyright {
+		.icons a {
+			margin-left: 15px;
+		}
+
+		> .copyright {
+			opacity: 0.62;
+		}
+
+		a {
+			color: #fff;
+			opacity: 0.62;
+			transition: 0.2s ease-in-out;
+			text-decoration: none;
+
+			&:hover {
+				opacity: 1;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+/* On mobile, don't add that extra space */
+@media only screen and (max-width: 575.98px) {
+	.footer {
+		padding-top: 30px;
+		padding-bottom: 30px;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+/* In xs navbar mode, Bootstrap forces open dropdowns to static/transparent.
+ * Override for locale switcher so the menu stays centered and readable. */
+@media (max-width: 767px) {
+	.footer {
+		.navbar.site-logo.site-logo-xs > .nav.navbar-nav > li.locale-switcher.open {
+			position: relative;
+
+			> ul.dropdown-menu {
+				display: block;
+				position: absolute;
+				top: 100%;
+				float: none;
+				left: 50% !important;
+				right: auto !important;
+				transform: translateX(-50%) !important;
+				margin-top: 6px;
+				min-width: 110px;
+				width: auto;
+				padding: 5px 0;
+				background-color: #2b2b2b !important;
+				border: 1px solid #4b4b4b !important;
+				box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+				text-align: center;
+
+				> li {
+					float: none;
+
+					> a {
+						display: block;
+						padding: 8px 16px;
+						color: #fff !important;
+						opacity: 0.9;
+						text-align: center !important;
+						white-space: nowrap;
+
+						&:hover {
+							background-color: #505050;
+							color: #fff !important;
+							opacity: 1;
+						}
+					}
+
+					&.active > a,
+					&.active > a:hover,
+					&.active > a:focus {
+						background-color: var(--alternate-bgcolor);
+						color: var(--alternate-fgcolor) !important;
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+}
