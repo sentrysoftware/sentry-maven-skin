@@ -45,17 +45,11 @@ limitations under the License.
 <!DOCTYPE html>#*
 *##*
 * Compute lang attribute for <html> element (BCP 47 language tag)
-* - Use $locale.language if available (e.g., "en", "fr", "es")
-* - Fall back to default locale language if current locale language is empty
-* - Fall back to "en" (English) if default locale language is also empty
-*##set($langAttribute = $locale.language)#*
-*##if($StringUtils.isBlank($langAttribute))#*
-	*##set($localeClass = $class.inspect("java.util.Locale").type)#*
-	*##set($defaultLocale = $localeClass.getDefault())#*
-	*##set($langAttribute = $defaultLocale.language)#*
-	*##if($StringUtils.isBlank($langAttribute))#*
-		*##set($langAttribute = "en")#*
-	*##end#*
+* - Use $locale.toLanguageTag() to get proper BCP 47 format (e.g., "en", "en-US", "fr", "fr-FR")
+* - Fall back to "en" if the language tag is empty or "und" (undetermined/root locale)
+*##set($langAttribute = $locale.toLanguageTag())#*
+*##if($StringUtils.isBlank($langAttribute) || $langAttribute == "und")#*
+	*##set($langAttribute = "en")#*
 *##end#*
 *#<html lang="$langAttribute">
 ##
