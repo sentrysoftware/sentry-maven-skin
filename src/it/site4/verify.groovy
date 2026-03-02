@@ -18,6 +18,10 @@ assert indexFile.isFile() : "index.html must have been generated"
 Document indexDoc = parseHtml(indexFile)
 def indexHtml = indexFile.text // Keep raw text for some specific tests
 
+// Verify html element has lang attribute for accessibility
+assert indexDoc.select('html[lang]').size() > 0 : "HTML element must have lang attribute for accessibility"
+assert indexDoc.select('html[lang]').attr('lang') != "" : "HTML lang attribute must not be empty"
+
 // Resource bundles must remain internal and must not be published in generated site output
 assert !new File(basedir, "target/site/resources.properties").exists() : "resources.properties must not be published in site output"
 assert !new File(basedir, "target/site/resources_fr.properties").exists() : "resources_fr.properties must not be published in site output"

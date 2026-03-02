@@ -42,7 +42,22 @@ limitations under the License.
 *
 ***********************************************************************
 *#
-<!DOCTYPE html><html lang="$locale.language">
+<!DOCTYPE html>#*
+*##*
+* Compute lang attribute for <html> element (BCP 47 language tag)
+* - Use $locale.language if available (e.g., "en", "fr", "es")
+* - Fall back to default locale language if current locale language is empty
+* - Fall back to "en" (English) if default locale language is also empty
+*##set($langAttribute = $locale.language)#*
+*##if($StringUtils.isBlank($langAttribute))#*
+	*##set($localeClass = $class.inspect("java.util.Locale").type)#*
+	*##set($defaultLocale = $localeClass.getDefault())#*
+	*##set($langAttribute = $defaultLocale.language)#*
+	*##if($StringUtils.isBlank($langAttribute))#*
+		*##set($langAttribute = "en")#*
+	*##end#*
+*##end#*
+*#<html lang="$langAttribute">
 ##
 ## ========================================================================
 ## PHASE 1: Load macros and initialize variables
