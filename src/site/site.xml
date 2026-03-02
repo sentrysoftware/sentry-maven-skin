@@ -104,6 +104,7 @@
 
 		<menu name="Writing Documentation">
 			<item name="Writing a Page" href="page-structure.html" />
+			<item name="Vibe Writing (AI Prompt)" href="vibe-writing.html" />
 			<item name="Automatic ToC" href="toc.html" />
 			<item name="Images" href="images.html" />
 			<item name="Code Highlighting" href="code.html" />
