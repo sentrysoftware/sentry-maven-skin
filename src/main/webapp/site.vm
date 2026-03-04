@@ -42,7 +42,16 @@ limitations under the License.
 *
 ***********************************************************************
 *#
-<!DOCTYPE html><html lang="$locale.language">
+<!DOCTYPE html>#*
+*##*
+* Compute lang attribute for <html> element (BCP 47 language tag)
+* - Use $locale.toLanguageTag() to get proper BCP 47 format (e.g., "en", "en-US", "fr", "fr-FR")
+* - Fall back to "en" if the language tag is empty or "und" (undetermined/root locale)
+*##set($langAttribute = $locale.toLanguageTag())#*
+*##if($StringUtils.isBlank($langAttribute) || $langAttribute == "und")#*
+	*##set($langAttribute = "en")#*
+*##end#*
+*#<html lang="$langAttribute">
 ##
 ## ========================================================================
 ## PHASE 1: Load macros and initialize variables

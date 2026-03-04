@@ -18,6 +18,7 @@ def indexHtml = indexFile.text // Keep raw text for some specific tests
 // Verify that the left menu is correct using CSS selectors
 def activeMenuItem = indexDoc.select('nav.left-menu li.active > a[href=index.html]')
 assert activeMenuItem.size() == 1 : "index.html must be listed exactly once as active entry in menu"
+assert indexDoc.select('html[lang=en]').size() > 0 : "English page must have lang=en"
 assert indexDoc.select('.version-prefix:contains(Version)').size() > 0 : "Default projectVersionText must come from ResourceBundle"
 assert indexDoc.select('.toc-heading:contains(On this Page)').size() > 0 : "Default tocHeadingText must come from ResourceBundle"
 assert indexDoc.select('input[placeholder=\"Search...\"]').size() > 0 : "Default searchFieldText must come from ResourceBundle"
