@@ -285,6 +285,18 @@ assert topicAFile.isFile() : "advanced/topic-a.html must have been generated"
 Document topicADoc = parseHtml(topicAFile)
 // Verify breadcrumb parents are shown
 assert topicADoc.select(':contains(Advanced)').size() > 0 : "Parent menu 'Advanced' should be in breadcrumb"
+// Verify frontmatter metadata is processed in subdirectory pages
+assert topicADoc.select('meta[name=keywords]').attr('content').contains('topic') : "Keywords from frontmatter must be present in subdirectory page"
+assert topicADoc.select('meta[name=description]').attr('content').startsWith('This is Topic A') : "Description from frontmatter must be present in subdirectory page"
+
+def topicBFile = new File(basedir, "target/site/advanced/topic-b.html")
+assert topicBFile.isFile() : "advanced/topic-b.html must have been generated"
+Document topicBDoc = parseHtml(topicBFile)
+def topicBTitle = topicBDoc.title()
+assert topicBTitle == "BOM Test Page \u2013 Site4 Test Project" : "Title must NOT contain frontmatter when file has UTF-8 BOM (was: ${topicBTitle})"
+assert topicBDoc.select('meta[name=keywords]').attr('content').contains('bom-test') : "Keywords from frontmatter must be present even when file has UTF-8 BOM"
+assert topicBDoc.select('meta[name=description]').attr('content').startsWith('This page has a UTF-8 BOM') : "Description from frontmatter must be present even when file has UTF-8 BOM"
+assert !topicBDoc.body().text().contains("keywords:") : "Frontmatter text must NOT appear in page body when file has UTF-8 BOM"
 
 // ============================================================================
 // TEST: UI Components

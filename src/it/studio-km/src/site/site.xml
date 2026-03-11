@@ -88,6 +88,7 @@
 			<item name="Operating the Console &lt;i class='fa-regular fa-compass'>&lt;/i>" href="console.html" />
 			<item name="Managing Events" href="events.html" />
 			<item name="Configuring the Agent" href="subdir/agent.html" />
+			<item name="BOM Test" href="subdir/bom-test.html" />
 			<item name="Other Tools" href="tools.html" />
 		</menu>
 

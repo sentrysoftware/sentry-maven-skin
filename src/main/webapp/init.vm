@@ -58,6 +58,70 @@ limitations under the License.
 *##if(!$bodyContent)#set($bodyContent = "")#end#*
 *##if(!$shortTitle)#set($shortTitle = "")#end#*
 
+** BOM detection and frontmatter fallback **
+*
+* When a Markdown source file starts with a UTF-8 BOM (U+FEFF, decimal 65279),
+* Doxia cannot recognize the frontmatter, leaving it in the rendered body as a
+* paragraph instead of meta tags. This section detects the BOM in bodyContent or
+* shortTitle, strips it from all content strings, then re-reads the source Markdown
+* file to extract and inject the frontmatter metadata as <meta> tags into headContent,
+* so that configTool and subsequent processing work correctly.
+*##set($bomCharValue = $class.inspect("java.lang.String").type.valueOf($class.inspect("java.lang.Character").type.toChars(65279)))#*
+*##set($bomQ = '"')#*
+*##set($bomFound = $bodyContent.contains($bomCharValue) || $shortTitle.contains($bomCharValue))#*
+*##set($bomFrontmatterParsed = false)#*
+*##if($bomFound)#*
+	*##set($bodyContent = $bodyContent.replace($bomCharValue, ""))#*
+	*##set($headContent = $headContent.replace($bomCharValue, ""))#*
+	*##set($shortTitle = $shortTitle.replace($bomCharValue, ""))#*
+	* Resolve the source Markdown file path (try .md, then .md.vm, and locale-specific paths)
+	*##set($bomPaths = $class.inspect("java.nio.file.Paths").type)#*
+	*##set($bomFiles = $class.inspect("java.nio.file.Files").type)#*
+	*##set($bomMdName = $currentFileName.replaceAll("\.html$", ".md"))#*
+	*##set($bomMdPath = $bomPaths.get("${project.basedir}/src/site/markdown", $bomMdName))#*
+	*##if(!$bomFiles.exists($bomMdPath))#*
+		*##set($bomMdPath = $bomPaths.get("${project.basedir}/src/site/markdown", $bomMdName.concat(".vm")))#*
+	*##end#*
+	*##if(!$bomFiles.exists($bomMdPath))#*
+		*##set($bomLocaleId = $locale.toString())#*
+		*##if($StringUtils.isNotBlank($bomLocaleId))#*
+			*##set($bomMdPath = $bomPaths.get("${project.basedir}/src/site/markdown/$bomLocaleId", $bomMdName))#*
+		*##end#*
+	*##end#*
+	*##if($bomFiles.exists($bomMdPath))#*
+		* Read the source file as UTF-8 and strip BOM if present at the start
+		*##set($bomCharset = $class.inspect("java.nio.charset.StandardCharsets").type.UTF_8)#*
+		*##set($bomSrc = $bomFiles.readString($bomMdPath, $bomCharset))#*
+		*##if($bomSrc.startsWith($bomCharValue))#*
+			*##set($bomSrc = $bomSrc.substring(1))#*
+		*##end#*
+		* Parse frontmatter: consecutive key: value lines at the beginning of the file.
+		* Stop at the first blank line or heading (line starting with #).
+		*##foreach($bomLine in $bomSrc.split("\n"))#*
+			*##set($bomLineTrimmed = $bomLine.trim())#*
+			*##if($bomLineTrimmed.isEmpty() || $bomLineTrimmed.startsWith("#"))#*
+				*##break#*
+			*##end#*
+			*##set($bomColonIdx = $bomLineTrimmed.indexOf(":"))#*
+			*##if($bomColonIdx > 0)#*
+				*##set($bomFmKey = $bomLineTrimmed.substring(0, $bomColonIdx).trim())#*
+				*##set($bomFmVal = $bomLineTrimmed.substring($bomColonIdx + 1).trim())#*
+				*##if($bomFmKey.matches("[a-z][\\w-]*") && !$bomFmVal.isEmpty())#*
+					* Inject as <meta> tag if not already present (avoids duplicates)
+					*##if(!$headContent.contains("name=${bomQ}${bomFmKey}${bomQ}"))#*
+						*##set($headContent = $headContent.concat("<meta name=${bomQ}${bomFmKey}${bomQ} content=${bomQ}$esc.html($bomFmVal)${bomQ}>"))#*
+						*##set($bomFrontmatterParsed = true)#*
+					*##end#*
+					* Update shortTitle from the "title" frontmatter key if it is not yet set
+					*##if($bomFmKey == "title" && $StringUtils.isBlank($shortTitle))#*
+						*##set($shortTitle = $bomFmVal)#*
+					*##end#*
+				*##end#*
+			*##end#*
+		*##end#*
+	*##end#*
+*##end#*
+
 ** Configuration (using configTool for site.xml + frontmatter precedence) **
 
 * interpolation: controls how ${...} expressions are processed in content
@@ -289,4 +353,27 @@ limitations under the License.
 * Fix all protocol-relative links (if enabled)
 *##if($fixProtocolRelativeUrls)#*
 	*##set($bodyElement = $htmlTool.fixProtocolRelativeUrls($bodyElement))#*
+*##end#*
+
+** BOM cleanup: remove the unparsed frontmatter paragraph from bodyElement **
+*
+* If BOM was detected and frontmatter was successfully parsed from the source file,
+* the frontmatter lines are still present as a <p> element at the start of the body
+* (because Doxia already rendered them as content). Remove that paragraph and fix
+* shortTitle if it is still blank.
+*##if($bomFound && $bomFrontmatterParsed)#*
+	*##set($bomFirstChild = $bodyElement.selectFirst("body > *"))#*
+	*##if($bomFirstChild && $bomFirstChild.tagName() == "p")#*
+		* Check that this paragraph looks like a frontmatter block (starts with "key:")
+		*##if($bomFirstChild.text().trim().matches("[a-z][\\w-]*\\s*:.*"))#*
+			*##call($bomFirstChild.remove())#*
+		*##end#*
+	*##end#*
+	* If shortTitle is still blank, extract it from the first <h1> in the body
+	*##if($StringUtils.isBlank($shortTitle))#*
+		*##set($bomH1 = $bodyElement.selectFirst("h1"))#*
+		*##if($bomH1)#*
+			*##set($shortTitle = $bomH1.text())#*
+		*##end#*
+	*##end#*
 *##end

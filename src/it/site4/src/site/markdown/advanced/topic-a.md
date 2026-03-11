@@ -1,3 +1,6 @@
+keywords: topic, advanced, nested, subdirectory
+description: This is Topic A, a page in a subdirectory for testing frontmatter in nested pages.
+
 # Topic A
 
 This is the first sub-topic under Advanced.

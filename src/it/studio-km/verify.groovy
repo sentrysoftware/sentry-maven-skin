@@ -280,6 +280,16 @@ assert agentDoc.title() == "Configuring the Agent – skin-test Extended" : "Doc
 // Verify that there is no protocol-relative links left
 assert !(agentHtml =~ '"//') : "URLs must not be protocol-relative"
 
+// Verify BOM handling in subdirectory page (Maven Site Plugin 3.x)
+def bomTestFile = new File(basedir, "target/site/subdir/bom-test.html")
+assert bomTestFile.isFile() : "BOM test page must have been generated"
+Document bomTestDoc = parseHtml(bomTestFile)
+def bomTestTitle = bomTestDoc.title()
+assert bomTestTitle == "BOM Subdir Test \u2013 skin-test Extended" : "Title must NOT contain frontmatter when file has UTF-8 BOM (was: ${bomTestTitle})"
+assert bomTestDoc.select('meta[name=keywords]').attr('content').contains('bom') : "Keywords from frontmatter must be present even when file has UTF-8 BOM"
+assert bomTestDoc.select('meta[name=description]').attr('content').startsWith('A test page with UTF-8 BOM') : "Description from frontmatter must be present even when file has UTF-8 BOM"
+assert !bomTestDoc.body().text().contains("keywords:") : "Frontmatter text must NOT appear in page body when file has UTF-8 BOM"
+
 // Verify that index.json contains the proper information
 indexJsonFile = new File(basedir, "target/site/index.json")
 assert indexJsonFile.isFile()
