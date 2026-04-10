@@ -43,7 +43,7 @@
 		"gulp-useref": "^5.0.0",
 		"pixelmatch": "^7.1.0",
 		"pngjs": "^7.0.0",
-		"prettier": "^3.4.2",
+		"prettier": "^3.8.2",
 		"sass": "^1.97.3"
 	},
 	"scripts": {
