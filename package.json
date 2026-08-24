@@ -44,7 +44,7 @@
 		"pixelmatch": "^7.2.0",
 		"pngjs": "^7.0.0",
 		"prettier": "^3.9.6",
-		"sass": "^1.102.0"
+		"sass": "^1.103.1"
 	},
 	"scripts": {
 		"format": "prettier --write \"src/**/*.{js,cjs,mjs,css,scss,html,xml,yml,yaml,json,md}\" \"tests/**/*.js\" \"tools/**/*.js\" \"*.{js,cjs,md,yaml,yml,json}\"",
