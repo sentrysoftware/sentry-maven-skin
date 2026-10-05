@@ -27,6 +27,7 @@ limitations under the License.
 * - Table styling (Bootstrap classes)
 * - Heading fixes (anchors, IDs)
 * - Copy-to-clipboard
+* - AngularJS literal protection
 * - Table of Contents extraction
 * - Keywords extraction
 * - Search index building
@@ -170,6 +171,24 @@ limitations under the License.
 * Use copy-to-clipboard for elements (if enabled - check for "false" to disable)
 *##if($copyToClipboard && $copyToClipboard != "false")#*
 	*##set($bodyElement = $htmlTool.setAttr($bodyElement, $copyToClipboard, "copy-to-clipboard", ""))#*
+*##end#*
+
+** AngularJS literal protection **
+
+* Protect code at build time, leaving the outer <pre copy-to-clipboard> compilable.
+* Textareas need ng-non-bindable because HTML comments inside them are literal text.
+*##if($protectAngular)#*
+	*##set($bodyElement = $htmlTool.setAttr($bodyElement, "code, textarea", "ng-non-bindable", ""))#*
+	* Separate opening braces in text nodes, preserving visible text and component directives.
+	* Do this before cloning the TOC so both copies are protected.
+	*##foreach($literalElement in $bodyElement.select(":containsOwn({{):not(code):not(code *):not(script):not(style):not(textarea)"))#*
+		*##foreach($literalText in $literalElement.textNodes())#*
+			*##if($literalText.getWholeText().contains("{{"))#*
+				*##call($literalText.before($esc.html($literalText.getWholeText()).replace("{{", "{<!---->{")))#*
+				*##call($literalText.remove())#*
+			*##end#*
+		*##end#*
+	*##end#*
 *##end#*
 
 ** Table of Contents extraction **

@@ -73,7 +73,7 @@ When a setting is defined in multiple places, the precedence order is:
 | Setting          | Type   | Description                                                                            | Default               |
 | ---------------- | ------ | -------------------------------------------------------------------------------------- | --------------------- |
 | `interpolation`  | String | How `${...}` expressions are processed. See [Maven Properties](maven-properties.html). | `maven`               |
-| `protectAngular` | Boolean | Keep literal `{{...}}` expressions in document text and HTML attributes. See [AngularJS Content](headers.html#angularjs-content). | `true` |
+| `protectAngular` | Boolean | Keep literal `{{...}}` expressions in document text and code. See [AngularJS Content](headers.html#angularjs-content). | `true` |
 | `publishDate`    | Date   | Publication date for metadata                                                          | Build timestamp       |
 | `projectVersion` | String | Version displayed in the header                                                        | `$${project.version}` |
 

@@ -15,8 +15,7 @@ Inline: `{{index .data "MCP_AGENT_TOKEN" | base64decode}}`.
 
 <textarea id="literal-textarea">{{missingTemplateVariable}} {{1 + 2}}</textarea>
 
-<button type="button" id="literal-attribute" title="{{index .data &quot;MCP_AGENT_TOKEN&quot; | base64decode}}" data-example="{{1 + 2}}">Attribute example</button>
-<a id="literal-link" href="https://example.org/{{name}}">Template URL</a>
+<button type="button" id="angular-attribute" ng-init="attributeValue = 'Attribute binding'" title="{{attributeValue}}">Attribute binding</button>
 
 ```bash
 kubectl -n "$NS" get secret m8b-runtime -o go-template='{{index .data "MCP_AGENT_TOKEN" | base64decode}}' | wc -c
@@ -33,8 +32,6 @@ kubectl -n "$NS" get secret m8b-runtime -o go-template='{{index .data "MCP_AGENT
 > - Second
 >
 >     `{{missingTemplateVariable}}`
->
->     <span title="{{missingTemplateVariable}}">Nested attribute</span>
 >
 >     ```bash
 >     echo '{{index .data "MCP_AGENT_TOKEN" | base64decode}}'
@@ -54,9 +51,9 @@ kubectl -n "$NS" get secret m8b-runtime -o go-template='{{index .data "MCP_AGENT
 >
 > Hidden {{missingTemplateVariable}} content.
 
-![Zoom {{1 + 2}}](images/test-image.png)
+![Zoom image](images/test-image.png)
 
 > [!CAROUSEL interval=0]
 >
-> - ![Slide {{1 + 2}}](images/test-image.png)
-> - ![Other slide {{missingTemplateVariable}}](images/test-image.png)
+> - ![First slide](images/test-image.png)
+> - ![Other slide](images/test-image.png)

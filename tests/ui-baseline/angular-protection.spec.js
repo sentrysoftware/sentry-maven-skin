@@ -19,9 +19,7 @@ for (const project of ["studio-km", "site4"]) {
 		await expect(page.locator("#plain-pre")).toHaveText("{{missingTemplateVariable}} {{1 + 2}}");
 		await expect(page.locator("p > code").filter({ hasText: goTemplate })).toHaveText(goTemplate);
 		await expect(page.locator("#literal-textarea")).toHaveValue("{{missingTemplateVariable}} {{1 + 2}}");
-		await expect(page.locator("#literal-attribute")).toHaveAttribute("title", goTemplate);
-		await expect(page.locator("#literal-attribute")).toHaveAttribute("data-example", "{{1 + 2}}");
-		await expect(page.locator("#literal-link")).toHaveAttribute("href", "https://example.org/{{name}}");
+		await expect(page.locator("#angular-attribute")).toHaveAttribute("title", "Attribute binding");
 		await expect(page.locator("#right-toc")).toContainText("Literal {{1 + 2}} heading");
 		await expect(page.locator("main h2").first()).toHaveText("Literal {{1 + 2}} heading");
 
@@ -37,10 +35,6 @@ for (const project of ["studio-km", "site4"]) {
 		);
 		await page.locator(".nav-tabs").getByText("Second", { exact: true }).click();
 		await expect(page.locator(".tab-pane.active")).toContainText("{{missingTemplateVariable}}");
-		await expect(page.locator(".tab-pane.active span[title]")).toHaveAttribute(
-			"title",
-			"{{missingTemplateVariable}}"
-		);
 		await expect(page.locator(".tab-pane.active .copy-to-clipboard button")).toBeAttached();
 		await page.getByRole("button", { name: "Second panel {{1 + 2}}" }).click();
 		await expect(page.getByText("Second panel {{missingTemplateVariable}}.", { exact: true })).toBeVisible();
@@ -54,7 +48,7 @@ for (const project of ["studio-km", "site4"]) {
 			.poll(() => page.locator("#components").evaluate((element) => element.getBoundingClientRect().top))
 			.toBeLessThan(150);
 		await page.locator(".carousel .right.carousel-control").click();
-		await expect(page.locator(".carousel .item.active")).toContainText("Other slide {{missingTemplateVariable}}");
+		await expect(page.locator(".carousel .item.active")).toContainText("Other slide");
 		await page.locator("zoomable").click();
 		await expect(page.locator("zoomable")).toHaveClass(/zoomed/);
 		await page.locator("zoomable").click();
@@ -85,8 +79,11 @@ test("documentation renders the protection setting and literal examples", async 
 		if (message.type() === "error") errors.push(message.text());
 	});
 	await page.goto("/docs/headers.html");
-	await expect(page.locator("[sentry-protect-angular]")).toBeAttached();
+	await expect(page.locator("pre code[ng-non-bindable]").first()).toBeAttached();
 	await expect(page.locator("pre").filter({ hasText: "protectAngular: false" })).toContainText("<p>{{1 + 2}}</p>");
+	await page.locator(".nav-tabs").getByText("XHTML", { exact: true }).click();
+	await expect(page.locator(".tab-pane.active pre")).toContainText('<meta name="protectAngular" content="false" />');
+	await page.screenshot({ path: "tests/results/angular-headers.png", fullPage: true });
 	await page.goto("/docs/settings.html");
 	await expect(page.locator("tr").filter({ hasText: "protectAngular" })).toContainText("true");
 	await page.goto("/docs/code.html");
