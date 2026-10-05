@@ -68,7 +68,7 @@ function cleanDirectory(relativePath) {
 }
 
 function runPlaywright(target) {
-	run(process.execPath, [playwrightCli, "test", "tests/ui-baseline/baseline.spec.js", "--project=chromium"], {
+	run(process.execPath, [playwrightCli, "test", "tests/ui-baseline", "--project=chromium"], {
 		env: {
 			...process.env,
 			UI_BASELINE_TARGET: target

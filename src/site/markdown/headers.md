@@ -117,7 +117,9 @@ section. Page metadata takes precedence, so `protectAngular: true` can protect i
 Existing pages that use AngularJS bindings need this opt-out when upgrading.
 
 Protection is applied when the site is built and targets text and code, rather than arbitrary HTML attributes or
-author-supplied AngularJS directives. It does not sanitize scripts. The separate `interpolation` setting controls Maven/Velocity `${...}` expressions.
+author-supplied AngularJS directives. Literal textarea and inline style content is also protected; directives on
+the containing elements, such as `ng-model` and copy buttons on code, remain active. It does not sanitize scripts.
+The separate `interpolation` setting controls Maven/Velocity `${...}` expressions.
 
 ## How It Works
 

@@ -24,6 +24,24 @@ angular.module("sentry.site", ["ngAnimate", "ngSanitize", "matchMediaLight", "du
 angular.module("sentry.site").value("duScrollGreedy", true);
 
 /**
+ * Skip compilation of literal children, keeping directives on their owner active.
+ * Velocity marks these elements; no document or attribute scan runs in the browser.
+ **/
+angular.module("sentry.site").directive("sentryLiteralContent", function () {
+	return {
+		compile: function (element) {
+			var content = element.contents().clone();
+			element.empty();
+			return {
+				pre: function (scope, element) {
+					element.append(content.clone());
+				}
+			};
+		}
+	};
+});
+
+/**
  * Prevent animations for anything not marked with the class "animate"
  * Exception: carousel elements need animations to work properly
  * - "carousel" class is added to the carousel container

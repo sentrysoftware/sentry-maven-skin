@@ -60,6 +60,42 @@ for (const project of ["studio-km", "site4"]) {
 		expect(errors).toEqual([]);
 	});
 
+	test(`${project} copies literal code with a code selector`, async ({ page, context }) => {
+		const errors = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		page.on("console", (message) => {
+			if (message.type() === "error") errors.push(message.text());
+		});
+		await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+		await page.goto(`/${project}/angular-code-copy.html`);
+		await expect(page.locator("#pre-protected-link")).toHaveAttribute("href", "https://example.org/{{name}}");
+		await expect(page.locator("#pre-protected-link")).toHaveAttribute("title", "{{name}}");
+		await expect.poll(() => page.locator("#literal-style").textContent()).toContain(goTemplate);
+		await expect.poll(() => page.locator("#literal-style").textContent()).toContain("{{1 + 2}}");
+		const editor = page.locator("#interactive-textarea");
+		await expect(editor).toHaveValue("initial");
+		await editor.fill("ab");
+		await expect(editor).toHaveClass(/ng-invalid-minlength/);
+		await editor.fill("edited");
+		await expect(page.locator("#textarea-value")).toHaveText("edited");
+		await expect(page.locator("#textarea-changes")).toHaveText("2");
+		await expect(page.locator("#literal-editor")).toHaveValue("Editable");
+		await page.locator("#literal-editor").fill("updated");
+		await expect(page.locator("#literal-editor-value")).toHaveText("updated");
+		await expect(page.locator(".copy-to-clipboard button")).toHaveCount(2);
+		const code = page.locator("code").filter({ hasText: "echo" });
+		await expect(code.locator(".token").first()).toBeAttached();
+		await code.hover();
+		await code.locator("..").locator('button[title="Copy to clipboard"]').click();
+		expect((await page.evaluate(() => navigator.clipboard.readText())).trim()).toBe(`echo '${goTemplate}'`);
+		const inline = page.locator("code").filter({ hasText: goTemplate }).filter({ hasNotText: "echo" });
+		await expect(inline).toHaveText(goTemplate);
+		await inline.hover();
+		await inline.locator("..").locator('button[title="Copy to clipboard"]').click();
+		expect((await page.evaluate(() => navigator.clipboard.readText())).trim()).toBe(goTemplate);
+		expect(errors).toEqual([]);
+	});
+
 	for (const name of ["angular-enabled", "angular-enabled-xhtml"]) {
 		test(`${project} ${name} allows intentional AngularJS`, async ({ page }) => {
 			await page.goto(`/${project}/${name}.html`);
@@ -79,7 +115,7 @@ test("documentation renders the protection setting and literal examples", async 
 		if (message.type() === "error") errors.push(message.text());
 	});
 	await page.goto("/docs/headers.html");
-	await expect(page.locator("pre code[ng-non-bindable]").first()).toBeAttached();
+	await expect(page.locator("pre code[sentry-literal-content]").first()).toBeAttached();
 	await expect(page.locator("pre").filter({ hasText: "protectAngular: false" })).toContainText("<p>{{1 + 2}}</p>");
 	await page.locator(".nav-tabs").getByText("XHTML", { exact: true }).click();
 	await expect(page.locator(".tab-pane.active pre")).toContainText('<meta name="protectAngular" content="false" />');

@@ -175,10 +175,10 @@ limitations under the License.
 
 ** AngularJS literal protection **
 
-* Protect code at build time, leaving the outer <pre copy-to-clipboard> compilable.
-* Textareas need ng-non-bindable because HTML comments inside them are literal text.
+* Mark literal content at build time without suppressing directives on its owner.
+* Textareas and styles cannot contain HTML comments as text-node separators.
 *##if($protectAngular)#*
-	*##set($bodyElement = $htmlTool.setAttr($bodyElement, "code, textarea", "ng-non-bindable", ""))#*
+	*##set($bodyElement = $htmlTool.setAttr($bodyElement, "code, textarea:containsOwn({{), style:containsData({{)", "sentry-literal-content", ""))#*
 	* Separate opening braces in text nodes, preserving visible text and component directives.
 	* Do this before cloning the TOC so both copies are protected.
 	*##foreach($literalElement in $bodyElement.select(":containsOwn({{):not(code):not(code *):not(script):not(style):not(textarea)"))#*

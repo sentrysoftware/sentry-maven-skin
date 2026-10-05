@@ -466,7 +466,7 @@ assert jsContent.contains('Mark(') || jsContent.contains('mark.js') : "mark.js l
 
 // Build-time AngularJS text protection and configuration (issue #277).
 def angularProtected = parseHtml(new File(basedir, "target/site/angular-protection.html"))
-assert !angularProtected.select('code[ng-non-bindable]').isEmpty() : "Code must be protected at build time"
+assert !angularProtected.select('code[sentry-literal-content]').isEmpty() : "Code must be protected at build time"
 assert angularProtected.select('#right-toc').text().contains('Literal {{1 + 2}} heading') : "TOC must preserve literal headings"
 assert angularProtected.select('#literal-prose').text().contains('{{missingTemplateVariable}}') : "Generated text must stay literal"
 assert angularProtected.select('#literal-prose').html().contains('{<!---->{') : "Text protection must be generated at build time"
@@ -474,7 +474,14 @@ assert angularProtected.select('#angular-attribute').attr('title') == '{{attribu
 assert angularProtected.select('uib-tabset pre[copy-to-clipboard] code').size() == 1 : "Generated components and copy directives must remain"
 ['angular-enabled', 'angular-enabled-xhtml'].each { name ->
     def enabled = parseHtml(new File(basedir, "target/site/" + name + ".html"))
-    assert enabled.select('[ng-non-bindable]').isEmpty() : "Page metadata must allow AngularJS: " + name
+    assert enabled.select('[sentry-literal-content]').isEmpty() : "Page metadata must allow AngularJS: " + name
     assert enabled.select('#counter').text() == '{{counter}}' : "AngularJS opt-out content must reach the browser"
 }
-assert !indexDoc.select('code[ng-non-bindable]').isEmpty() : "Site-wide/default protection must be honored"
+assert !indexDoc.select('code[sentry-literal-content]').isEmpty() : "Site-wide/default protection must be honored"
+
+def angularCodeCopy = parseHtml(new File(basedir, "target/site/angular-code-copy.html"))
+assert angularCodeCopy.select('#literal-style[sentry-literal-content]').size() == 1 : "Style templates must be protected"
+assert angularCodeCopy.select('#interactive-textarea[sentry-literal-content]').isEmpty() : "Ordinary textareas must remain untouched"
+assert angularCodeCopy.select('#literal-editor[sentry-literal-content]').size() == 1 : "Literal textarea content must be protected"
+assert angularCodeCopy.select('code[copy-to-clipboard][sentry-literal-content]').size() == 2 : "Configured code copy targets must retain both directives"
+assert angularCodeCopy.select('code[ng-non-bindable]').isEmpty() : "Code copy directives must not be suppressed"
