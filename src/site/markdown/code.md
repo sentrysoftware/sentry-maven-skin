@@ -172,6 +172,11 @@ if __name__ == "__main__":
 
 ## Configuration
 
+Template expressions such as `{{index .data "MCP_AGENT_TOKEN" | base64decode}}` remain literal by default.
+AngularJS protection preserves the displayed and copied code without affecting syntax highlighting or copy buttons.
+For a page that intentionally uses AngularJS bindings, set `protectAngular: false` in its front matter.
+See [AngularJS Content](headers.html#angularjs-content) for XHTML metadata and site-wide configuration.
+
 Code highlighting and copy features can be configured globally or per-page:
 
 | Setting              | Description                                | Default                        |

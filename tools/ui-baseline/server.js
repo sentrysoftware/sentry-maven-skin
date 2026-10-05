@@ -6,6 +6,8 @@ const HOST = "127.0.0.1";
 const PORT = 4173;
 const repositoryRoot = process.cwd();
 const site4Root = path.resolve(repositoryRoot, "target", "it", "site4", "target", "site");
+const studioRoot = path.resolve(repositoryRoot, "target", "it", "studio-km", "target", "site");
+const documentationRoot = path.resolve(repositoryRoot, "target", "site");
 const harnessRoot = path.resolve(repositoryRoot, "tools", "ui-harness");
 
 function failIfMissingSite4() {
@@ -55,6 +57,12 @@ function resolveStaticPath(requestPath) {
 	if (requestPath.startsWith("/harness/")) {
 		const relativePath = requestPath.slice("/harness/".length);
 		return resolveUnderRoot(harnessRoot, relativePath);
+	}
+	if (requestPath.startsWith("/studio-km/")) {
+		return resolveUnderRoot(studioRoot, requestPath.slice("/studio-km/".length));
+	}
+	if (requestPath.startsWith("/docs/")) {
+		return resolveUnderRoot(documentationRoot, requestPath.slice("/docs/".length));
 	}
 
 	return null;

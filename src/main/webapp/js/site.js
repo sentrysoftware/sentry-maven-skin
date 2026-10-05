@@ -24,6 +24,65 @@ angular.module("sentry.site", ["ngAnimate", "ngSanitize", "matchMediaLight", "du
 angular.module("sentry.site").value("duScrollGreedy", true);
 
 /**
+ * Protect document literals before Angular compiles descendants. Skin-generated
+ * component templates and the search panel remain outside this protection.
+ **/
+angular.module("sentry.site").directive("sentryProtectAngular", function () {
+	return {
+		compile: function (element) {
+			var root = element[0];
+			var document = root.ownerDocument;
+			root.querySelectorAll("code").forEach(function (code) {
+				code.setAttribute("ng-non-bindable", "");
+			});
+			root.querySelectorAll("*").forEach(function (node) {
+				var literals = Object.create(null);
+				Array.from(node.attributes).forEach(function (attribute) {
+					if (attribute.value.indexOf("{{") !== -1) {
+						literals[attribute.name] = attribute.value;
+						attribute.value = "";
+					}
+				});
+				if (Object.keys(literals).length) {
+					// No braces in the marker: Angular interpolates every attribute.
+					node.setAttribute("sentry-literal-attributes", encodeURIComponent(JSON.stringify(literals)));
+				}
+			});
+			var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+			var text;
+			while ((text = walker.nextNode())) {
+				if (text.parentElement.closest("code, script, style")) {
+					continue;
+				}
+				var index = text.nodeValue.indexOf("{{");
+				if (index !== -1) {
+					// A comment separates the braces without changing visible text.
+					var remainder = text.splitText(index + 1);
+					text.parentNode.insertBefore(document.createComment(""), remainder);
+				}
+			}
+		}
+	};
+});
+
+angular.module("sentry.site").directive("sentryLiteralAttributes", function () {
+	return {
+		// Restore after directive collection, before ng-non-bindable/components.
+		priority: 1001,
+		compile: function (element, attrs) {
+			var literals = JSON.parse(decodeURIComponent(attrs.sentryLiteralAttributes));
+			Object.keys(attrs.$attr).forEach(function (name) {
+				var attribute = attrs.$attr[name];
+				if (Object.prototype.hasOwnProperty.call(literals, attribute)) {
+					attrs.$set(name, literals[attribute]);
+				}
+			});
+			element.removeAttr("sentry-literal-attributes");
+		}
+	};
+});
+
+/**
  * Prevent animations for anything not marked with the class "animate"
  * Exception: carousel elements need animations to work properly
  * - "carousel" class is added to the carousel container

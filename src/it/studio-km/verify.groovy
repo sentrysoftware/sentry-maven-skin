@@ -463,3 +463,17 @@ assert jsContent.contains('elasticlunr') : "elasticlunr search library must be i
 // Test 8: Verify mark.js highlighting library is included
 // (Issue: Search result highlighting depends on mark.js)
 assert jsContent.contains('Mark(') || jsContent.contains('mark.js') : "mark.js library must be included for search highlighting"
+
+// AngularJS protection configuration and unmodified generated content (issue #277).
+def angularProtected = parseHtml(new File(basedir, "target/site/angular-protection.html"))
+assert angularProtected.select('[sentry-protect-angular]').size() == 1 : "Literal page must be protected"
+assert angularProtected.select('#right-toc').text().contains('Literal {{1 + 2}} heading') : "TOC must preserve literal headings"
+assert angularProtected.select('#literal-prose').text().contains('{{missingTemplateVariable}}') : "Generated text must stay literal"
+assert angularProtected.select('#literal-attribute').attr('title').contains('{{index .data') : "Generated attributes must stay literal"
+assert angularProtected.select('uib-tabset pre[copy-to-clipboard] code').size() == 1 : "Generated components and copy directives must remain"
+['angular-enabled', 'angular-enabled-xhtml'].each { name ->
+    def enabled = parseHtml(new File(basedir, "target/site/" + name + ".html"))
+    assert enabled.select('[sentry-protect-angular]').isEmpty() : "Page metadata must allow AngularJS: " + name
+    assert enabled.select('#counter').text() == '{{counter}}' : "AngularJS opt-out content must reach the browser"
+}
+assert indexDoc.select('[sentry-protect-angular]').size() == 1 : "Site-wide/default protection must be honored"

@@ -81,6 +81,37 @@ interpolation: velocity
 This page uses Velocity: $project.version
 ```
 
+## AngularJS Content
+
+By default, `protectAngular: true` keeps `{{...}}` expressions literal in document text and HTML attributes,
+including code examples, headings, and the table of contents. This allows Go, Helm, and other template examples
+to display and copy unchanged while the skin's search, tabs, image zoom, and other interactive features still work.
+
+Pages that intentionally use AngularJS bindings must opt out. Add the option to their front matter;
+undelimited headers must begin with a standard metadata key such as `title`:
+
+```markdown
+title: Interactive Page
+protectAngular: false
+
+# Interactive Page
+
+<p>{{1 + 2}}</p>
+```
+
+For an XHTML page, set the equivalent metadata in its `<head>`:
+
+```xml
+<meta name="protectAngular" content="false" />
+```
+
+You can also set a site-wide default with `<protectAngular>false</protectAngular>` inside `site.xml`'s `<custom>`
+section. Page metadata takes precedence, so `protectAngular: true` can protect individual pages on that site.
+Existing pages that use AngularJS bindings need this opt-out when upgrading.
+
+This setting protects literal interpolation in the rendered document; it does not sanitize scripts or remove
+author-supplied AngularJS directives. The separate `interpolation` setting controls Maven/Velocity `${...}` expressions.
+
 ## How It Works
 
 Headers are processed in two ways:

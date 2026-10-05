@@ -64,6 +64,9 @@ limitations under the License.
 * Options: "velocity", "maven" (default), "none"
 *##set($interpolationMode = $configTool.getValue($site, $headContent, "interpolation", "maven"))#*
 
+* protectAngular: keep author {{...}} expressions literal (boolean, default: true)
+*##set($protectAngular = $configTool.getBooleanValue($site, $headContent, "protectAngular", true))#*
+
 * fixProtocolRelativeUrls: fix // URLs to https:// (boolean, default: true)
 *##set($fixProtocolRelativeUrls = $configTool.getBooleanValue($site, $headContent, "fixProtocolRelativeUrls", true))#*
 

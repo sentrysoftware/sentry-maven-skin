@@ -38,7 +38,7 @@ limitations under the License.
 ##
 ## Hide content if we're displaying search results (only if search is enabled site-wide)
 ##
-				<div#if($showSearchUI) ng-hide="siteSearch"#end>
+				<div#if($showSearchUI) ng-hide="siteSearch"#end#if($protectAngular) sentry-protect-angular#end>
 
 					<div class="row">
 ##

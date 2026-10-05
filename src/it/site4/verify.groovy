@@ -459,3 +459,16 @@ assert noImageProcDoc.select('zoomable').size() == 0 : "Must not have zoomable e
 // All tests passed!
 // ============================================================================
 println "SUCCESS: All Maven Site Plugin 4.x integration tests passed!"
+
+// AngularJS protection configuration and unmodified generated content (issue #277).
+def angularProtected = parseHtml(new File(basedir, "target/site/angular-protection.html"))
+assert angularProtected.select('[sentry-protect-angular]').size() == 1 : "Literal page must be protected"
+assert angularProtected.select('#literal-prose').text().contains('{{missingTemplateVariable}}') : "Generated text must stay literal"
+assert angularProtected.select('#literal-attribute').attr('title').contains('{{index .data') : "Generated attributes must stay literal"
+assert angularProtected.select('uib-tabset pre[copy-to-clipboard] code').size() == 1 : "Generated components and copy directives must remain"
+['angular-enabled', 'angular-enabled-xhtml'].each { name ->
+    def enabled = parseHtml(new File(basedir, "target/site/" + name + ".html"))
+    assert enabled.select('[sentry-protect-angular]').isEmpty() : "Page metadata must allow AngularJS: " + name
+    assert enabled.select('#counter').text() == '{{counter}}' : "AngularJS opt-out content must reach the browser"
+}
+assert indexDoc.select('[sentry-protect-angular]').size() == 0 : "Site-wide/default protection must be honored"

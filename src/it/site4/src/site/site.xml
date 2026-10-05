@@ -33,6 +33,8 @@
 	</skin>
 
 	<custom>
+		<!-- Exercise per-page protection overriding a disabled site-wide default. -->
+		<protectAngular>false</protectAngular>
 		<interpolation>maven</interpolation>
 		<projectVersion>${project.version}-site4</projectVersion>
 		<projectVersionText>Release</projectVersionText>
