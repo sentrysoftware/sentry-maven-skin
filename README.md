@@ -51,6 +51,10 @@ Build steps:
 - A test project is set up in `./target/it` and `mvn site` is run on this test project
 - The result validated with a Groovy script
 
+## Release automation
+
+The GitHub release workflow pins the shared Maven Central workflow to a reviewed commit. Its release and GitHub Pages jobs use Ubuntu 24.04 and Node.js 24 actions. The `nodeVersion` input separately selects Node.js 20 for building the frontend.
+
 ## Test
 
 While modifying the _Sentry Maven Skin_, you will want to see how your changes are reflected in a _test_ documentation project.

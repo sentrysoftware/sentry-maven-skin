@@ -137,6 +137,10 @@ When debugging integration tests, you can iterate faster:
 #call($log.debug($bodyContent))
 ```
 
+## Release Automation
+
+`.github/workflows/release.yml` pins a shared Maven Central release workflow by commit. When updating this reference, validate both the caller and shared workflow with `actionlint` and check action runtimes, inputs, and runner labels. See `README.md` for the release environment.
+
 ## Code Formatting
 
 ### JavaScript, CSS, HTML

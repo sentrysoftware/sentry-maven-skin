@@ -10,15 +10,13 @@ on:
       releaseVersion:
         description: "Release version"
         required: true
-        default: ""
       developmentVersion:
         description: "New SNAPSHOT version"
         required: true
-        default: ""
 
 jobs:
   release:
-    uses: sentrysoftware/workflows/.github/workflows/maven-central-release.yml@v5
+    uses: sentrysoftware/workflows/.github/workflows/maven-central-release.yml@b79e9328c15e58bf66af4b1628d2f296a882e7ed # Node 24 actions, Ubuntu 24.04
     with:
       releaseVersion: ${{ inputs.releaseVersion }}
       developmentVersion: ${{ inputs.developmentVersion }}
