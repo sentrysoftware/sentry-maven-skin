@@ -90,9 +90,11 @@ In case of a build failure, the output of the build is stored in `./sentry-maven
 
 ## UI Baseline Regression Suite
 
-The repository includes a Playwright-based UI baseline suite (Chromium) with visual snapshots and computed-style dumps:
+The repository includes a Playwright-based UI suite (Chromium) with visual snapshots, computed-style dumps, and AngularJS protection checks.
+Build both integration sites and the project documentation before running it:
 
 ```bash
+mvn clean install site
 npm run ui:baseline:install
 npm run ui:baseline:capture
 npm run ui:baseline:verify

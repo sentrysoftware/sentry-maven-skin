@@ -59,7 +59,7 @@ assert indexHtml.contains("SITE4_GOOGLE_ID") : "Google Analytics ID must be inse
 assert indexDoc.select('a[href=https://example.org]').size() > 0 : "bannerLeft.href must be included"
 assert indexDoc.select(':contains(Banner Left)').size() > 0 : "bannerLeft.name must be included"
 assert indexDoc.select('img[src=images/icon.png]').size() > 0 : "bannerLeft.image.src must be included (new 4.x syntax)"
-assert indexDoc.select('img[alt=Banner Left Logo]').size() > 0 : "bannerLeft.image.alt must be included (new 4.x syntax)"
+assert indexDoc.select('img[alt="Banner Left Logo {{1 + 2}}"]').size() > 0 : "bannerLeft.image.alt must be included (new 4.x syntax)"
 assert indexDoc.select('a[href=https://maven.apache.org]').size() > 0 : "bannerRight.href must be included"
 assert indexDoc.select(':contains(Banner Right)').size() > 0 : "bannerRight.name must be included"
 assert indexDoc.select('img[src=images/test-image.png]').size() > 0 : "bannerRight.image.src must be included (new 4.x syntax)"
@@ -459,3 +459,31 @@ assert noImageProcDoc.select('zoomable').size() == 0 : "Must not have zoomable e
 // All tests passed!
 // ============================================================================
 println "SUCCESS: All Maven Site Plugin 4.x integration tests passed!"
+
+// Build-time AngularJS text protection and configuration (issue #277).
+def angularProtected = parseHtml(new File(basedir, "target/site/angular-protection.html"))
+assert !angularProtected.select('code[sentry-literal-content]').isEmpty() : "Code must be protected at build time"
+assert angularProtected.select('#literal-prose').text().contains('{{missingTemplateVariable}}') : "Generated text must stay literal"
+assert angularProtected.select('#literal-prose').html().contains('{<!---->{') : "Text protection must be generated at build time"
+assert angularProtected.select('#angular-attribute').attr('title') == '{{attributeValue}}' : "Author attribute bindings must reach AngularJS unchanged"
+assert angularProtected.select('uib-tabset pre[copy-to-clipboard] code').size() == 1 : "Generated components and copy directives must remain"
+['angular-enabled', 'angular-enabled-xhtml'].each { name ->
+    def enabled = parseHtml(new File(basedir, "target/site/" + name + ".html"))
+    assert enabled.select('[sentry-literal-content]').isEmpty() : "Page metadata must allow AngularJS: " + name
+    assert enabled.select('#counter').text() == '{{counter}}' : "AngularJS opt-out content must reach the browser"
+}
+assert indexDoc.select('code[sentry-literal-content]').isEmpty() : "Site-wide/default protection must be honored"
+
+def angularCodeCopy = parseHtml(new File(basedir, "target/site/angular-code-copy.html"))
+assert angularCodeCopy.select('#literal-style[sentry-literal-content]').size() == 1 : "Style templates must be protected"
+assert angularCodeCopy.select('#interactive-textarea[sentry-literal-content]').isEmpty() : "Ordinary textareas must remain untouched"
+assert angularCodeCopy.select('#literal-editor[sentry-literal-content]').size() == 1 : "Literal textarea content must be protected"
+assert angularCodeCopy.select('code[copy-to-clipboard][sentry-literal-content]').size() == 2 : "Configured code copy targets must retain both directives"
+assert angularCodeCopy.select('code[ng-non-bindable]').isEmpty() : "Code copy directives must not be suppressed"
+
+// Skin-rendered labels use the same build-time protection as the parsed document.
+assert angularCodeCopy.select('.header-title').first().text().contains('{{1 + 2}}') && angularCodeCopy.select('.header-title').first().html().contains('<!---->') : "Site titles must be protected"
+assert angularCodeCopy.select('.parents .breadcrumb').html().contains('<!---->') : "Menu breadcrumbs must be protected"
+assert angularCodeCopy.select('.left-menu a[href=angular-code-copy.html] i.fa-star').attr('title') == '{{1 + 2}}' : "Label HTML attributes must remain intact"
+assert angularCodeCopy.select('header img[ng-non-bindable]').size() > 0 : "Generated banner alt text must be protected"
+assert angularCodeCopy.select('.authors').text().contains('{{index .data') : "Author metadata must stay literal"

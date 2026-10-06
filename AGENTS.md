@@ -174,6 +174,9 @@ No automated formatting. Follow these conventions:
 
 ## Testing
 
+The UI commands `npm run ui:baseline:capture` and `npm run ui:baseline:verify` run all specs in `tests/ui-baseline/`.
+Run `mvn clean install site` first: the browser checks require both integration sites and `target/site/` documentation.
+
 Integration tests run automatically during `mvn install`. Each test:
 
 1. Builds a documentation site using the skin

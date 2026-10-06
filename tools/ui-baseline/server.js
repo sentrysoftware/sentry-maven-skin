@@ -6,13 +6,21 @@ const HOST = "127.0.0.1";
 const PORT = 4173;
 const repositoryRoot = process.cwd();
 const site4Root = path.resolve(repositoryRoot, "target", "it", "site4", "target", "site");
+const studioRoot = path.resolve(repositoryRoot, "target", "it", "studio-km", "target", "site");
+const documentationRoot = path.resolve(repositoryRoot, "target", "site");
 const harnessRoot = path.resolve(repositoryRoot, "tools", "ui-harness");
 
-function failIfMissingSite4() {
-	if (!fs.existsSync(site4Root)) {
-		console.error(`Missing generated Site4 pages at: ${site4Root}`);
-		console.error("Build them first with: mvn verify");
-		process.exit(1);
+function failIfMissingSites() {
+	for (const [name, root] of [
+		["Site4", site4Root],
+		["Studio KM", studioRoot],
+		["documentation", documentationRoot]
+	]) {
+		if (!fs.existsSync(path.join(root, "index.html"))) {
+			console.error(`Missing generated ${name} pages at: ${root}`);
+			console.error("Build them first with: mvn clean install site");
+			process.exit(1);
+		}
 	}
 }
 
@@ -55,6 +63,12 @@ function resolveStaticPath(requestPath) {
 	if (requestPath.startsWith("/harness/")) {
 		const relativePath = requestPath.slice("/harness/".length);
 		return resolveUnderRoot(harnessRoot, relativePath);
+	}
+	if (requestPath.startsWith("/studio-km/")) {
+		return resolveUnderRoot(studioRoot, requestPath.slice("/studio-km/".length));
+	}
+	if (requestPath.startsWith("/docs/")) {
+		return resolveUnderRoot(documentationRoot, requestPath.slice("/docs/".length));
 	}
 
 	return null;
@@ -110,7 +124,7 @@ function serveFile(response, filePath) {
 }
 
 function main() {
-	failIfMissingSite4();
+	failIfMissingSites();
 
 	const server = http.createServer((request, response) => {
 		const requestPath = normalizeRequestPath(request.url);

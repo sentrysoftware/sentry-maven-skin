@@ -17,7 +17,7 @@
   ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
   -->
 
-<project name="${project.name} Extended" xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd">
+<project name="${project.name} Extended {{1 + 2}}" xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd">
 
 	<skin>
 		<groupId>org.sentrysoftware.maven</groupId>
@@ -26,7 +26,7 @@
 	</skin>
 
 	<custom>
-		<projectVersion>${project.version}-test</projectVersion>
+		<projectVersion>${project.version}-test {{1 + 2}}</projectVersion>
 		<bodyClass>sentry-purple</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
 		<additionalLinks>
@@ -54,13 +54,13 @@
 	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
 
 	<bannerLeft>
-		<name>Banner Left</name>
+		<name>Banner Left {{1 + 2}}</name>
 		<src>images/logo-short.png</src>
 		<href>https://banner.left</href>
 	</bannerLeft>
 
 	<bannerRight>
-		<name>Banner Right</name>
+		<name>Banner Right {{1 + 2}}</name>
 		<src>images/logo.png</src>
 		<href>https://banner.right</href>
 	</bannerRight>
@@ -73,12 +73,15 @@
 		</links>
 
 		<breadcrumbs>
-			<item name="Great KMs" href="https://sentrysoftware.com/bmc/products/index.html" />
+			<item name="Great KMs {{1 + 2}}" href="https://sentrysoftware.com/bmc/products/index.html" />
 			<item name="Application Monitoring" />
 		</breadcrumbs>
 
 
-		<menu name="Getting Started">
+		<menu name="Getting Started &amp;#123;&amp;#123;1 + 2}}">
+			<item name="Parent {{1 + 2}}" href="angular-protection.html">
+				<item name="Child {{1 + 2}} &lt;i class='fa fa-star' title='{{1 + 2}}'>&lt;/i>" href="angular-code-copy.html" />
+			</item>
 			<item name="Overview" href="index.html" />
 			<item name="Foreword" href="foreword.html" />
 			<item name="Installing Monitoring Studio" href="installing-studio.html" />

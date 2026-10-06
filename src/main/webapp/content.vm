@@ -27,6 +27,7 @@ limitations under the License.
 * - Table styling (Bootstrap classes)
 * - Heading fixes (anchors, IDs)
 * - Copy-to-clipboard
+* - AngularJS literal protection
 * - Table of Contents extraction
 * - Keywords extraction
 * - Search index building
@@ -172,6 +173,11 @@ limitations under the License.
 	*##set($bodyElement = $htmlTool.setAttr($bodyElement, $copyToClipboard, "copy-to-clipboard", ""))#*
 *##end#*
 
+** AngularJS literal protection **
+
+* Protect before cloning the TOC so both copies retain literal text.
+*##protectAngularLiterals($bodyElement)#*
+
 ** Table of Contents extraction **
 
 * Extract the TOC and put it in a variable (using configurable selector)
@@ -212,6 +218,9 @@ limitations under the License.
 	* Wrap the inline TOC with the necessary HTML
 	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg hidden-xs'>"))#*
 	*##call($tocElement.parent().prepend("<div class='toc-heading'>$esc.html($tocHeadingText)</div>"))#*
+	*##if($protectAngular)#*
+		*##call($tocElement.parent().select(".toc-heading").first().attr("ng-non-bindable", ""))#*
+	*##end#*
 *##else#*
 	*##set($tocContent = "")#*
 *##end#*
