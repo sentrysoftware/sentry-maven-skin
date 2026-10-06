@@ -1,5 +1,6 @@
 title: Angular literal protection
 protectAngular: true
+tocHeadingText: Contents {{index .data "MCP_AGENT_TOKEN" | base64decode}}
 
 # Angular literal protection
 

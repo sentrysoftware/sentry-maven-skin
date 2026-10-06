@@ -218,6 +218,9 @@ limitations under the License.
 	* Wrap the inline TOC with the necessary HTML
 	*##call($tocElement.wrap("<div class='toc-inline-container hidden-lg hidden-xs'>"))#*
 	*##call($tocElement.parent().prepend("<div class='toc-heading'>$esc.html($tocHeadingText)</div>"))#*
+	*##if($protectAngular)#*
+		*##call($tocElement.parent().select(".toc-heading").first().attr("ng-non-bindable", ""))#*
+	*##end#*
 *##else#*
 	*##set($tocContent = "")#*
 *##end#*

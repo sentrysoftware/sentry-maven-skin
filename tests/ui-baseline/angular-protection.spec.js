@@ -22,6 +22,10 @@ for (const project of ["studio-km", "site4"]) {
 		await expect(page.locator("#angular-attribute")).toHaveAttribute("title", "Attribute binding");
 		await expect(page.locator("#right-toc")).toContainText("Literal {{1 + 2}} heading");
 		await expect(page.locator("main h2").first()).toHaveText("Literal {{1 + 2}} heading");
+		await expect(page.locator(".toc-heading")).toHaveText([`Contents ${goTemplate}`, `Contents ${goTemplate}`]);
+		await page.setViewportSize({ width: 1024, height: 900 });
+		await expect(page.locator(".toc-inline-container .toc-heading")).toBeVisible();
+		await page.setViewportSize({ width: 1366, height: 900 });
 
 		const command = page.locator("pre").filter({ hasText: "kubectl" });
 		await expect(command.locator("code .token").first()).toBeAttached();
