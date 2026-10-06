@@ -59,7 +59,7 @@ assert indexHtml.contains("SITE4_GOOGLE_ID") : "Google Analytics ID must be inse
 assert indexDoc.select('a[href=https://example.org]').size() > 0 : "bannerLeft.href must be included"
 assert indexDoc.select(':contains(Banner Left)').size() > 0 : "bannerLeft.name must be included"
 assert indexDoc.select('img[src=images/icon.png]').size() > 0 : "bannerLeft.image.src must be included (new 4.x syntax)"
-assert indexDoc.select('img[alt=Banner Left Logo]').size() > 0 : "bannerLeft.image.alt must be included (new 4.x syntax)"
+assert indexDoc.select('img[alt="Banner Left Logo {{1 + 2}}"]').size() > 0 : "bannerLeft.image.alt must be included (new 4.x syntax)"
 assert indexDoc.select('a[href=https://maven.apache.org]').size() > 0 : "bannerRight.href must be included"
 assert indexDoc.select(':contains(Banner Right)').size() > 0 : "bannerRight.name must be included"
 assert indexDoc.select('img[src=images/test-image.png]').size() > 0 : "bannerRight.image.src must be included (new 4.x syntax)"
@@ -480,3 +480,10 @@ assert angularCodeCopy.select('#interactive-textarea[sentry-literal-content]').i
 assert angularCodeCopy.select('#literal-editor[sentry-literal-content]').size() == 1 : "Literal textarea content must be protected"
 assert angularCodeCopy.select('code[copy-to-clipboard][sentry-literal-content]').size() == 2 : "Configured code copy targets must retain both directives"
 assert angularCodeCopy.select('code[ng-non-bindable]').isEmpty() : "Code copy directives must not be suppressed"
+
+// Skin-rendered labels use the same build-time protection as the parsed document.
+assert angularCodeCopy.select('.header-title').first().text().contains('{{1 + 2}}') && angularCodeCopy.select('.header-title').first().html().contains('<!---->') : "Site titles must be protected"
+assert angularCodeCopy.select('.parents .breadcrumb').html().contains('<!---->') : "Menu breadcrumbs must be protected"
+assert angularCodeCopy.select('.left-menu a[href=angular-code-copy.html] i.fa-star').attr('title') == '{{1 + 2}}' : "Label HTML attributes must remain intact"
+assert angularCodeCopy.select('header img[ng-non-bindable]').size() > 0 : "Generated banner alt text must be protected"
+assert angularCodeCopy.select('.authors').text().contains('{{index .data') : "Author metadata must stay literal"

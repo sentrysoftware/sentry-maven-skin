@@ -47,7 +47,7 @@ limitations under the License.
 ## We have a TOC
 						<div class="col-lg-4 col-lg-push-9 visible-lg toc-side-container">
 							<div class="toc">
-								<div class="toc-heading">$esc.html($tocHeadingText)</div>
+								<div class="toc-heading">#literalText($esc.html($tocHeadingText))</div>
 #*							*#$tocContent
 							</div>
 						</div>
@@ -59,9 +59,9 @@ limitations under the License.
 					<div class="page-header visible-print-block">
 							<h3>#*
 *##if ($site.bannerLeft.name)#*
-							*#<small>$site.bannerLeft.name</small><br/>#*
+							*#<small>#literalText($site.bannerLeft.name)</small><br/>#*
 *##end#*
-*#							$project.name $project.version
+*#							#literalText($project.name) #literalText($project.version)
 							</h3>
 						</div>#*
 *#
@@ -80,14 +80,14 @@ limitations under the License.
 	*##foreach($item in $menu.items)#*
 		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
 		*##if ($alignedHref == $alignedFileName)
-									<li>$menu.name</li>
+									<li>#literalText($menu.name)</li>
 				#break($foreach.parent)#*
 		*##else#*
 			*##foreach($subItem in $item.items)#*
 				*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
 				*##if ($alignedSubHref == $alignedFileName)
-									<li>$menu.name</li>
-									<li><a href="$alignedHref">$item.name</a></li>
+									<li>#literalText($menu.name)</li>
+									<li><a href="$alignedHref">#literalText($item.name)</a></li>
 						#break($foreach.parent)#*
 				*##end#*
 			*##end#*
@@ -109,15 +109,15 @@ limitations under the License.
 	*##foreach($item in $menu.items)#*
 		*##set($alignedHref = $PathTool.calculateLink($item.href, $relativePath))#*
 		*##if ($alignedHref == $alignedFileName)
-									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>$menu.name</li>
+									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>#literalText($menu.name)</li>
 				#break($foreach.parent)#*
 		*##else#*
 			*##foreach($subItem in $item.items)#*
 				*##set($alignedSubHref = $PathTool.calculateLink($subItem.href, $relativePath))#*
 				*##if ($alignedSubHref == $alignedFileName)
-									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>$menu.name</li>
+									<li class="list-group-item"><i class="fas fa-level-up-alt fa-flip-horizontal"></i>#literalText($menu.name)</li>
 									<a class="list-group-item" href="$alignedHref">
-										<i class="fas fa-level-up-alt fa-flip-horizontal"></i>$item.name
+										<i class="fas fa-level-up-alt fa-flip-horizontal"></i>#literalText($item.name)
 										<span class="badge">$item.items.size()</span>
 									</a>
 						#break($foreach.parent)#*
@@ -136,16 +136,16 @@ limitations under the License.
 									<h1 title="Documentation Home"><i class="fas fa-home"></i></h1>
 									<ul class="list-group">
 #*								*##foreach ($menu in $site.body.menus)
-										<li class="list-group-item"><i class="fas fa-folder-open"></i>$menu.name</li>
+										<li class="list-group-item"><i class="fas fa-folder-open"></i>#literalText($menu.name)</li>
 #*									*##foreach ($item in $menu.items)#*
 											*##if ($item.href == "index.html")
 												<a class="list-group-item" href="#$bodyElement.select('h1').get(0).attr('id')" du-smooth-scroll>
-													<i class="fas fa-home"></i>$item.name
+													<i class="fas fa-home"></i>#literalText($item.name)
 													<i class="fas fa-angle-double-down pull-right"></i>
 												</a>
 #*										*##else
 												<a class="list-group-item" href="$PathTool.calculateLink($item.href, $relativePath)">
-													<i class="fas fa-file-alt"></i>$item.name
+													<i class="fas fa-file-alt"></i>#literalText($item.name)
 #*												*##if (!$item.items.empty)<span class="badge">$item.items.size()</span>#end
 												</a>
 #*										*##end#*
@@ -170,7 +170,7 @@ limitations under the License.
 #*											*##foreach ($subItem in $item.items)
 													<li>
 														<a href="$PathTool.calculateLink($subItem.href, $relativePath)">
-															<i class="fas fa-file-alt"></i>$subItem.name
+															<i class="fas fa-file-alt"></i>#literalText($subItem.name)
 														</a>
 													</li>
 #*											*##end
@@ -178,10 +178,10 @@ limitations under the License.
 											</div>
 											<div class="subtopics-xs visible-xs">
 												<ul class="list-group">
-													<li class="list-group-item"><i class="fas fa-folder-open"></i>$item.name</li>
+													<li class="list-group-item"><i class="fas fa-folder-open"></i>#literalText($item.name)</li>
 #*												*##foreach ($subItem in $item.items)
 													<a class="list-group-item" href="$PathTool.calculateLink($subItem.href, $relativePath)">
-														<i class="fas fa-file-alt"></i>$subItem.name
+														<i class="fas fa-file-alt"></i>#literalText($subItem.name)
 													</a>
 #*												*##end
 												</ul>
@@ -200,7 +200,7 @@ limitations under the License.
 							*##if (!$keywordsArray.empty)#*
 								*#<div class="keywords">
 #*								*##foreach ($keyword in $keywordsArray)#*
-									*#<span class="label label-default">$keyword</span>
+									*#<span class="label label-default">#literalText($keyword)</span>
 #*								*##end#*
 								*#</div>
 #*							*##end#*
@@ -211,7 +211,7 @@ limitations under the License.
 								Links:
 								<ul class="list-unstyled">
 								#foreach ($url in $urlFootnoteMap.keySet())#*
-									*#<li>[$urlFootnoteMap[$url]] $url</li>
+									*#<li>[$urlFootnoteMap[$url]] #literalText($url)</li>
 								#end#*
 							*#</ul>
 							</div>
@@ -219,12 +219,12 @@ limitations under the License.
 
 							## Author
 							*##if (!$authors.isEmpty())#*
-								*#<div class="authors">Author: <strong>$StringUtils.join($authors.toArray(), ", ")</strong></div>
+								*#<div class="authors">Author: <strong>#literalText($StringUtils.join($authors.toArray(), ", "))</strong></div>
 #*							*##end#*
 
 							## Date
 							*##if ($StringUtils.isNotBlank($documentDate))#*
-								*#<div class="date">Date: <strong>$documentDate</strong></div>
+								*#<div class="date">Date: <strong>#literalText($documentDate)</strong></div>
 #*							*##end#*
 *#						</div>
 					</div>
@@ -235,7 +235,7 @@ limitations under the License.
 				<div class="search-results" ng-show="siteSearch">
 
 					<h2 class="hidden-xs">
-						$esc.html($searchResultsText) <em>{{siteSearch | truncate:'50'}}</em>
+						#literalText($esc.html($searchResultsText)) <em>{{siteSearch | truncate:'50'}}</em>
 					</h2>
 
 					<div ng-show="resultArray.length">

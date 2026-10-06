@@ -41,11 +41,11 @@ limitations under the License.
 			<div class="navbar-header">
 				<a class="navbar-brand" href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">#*
 *##if ($site.bannerLeft.image && $site.bannerLeft.image.src)#*
-				*#<img src="$PathTool.calculateLink($site.bannerLeft.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
+				*#<img src="$PathTool.calculateLink($site.bannerLeft.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)"#if($protectAngular) ng-non-bindable#end>#*
 *##elseif ($site.bannerLeft.src)#*
-				*#<img src="$PathTool.calculateLink($site.bannerLeft.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)">#*
+				*#<img src="$PathTool.calculateLink($site.bannerLeft.src, $relativePath)" alt="#bannerImageAlt($site.bannerLeft)"#if($protectAngular) ng-non-bindable#end>#*
 *##elseif ($site.bannerLeft.name)#*
-				*#$site.bannerLeft.name#*
+				*##literalText($site.bannerLeft.name)#*
 *##end#*
 			*#</a>
 			</div>
@@ -68,11 +68,11 @@ limitations under the License.
 *#			<li>
 					<a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">#*
 		*##if ($site.bannerRight.image && $site.bannerRight.image.src)#*
-					*#<img src="$PathTool.calculateLink($site.bannerRight.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
+					*#<img src="$PathTool.calculateLink($site.bannerRight.image.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)"#if($protectAngular) ng-non-bindable#end>#*
 		*##elseif ($site.bannerRight.src)#*
-					*#<img src="$PathTool.calculateLink($site.bannerRight.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)">#*
+					*#<img src="$PathTool.calculateLink($site.bannerRight.src, $relativePath)" alt="#bannerImageAlt($site.bannerRight)"#if($protectAngular) ng-non-bindable#end>#*
 		*##elseif ($site.bannerRight.name)#*
-	*#$!site.bannerRight.name#*
+	*##literalText($site.bannerRight.name)#*
 		*##end#*
 				*#</a>
 				</li>
@@ -85,7 +85,7 @@ limitations under the License.
 #if ($site.bannerLeft.href && $site.bannerLeft.name)#*
 *#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
-				<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">$!site.bannerLeft.name</a></li>
+				<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">#literalText($site.bannerLeft.name)</a></li>
 			</ul>
 		</div>
 #end#*
@@ -122,18 +122,18 @@ limitations under the License.
 #links($site.body.breadcrumbs)
 						</ol>
 #*				*##end#*
-*#					<div class="header-title">$site.name</div>
+*#					<div class="header-title">#literalText($site.name)</div>
 						<div class="header-subtitle">
-							<span class="version-prefix">$esc.html($projectVersionText)</span>
-							<span class="version">$site.getCustomValue("projectVersion", $project.version)</span>
+							<span class="version-prefix">#literalText($esc.html($projectVersionText))</span>
+							<span class="version">#literalText($site.getCustomValue("projectVersion", $project.version))</span>
 						</div>
 					</div>#*
 
 					## The documentation title minimized (when search is on, on mobile) *#
 					<div class="navbar-brand header-xxs visible-xs">
-						<div class="header-title">$site.name</div>
+						<div class="header-title">#literalText($site.name)</div>
 						<div class="header-subtitle">
-							$esc.html($projectVersionText) <strong>$site.getCustomValue("projectVersion", $project.version)</strong>
+							#literalText($esc.html($projectVersionText)) <strong>#literalText($site.getCustomValue("projectVersion", $project.version))</strong>
 						</div>
 					</div>#*
 

@@ -84,7 +84,9 @@ This page uses Velocity: $project.version
 ## AngularJS Content
 
 By default, `protectAngular: true` keeps `{{...}}` expressions literal in document text,
-including code examples, headings, and the table of contents. This allows Go, Helm, and other template examples
+including code examples, headings, the table of contents, and skin-rendered labels such as menus, breadcrumbs,
+site titles, banner names, and versions. Generated banner image alt text is protected too.
+This allows Go, Helm, and other template examples
 to display and copy unchanged while the skin's search, tabs, image zoom, and other interactive features still work.
 
 Pages that intentionally use AngularJS text bindings must opt out:

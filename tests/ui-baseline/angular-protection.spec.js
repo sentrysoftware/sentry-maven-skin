@@ -96,6 +96,39 @@ for (const project of ["studio-km", "site4"]) {
 		expect(errors).toEqual([]);
 	});
 
+	test(`${project} protects decoration labels and preserves their markup`, async ({ page }) => {
+		const errors = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		page.on("console", (message) => {
+			if (message.type() === "error") errors.push(message.text());
+		});
+		await page.goto(`/${project}/angular-code-copy.html`);
+		await expect(page.locator(".header-title").first()).toContainText("{{1 + 2}}");
+		await expect(page.locator(".site-banner .version")).toContainText("{{1 + 2}}");
+		await expect(page.locator(".footer-title strong").first()).toContainText("{{1 + 2}}");
+		await expect(page.locator("header .site-logo img").first()).toHaveAttribute("alt", /\{\{1 \+ 2\}\}/);
+		await expect(page.locator("header .breadcrumb a").first()).toContainText("{{1 + 2}}");
+		await expect(page.locator(".left-menu h5").first()).toHaveText("Getting Started {{1 + 2}}");
+		await expect(page.locator(".parents .breadcrumb")).toContainText("Parent {{1 + 2}}");
+		await expect(page.locator(".parents-xs")).toContainText("Getting Started {{1 + 2}}");
+		const child = page.locator('.left-menu a[href="angular-code-copy.html"]');
+		await expect(child).toContainText("Child {{1 + 2}}");
+		// Label markup and author attribute bindings survive build-time text protection.
+		await expect(child.locator("i.fa-star")).toHaveAttribute("title", "3");
+		await expect(page.locator(".authors strong")).toHaveText(`Author ${goTemplate}`);
+		await page.setViewportSize({ width: 390, height: 844 });
+		await expect(page.locator("header .site-logo-xs a").first()).toContainText("Banner Left {{1 + 2}}");
+		await page.goto(`/${project}/angular-protection.html`);
+		await expect(page.locator(".subtopics-xs")).toContainText("Child {{1 + 2}}");
+		await page.goto(`/${project}/index.html`);
+		const expression = project === "site4" ? "3" : "{{1 + 2}}";
+		await expect(page.locator(".home-xs")).toContainText(`Getting Started ${expression}`);
+		await page.goto(`/${project}/angular-enabled.html`);
+		await expect(page.locator(".header-title").first()).not.toContainText("{{");
+		await expect(page.locator(".left-menu h5").first()).toHaveText("Getting Started 3");
+		expect(errors).toEqual([]);
+	});
+
 	test(`${project} protects terminal directive clones`, async ({ page }) => {
 		const errors = [];
 		page.on("pageerror", (error) => errors.push(error.message));

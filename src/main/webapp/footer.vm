@@ -39,9 +39,9 @@ limitations under the License.
 ##
 ## Footer
 		<p class="footer-title" ng-class="{'text-center': $matchMedia.size == 'xs'}">
-			<strong>$site.name $site.getCustomValue("projectVersion", $project.version)</strong>
+			<strong>#literalText($site.name) #literalText($site.getCustomValue("projectVersion", $project.version))</strong>
 			<span class="hidden-xs">|</span><br class="hidden-sm hidden-md hidden-lg"/>
-			$esc.html($publishDateText) <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">$date.format($site.publishDate.format, $publishDate)</time></strong>
+			#literalText($esc.html($publishDateText)) <strong><time datetime="$date.format('YYYY-MM-dd', $publishDate)">#literalText($date.format($site.publishDate.format, $publishDate))</time></strong>
 		</p>
 ##
 ## Additional links
@@ -57,7 +57,7 @@ limitations under the License.
 *#	<div class="visible-xs navbar navbar-inverse site-logo site-logo-xs">
 			<ul class="nav navbar-nav">
 #if ($site.bannerLeft.href && $site.bannerLeft.name)#*
-*#			<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">$!site.bannerLeft.name</a></li>
+*#			<li><a href="$PathTool.calculateLink($site.bannerLeft.href, $relativePath)">#literalText($site.bannerLeft.name)</a></li>
 #end#*
 *##links($site.body.links)
 #links($additionalLinks)
@@ -90,16 +90,16 @@ limitations under the License.
 		</li>
 #*
 *##if ($site.bannerRight.href && $site.bannerRight.name)#*
-*#			<li><a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">$!site.bannerRight.name</a></li>
+*#			<li><a href="$PathTool.calculateLink($site.bannerRight.href, $relativePath)">#literalText($site.bannerRight.name)</a></li>
 #end#*
 *#		</ul>
 		</div>
 
 		<div class="footer-copyright" ng-class="{'text-center': $matchMedia.size == 'xs'}">
-			<span class="copyright">$esc.html($copyrightText) &copy;#*
+			<span class="copyright">#literalText($esc.html($copyrightText)) &copy;#*
 		*##if ($StringUtils.isNotBlank($project.inceptionYear)) $project.inceptionYear&dash;#end#*
 		*#$date.getYear($publishDate)</span>#*
-		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">$project.organization.name</a>#end
+		*##if ($StringUtils.isNotBlank($project.organization.name)) <a href="$PathTool.calculateLink($project.organization.url, $relativePath)">#literalText($project.organization.name)</a>#end
 #if($socialLinks)#*
 	*#<span class="pull-right hidden-xs icons">
 			#*

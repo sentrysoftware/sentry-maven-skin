@@ -23,7 +23,7 @@
 	The root element is now <site> instead of <project>
 	The $site variable is used instead of $decoration in Velocity templates
 -->
-<site name="${project.name}" xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<site name="${project.name} {{1 + 2}}" xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
 
 	<skin>
@@ -36,7 +36,7 @@
 		<!-- Exercise per-page protection overriding a disabled site-wide default. -->
 		<protectAngular>false</protectAngular>
 		<interpolation>maven</interpolation>
-		<projectVersion>${project.version}-site4</projectVersion>
+		<projectVersion>${project.version}-site4 {{1 + 2}}</projectVersion>
 		<projectVersionText>Release</projectVersionText>
 		<tocHeadingText>On This Page (site.xml)</tocHeadingText>
 		<publishDateText>Published on</publishDateText>
@@ -66,11 +66,11 @@
 	</custom>
 
 	<!-- In site.xml 2.0.0, bannerLeft and bannerRight use the <image> sub-element -->
-	<bannerLeft name="Banner Left" href="https://example.org">
-		<image src="images/icon.png" alt="Banner Left Logo" />
+	<bannerLeft name="Banner Left {{1 + 2}}" href="https://example.org">
+		<image src="images/icon.png" alt="Banner Left Logo {{1 + 2}}" />
 	</bannerLeft>
 
-	<bannerRight name="Banner Right" href="https://maven.apache.org">
+	<bannerRight name="Banner Right {{1 + 2}}" href="https://maven.apache.org">
 		<image src="images/test-image.png" alt="Banner Right Logo" />
 	</bannerRight>
 
@@ -82,11 +82,14 @@
 		</links>
 
 		<breadcrumbs>
-			<item name="Docs Home" href="https://example.org/docs" />
+			<item name="Docs Home {{1 + 2}}" href="https://example.org/docs" />
 			<item name="Site4 Test" />
 		</breadcrumbs>
 
-		<menu name="Getting Started">
+		<menu name="Getting Started &amp;#123;&amp;#123;1 + 2}}">
+			<item name="Parent {{1 + 2}}" href="angular-protection.html">
+				<item name="Child {{1 + 2}} &lt;i class='fa fa-star' title='{{1 + 2}}'>&lt;/i>" href="angular-code-copy.html" />
+			</item>
 			<item name="Overview" href="index.html" />
 			<item name="Features" href="features.html" />
 			<item name="Installation" href="installation.html" />
