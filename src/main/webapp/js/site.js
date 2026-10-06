@@ -26,6 +26,7 @@ angular.module("sentry.site").value("duScrollGreedy", true);
 /**
  * Skip compilation of literal children, keeping directives on their owner active.
  * Velocity marks these elements; no document or attribute scan runs in the browser.
+ * Keep the default priority so ng-if/ng-repeat compile this on their transcluded clones.
  **/
 angular.module("sentry.site").directive("sentryLiteralContent", function () {
 	return {

@@ -96,6 +96,43 @@ for (const project of ["studio-km", "site4"]) {
 		expect(errors).toEqual([]);
 	});
 
+	test(`${project} protects terminal directive clones`, async ({ page }) => {
+		const errors = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		page.on("console", (message) => {
+			if (message.type() === "error") errors.push(message.text());
+		});
+		await page.goto(`/${project}/angular-code-copy.html`);
+		await page.evaluate((literal) => {
+			const injector = angular.element(document.body).injector();
+			const scope = injector.get("$rootScope").$new();
+			scope.show = true;
+			scope.clicks = { value: 0 };
+			scope.items = [1, 2];
+			const host = angular.element(
+				'<div id="terminal-literals"><button ng-click="show = !show">Toggle</button><button ng-click="items.push(items.length + 1)">Add</button><code class="conditional" ng-if="show" sentry-literal-content ng-click="clicks.value = clicks.value + 1" title="{{clicks.value}}"></code><code class="repeated" ng-repeat="item in items" title="{{item}}" sentry-literal-content></code></div>'
+			);
+			host.find("code").text(literal);
+			angular.element(document.body).append(host);
+			injector.get("$compile")(host)(scope);
+			scope.$digest();
+		}, goTemplate);
+		const host = page.locator("#terminal-literals");
+		await expect(host.locator("code")).toHaveText([goTemplate, goTemplate, goTemplate]);
+		await host.locator(".conditional").click();
+		await expect(host.locator(".conditional")).toHaveAttribute("title", "1");
+		await host.getByRole("button", { name: "Toggle", exact: true }).click();
+		await expect(host.locator(".conditional")).toHaveCount(0);
+		await host.getByRole("button", { name: "Add", exact: true }).click();
+		await expect(host.locator(".repeated")).toHaveText([goTemplate, goTemplate, goTemplate]);
+		await expect(host.locator(".repeated").last()).toHaveAttribute("title", "3");
+		await host.getByRole("button", { name: "Toggle", exact: true }).click();
+		await expect(host.locator("code")).toHaveText([goTemplate, goTemplate, goTemplate, goTemplate]);
+		await host.locator(".conditional").click();
+		await expect(host.locator(".conditional")).toHaveAttribute("title", "2");
+		expect(errors).toEqual([]);
+	});
+
 	for (const name of ["angular-enabled", "angular-enabled-xhtml"]) {
 		test(`${project} ${name} allows intentional AngularJS`, async ({ page }) => {
 			await page.goto(`/${project}/${name}.html`);
