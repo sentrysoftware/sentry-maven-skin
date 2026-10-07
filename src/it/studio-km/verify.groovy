@@ -2,6 +2,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
+// Reject competing Velocity 1.x / Tools 2.x libraries (issue #283).
+def integrationBuildLog = new File(basedir, "build.log").text
+assert integrationBuildLog.contains("Included: org.apache.velocity:velocity-engine-core:jar:") : "Integration build log must identify the modern Velocity engine"
+assert !(integrationBuildLog =~ /Included: org.apache.velocity:(velocity|velocity-tools):jar:/) : "Legacy Velocity libraries must not share the site plugin classpath"
+
 // Helper to parse HTML file with JSoup
 def parseHtml = { File file ->
     Jsoup.parse(file, "UTF-8")
@@ -84,7 +89,7 @@ assert eventsDoc.select('meta[property=article:published_time]').attr('content')
 assert eventsDoc.select('meta[property=article:modified_time]').attr('content').startsWith('1980-05-22') : "Document's modified time is set"
 assert eventsDoc.select('link[rel=canonical]').attr('href') == "https://the.org/docs/events.html" : "Document's canonical link is set"
 assert eventsDoc.select('link[rel=alternate][type=text/markdown]').attr('href') == "events.html.md" : "Document's alternate link uses .html.md extension"
-assert eventsDoc.select('b:contains(skin-test)').size() > 0 : "pom.xml properties must be replaced with their values"
+assert eventsDoc.select('strong:contains(skin-test)').size() > 0 : "pom.xml properties must be replaced with their values"
 
 // Links, breadcrumbs, additionalLinks, and social networks
 assert eventsDoc.select('a.externalLink[href=https://youtu.be/Th6NweyurWs]:contains(YouTube)').size() > 0 : "Links specified in site.xml are added"
@@ -124,8 +129,9 @@ def filteringHeading = eventsDoc.select('h2#filtering-events').first()
 assert filteringHeading != null : "Headings must have proper id attribute"
 assert filteringHeading.select('a[href=#filtering-events]').size() > 0 : "Headings have anchor links"
 
-def keyboardHeading = eventsDoc.select('h2#keyboard-shortcuts-28special-29').first()
+def keyboardHeading = eventsDoc.select('h2#keyboard-shortcuts-special').first()
 assert keyboardHeading != null : "id attribute in headings must discard special chars"
+assert eventsDoc.select('a#keyboard-shortcuts-28special-29').size() == 1 : "Original Doxia anchor must remain available"
 
 // TOC verification
 assert eventsDoc.select('.toc-inline-container').size() > 0 : "Inline TOC container exists"
@@ -317,6 +323,7 @@ def extendFile = new File(basedir, "target/site/extend-summary.html")
 Document extendDoc = parseHtml(extendFile)
 def extendHtml = extendFile.text
 assert extendHtml.contains("prism.js") : "Page with code must load prism.js"
+assert extendDoc.select('pre > code.language-psl').text().contains('set("/SW_MAIN/X_icon", "fas fa-toolbox");') : "Syntax highlighting detection must preserve code content"
 // Code must be copy-pastable
 assert extendDoc.select('pre[copy-to-clipboard]').size() > 0 : "<pre> blocks must have the copy-to-clipboard attribute"
 

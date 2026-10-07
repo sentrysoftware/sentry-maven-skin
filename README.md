@@ -9,13 +9,15 @@ The [_Sentry Maven Skin_](https://sentrysoftware.github.io/sentry-maven-skin) is
 
 To use the _Sentry Maven Skin_, read the [full documentation](https://sentrysoftware.github.io/sentry-maven-skin).
 
+Maven Site Plugin 3.21.0 or newer (including 4.x) is required. Versions up to 3.12.1 use Velocity 1.7, which conflicts with the Velocity 2.x tools supplied by `maven-skin-tools`. Use the `site.xml` 2.0 schema for both supported plugin families.
+
 ## Structure and technologies
 
 Beware that this project is a baroc mix of languages, frameworks and libraries:
 
 - Java for some _backend_ HTML processing
 - Javascript-in-Java with [GraalVM](https://www.graalvm.org/reference-manual/js/) for building the index
-- [Velocity](https://velocity.apache.org/engine/1.7/user-guide.html) for templating
+- [Velocity](https://velocity.apache.org/engine/2.3/user-guide.html) for templating
 - [AngularJS](https://angularjs.org/) for front-end logic
 - Various HTML, CSS and JS frameworks and libraries (Bootstrap, etc.)
 - [npm](https:www.npmjs.com/) and [Gulp.js](https://gulpjs.com/) to build the front-end
@@ -29,7 +31,7 @@ The _Sentry Maven Skin_ project is made of several main components:
 - `./src/main/webapp/*.vm`: modular Velocity templates (head, banner, menu, content, footer, etc.)
 - `./package.json`: for NPM
 - `./gulpfile.js`: to build and minify the web app
-- `./src/it/studio-km`: integration test for Maven Site Plugin 3.x
+- `./src/it/studio-km`: integration test for the minimum supported Maven Site Plugin 3.21.0
 - `./src/it/site4`: integration test for Maven Site Plugin 4.x
 
 ## Build

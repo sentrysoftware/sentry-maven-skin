@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
+<site
 	name="${project.name} Étendu"
-	xmlns="http://maven.apache.org/DECORATION/1.8.0"
+	xmlns="http://maven.apache.org/SITE/2.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd"
+	xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
 >
 	<skin>
 		<groupId>org.sentrysoftware.maven</groupId>
@@ -12,6 +12,7 @@
 	</skin>
 
 	<custom>
+		<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
 		<projectVersion>${project.version}-test</projectVersion>
 		<bodyClass>sentry-purple</bodyClass>
 		<keywords>studio,km,patrol,develop,web</keywords>
@@ -37,18 +38,12 @@
 		</social>
 	</custom>
 
-	<googleAnalyticsAccountId>MY_GOOGLE_ID</googleAnalyticsAccountId>
-
-	<bannerLeft>
-		<name>Bannière gauche</name>
-		<src>../images/logo-short.png</src>
-		<href>https://banner.left</href>
+	<bannerLeft name="Bannière gauche" href="https://banner.left">
+		<image src="../images/logo-short.png" alt="Bannière gauche" />
 	</bannerLeft>
 
-	<bannerRight>
-		<name>Bannière droite</name>
-		<src>../images/logo.png</src>
-		<href>https://banner.right</href>
+	<bannerRight name="Bannière droite" href="https://banner.right">
+		<image src="../images/logo.png" alt="Bannière droite" />
 	</bannerRight>
 
 	<body>
@@ -66,4 +61,4 @@
 			<item name="Aperçu" href="index.html" />
 		</menu>
 	</body>
-</project>
+</site>

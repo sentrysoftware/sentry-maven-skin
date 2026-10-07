@@ -5,6 +5,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
+// Reject competing Velocity 1.x / Tools 2.x libraries (issue #283).
+def integrationBuildLog = new File(basedir, "build.log").text
+assert integrationBuildLog.contains("Included: org.apache.velocity:velocity-engine-core:jar:") : "Integration build log must identify the modern Velocity engine"
+assert !(integrationBuildLog =~ /Included: org.apache.velocity:(velocity|velocity-tools):jar:/) : "Legacy Velocity libraries must not share the site plugin classpath"
+
 // Helper to parse HTML file with JSoup
 def parseHtml = { File file ->
     Jsoup.parse(file, "UTF-8")
@@ -487,3 +492,5 @@ assert angularCodeCopy.select('.parents .breadcrumb').html().contains('<!---->')
 assert angularCodeCopy.select('.left-menu a[href=angular-code-copy.html] i.fa-star').attr('title') == '{{1 + 2}}' : "Label HTML attributes must remain intact"
 assert angularCodeCopy.select('header img[ng-non-bindable]').size() > 0 : "Generated banner alt text must be protected"
 assert angularCodeCopy.select('.authors').text().contains('{{index .data') : "Author metadata must stay literal"
+
+assert angularCodeCopy.select('meta[name=author]').attr('content') == 'Author {{index .data "MCP_AGENT_TOKEN" | base64decode}}' : "Quoted author metadata must remain intact"

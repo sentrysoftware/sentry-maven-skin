@@ -242,6 +242,7 @@ limitations under the License.
 #macro(localeSwitcher $liClass $alignRight)
 #if($availableLocales && $availableLocales.size() > 1)
 #set($currentLocaleLabel = $locale.toLanguageTag().toUpperCase())
+#if($currentLocaleLabel == "UND")#set($currentLocaleLabel = "EN")#end
 #set($dropdownMenuClass = "dropdown-menu")
 #if($alignRight)
 #set($dropdownMenuClass = "dropdown-menu dropdown-menu-right")
@@ -256,6 +257,7 @@ limitations under the License.
 	#foreach($candidateLocale in $availableLocales)
 #set($candidateLocaleId = $candidateLocale.toString())
 #set($candidateLocaleLabel = $candidateLocale.toLanguageTag().toUpperCase())
+#if($candidateLocaleLabel == "UND")#set($candidateLocaleLabel = "EN")#end
 #set($candidateLocaleHasDedicatedDirectory = false)
 #if($localeHasDedicatedDirectoryById && $localeHasDedicatedDirectoryById.containsKey($candidateLocaleId))
 #set($candidateLocaleHasDedicatedDirectory = $localeHasDedicatedDirectoryById.get($candidateLocaleId))

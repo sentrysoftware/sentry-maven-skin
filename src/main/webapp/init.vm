@@ -126,7 +126,7 @@ limitations under the License.
 *##set($currentLocaleHasDedicatedDirectory = false)#*
 *##set($localeSourceDirPath = $pathsClass.get("${project.basedir}/src/site/${localeId}"))#*
 *##set($localeDescriptorFilePath = $pathsClass.get("${project.basedir}/src/site/site_${localeId}.xml"))#*
-*##if($filesClass.exists($localeSourceDirPath) || $filesClass.exists($localeDescriptorFilePath))#*
+*##if($StringUtils.isNotBlank($localeId) && ($filesClass.exists($localeSourceDirPath) || $filesClass.exists($localeDescriptorFilePath)))#*
 	*##set($currentLocaleHasDedicatedDirectory = true)#*
 	*##set($localeOutputDirectory = "${project.reporting.outputDirectory}/${localeId}")#*
 	*##set($localeOutputDirPath = $pathsClass.get($localeOutputDirectory))#*
@@ -182,7 +182,7 @@ limitations under the License.
 	*##set($candidateLocaleHasDedicatedDirectory = false)#*
 	*##set($candidateLocaleSourceDirPath = $pathsClass.get("${project.basedir}/src/site/${candidateLocaleId}"))#*
 	*##set($candidateLocaleDescriptorFilePath = $pathsClass.get("${project.basedir}/src/site/site_${candidateLocaleId}.xml"))#*
-	*##if($filesClass.exists($candidateLocaleSourceDirPath) || $filesClass.exists($candidateLocaleDescriptorFilePath))#*
+	*##if($StringUtils.isNotBlank($candidateLocaleId) && ($filesClass.exists($candidateLocaleSourceDirPath) || $filesClass.exists($candidateLocaleDescriptorFilePath)))#*
 		*##set($candidateLocaleHasDedicatedDirectory = true)#*
 	*##end#*
 	*##call($localeHasDedicatedDirectoryById.put($candidateLocaleId, $candidateLocaleHasDedicatedDirectory))#*

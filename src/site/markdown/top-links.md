@@ -15,36 +15,18 @@ The header navigation bar displays your logo, external links, social media icons
 
 Display your logo on the left side of the navigation bar.
 
-> [!TABS]
-> - Maven Site Plugin 4.x
->
->   The current syntax uses attributes for `name` and `href`, plus an `<image>` sub-element:
->
->   ```xml
->   <bannerLeft name="My Organization" href="https://example.com">
->     <image src="images/logo.png" alt="My Organization Logo"/>
->   </bannerLeft>
->   ```
->
->   See the [Doxia Site Model](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html) for complete reference.
->
-> - Maven Site Plugin 3.x
->
->   The legacy syntax uses direct child elements (still supported for backward compatibility):
->
->   ```xml
->   <bannerLeft>
->     <name>My Organization</name>
->     <href>https://example.com</href>
->     <src>images/logo.png</src>
->     <alt>My Organization Logo</alt>
->   </bannerLeft>
->   ```
+Maven Site Plugin 3.21.0+ and 4.x use attributes for `name` and `href`, plus an `<image>` sub-element:
 
-> [!NOTE]
-> Both syntaxes are fully supported. Use the 4.x syntax for new projects.
+```xml
+<bannerLeft name="My Organization" href="https://example.com">
+  <image src="images/logo.png" alt="My Organization Logo"/>
+</bannerLeft>
+```
+
+See the [Doxia Site Model](https://maven.apache.org/doxia/doxia-sitetools/doxia-site-model/site.html) for the complete reference.
 
 **Logo requirements:**
+
 - Height: 40-80px (resized to 40px)
 - Format: PNG with transparent background
 - Colors: Light (for contrast with dark bar)
@@ -52,10 +34,7 @@ Display your logo on the left side of the navigation bar.
 **Text alternative** (if no logo image):
 
 ```xml
-<bannerLeft>
-  <name>My Organization</name>
-  <href>https://example.com</href>
-</bannerLeft>
+<bannerLeft name="My Organization" href="https://example.com" />
 ```
 
 ### `<bannerRight>`
@@ -115,7 +94,7 @@ Add social media icons to the header:
 
 ## Locale Switcher
 
-When multiple locales are configured in `maven-site-plugin` (for example `<locales>en,fr</locales>`), the skin automatically shows a locale switcher:
+When multiple locales are configured in `maven-site-plugin` (for example `<locales>default,fr</locales>`), the skin automatically shows a locale switcher:
 
 - In desktop view: in the top banner, after social icons and before the light/dark toggle
 - In mobile view: in the footer, between social icons and the light/dark toggle
