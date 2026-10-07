@@ -251,6 +251,7 @@
 				<configuration>
 					<addTestClassPath>true</addTestClassPath>
 					<debug>true</debug>
+					<streamLogsOnFailures>true</streamLogsOnFailures>
 					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
 					<pomIncludes>
 						<pomInclude>**/pom.xml</pomInclude>
