@@ -139,7 +139,7 @@ When debugging integration tests, you can iterate faster:
 
 ## Release Automation
 
-`.github/workflows/release.yml` pins a shared Maven Central release workflow by commit. When updating this reference, validate both the caller and shared workflow with `actionlint` and check action runtimes, inputs, and runner labels. See `README.md` for the release environment.
+`.github/workflows/release.yml` uses a versioned shared Maven Central release workflow. When updating this version, validate both the caller and shared workflow with `actionlint` and check action runtimes, inputs, and runner labels. See `README.md` for the release environment.
 
 ## Code Formatting
 

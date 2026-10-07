@@ -53,7 +53,7 @@ Build steps:
 
 ## Release automation
 
-The GitHub release workflow pins the shared Maven Central workflow to a reviewed commit. Its release and GitHub Pages jobs use Ubuntu 24.04 and Node.js 24 actions. The `nodeVersion` input separately selects Node.js 20 for building the frontend.
+The GitHub release workflow uses version 6 of the shared Maven Central workflow. Its release and GitHub Pages jobs use Ubuntu 24.04 and Node.js 24 actions. The `nodeVersion` input separately selects Node.js 20 for building the frontend.
 
 ## Test
 
