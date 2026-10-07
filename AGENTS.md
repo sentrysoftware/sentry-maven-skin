@@ -54,7 +54,7 @@ sentry-maven-skin/
 │   │   └── fonts/            # Custom fonts
 │   ├── it/                   # Integration tests
 │   │   ├── settings.xml      # Maven settings for IT
-│   │   ├── studio-km/        # Main test project (Maven Site Plugin 3.x)
+│   │   ├── studio-km/        # Main test project (Maven Site Plugin 3.21.0)
 │   │   └── site4/            # Test project for Maven Site Plugin 4.x
 │   └── site/                 # Project's own documentation (dogfooding)
 ├── gulpfile.js               # Gulp build tasks for frontend
@@ -181,6 +181,8 @@ No automated formatting. Follow these conventions:
 The UI commands `npm run ui:baseline:capture` and `npm run ui:baseline:verify` run all specs in `tests/ui-baseline/`.
 Run `mvn clean install site` first: the browser checks require both integration sites and `target/site/` documentation.
 
+The minimum supported Maven Site Plugin is 3.21.0; 4.x is also supported. Both use the `site.xml` 2.0 schema and Velocity 2.x. The verification scripts reject legacy Velocity 1.x / Tools 2.x jars in the integration build logs.
+
 Integration tests run automatically during `mvn install`. Each test:
 
 1. Builds a documentation site using the skin
@@ -198,7 +200,7 @@ assert doc.select('main.main-content .search-results').size() > 0 : "Search resu
 
 | Test Project | Maven Site Plugin | Source Location     |
 | ------------ | ----------------- | ------------------- |
-| `studio-km`  | 3.x               | `src/it/studio-km/` |
+| `studio-km`  | 3.21.0            | `src/it/studio-km/` |
 | `site4`      | 4.x               | `src/it/site4/`     |
 
 ## Common Issues

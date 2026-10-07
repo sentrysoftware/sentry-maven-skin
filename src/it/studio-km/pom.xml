@@ -55,13 +55,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.21.0</version>
 				<configuration>
 					<generateReports>true</generateReports>
 					<generateProjectInfo>true</generateProjectInfo>
 					<inputEncoding>UTF-8</inputEncoding>
 					<outputEncoding>UTF-8</outputEncoding>
-					<locales>en,fr</locales>
+					<locales>default,fr</locales>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -83,7 +83,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>3.4.5</version>
+				<version>3.7.0</version>
 			</plugin>
 
 		</plugins>

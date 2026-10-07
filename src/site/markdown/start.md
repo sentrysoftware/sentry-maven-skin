@@ -10,8 +10,8 @@ Get your documentation site up and running in 5 minutes.
 ## Prerequisites
 
 - A [Maven project](https://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html) with `pom.xml`
-- Maven 3.x installed
-- Java 8 or later
+- Maven 3.6.3 or later installed
+- Java 17 or later
 
 ## Step 1: Project Structure
 
@@ -55,77 +55,41 @@ Add the Maven Site Plugin with the required dependency:
 ```
 
 > [!NOTE]
-> This skin supports both `maven-site-plugin` **4.x** and **3.x**.
+> This skin requires `maven-site-plugin` **3.21.0 or newer**, including **4.x**. Both use the `site.xml` 2.0 schema. Versions up to 3.12.1 use Velocity 1.7, which conflicts with the Velocity 2.x tools supplied by `maven-skin-tools`.
 
 ## Step 3: Configure site.xml
 
 Create `src/site/site.xml`:
 
-> [!TABS]
->
-> - Maven Site Plugin 4.x
->
->   ```xml
->   <site xmlns="http://maven.apache.org/SITE/2.0.0"
->       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
->       xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
->       name="$${project.name}">
->
->     <skin>
->       <groupId>${project.groupId}</groupId>
->       <artifactId>${project.artifactId}</artifactId>
->       <version>${project.version}</version>
->     </skin>
->
->     <bannerLeft name="$${project.organization.name}" href="$${project.organization.url}">
->       <image src="images/logo.png" alt="$${project.organization.name}"/>
->     </bannerLeft>
->
->     <custom>
->       <!-- Skin settings (see https://sentrysoftware.org/sentry-maven-skin/settings.html) -->
->       <keywords>maven, documentation</keywords>
->     </custom>
->
->     <body>
->       <menu name="Documentation">
->         <item name="Overview" href="index.html"/>
->       </menu>
->     </body>
->
->   </site>
->   ```
->
-> - Maven Site Plugin 3.x
->
->   ```xml
->   <project name="$${project.name}">
->
->     <skin>
->       <groupId>${project.groupId}</groupId>
->       <artifactId>${project.artifactId}</artifactId>
->       <version>${project.version}</version>
->     </skin>
->
->     <bannerLeft>
->       <name>$${project.organization.name}</name>
->       <href>$${project.organization.url}</href>
->       <src>images/logo.png</src>
->       <alt>$${project.organization.name}</alt>
->     </bannerLeft>
->
->     <custom>
->       <!-- Skin settings (see https://sentrysoftware.org/sentry-maven-skin/settings.html) -->
->       <keywords>maven, documentation</keywords>
->     </custom>
->
->     <body>
->       <menu name="Documentation">
->         <item name="Overview" href="index.html"/>
->       </menu>
->     </body>
->
->   </project>
->   ```
+```xml
+<site xmlns="http://maven.apache.org/SITE/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
+    name="$${project.name}">
+
+  <skin>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>${project.artifactId}</artifactId>
+    <version>${project.version}</version>
+  </skin>
+
+  <bannerLeft name="$${project.organization.name}" href="$${project.organization.url}">
+    <image src="images/logo.png" alt="$${project.organization.name}"/>
+  </bannerLeft>
+
+  <custom>
+    <!-- Skin settings (see https://sentrysoftware.org/sentry-maven-skin/settings.html) -->
+    <keywords>maven, documentation</keywords>
+  </custom>
+
+  <body>
+    <menu name="Documentation">
+      <item name="Overview" href="index.html"/>
+    </menu>
+  </body>
+
+</site>
+```
 
 > [!TIP]
 > See [Configuration Reference](settings.html) for all available `<custom>` settings.

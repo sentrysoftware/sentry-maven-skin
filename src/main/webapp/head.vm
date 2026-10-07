@@ -46,7 +46,7 @@ limitations under the License.
 #end
 	<meta name="generator" content="$esc.html($generator)" />
 #foreach ($author in $authors)
-	<meta name="author" content="$author" />
+	<meta name="author" content="$esc.html($author)" />
 #end
 	<meta property="article:published_time" content="$date.format('iso', $publishDate)" />
 	<meta property="article:modified_time" content="$date.format('iso', $publishDate)" />

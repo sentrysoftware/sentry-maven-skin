@@ -259,11 +259,8 @@ These settings are only available in `site.xml` (not frontmatter):
 ### Banners
 
 ```xml
-<bannerLeft>
-  <src>images/logo.png</src>
-  <href>https://example.com</href>
-  <name>My Project</name>
-  <alt>Project Logo</alt>
+<bannerLeft name="My Project" href="https://example.com">
+  <image src="images/logo.png" alt="Project Logo" />
 </bannerLeft>
 
 <bannerRight>

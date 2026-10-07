@@ -31,6 +31,8 @@ Your content here...
 | `keywords`    | Page-specific keywords (comma-separated) |
 | `date`        | Document date (creation or update)       |
 
+Author names may contain quotes and ampersands; these characters are preserved in the generated metadata.
+
 ## Configuration Headers
 
 All [configuration options](settings.html) can be set per-page via frontmatter. **Frontmatter takes precedence** over site.xml settings.
