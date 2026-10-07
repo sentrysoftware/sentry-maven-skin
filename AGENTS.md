@@ -128,7 +128,7 @@ When debugging integration tests, you can iterate faster:
 
 1. Edit files in `src/it/studio-km/` or `src/it/site4/`
 2. Run `mvn verify` (faster than full `install site`)
-3. Check `target/it/*/build.log` for output
+3. Check `target/it/*/build.log` for output; failed test logs are also printed in the Maven console (including GitHub Actions)
 
 **Debugging Velocity templates:** Use `$log.debug(...)` in `.vm` files to output debug information to `build.log`:
 

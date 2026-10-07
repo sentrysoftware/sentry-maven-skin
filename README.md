@@ -86,7 +86,7 @@ Launch a Web server with the generated test documentation with:
 http-server sentry-maven-skin/target/it/studio-km/target/site
 ```
 
-In case of a build failure, the output of the build is stored in `./sentry-maven-skin/target/it/studio-km/build.log`.
+Integration test build logs are stored in `target/it/*/build.log`. Failed test logs are also printed in the Maven console, including GitHub Actions output.
 
 ## UI Baseline Regression Suite
 
