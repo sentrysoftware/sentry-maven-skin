@@ -159,7 +159,8 @@ limitations under the License.
 			*##if($StringUtils.isNotBlank($localeTokenTrimmed))#*
 				*##set($localeTokenNormalized = $localeTokenTrimmed.replace('_', '-'))#*
 				*##if($localeTokenNormalized == "default")#*
-					*##set($candidateLocale = $localeClass.getDefault())#*
+					* default is Locale.ROOT, independent of the JVM default locale.
+					*##set($candidateLocale = $localeClass.forLanguageTag(""))#*
 				*##else#*
 					*##set($candidateLocale = $localeClass.forLanguageTag($localeTokenNormalized))#*
 				*##end#*

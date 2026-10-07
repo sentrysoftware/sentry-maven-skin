@@ -33,10 +33,10 @@ assert indexDoc.html().contains("'other': 'results'") : "Default searchResultCou
 assert indexDoc.select('footer.footer :contains(Documentation as of)').size() > 0 : "Default publishDateText must come from ResourceBundle"
 assert indexDoc.select('footer.footer .copyright:contains(Copyright)').size() > 0 : "Default copyrightText must come from ResourceBundle"
 assert indexDoc.select('header .navbar-right li.locale-switcher > a .locale-label:contains(EN)').size() > 0 : "Desktop locale switcher must display current locale"
-assert indexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(EN)').size() > 0 : "Locale switcher must include default locale root"
+assert indexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(EN)').size() == 1 : "Locale switcher must include exactly one entry for default locale root"
 assert indexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=fr/index.html]:contains(FR)').size() > 0 : "Locale switcher must include French locale root"
 assert indexDoc.select('footer .navbar.site-logo.site-logo-xs > ul.nav.navbar-nav > li.icons + li.locale-switcher + li.dark-toggle').size() == 1 : "In mobile footer, locale switcher must be between social icons and dark toggle"
-assert indexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(EN)').size() > 0 : "Mobile locale switcher must include default locale root"
+assert indexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(EN)').size() == 1 : "Mobile locale switcher must include exactly one entry for default locale root"
 assert indexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=fr/index.html]:contains(FR)').size() > 0 : "Mobile locale switcher must include French locale root"
 
 // French localized page (single source page: src/site/fr/markdown/index.md)
@@ -55,9 +55,9 @@ assert frIndexDoc.html().contains("'other': 'r\\u00E9sultats'") : "French plural
 assert frIndexDoc.select('footer.footer :contains(Documentation du)').size() > 0 : "French publishDateText must come from ResourceBundle"
 assert frIndexDoc.select('footer.footer .copyright').text().contains("Droits d'auteur") : "French copyrightText must come from ResourceBundle"
 assert frIndexDoc.select('header .navbar-right li.locale-switcher > a .locale-label:contains(FR)').size() > 0 : "Desktop locale switcher must display current French locale"
-assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() > 0 : "French locale switcher must include default locale root"
+assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() == 1 : "French locale switcher must include exactly one entry for default locale root"
 assert frIndexDoc.select('header .navbar-right li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French locale switcher must include French locale root"
-assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() > 0 : "French mobile locale switcher must include default locale root"
+assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=../index.html]:contains(EN)').size() == 1 : "French mobile locale switcher must include exactly one entry for default locale root"
 assert frIndexDoc.select('footer li.locale-switcher ul.dropdown-menu a[href=index.html]:contains(FR)').size() > 0 : "French mobile locale switcher must include French locale root"
 assert frIndexDoc.select('link[rel=canonical]').attr('href') == "https://the.org/docs/fr/index.html" : "French canonical link must use locale root URL"
 def frIndexHtml = frIndexFile.text
